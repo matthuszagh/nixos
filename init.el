@@ -7,9 +7,9 @@
 ;; Configuration/Customization:
 ;; Defines global variables that are later used to customize and set
 ;; up packages.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Specify the ycmd server command and path to the ycmd directory *inside* the
-;; cloned ycmd directory
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Specify the ycmd server command and path to the ycmd directory *inside *the;
+; cloned ycmd directory
 (defvar my:ycmd-server-command '("python" "/home/matt/developer/ycmd/ycmd"))
 (defvar my:ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
 (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
@@ -19,7 +19,7 @@
 (defvar my:jupyter_start_dir "/home/matt")
 
 ;; Compilation command for C/C++
-(defvar my:compile-command "clang++ -Wall -Wextra -std=c++14 ")
+(defvar my:compile-command "make && ./")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set packages to install
@@ -98,6 +98,101 @@
 (global-hl-line-mode t)
 ;; Disable the toolbar at the top since it's useless
 (if (functionp 'tool-bar-mode) (tool-bar-mode -1))
+;; Increase threshold for large file warning to 1GB
+(setq large-file-warning-threshold 1000000000)
+
+;; Save buffers between sessions.
+(desktop-save-mode 1)
+
+;; Improve PDF resolution in DocView
+(require 'doc-view)
+(setq doc-view-resolution 300)
+
+;; pdf-tools
+(package-initialize)
+(pdf-tools-install)
+(defun pdf-view--rotate (&optional counterclockwise-p page-p)
+  "Rotate PDF 90 degrees.  Requires pdftk to work.\n
+Clockwise rotation is the default; set COUNTERCLOCKWISE-P to
+non-nil for the other direction.  Rotate the whole document by
+default; set PAGE-P to non-nil to rotate only the current page.
+\nWARNING: overwrites the original file, so be careful!"
+  ;; error out when pdftk is not installed
+  (if (null (executable-find "pdftk"))
+      (error "Rotation requires pdftk")
+    ;; only rotate in pdf-view-mode
+    (when (eq major-mode 'pdf-view-mode)
+      (let* ((rotate (if counterclockwise-p "left" "right"))
+             (file   (format "\"%s\"" (pdf-view-buffer-file-name)))
+             (page   (pdf-view-current-page))
+             (pages  (cond ((not page-p)                        ; whole doc?
+                            (format "1-end%s" rotate))
+                           ((= page 1)                          ; first page?
+                            (format "%d%s %d-end"
+                                    page rotate (1+ page)))
+                           ((= page (pdf-info-number-of-pages)) ; last page?
+                            (format "1-%d %d%s"
+                                    (1- page) page rotate))
+                           (t                                   ; interior page?
+                            (format "1-%d %d%s %d-end"
+                                    (1- page) page rotate (1+ page))))))
+        ;; empty string if it worked
+        (if (string= "" (shell-command-to-string
+                         (format (concat "pdftk %s cat %s "
+                                         "output %s.NEW "
+                                         "&& mv %s.NEW %s")
+                                 file pages file file file)))
+            (pdf-view-revert-buffer nil t)
+          (error "Rotation error!"))))))
+
+(defun pdf-view-rotate-clockwise (&optional arg)
+  "Rotate PDF page 90 degrees clockwise.  With prefix ARG, rotate
+entire document."
+  (interactive "P")
+  (pdf-view--rotate nil (not arg)))
+
+(defun pdf-view-rotate-counterclockwise (&optional arg)
+  "Rotate PDF page 90 degrees counterclockwise.  With prefix ARG,
+rotate entire document."
+  (interactive "P")
+  (pdf-view--rotate :counterclockwise (not arg)))
+
+;; Evil
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode 1)
+
+  ;; Set some modes to default to Emacs keybindings.
+  (dolist (mode '(git-rebase-mode
+                  flycheck-error-list-mode
+                  pdf-outline-buffer-mode
+                  sx-question-mode
+                  sx-question-list-mode
+                  pdf-occur-buffer-mode
+                  slime-repl-mode))
+    (add-to-list 'evil-emacs-state-modes mode))
+
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'term-char-mode 'emacs)
+  (evil-set-initial-state 'term-line-mode 'emacs)
+  (evil-set-initial-state 'Info-mode 'emacs)
+  (evil-set-initial-state 'help-mode 'emacs)
+  (evil-set-initial-state 'Man-mode 'emacs)
+
+  (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+  (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
+  (define-key evil-insert-state-map (kbd "C-u")
+    (lambda ()
+      (interactive)
+      (evil-delete (point-at-bol) (point))))
+
+  ;; Evil binds M-. which overrides the behavior of counsel-etags find tag.
+  ;; This only seems to be an issue in normal mode with this keybinding.
+  ;; If others are issues, perform similar actions with them.
+  (define-key evil-normal-state-map (kbd "M-.") 'counsel-etags-find-tag-at-point)
+  )
+
 
 ;; Remove trailing white space upon saving
 ;; Note: because of a bug in EIN we only delete trailing whitespace
@@ -107,12 +202,15 @@
             (when (not (derived-mode-p 'ein:notebook-multilang-mode))
               (delete-trailing-whitespace))))
 
-;; Auto-wrap at 80 characters
+;; Auto-wrap at 100 characters
 (setq-default auto-fill-function 'do-auto-fill)
-(setq-default fill-column 80)
+(setq-default fill-column 100)
 (turn-on-auto-fill)
 ;; Disable auto-fill-mode in programming mode
 (add-hook 'prog-mode-hook (lambda () (auto-fill-mode -1)))
+;; Automatically revert buffers
+(global-auto-revert-mode 1)
+(add-hook 'dired-mode-hook 'auto-revert-mode)
 
 ;; Global Keyboard Shortcuts
 ;; Set help to C-?
@@ -125,18 +223,55 @@
 (global-set-key (kbd "M-h") 'backward-kill-word)
 ;; Use meta+tab word completion
 (global-set-key (kbd "M-TAB") 'dabbrev-expand)
-;; Easy undo key
-(global-set-key (kbd "C-/") 'undo)
+;; Show buffer list in the current active buffer
+(global-set-key (kbd "C-x C-b") 'buffer-menu)
 ;; Comment or uncomment the region
-(global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-/") 'comment-or-uncomment-region)
+(define-key undo-tree-map (kbd "C-/") nil)
 ;; Indent after a newline, if required by syntax of language
 (global-set-key (kbd "C-m") 'newline-and-indent)
-;; Load the compile ocmmand
-(global-set-key (kbd "C-c C-c") 'compile)
-;; Undo, basically C-x u
-(global-set-key (kbd "C-/") 'undo)
+;; Shortcut for M-x multi-term
+(global-set-key (kbd "C-c C-t") 'multi-term)
 ;; Find file in project
 (global-set-key (kbd "C-x M-f") 'project-find-file)
+;; Turn off blinking cursor.
+(blink-cursor-mode 0)
+
+;; C-c o switches to minibuffer.
+(defun switch-to-minibuffer ()
+  "Switch to minibuffer window."
+  (interactive)
+  (if (active-minibuffer-window)
+      (select-window (active-minibuffer-window))
+    (error "Minibuffer is not active")))
+
+(global-set-key "\C-co" 'switch-to-minibuffer) ;; Bind to `C-c o'
+
+;; Load the compile command
+;; Use "C-c i" in a compilation buffer to allow user input.
+(global-set-key (kbd "C-c C-c") 'compile)
+(setq compilation-scroll-output 'next-error)
+(setq compilation-skip-threshold 2)
+
+(require 'cl-lib)
+(defun endless/toggle-comint-compilation ()
+  "Restart compilation with (or without) `comint-mode'."
+  (interactive)
+  (cl-callf (lambda (mode) (if (eq mode t) nil t))
+      (elt compilation-arguments 1))
+  (recompile))
+
+(define-key compilation-mode-map (kbd "C-c i")
+#'endless/toggle-comint-compilation)
+(define-key compilation-minor-mode-map (kbd "C-c i")
+#'endless/toggle-comint-compilation)
+(define-key compilation-shell-minor-mode-map (kbd "C-c i")
+#'endless/toggle-comint-compilation)
+
+;; Deadgrep
+;; (global-set-key (kbd "<f5> g") #'deadgrep)
+;; package manager
+(global-set-key (kbd "<f5>") #'helm-system-packages)
 
 ;; We don't want to type yes and no all the time so, do y and n
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -145,8 +280,9 @@
 
 ;; Disable the menu bar since we don't use it, especially not in the
 ;; terminal
-(when (and (not (eq system-type 'darwin)) (fboundp 'menu-bar-mode))
-  (menu-bar-mode -1))
+;; (when (and (not (eq system-type 'darwin)) (fboundp 'menu-bar-mode))
+  ;; (menu-bar-mode -1))
+(menu-bar-mode -1)
 
 ;; Don't ring the bell
 (setq ring-bell-function 'ignore)
@@ -229,6 +365,30 @@
   :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; symon - display CPU/mem/etc usage
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'symon)
+(symon-mode 0)
+(global-set-key (kbd "<f1> z") 'symon-mode)
+;; (setq symon-delay 10)
+
+;; Enable plantuml-mode for PlantUML files
+(add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
+(require 'plantuml_helpers)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; slime - package for common lisp
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq inferior-lisp-program "/usr/bin/sbcl")
+(setq slime-contribs '(slime-fancy))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; google-this - package to google selected text or text under cursor
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(google-this-mode 1)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; s is used by ycmd, origami, etc and sometimes during Emacs
 ;; upgrades disappears so we try to install it on its own.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -265,6 +425,7 @@
         (byte-compile-init-files (file-truename "~/.emacs.d/init.el")))
     )
   )
+ ;; #'load-file user-init-file
  )
 
 ;; Byte-compile again to ~/.emacs.d/init.elc if it is outdated
@@ -592,6 +753,14 @@
   (elpy-enable)
   )
 
+(require 'elpy)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
 (use-package yapfify
   :ensure t
   :init
@@ -605,7 +774,7 @@
 ;; clang-format -style=google -dump-config > .clang-format
 (use-package clang-format
   :ensure t
-  :bind (("C-c C-f" . clang-format-region))
+  :bind (("C-c C-f" . clang-format-buffer))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -632,6 +801,8 @@
   :config
   (define-key c++-mode-map (kbd "C-c C-c") 'compile)
   (define-key c++-mode-map (kbd "C-c C-k") 'kill-compilation)
+  (define-key c-mode-base-map (kbd "C-c C-c") 'compile)
+  (define-key c-mode-base-map (kbd "C-c C-k") 'kill-compilation)
   (setq compile-command my:compile-command)
   (use-package google-c-style
     :ensure t
@@ -670,6 +841,11 @@
 
 ;; Enable hide/show of code blocks
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Verilog mode.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq verilog-auto-newline nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: ycmd (YouCompleteMeDaemon)
@@ -713,11 +889,11 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
           (company-ycmd-setup)
           )
 
-        (use-package flycheck-ycmd
-          :ensure t
-          :init
-          (add-hook 'c-mode-common-hook 'flycheck-ycmd-setup)
-          )
+        ;; (use-package flycheck-ycmd
+        ;;   :ensure t
+        ;;   :init
+        ;;   (add-hook 'c-mode-common-hook 'flycheck-ycmd-setup)
+        ;;   )
 
         ;; Add displaying the function arguments in mini buffer using El Doc
         (require 'ycmd-eldoc)
@@ -766,6 +942,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (eval-when-compile
     ;; Silence missing function warnings
     (declare-function global-flycheck-mode "flycheck.el"))
+  :bind ("C-c l" . flycheck-list-errors)
   :config
   ;; Turn flycheck on everywhere
   (global-flycheck-mode t)
@@ -778,6 +955,50 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (use-package flycheck-pyflakes
   :ensure t
   :after python)
+
+;; Clang static analyzer
+(use-package flycheck-clang-analyzer
+  :ensure t
+  :after flycheck
+  :config (flycheck-clang-analyzer-setup))
+
+;; (with-eval-after-load 'flycheck
+;;   (require 'flycheck-clang-analyzer)
+;;   (flycheck-clang-analyzer-setup))
+
+;; ;; Cpp Check
+;; (require 'flymake-cppcheck)
+;; (add-hook 'c-mode-hook 'flymake-cppcheck-load)
+;; (add-hook 'c++-mode-hook 'flymake-cppcheck-load)
+
+;; ;; Rtags
+;; (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
+;; (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
+;; (add-hook 'objc-mode-hook 'rtags-start-process-unless-running)
+
+;; ;; cmake ide
+;; (require 'rtags) ;; optional, must have rtags installed
+;; (cmake-ide-setup)
+
+;; ;; Irony mode
+;; (add-hook 'c++-mode-hook 'irony-mode)
+;; (add-hook 'c-mode-hook 'irony-mode)
+;; (add-hook 'objc-mode-hook 'irony-mode)
+
+;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(Man-notify-method (quote pushy))
+ '(flymake-cppcheck-enable "all")
+ '(git-gutter:update-interval 5)
+ '(package-selected-packages
+   (quote
+    (flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+ '(plantuml-jar-path "/usr/share/plantuml/plantuml.jar"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; string-inflection
@@ -848,29 +1069,29 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; ein - ipython notebooks in gui emacs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Only launch if the executable exists.
-(if (and my:jupyter_location
-         my:jupyter_start_dir)
-    (use-package ein
-      :ensure t
-      :commands (ein:jupyter-server-start)
-      :defer 5
-      :config
-      (require 'ein)
-      (require 'ein-loaddefs)
-      (require 'ein-notebook)
-      (require 'ein-subpackages)
-      ;; when editing the emacs.el file, we do not want to start a new
-      ;; Jupyter server each time we save, so we only start a new Jupyter
-      ;; server if there currently isn't one running.
-      (defvar my-found-ein-server nil)
-      (dolist (my-current-process (process-list))
-        (when (string-match "EIN: Jupyter*" (process-name my-current-process))
-          (setq my-found-ein-server t))
-        )
-      (when (not my-found-ein-server)
-        (ein:jupyter-server-start my:jupyter_location my:jupyter_start_dir))
-      )
-  )
+;; (if (and my:jupyter_location
+;;          my:jupyter_start_dir)
+;;     (use-package ein
+;;       :ensure t
+;;       :commands (ein:jupyter-server-start)
+;;       :defer 5
+;;       :config
+;;       (require 'ein)
+;;       (require 'ein-loaddefs)
+;;       (require 'ein-notebook)
+;;       (require 'ein-subpackages)
+;;       ;; when editing the emacs.el file, we do not want to start a new
+;;       ;; Jupyter server each time we save, so we only start a new Jupyter
+;;       ;; server if there currently isn't one running.
+;;       (defvar my-found-ein-server nil)
+;;       (dolist (my-current-process (process-list))
+;;         (when (string-match "EIN: Jupyter*" (process-name my-current-process))
+;;           (setq my-found-ein-server t))
+;;         )
+;;       (when (not my-found-ein-server)
+;;         (ein:jupyter-server-start my:jupyter_location my:jupyter_start_dir))
+;;       )
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; autopair
@@ -919,7 +1140,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
     ;; Silence missing function warnings
     (declare-function flyspell-goto-next-error "flyspell.el")
     (declare-function flyspell-mode "flyspell.el")
-    (declare-function flyspell-prog-mode "flyspell.el"))
+    ;; (declare-function flyspell-prog-mode "flyspell.el")
+    )
   (setq flyspell-issue-welcome-flag nil)
   :config
   (defun flyspell-check-next-highlighted-word ()
@@ -933,7 +1155,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (global-set-key (kbd "<f9>") 'flyspell-correct-previous)
 
   (add-hook 'text-mode-hook #'flyspell-mode)
-  (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+  ;; (add-hook 'prog-mode-hook #'flyspell-prog-mode)
   (add-hook 'org-mode-hook #'flyspell-mode)
   )
 (use-package flyspell-correct-ivy
@@ -959,6 +1181,22 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :ensure t
   :after magit
   )
+
+(global-set-key (kbd "C-x g") 'magit-status)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (require 'package)
+  (add-to-list 'package-archives
+	       '("melpa" . "http://melpa.org/packages/"))
+  (package-refresh-contents)
+  (package-initialize)
+  (package-install 'el-get)
+  (require 'el-get))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GitGutter
@@ -1061,24 +1299,122 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Package: multi-term
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'multi-term)
+(require 'multi-term-ext)
 (setq multi-term-program "/bin/bash")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package: info+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'info+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load asm-mode when opening assembly files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package asm-mode
-  :mode ("\\.s\\'"))
+   :mode ("\\.s\\'"))
+;; (require 'asm-mode)
+;; (add-hook 'asm-mode-hook (lambda ()
+;;                            (setq indent-tabs-mode nil) ; use spaces to indent
+;;                            (electric-indent-mode -1) ; indentation in asm-mode is annoying
+;;                            (setq tab-stop-list (number-sequence 4 60 4))))
+
+;; (define-key asm-mode-map (kbd "<ret>") 'newline-and-indent)
+;; (define-key asm-mode-map (kbd "<backtab>") 'company-complete)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; nov: epub reader
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+(defun my-nov-font-setup ()
+  (face-remap-add-relative 'variable-pitch :family "SF UI Text"
+                           :height 1.0))
+(add-hook 'nov-mode-hook 'my-nov-font-setup)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; assembly configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package x86-lookup
+  :ensure t
+  :config
+  (setq x86-lookup-pdf "~/Documents/library/Intel Software Developer’s Manual (2017).pdf"))
+
+;; (use-package nasm-mode
+;;   :ensure t
+;;   :config
+;;   (add-hook 'asm-mode-hook 'nasm-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use markdown-mode for markdown files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package markdown-mode
   :ensure t
-  :mode (".md" ".markdown"))
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SX - Stack Exchange
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package sx
+  :config
+  (bind-keys :prefix "C-c s"
+             :prefix-map my-sx-map
+             :prefix-docstring "Global keymap for SX."
+             ("q" . sx-tab-all-questions)
+             ("i" . sx-inbox)
+             ("o" . sx-open-link)
+             ("u" . sx-tab-unanswered-my-tags)
+             ("a" . sx-ask)
+             ("s" . sx-search)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auctex
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun insert-frac ()
+  "Insert '\frac{}{}' and position point before the first right brace."
+  (interactive)
+  (progn
+    (insert "\\frac{}{}")
+    (backward-char)
+    (backward-char)
+    (backward-char)))
+
+(defun insert-text ()
+  "Insert '\text{}' and position point inside the brace."
+  (interactive)
+  (progn
+    (insert "\\text{}")
+    (backward-char)))
+
+(defun insert-math-subscript ()
+  "Insert '_{\text{}}' and cursor to point inside middle brace."
+  (interactive)
+  (progn
+    (insert "_{\\text{}}")
+    (backward-char)
+    (backward-char)))
+
+(defun insert-left-delimiter ()
+  "Insert '\left('."
+  (interactive)
+  (progn
+    (insert "\\left(")))
+
+(defun insert-right-delimiter ()
+  "Insert '\right)'."
+  (interactive)
+  (progn
+    (insert "\\right)")))
+
+(defun add-auctex-keys ()
+  (local-set-key "\C-cf" 'insert-frac)
+  (local-set-key "\C-ct" 'insert-text)
+  (local-set-key "\C-cs" 'insert-math-subscript)
+  (local-set-key "\C-cl" 'insert-left-delimiter)
+  (local-set-key "\C-cr" 'insert-right-delimiter))
+
 (use-package tex-site
   :ensure auctex
   :mode ("\\.tex\\'" . latex-mode)
@@ -1110,8 +1446,17 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
   (add-hook 'LaTeX-mode-hook 'flyspell-buffer)
   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (add-hook 'LaTeX-mode-hook 'add-auctex-keys)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (setq-default reftex-plug-into-AUCTeX t)
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; use latexmk with auctex
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'auctex-latexmk)
+(auctex-latexmk-setup)
+(setq auctex-latexmk-inherit-TeX-PDF-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
@@ -1157,7 +1502,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 
 ;; Hide the scroll bar
 (scroll-bar-mode -1)
-(defvar my-font-size 90)
+(defvar my-font-size 100)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my-font-size)
 ;; Set the header bar font
@@ -1267,62 +1612,65 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Powerline theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; powerline theme where the modes are on the right side.
-(use-package powerline
-  :ensure t
-  :config
-  (defun powerline-right-theme ()
-    "Setup a mode-line with major and minor modes on the right side."
-    (interactive)
-    (setq-default mode-line-format
-                  '("%e"
-                    (:eval
-                     (let* ((active (powerline-selected-window-active))
-                            (mode-line-buffer-id (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
-                            (mode-line (if active 'mode-line 'mode-line-inactive))
-                            (face0 (if active 'powerline-active0 'powerline-inactive0))
-                            (face1 (if active 'powerline-active1 'powerline-inactive1))
-                            (face2 (if active 'powerline-active2 'powerline-inactive2))
-                            (separator-left (intern (format "powerline-%s-%s"
-                                                            (powerline-current-separator)
-                                                            (car powerline-default-separator-dir))))
-                            (separator-right (intern (format "powerline-%s-%s"
-                                                             (powerline-current-separator)
-                                                             (cdr powerline-default-separator-dir))))
-                            (lhs (list (powerline-raw "%*" face0 'l)
-                                       (powerline-buffer-size face0 'l)
-                                       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
-                                       (powerline-raw " ")
-                                       (funcall separator-left face0 face1)
-                                       (powerline-narrow face1 'l)
-                                       (powerline-vc face1)))
-                            (center (list (powerline-raw global-mode-string face1 'r)
-                                          (powerline-raw "%4l" face1 'r)
-                                          (powerline-raw ":" face1)
-                                          (powerline-raw "%3c" face1 'r)
-                                          (funcall separator-right face1 face0)
-                                          (powerline-raw " ")
-                                          (powerline-raw "%6p" face0 'r)
-                                          (powerline-hud face2 face1)
-                                          ))
-                            (rhs (list (powerline-raw " " face1)
-                                       (funcall separator-left face1 face2)
-                                       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-                                         (powerline-raw erc-modified-channels-object face2 'l))
-                                       (powerline-major-mode face2 'l)
-                                       (powerline-process face2)
-                                       (powerline-raw " :" face2)
-                                       (powerline-minor-modes face2 'l)
-                                       (powerline-raw " " face2)
-                                       (funcall separator-right face2 face1)
-                                       ))
-                            )
-                       (concat (powerline-render lhs)
-                               (powerline-fill-center face1 (/ (powerline-width center) 2.0))
-                               (powerline-render center)
-                               (powerline-fill face1 (powerline-width rhs))
-                               (powerline-render rhs)))))))
-  (powerline-right-theme)
-  )
+;; (use-package powerline
+;;   :ensure t
+;;   :config
+;;   (defun powerline-right-theme ()
+;;     "Setup a mode-line with major and minor modes on the right side."
+;;     (interactive)
+;;     (setq-default mode-line-format
+;;                   '("%e"
+;;                     (:eval
+;;                      (let* ((active (powerline-selected-window-active))
+;;                             (mode-line-buffer-id (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
+;;                             (mode-line (if active 'mode-line 'mode-line-inactive))
+;;                             (face0 (if active 'powerline-active0 'powerline-inactive0))
+;;                             (face1 (if active 'powerline-active1 'powerline-inactive1))
+;;                             (face2 (if active 'powerline-active2 'powerline-inactive2))
+;;                             (separator-left (intern (format "powerline-%s-%s"
+;;                                                             (powerline-current-separator)
+;;                                                             (car powerline-default-separator-dir))))
+;;                             (separator-right (intern (format "powerline-%s-%s"
+;;                                                              (powerline-current-separator)
+;;                                                              (cdr powerline-default-separator-dir))))
+;;                             (lhs (list (powerline-raw "%*" face0 'l)
+;;                                        (powerline-buffer-size face0 'l)
+;;                                        (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
+;;                                        (powerline-raw " ")
+;;                                        (funcall separator-left face0 face1)
+;;                                        (powerline-narrow face1 'l)
+;;                                        (powerline-vc face1)))
+;;                             (center (list (powerline-raw global-mode-string face1 'r)
+;;                                           (powerline-raw "%4l" face1 'r)
+;;                                           (powerline-raw ":" face1)
+;;                                           (powerline-raw "%3c" face1 'r)
+;;                                           (funcall separator-right face1 face0)
+;;                                           (powerline-raw " ")
+;;                                           (powerline-raw "%6p" face0 'r)
+;;                                           (powerline-hud face2 face1)
+;;                                           ))
+;;                             (rhs (list (powerline-raw " " face1)
+;;                                        (funcall separator-left face1 face2)
+;;                                        (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+;;                                          (powerline-raw erc-modified-channels-object face2 'l))
+;;                                        (powerline-major-mode face2 'l)
+;;                                        (powerline-process face2)
+;;                                        (powerline-raw " :" face2)
+;;                                        (powerline-minor-modes face2 'l)
+;;                                        (powerline-raw " " face2)
+;;                                        (funcall separator-right face2 face1)
+;;                                        ))
+;;                             )
+;;                        (concat (powerline-render lhs)
+;;                                (powerline-fill-center face1 (/ (powerline-width center) 2.0))
+;;                                (powerline-render center)
+;;                                (powerline-fill face1 (powerline-width rhs))
+;;                                (powerline-render rhs)))))))
+;;   (powerline-right-theme)
+;;   )
 
 (provide '.emacs)
 ;;; .emacs ends here
+
+
+(provide 'init)\n;;; init.el ends here

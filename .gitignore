@@ -1,3 +1,16 @@
 auto-save-list/
 recentf
 .last-package-update-day
+elpa/
+el-get/
+eshell/
+session*
+.python-environments/
+.sx/
+.emacs*
+.mc-lists.el
+nov-places
+request/
+url/
+tramp
+init.elc

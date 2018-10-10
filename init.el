@@ -10,7 +10,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Specify the ycmd server command and path to the ycmd directory *inside *the;
 ; cloned ycmd directory
-(defvar my:ycmd-server-command '("python" "/home/matt/developer/ycmd/ycmd"))
+(defvar my:ycmd-server-command '("python" "/home/matt/developer/software/ycmd/ycmd"))
 (defvar my:ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
 (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
 
@@ -107,6 +107,26 @@
 ;; Improve PDF resolution in DocView
 (require 'doc-view)
 (setq doc-view-resolution 300)
+
+;; Open a file with sudo
+(defun sudo-find-file (file-name)
+  "Like find file, but opens the file as root."
+  (interactive "FSudo Find File: ")
+  (let ((tramp-file-name (concat "/sudo::" (expand-file-name file-name))))
+    (find-file tramp-file-name)))
+
+;; Copy file fath to clipboard
+(defun copy-file-path ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (with-temp-buffer
+        (insert filename)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message filename))))
 
 ;; pdf-tools
 (package-initialize)
@@ -300,18 +320,18 @@ rotate entire document."
 ;; http://mbork.pl/2015-01-10_A_few_random_Emacs_tips
 (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 
-;; Highlight some keywords in prog-mode
-(add-hook 'prog-mode-hook
-          (lambda ()
-            ;; Highlighting in cmake-mode this way interferes with
-            ;; cmake-font-lock, which is something I don't yet understand.
-            (when (not (derived-mode-p 'cmake-mode))
-              (font-lock-add-keywords
-               nil
-               '(("\\<\\(FIXME\\|TODO\\|BUG\\|DONE\\)"
-                  1 font-lock-warning-face t))))
-            )
-          )
+;; ;; Highlight some keywords in prog-mode
+;; (add-hook 'prog-mode-hook
+;;           (lambda ()
+;;             ;; Highlighting in cmake-mode this way interferes with
+;;             ;; cmake-font-lock, which is something I don't yet understand.
+;;             (when (not (derived-mode-p 'cmake-mode))
+;;               (font-lock-add-keywords
+;;                nil
+;;                '(("\\<\\(FIXME\\|TODO\\|BUG\\|DONE\\)"
+;;                   1 font-lock-warning-face t))))
+;;             )
+;;           )
 
 ;; Setup use-package
 (eval-when-compile
@@ -997,7 +1017,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(git-gutter:update-interval 5)
  '(package-selected-packages
    (quote
-    (flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+    (ov hide-lines flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/usr/share/plantuml/plantuml.jar"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1368,6 +1388,11 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
              ("u" . sx-tab-unanswered-my-tags)
              ("a" . sx-ask)
              ("s" . sx-search)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; syslog-mode : Package for viewing log files.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'syslog-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auctex

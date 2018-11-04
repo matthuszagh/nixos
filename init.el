@@ -9,8 +9,8 @@
 ;; up packages.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Specify the ycmd server command and path to the ycmd directory *inside *the;
-; cloned ycmd directory
-(defvar my:ycmd-server-command '("python3" "-u" "/home/matt/developer/software/ycmd/ycmd"))
+                                        ; cloned ycmd directory
+(defvar my:ycmd-server-command '("python" "/home/matt/developer/software/ycmd/ycmd"))
 (defvar my:ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
 (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
 
@@ -100,9 +100,12 @@
 (if (functionp 'tool-bar-mode) (tool-bar-mode -1))
 ;; Increase threshold for large file warning to 1GB
 (setq large-file-warning-threshold 1000000000)
-
+;;; gnus init file
+(setq gnus-init-file "~/.emacs.d/.gnus.el")
 ;; Save buffers between sessions.
 (desktop-save-mode 1)
+
+
 
 ;; Improve PDF resolution in DocView
 (require 'doc-view)
@@ -282,11 +285,11 @@ rotate entire document."
   (recompile))
 
 (define-key compilation-mode-map (kbd "C-c i")
-#'endless/toggle-comint-compilation)
+  #'endless/toggle-comint-compilation)
 (define-key compilation-minor-mode-map (kbd "C-c i")
-#'endless/toggle-comint-compilation)
+  #'endless/toggle-comint-compilation)
 (define-key compilation-shell-minor-mode-map (kbd "C-c i")
-#'endless/toggle-comint-compilation)
+  #'endless/toggle-comint-compilation)
 
 ;; Deadgrep
 ;; (global-set-key (kbd "<f5> g") #'deadgrep)
@@ -301,7 +304,7 @@ rotate entire document."
 ;; Disable the menu bar since we don't use it, especially not in the
 ;; terminal
 ;; (when (and (not (eq system-type 'darwin)) (fboundp 'menu-bar-mode))
-  ;; (menu-bar-mode -1))
+;; (menu-bar-mode -1))
 (menu-bar-mode -1)
 
 ;; Don't ring the bell
@@ -466,7 +469,7 @@ rotate entire document."
   (setq auto-package-update-hide-results t)
   (auto-package-update-maybe)
   (add-hook 'auto-package-update-before-hook
-          (lambda () (message "I will update packages now")))
+            (lambda () (message "I will update packages now")))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -797,6 +800,9 @@ rotate entire document."
   :bind (("C-c C-f" . clang-format-buffer))
   )
 
+;; GDB configuration
+(setq gdb-many-windows t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modern C++ code highlighting
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -804,7 +810,7 @@ rotate entire document."
   :ensure t
   :init
   (eval-when-compile
-      ;; Silence missing function warnings
+    ;; Silence missing function warnings
     (declare-function modern-c++-font-lock-global-mode
                       "modern-cpp-font-lock.el"))
   :config
@@ -851,8 +857,8 @@ rotate entire document."
   :ensure t
   :init
   (eval-when-compile
-      ;; Silence missing function warnings
-      (declare-function global-whitespace-mode "whitespace.el"))
+    ;; Silence missing function warnings
+    (declare-function global-whitespace-mode "whitespace.el"))
   :config
   (setq whitespace-style '(tabs tab-mark))
   ;; Turn on whitespace mode globally.
@@ -928,9 +934,22 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
         ;; Add displaying the function arguments in mini buffer using El Doc
         (require 'ycmd-eldoc)
         (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
+        ;; disable ycmd in tramp mode when editing C++ and python files
+        ;; (ycmd doesn't work with tramp)
+        (add-hook 'c++-mode-hook
+                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+                    (ycmd-mode)))
+        (add-hook 'c-mode-hook
+                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+                    (ycmd-mode)))
+        (add-hook 'python-mode-hook
+                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+                    (ycmd-mode)))
         )
       )
   )
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set up code completion with company
@@ -1221,7 +1240,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (unless (require 'el-get nil 'noerror)
   (require 'package)
   (add-to-list 'package-archives
-	       '("melpa" . "http://melpa.org/packages/"))
+               '("melpa" . "http://melpa.org/packages/"))
   (package-refresh-contents)
   (package-initialize)
   (package-install 'el-get)
@@ -1343,7 +1362,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Load asm-mode when opening assembly files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package asm-mode
-   :mode ("\\.s\\'"))
+  :mode ("\\.s\\'"))
 ;; (require 'asm-mode)
 ;; (add-hook 'asm-mode-hook (lambda ()
 ;;                            (setq indent-tabs-mode nil) ; use spaces to indent

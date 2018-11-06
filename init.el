@@ -104,7 +104,8 @@
 (setq gnus-init-file "~/.emacs.d/.gnus.el")
 ;; Save buffers between sessions.
 (desktop-save-mode 1)
-
+;; Ensure undo-tree is installed.
+(require 'undo-tree)
 
 
 ;; Improve PDF resolution in DocView
@@ -131,7 +132,9 @@
         (clipboard-kill-region (point-min) (point-max)))
       (message filename))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pdf-tools
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (package-initialize)
 (pdf-tools-install)
 (defun pdf-view--rotate (&optional counterclockwise-p page-p)
@@ -180,7 +183,40 @@ rotate entire document."
   (interactive "P")
   (pdf-view--rotate :counterclockwise (not arg)))
 
+;; workaround for pdf-tools not reopening to last-viewed page of the pdf:
+;; https://github.com/politza/pdf-tools/issues/18#issuecomment-269515117
+(defun brds/pdf-set-last-viewed-bookmark ()
+  (interactive)
+  (when (eq major-mode 'pdf-view-mode)
+    (bookmark-set (brds/pdf-generate-bookmark-name))))
+
+(defun brds/pdf-jump-last-viewed-bookmark ()
+  (bookmark-set "fake") ; this is new
+  (when
+      (brds/pdf-has-last-viewed-bookmark)
+    (bookmark-jump (brds/pdf-generate-bookmark-name))))
+
+(defun brds/pdf-has-last-viewed-bookmark ()
+  (assoc
+   (brds/pdf-generate-bookmark-name) bookmark-alist))
+
+(defun brds/pdf-generate-bookmark-name ()
+  (concat "PDF-LAST-VIEWED: " (buffer-file-name)))
+
+(defun brds/pdf-set-all-last-viewed-bookmarks ()
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (brds/pdf-set-last-viewed-bookmark))))
+
+(add-hook 'kill-buffer-hook 'brds/pdf-set-last-viewed-bookmark)
+(add-hook 'pdf-view-mode-hook 'brds/pdf-jump-last-viewed-bookmark)
+(unless noninteractive  ; as `save-place-mode' does
+  (add-hook 'kill-emacs-hook #'brds/pdf-set-all-last-viewed-bookmarks))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evil
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package evil
   :ensure t
   :config
@@ -202,6 +238,8 @@ rotate entire document."
   (evil-set-initial-state 'Info-mode 'emacs)
   (evil-set-initial-state 'help-mode 'emacs)
   (evil-set-initial-state 'Man-mode 'emacs)
+  (evil-set-initial-state 'gud-mode 'emacs)
+  (evil-set-initial-state 'sage-shell-mode 'emacs)
 
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
@@ -224,6 +262,11 @@ rotate entire document."
           (lambda ()
             (when (not (derived-mode-p 'ein:notebook-multilang-mode))
               (delete-trailing-whitespace))))
+
+;; Dim buffers other than the active one to more clearly show which is currently active.
+;; (add-hook 'after-init-hook (lambda ()
+;;   (when (fboundp 'auto-dim-other-buffers-mode)
+;;     (auto-dim-other-buffers-mode t))))
 
 ;; Auto-wrap at 100 characters
 (setq-default auto-fill-function 'do-auto-fill)
@@ -255,6 +298,8 @@ rotate entire document."
 (global-set-key (kbd "C-m") 'newline-and-indent)
 ;; Shortcut for M-x multi-term
 (global-set-key (kbd "C-c C-t") 'multi-term)
+;; Shortcut for M-x sage-shell:run-sage
+(global-set-key (kbd "C-c C-s") 'sage-shell:run-sage)
 ;; Find file in project
 (global-set-key (kbd "C-x M-f") 'project-find-file)
 ;; Turn off blinking cursor.
@@ -1048,7 +1093,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(git-gutter:update-interval 5)
  '(package-selected-packages
    (quote
-    (projectile flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+    (auto-dim-other-buffers projectile flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/usr/share/plantuml/plantuml.jar"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1535,6 +1580,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((((type tty) (background dark)) (:background "nil"))))
+ '(auto-dim-other-buffers-face ((t (:background "#111"))))
  '(company-preview ((t (:background "#073642" :foreground "#2aa198"))))
  '(company-preview-common ((t (:foreground "#93a1a1" :underline t))))
  '(company-scrollbar-bg ((t (:background "#073642" :foreground "#2aa198"))))

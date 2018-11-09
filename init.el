@@ -757,7 +757,9 @@ rotate entire document."
     ;; Silence missing function warnings
     (declare-function beacon-mode "beacon.el"))
   :config
-  (beacon-mode t))
+  (beacon-mode nil))
+
+(beacon-mode 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; which-key: when you pause on a keyboard shortcut it provides
@@ -1615,6 +1617,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(ivy-minibuffer-match-face-2 ((t (:background "#314f30" :weight bold))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#48225b" :weight bold))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#680a0a" :weight bold))))
+ '(ivy-current-match ((((class color) (background light)) (:background "#555555")) (((class color) (background dark)) (:background "DodgerBlue4"))))
  '(which-func ((t (:foreground "#8fb28f")))))
 
 ;; I don't care to see the splash screen

@@ -927,7 +927,8 @@ rotate entire document."
     ;; Silence missing function warnings
     (declare-function global-whitespace-mode "whitespace.el"))
   :config
-  (setq whitespace-style '(tabs tab-mark))
+  ;; (setq whitespace-style '(tabs tab-mark))
+  (setq whitespace-style nil)
   ;; Turn on whitespace mode globally.
   (global-whitespace-mode t)
   )
@@ -1633,11 +1634,11 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(company-tooltip-mouse ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(company-tooltip-selection ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(header-line ((t (:background "#003366"))))
+ '(ivy-current-match ((((class color) (background light)) (:background "#555555")) (((class color) (background dark)) (:background "DodgerBlue4"))))
  '(ivy-minibuffer-match-face-1 ((((class color) (background light)) (:background "#555555")) (((class color) (background dark)) (:background "#555555"))))
  '(ivy-minibuffer-match-face-2 ((t (:background "#314f30" :weight bold))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#48225b" :weight bold))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#680a0a" :weight bold))))
- '(ivy-current-match ((((class color) (background light)) (:background "#555555")) (((class color) (background dark)) (:background "DodgerBlue4"))))
  '(which-func ((t (:foreground "#8fb28f")))))
 
 ;; I don't care to see the splash screen

@@ -17,3 +17,14 @@ init.elc
 /projectile-bookmarks.eld
 /#init.el#
 /bookmarks
+doc/auto
+*.aux
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.gz
+*.toc

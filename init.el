@@ -1557,6 +1557,11 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (setq-default reftex-plug-into-AUCTeX t)
   )
+;; Disable default syntax highlighting in certain LaTeX environments.
+;; This prevents certain special characters from causing issues in those environments.
+;; For instance, $ and _
+;; See: https://tex.stackexchange.com/questions/111289/how-to-make-auctex-ignore-syntax-highlighting-within-environment
+(setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting" "minted"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; use latexmk with auctex

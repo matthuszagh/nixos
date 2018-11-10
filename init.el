@@ -106,10 +106,28 @@
 (desktop-save-mode 1)
 ;; Ensure undo-tree is installed.
 (require 'undo-tree)
-
+;; Change tab key behavior to insert spaces instead
+(setq-default indent-tabs-mode nil)
+;; Set the number of spaces that the tab key inserts (usually 2 or 4)
+(setq c-basic-offset 4)
+;; Set the size that a tab CHARACTER is interpreted as
+;; (unnecessary if there are no tab characters in the file!)
+(setq tab-width 4)
 ;; Improve PDF resolution in DocView
 (require 'doc-view)
 (setq doc-view-resolution 300)
+;; Change tabs to spaces when copying text. This is useful for copying to external applications.
+(defun copy-untabify (start end)
+  "Copy the region.
+Tabs at the beginning of each line are replaced by the same
+amount of spaces."
+  (interactive "r")
+  (kill-new
+   (replace-regexp-in-string
+    "^\t+"
+    (lambda (substring)
+      (make-string (* tab-width (length substring)) ?\s))
+    (buffer-substring start end))))
 
 ;; Open a file with sudo
 (defun sudo-find-file (file-name)
@@ -351,6 +369,10 @@ rotate entire document."
 ;; (when (and (not (eq system-type 'darwin)) (fboundp 'menu-bar-mode))
 ;; (menu-bar-mode -1))
 (menu-bar-mode -1)
+
+;; Make environment variables available to Emacs.
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 ;; Don't ring the bell
 (setq ring-bell-function 'ignore)
@@ -869,7 +891,6 @@ rotate entire document."
 (add-hook 'kill-buffer-hook 'gud-kill-buffer)
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modern C++ code highlighting
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -887,6 +908,13 @@ rotate entire document."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C++ keys
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq c-default-style "linux")
+
+(defun my-c-mode-common-hook ()
+  (setq c-basic-offset 8
+		tab-width 8
+		indent-tabs-mode t))
+
 (use-package cc-mode
   :ensure t
   :init
@@ -897,25 +925,19 @@ rotate entire document."
   (define-key c-mode-base-map (kbd "C-c C-c") 'compile)
   (define-key c-mode-base-map (kbd "C-c C-k") 'kill-compilation)
   (setq compile-command my:compile-command)
-  (use-package google-c-style
-    :ensure t
-    :config
-    ;; This prevents the extra two spaces in a namespace that Emacs
-    ;; otherwise wants to put... Gawd!
-    (add-hook 'c-mode-common-hook 'google-set-c-style)
-    ;; Autoindent using google style guide
-    (add-hook 'c-mode-common-hook 'google-make-newline-indent)
-    )
+  ;; (use-package google-c-style
+  ;;   :ensure t
+  ;;   :config
+  ;;   ;; This prevents the extra two spaces in a namespace that Emacs
+  ;;   ;; otherwise wants to put... Gawd!
+  ;;   ;; (add-hook 'c-mode-common-hook 'google-set-c-style)
+  ;;   ;; Autoindent using google style guide
+  ;;   ;; (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+  ;;   )
   )
 
-;; Change tab key behavior to insert spaces instead
-(setq-default indent-tabs-mode nil)
-
-;; Set the number of spaces that the tab key inserts (usually 2 or 4)
-(setq c-basic-offset 2)
-;; Set the size that a tab CHARACTER is interpreted as
-;; (unnecessary if there are no tab characters in the file!)
-(setq tab-width 2)
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 
 ;; We want to be able to see if there is a tab character vs a space.
 ;; global-whitespace-mode allows us to do just that.
@@ -977,7 +999,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
       :init
       (eval-when-compile
         ;; Silence missing function warnings
-        (declare-function global-ycmd-mode "ycmd.el"))
+        (declare-function global-ycmd-mode "ycmd.el")
+		(declare-function ycmd-mode "ycmd.el"))
       (add-hook 'after-init-hook #'global-ycmd-mode)
       :config
       (progn
@@ -1084,6 +1107,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (use-package flycheck-clang-analyzer
   :ensure t
   :after flycheck
+  :init
+  (eval-when-compile
+	(declare-function flycheck-clang-analyzer-setup "flycheck-clang-analyzer.el"))
   :config (flycheck-clang-analyzer-setup))
 
 ;; (with-eval-after-load 'flycheck
@@ -1121,7 +1147,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(git-gutter:update-interval 5)
  '(package-selected-packages
    (quote
-    (libmpdee ivy-mpdel mpdel auto-dim-other-buffers projectile flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+	(exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers projectile flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
  '(symon-mode nil))
 
@@ -1538,12 +1564,22 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (progn
     (insert "\\right)")))
 
+(defun latex-indent ()
+  "Runs latexindent on the current buffer."
+  (interactive)
+  (shell-command (concat "latexindent " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
+						 (buffer-file-name) ".tmp " (buffer-file-name))))
+
 (defun add-auctex-keys ()
   (local-set-key "\C-cf" 'insert-frac)
   (local-set-key "\C-ct" 'insert-text)
   (local-set-key "\C-cs" 'insert-math-subscript)
   (local-set-key "\C-cl" 'insert-left-delimiter)
-  (local-set-key "\C-cr" 'insert-right-delimiter))
+  (local-set-key "\C-cr" 'insert-right-delimiter)
+  )
+
+(add-hook 'latex-mode-hook '(lambda ()
+							  (local-set-key (kbd "C-c C-f") 'latex-indent)))
 
 (use-package tex-site
   :ensure auctex
@@ -1646,6 +1682,13 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 
 ;; Hide the scroll bar
 (scroll-bar-mode -1)
+;; Ensure that scrollbar is also disabled for new frames.
+(defun my/disable-scroll-bars (frame)
+  (modify-frame-parameters frame
+                           '((vertical-scroll-bars . nil)
+                             (horizontal-scroll-bars . nil))))
+(add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
+;; Set font size
 (defvar my-font-size 100)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my-font-size)

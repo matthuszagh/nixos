@@ -258,6 +258,7 @@ rotate entire document."
   (evil-set-initial-state 'Man-mode 'emacs)
   (evil-set-initial-state 'gud-mode 'emacs)
   (evil-set-initial-state 'sage-shell-mode 'emacs)
+  (evil-set-initial-state 'message-mode 'emacs)
 
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
@@ -872,24 +873,15 @@ rotate entire document."
 ;; GDB configuration
 (setq gdb-many-windows t)
 
-(defvar gud-overlay
-  (let* ((ov (make-overlay (point-min) (point-min))))
-    (overlay-put ov 'face 'secondary-selection)
-    ov)
-  "Overlay variable for GUD highlighting.")
-(defadvice gud-display-line (after my-gud-highlight act)
-  "Highlight current line."
-  (let* ((ov gud-overlay)
-         (bf (gud-find-file true-file)))
-    (with-current-buffer bf
-      (move-overlay ov (line-beginning-position) (line-beginning-position 2)
-                    ;;(move-overlay ov (line-beginning-position) (line-end-position)
-                    (current-buffer)))))
-(defun gud-kill-buffer ()
-  (if (derived-mode-p 'gud-mode)
-      (delete-overlay gud-overlay)))
-(add-hook 'kill-buffer-hook 'gud-kill-buffer)
-
+;; Keep source line centered on screen
+(defadvice gud-display-line (after gud-display-line-centered activate)
+  "Center the line in the window"
+  (when (and gud-overlay-arrow-position gdb-source-window)
+    (with-selected-window gdb-source-window
+      ; (marker-buffer gud-overlay-arrow-position)
+      (save-restriction
+        (goto-line (ad-get-arg 1))
+        (recenter)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modern C++ code highlighting
@@ -1142,12 +1134,11 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(Man-notify-method (quote pushy))
+ '(Man-notify-method 'pushy)
  '(flymake-cppcheck-enable "all")
  '(git-gutter:update-interval 5)
  '(package-selected-packages
-   (quote
-	(exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers projectile flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+   '(debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers projectile flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 flycheck-clang-analyzer djvu flycheck-plantuml plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode yasnippet-snippets elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy flycheck-ycmd flycheck-pyflakes elscreen-multi-term ein edit-server cuda-mode counsel-etags company-ycmd company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout))
  '(plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
  '(symon-mode nil))
 
@@ -1567,7 +1558,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (defun latex-indent ()
   "Runs latexindent on the current buffer."
   (interactive)
-  (shell-command (concat "latexindent " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
+  (shell-command (concat "latexindent.pl " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
 						 (buffer-file-name) ".tmp " (buffer-file-name))))
 
 (defun add-auctex-keys ()

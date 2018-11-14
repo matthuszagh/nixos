@@ -13,12 +13,34 @@
 
 \chapter{To-Do}\label{cha:to-do}
 
-\begin{itemize}
-\item Consider changing ivy and swiper to Helm. Helm is a larger project and may therefore be better
-  maintained with more features. The downside to this might be slower autocompletion times in which
-  case it may not be worth changing. If you do make the change, make sure to adjust
-  \lstinline{custom-set-faces} for Helm instead of ivy.
-\end{itemize}
+\section{Ivy/Swiper to Helm}\label{sec:ivyswiper-helm}
+
+Consider changing ivy and swiper to Helm. Helm is a larger project and may therefore be better
+maintained with more features. The downside to this might be slower autocompletion times in which
+case it may not be worth changing. If you do make the change, make sure to adjust
+\lstinline{custom-set-faces} for Helm instead of ivy.
+
+
+\section{Powerline Custom Mode-Line Configuration for Specific Modes}
+\label{sec:powerl-cust-mode}
+
+I'm experiencing an issue with powerline. I'd like to be able to display 2 different mode lines
+depending on whether I'm in pdf-view-mode or not. When displaying a PDF I'd like to display the
+current page and the total number of pages instead of the current row/column position of the
+cursor. In all other modes I'd like to display the row/column position of the cursor. The issue
+seems to be that powerline does not allow setting different configurations for different major
+modes. For instance, if I set a hook for pdf-view-mode, it will then stay in force for other
+buffers. I'm not eager to go back to the default mode line because it doesn't show the file size and
+doesn't look as good as the powerline mode line. It's probably a good idea to verify with the
+powerline developers that different modes are not possible. Another possible solution might be
+spaceline. Or, maybe I can get the buffer size in the default mode line display (look at powerline
+function).
+
+
+\section{Gnus doesn't work}
+\label{sec:gnus-doesnt-work}
+
+I can receive but not send mail.
 
 
 \end{document}

@@ -38,6 +38,10 @@
 (setq send-mail-function 'smtpmail-send-it)
 (setq message-send-mail-function 'smtpmail-send-it)
 (setq smtpmail-smtp-server my-smtp-server)
+(setq smtpmail-stream-type 'ssl)
+(setq smtpmail-smpt-service 465)
+(setq smtpmail-debug-info t)
+(setq smtpmail-debug-verb t)
 
 ;;; Save sent mail
 (setq gnus-message-archive-group "nnimap+gmail:Sent")

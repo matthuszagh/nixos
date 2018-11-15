@@ -29,3 +29,5 @@ doc/auto
 *.gz
 *.toc
 /network-security.data
+*.elc
+doc/

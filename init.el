@@ -1,7 +1,8 @@
 ;;; initfile --- Summary:
 ;;; Commentary:
-;; Emacs 25.1 and newer tested
-;; Code:
+;; Emacs 26.1 and newer tested
+
+;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration/Customization:
@@ -1054,7 +1055,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (setq company-idle-delay 0)
   (add-hook 'after-init-hook 'global-company-mode)
   ;; Disable company in specific major modes.
-  (setq company-global-modes '(not web-mode))
+  (setq company-global-modes '(not web-mode plantuml-mode))
   ;; remove unused backends
   (setq company-backends (delete 'company-semantic company-backends))
   (setq company-backends (delete 'company-eclim company-backends))
@@ -1721,6 +1722,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (add-hook 'message-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'gnus-group-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'gnus-summary-mode-hook (lambda () (display-line-numbers-mode -1)))
 )
 
 ;; Set the font to size 9 (90/10).

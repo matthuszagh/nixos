@@ -5,6 +5,11 @@
 
 ;;; Code:
 
+;; Save email locally.
+(require 'gnus)
+(setq nnml-directory "~/gmail")
+(setq message-directory "~/gmail")
+
 ;;; Personal settings
 (setq user-mail-address "huszaghmatt@gmail.com"
       mail-host-address "gmail.com"
@@ -35,13 +40,13 @@
 (setq nnheader-file-name-translation-alist '((?[ . ?_) (?] . ?_)) )
 
 ;;; Outbound email
-(setq send-mail-function 'smtpmail-send-it)
-(setq message-send-mail-function 'smtpmail-send-it)
-(setq smtpmail-smtp-server my-smtp-server)
-(setq smtpmail-stream-type 'ssl)
-(setq smtpmail-smpt-service 465)
-(setq smtpmail-debug-info t)
-(setq smtpmail-debug-verb t)
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "huszaghmatt@gmail.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      starttls-use-gnutls t)
 
 ;;; Save sent mail
 (setq gnus-message-archive-group "nnimap+gmail:Sent")

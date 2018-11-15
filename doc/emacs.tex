@@ -5,8 +5,35 @@
 \tableofcontents
 \hypersetup{linkcolor=red}
 
+\chapter{Installation}\label{cha:installation}
+
+I've fetched Emacs from the \href{https://github.com/emacs-mirror/emacs}{GitHub mirror
+  repository}. The source code resides in \textasciitilde/developer/software/emacs. Installation
+instructions reside in the source directory in the file named ``INSTALL''. I've chosen to use a
+build directory named ``build''. From the build directory run configure with:
+
+\begin{minted}{bash}
+$ ./../configure --with-x-toolkit=gtk3 --with-mailutils \
+                 --with-imagemagick --with-xwidgets
+\end{minted}
+
+I'm currently using version 26.1, by running:
+
+\begin{minted}{bash}
+$ git checkout emacs-26.1
+\end{minted}
+
+There is some issue with highlighting in version 27.050 (potentially font-lock?) that makes it very
+annoying to write code. In general I should only use stable releases, which are specified on the
+\href{https://www.gnu.org/software/emacs/}{Emacs website}.
+
 \chapter{Packages}\label{cha:packages}
 
+\section{Gnus}
+\label{sec:gnus}
+
+Gnus was a huge pain to setup. I finally got it working with the information at this
+\href{https://eschulte.github.io/emacs-starter-kit/starter-kit-gnus-imap.html}{link}.
 
 \chapter{Structure}\label{cha:structure}
 
@@ -35,12 +62,6 @@ doesn't look as good as the powerline mode line. It's probably a good idea to ve
 powerline developers that different modes are not possible. Another possible solution might be
 spaceline. Or, maybe I can get the buffer size in the default mode line display (look at powerline
 function).
-
-
-\section{Gnus doesn't work}
-\label{sec:gnus-doesnt-work}
-
-I can receive but not send mail.
 
 
 \end{document}

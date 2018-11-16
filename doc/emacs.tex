@@ -63,5 +63,46 @@ powerline developers that different modes are not possible. Another possible sol
 spaceline. Or, maybe I can get the buffer size in the default mode line display (look at powerline
 function).
 
+\section{Disable cursor in pdf-view-mode}
+
+I'd like to disable the cursor when viewing a PDF. It's distracting and provides no value. I've
+tried these two additions to \mintinline{text}{init.el} to no avail:
+
+\begin{minted}{elisp}
+(add-hook 'pdf-view-mode-hook
+          (lambda ()
+            (make-variable-buffer-local 'cursor-type)
+            (setq cursor-type nil)))
+(add-hook 'post-command-hook
+          (lambda ()
+            (setq cursor-type (if pdf-view-mode t 'nil))))
+\end{minted}
+
+These are the links I've found that address related issues:
+
+\href{https://emacs.stackexchange.com/questions/392/how-to-change-the-cursor-type-and-color}{How to
+  change the cursor type and color?}
+
+\href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Cursor-Parameters.html}{Cursor
+  parameters}
+
+\href{https://emacs.stackexchange.com/questions/44650/how-can-i-make-the-cursor-change-to-block-in-overwrite-mode?rq=1}{How
+  can I make the cursor change to block in overwrite mode?}
+
+\href{https://www.emacswiki.org/emacs/ChangingCursorDynamically}{Changing Cursor Dynamically}
+
+\href{https://www.gnu.org/software/emacs/manual/html_node/emacs/Cursor-Display.html}{Cursor Display}
+
+
+\section{Run Emacs as Daemon}
+
+Apparently, running Emacs as a server and then using emacsclient gives better results. I should
+investigate how this is done.
+
+
+\section{Get much better at Gnus}
+
+
+
 
 \end{document}

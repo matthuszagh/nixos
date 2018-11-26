@@ -38,6 +38,16 @@ Gnus was a huge pain to setup. I finally got it working with the information at 
 \chapter{Structure}\label{cha:structure}
 
 
+\chapter{Best Practices}
+\label{cha:best-practices}
+
+\href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Conventions.html}{This
+  Emacs manual page} contains principles to follow when customizing key bindings. Basically,
+\mintinline{text}{C-c <letter>} (but not \mintinline{text}{C-c} followed by another control
+character) as well as \mintinline{text}{<f5>} through \mintinline{text}{<f9>} are free for users to
+define how they wish.
+
+
 \chapter{To-Do}\label{cha:to-do}
 
 \section{Ivy/Swiper to Helm}\label{sec:ivyswiper-helm}
@@ -58,10 +68,16 @@ cursor. In all other modes I'd like to display the row/column position of the cu
 seems to be that powerline does not allow setting different configurations for different major
 modes. For instance, if I set a hook for pdf-view-mode, it will then stay in force for other
 buffers. I'm not eager to go back to the default mode line because it doesn't show the file size and
-doesn't look as good as the powerline mode line. It's probably a good idea to verify with the
+
 powerline developers that different modes are not possible. Another possible solution might be
 spaceline. Or, maybe I can get the buffer size in the default mode line display (look at powerline
 function).
+
+The file size can be displayed in the mode line of certain buffers by enabling
+\mintinline{text}{size-indication-mode}. Critically though, this doesn't work when displaying PDF's
+and potentially other file types as well. I've currently disabled powerline until I have a better
+solution: seeing the PDF page number outweighs the cost of a slightly worse aesthetic and seeing the
+file size for PDFs.
 
 \section{Disable cursor in pdf-view-mode}
 
@@ -102,6 +118,15 @@ investigate how this is done.
 
 \section{Get much better at Gnus}
 
+
+
+\section{Display header when buffer is displayed}
+
+Currently, a header displays only when you cursor to it. It should be displayed immediately when the
+buffer opens.
+
+
+\section{Remap keybindings to adhere to best practices}
 
 
 

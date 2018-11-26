@@ -106,6 +106,7 @@
 (setq large-file-warning-threshold 1000000000)
 ;;; gnus init file
 (setq gnus-init-file "~/.emacs.d/.gnus.el")
+(add-hook 'kill-emacs-hook 'gnus-group-exit)
 ;; Save buffers between sessions.
 (desktop-save-mode 1)
 ;; Only load some buffers immediately, load the others lazily when Emacs is idle.
@@ -154,6 +155,23 @@ amount of spaces."
         (insert filename)
         (clipboard-kill-region (point-min) (point-max)))
       (message filename))))
+
+;; Indent entire buffer
+(defun indent-buffer ()
+      (interactive)
+      (save-excursion
+        (indent-region (point-min) (point-max) nil)))
+(global-set-key (kbd "C-M-\\") 'indent-buffer)
+
+;; Keybindings for image mode
+(add-hook 'image-mode-hook
+          (lambda ()
+             (local-set-key (kbd "C-\+") 'image-increase-size)
+          ))
+(add-hook 'image-mode-hook
+          (lambda ()
+             (local-set-key (kbd "C-\-") 'image-decrease-size)
+          ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pdf-tools
@@ -206,6 +224,8 @@ rotate entire document."
   (interactive "P")
   (pdf-view--rotate :counterclockwise (not arg)))
 
+;; Revert PDF after TeX compilation has finished
+(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
 
 ;; workaround for pdf-tools not reopening to last-viewed page of the pdf:
 ;; https://github.com/politza/pdf-tools/issues/18#issuecomment-269515117
@@ -323,7 +343,7 @@ rotate entire document."
 ;; Indent after a newline, if required by syntax of language
 (global-set-key (kbd "C-m") 'newline-and-indent)
 ;; Shortcut for M-x multi-term
-(global-set-key (kbd "C-c C-t") 'multi-term)
+(global-set-key (kbd "C-c t") 'multi-term)
 ;; Shortcut for M-x sage-shell:run-sage
 (global-set-key (kbd "C-c C-s") 'sage-shell:run-sage)
 ;; Find file in project
@@ -362,10 +382,10 @@ rotate entire document."
 (define-key compilation-shell-minor-mode-map (kbd "C-c i")
   #'endless/toggle-comint-compilation)
 
-;; Deadgrep
-;; (global-set-key (kbd "<f5> g") #'deadgrep)
+;; rgrep
+(global-set-key (kbd "<f5>") #'rgrep)
 ;; package manager
-(global-set-key (kbd "<f5>") #'helm-system-packages)
+;; (global-set-key (kbd "<f5>") #'helm-system-packages)
 
 ;; We don't want to type yes and no all the time so, do y and n
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -379,8 +399,8 @@ rotate entire document."
 (menu-bar-mode -1)
 
 ;; Make environment variables available to Emacs.
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+;; (when (memq window-system '(mac ns x))
+;;   (exec-path-from-shell-initialize))
 
 ;; Don't ring the bell
 (setq ring-bell-function 'ignore)
@@ -882,15 +902,15 @@ rotate entire document."
 
 ;; Suppress warnings with reference to free variable.
 ;; Keep source line centered on screen
-(defadvice gud-display-line (after gud-display-line-centered activate)
-  "Center the line in the window"
-  (when (and gud-overlay-arrow-position gdb-source-window)
-    (with-selected-window gdb-source-window
-                                        ; (marker-buffer gud-overlay-arrow-position)
-      (save-restriction
-        (with-no-warnings
-          (goto-line (ad-get-arg 1)))
-        (recenter)))))
+;; (defadvice gud-display-line (after gud-display-line-centered activate)
+;;   "Center the line in the window"
+;;   (when (and gud-overlay-arrow-position gdb-source-window)
+;;     (with-selected-window gdb-source-window
+;;                                         ; (marker-buffer gud-overlay-arrow-position)
+;;       (save-restriction
+;;         (with-no-warnings
+;;           (goto-line (ad-get-arg 1)))
+;;         (recenter)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modern C++ code highlighting
@@ -966,8 +986,21 @@ rotate entire document."
   ;; :load-path "elisp/verilog-mode"
   :mode (("\\.[st]*v[hp]*\\'" . verilog-mode))
   :config
-  (setq verilog-auto-newline nil))
+  ;; Turns off automatic newline after typing a semicolon, which is annoying.
+  (setq verilog-auto-newline nil)
+  (setq verilog-indent-level 8)
+  (setq verilog-indent-level-declaration 8)
+  (setq verilog-indent-level-behavioral 8)
+  (setq verilog-indent-level-module 8)
+  (setq verilog-case-indent 0)
+  (setq verilog-auto-delete-trailing-whitespace t)
+  )
 
+(defun my-verilog-hook ()
+  (local-set-key (kbd "C-c C-f") 'indent-buffer)
+  (setq indent-tabs-mode t)
+  )
+(add-hook 'verilog-mode-hook 'my-verilog-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile - project-centered commands
@@ -1046,6 +1079,11 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
       )
   )
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; apt-mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'apt-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1151,7 +1189,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(jit-lock-context-time 0.1)
  '(package-selected-packages
    (quote
-    (yasnippet-snippets company-ycmd ycmd flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+    (magit yasnippet-snippets company-ycmd ycmd flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
  '(symon-mode nil))
 
@@ -1581,6 +1619,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (local-set-key "\C-cs" 'insert-math-subscript)
   (local-set-key "\C-cl" 'insert-left-delimiter)
   (local-set-key "\C-cr" 'insert-right-delimiter)
+  (local-set-key (kbd "C-c C-f") 'indent-buffer)
   )
 
 (add-hook 'latex-mode-hook '(lambda ()
@@ -1596,22 +1635,25 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :config
   (setq-default TeX-auto-save t
                 TeX-parse-self t
-                TeX-source-correlate-start-server t)
-  (cond
-   ((string-equal system-type "windows-nt") ; Microsoft Windows
-    (progn
-      (message "Windows does not have a PDF viewer set for auctex")))
-   ((string-equal system-type "darwin") ; Mac OS X
-    (setq-default
-     TeX-view-program-list
-     '(("Skim"
-        "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
-       )
-     TeX-view-program-selection '((output-pdf "Skim"))))
-   ((string-equal system-type "gnu/linux") ; linux
-    (setq-default TeX-view-program-list
-                  '(("Evince" "evince --page-index=%(outpage) %o"))
-                  TeX-view-program-selection '((output-pdf "Evince")))))
+                TeX-source-correlate-start-server t
+				LaTeX-indent-level 8
+
+				)
+;;  (cond
+;;   ((string-equal system-type "windows-nt") ; Microsoft Windows
+;;    (progn
+;;      (message "Windows does not have a PDF viewer set for auctex")))
+;;   ((string-equal system-type "darwin") ; Mac OS X
+;;    (setq-default
+;;     TeX-view-program-list
+;;     '(("Skim"
+;;        "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
+;;       )
+;;     TeX-view-program-selection '((output-pdf "Skim"))))
+;;   ((string-equal system-type "gnu/linux") ; linux
+;;    (setq-default TeX-view-program-list
+;;                  '(("Evince" "evince --page-index=%(outpage) %o"))
+;;                  TeX-view-program-selection '((output-pdf "Evince")))))
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
@@ -1653,7 +1695,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :config
   (load-theme 'sourcerer t))
 
-(set-face-background 'hl-line "#372E2D")
+(set-face-background 'hl-line "gray16")
+;; (set-face-background 'hl-line "#372E2D")
 ;; The minibuffer default colors with my theme are impossible to read, so change
 ;; them to something better using ivy-minibuffer-match-face.
 (custom-set-faces
@@ -1729,6 +1772,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'gnus-group-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'gnus-summary-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'image-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
 )
 
 ;; Set the font to size 9 (90/10).
@@ -1941,7 +1986,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 			       (powerline-render rhs))))
 		    ))
     )
-  (powerline-general-theme)
+  ;; (powerline-general-theme)
   )
 
 (provide 'init)

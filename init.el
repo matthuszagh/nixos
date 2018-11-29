@@ -100,13 +100,15 @@
               search-highlight t) ;hilit matches when searching
 ;; Highlight the line we are currently on
 (global-hl-line-mode t)
+;; Set image thumbnail size in image-dired
+(setq image-dired-thumb-size 500)
 ;; Disable the toolbar at the top since it's useless
 (if (functionp 'tool-bar-mode) (tool-bar-mode -1))
 ;; Increase threshold for large file warning to 1GB
 (setq large-file-warning-threshold 1000000000)
 ;;; gnus init file
 (setq gnus-init-file "~/.emacs.d/.gnus.el")
-(add-hook 'kill-emacs-hook 'gnus-group-exit)
+;; (add-hook 'kill-emacs-hook 'gnus-group-exit)
 ;; Save buffers between sessions.
 (desktop-save-mode 1)
 ;; Only load some buffers immediately, load the others lazily when Emacs is idle.
@@ -274,7 +276,9 @@ rotate entire document."
                   sx-question-list-mode
                   pdf-occur-buffer-mode
                   mpdel-nav-mode
-                  slime-repl-mode))
+                  slime-repl-mode
+				  image-dired-thumbnail-mode
+				  eshell-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
   (evil-set-initial-state 'term-mode 'emacs)
@@ -299,6 +303,11 @@ rotate entire document."
   ;; If others are issues, perform similar actions with them.
   (define-key evil-normal-state-map (kbd "M-.") 'counsel-etags-find-tag-at-point)
   )
+
+;; Unbind toggling Emacs state. I don't need this and would rather use it for term-mode.
+;; If this functionality needs to be performed it can be done so with 'evil-emacs-state and
+;; 'evil-exit-emacs-state.
+(define-key evil-emacs-state-map (kbd "C-z") nil)
 
 
 ;; Remove trailing white space upon saving
@@ -383,9 +392,7 @@ rotate entire document."
   #'endless/toggle-comint-compilation)
 
 ;; rgrep
-(global-set-key (kbd "<f5>") #'rgrep)
-;; package manager
-;; (global-set-key (kbd "<f5>") #'helm-system-packages)
+(global-set-key (kbd "<f6>") #'rgrep)
 
 ;; We don't want to type yes and no all the time so, do y and n
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -1189,7 +1196,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(jit-lock-context-time 0.1)
  '(package-selected-packages
    (quote
-    (magit yasnippet-snippets company-ycmd ycmd flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this helm-system-packages symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+	(eterm-256color xterm-color helm-systemd helm magit yasnippet-snippets company-ycmd ycmd flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
  '(symon-mode nil))
 
@@ -1489,11 +1496,31 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package: multi-term
+;; Terminal configuration.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'multi-term)
-(require 'multi-term-ext)
-(setq multi-term-program "/bin/bash")
+(when (and (require 'multi-term nil t) (require 'multi-term-ext nil t))
+  (global-set-key (kbd "<f5>") 'multi-term)
+  (global-set-key (kbd "<C-next>") 'multi-term-next)
+  (global-set-key (kbd "<C-prior>") 'multi-term-prev)
+  (setq multi-term-program "/bin/bash"))
+
+(when (require 'term nil t)
+  (setq term-bind-key-alist
+		(list (cons "C-c C-c" 'term-interrupt-subjob)
+			  (cons "C-z" 'term-stop-subjob)
+			  (cons "C-r" 'term-send-raw)
+			  (cons "C-s" 'term-send-raw)
+			  (cons "M-f" 'term-send-forward-word)
+              (cons "M-b" 'term-send-backward-word)
+			  (cons "C-c C-j" 'term-line-mode)
+              (cons "C-c C-k" 'term-char-mode)
+			  (cons "M-DEL" 'term-send-backward-kill-word)
+              (cons "M-d" 'term-send-forward-kill-word)
+			  (cons "<C-left>" 'term-send-backward-word)
+              (cons "<C-right>" 'term-send-forward-word)
+			  (cons "C-y" 'term-paste))))
+
+;; (add-hook 'term-mode-hook #'eterm-256color-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: info+
@@ -1724,6 +1751,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
  '(ivy-minibuffer-match-face-2 ((t (:background "#314f30" :weight bold))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#48225b" :weight bold))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#680a0a" :weight bold))))
+ '(term-color-red ((t (:background "#aa4450" :foreground "Pink"))))
  '(which-func ((t (:foreground "#8fb28f")))))
 
 ;; I don't care to see the splash screen

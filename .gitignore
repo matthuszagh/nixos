@@ -31,3 +31,4 @@ doc/auto
 /network-security.data
 *.elc
 doc/
+image-dired/

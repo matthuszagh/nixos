@@ -108,7 +108,10 @@
 (setq large-file-warning-threshold 1000000000)
 ;;; gnus init file
 (setq gnus-init-file "~/.emacs.d/.gnus.el")
-;; (add-hook 'kill-emacs-hook 'gnus-group-exit)
+(add-hook 'kill-emacs-hook
+          (lambda ()
+            (if (boundp 'gnus-buffers)
+                (gnus-group-exit))))
 ;; Save buffers between sessions.
 (desktop-save-mode 1)
 ;; Only load some buffers immediately, load the others lazily when Emacs is idle.
@@ -160,20 +163,20 @@ amount of spaces."
 
 ;; Indent entire buffer
 (defun indent-buffer ()
-      (interactive)
-      (save-excursion
-        (indent-region (point-min) (point-max) nil)))
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
 (global-set-key (kbd "C-M-\\") 'indent-buffer)
 
 ;; Keybindings for image mode
 (add-hook 'image-mode-hook
           (lambda ()
-             (local-set-key (kbd "C-\+") 'image-increase-size)
-          ))
+            (local-set-key (kbd "C-\+") 'image-increase-size)
+            ))
 (add-hook 'image-mode-hook
           (lambda ()
-             (local-set-key (kbd "C-\-") 'image-decrease-size)
-          ))
+            (local-set-key (kbd "C-\-") 'image-decrease-size)
+            ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pdf-tools
@@ -1666,21 +1669,21 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 				LaTeX-indent-level 8
 
 				)
-;;  (cond
-;;   ((string-equal system-type "windows-nt") ; Microsoft Windows
-;;    (progn
-;;      (message "Windows does not have a PDF viewer set for auctex")))
-;;   ((string-equal system-type "darwin") ; Mac OS X
-;;    (setq-default
-;;     TeX-view-program-list
-;;     '(("Skim"
-;;        "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
-;;       )
-;;     TeX-view-program-selection '((output-pdf "Skim"))))
-;;   ((string-equal system-type "gnu/linux") ; linux
-;;    (setq-default TeX-view-program-list
-;;                  '(("Evince" "evince --page-index=%(outpage) %o"))
-;;                  TeX-view-program-selection '((output-pdf "Evince")))))
+  ;;  (cond
+  ;;   ((string-equal system-type "windows-nt") ; Microsoft Windows
+  ;;    (progn
+  ;;      (message "Windows does not have a PDF viewer set for auctex")))
+  ;;   ((string-equal system-type "darwin") ; Mac OS X
+  ;;    (setq-default
+  ;;     TeX-view-program-list
+  ;;     '(("Skim"
+  ;;        "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
+  ;;       )
+  ;;     TeX-view-program-selection '((output-pdf "Skim"))))
+  ;;   ((string-equal system-type "gnu/linux") ; linux
+  ;;    (setq-default TeX-view-program-list
+  ;;                  '(("Evince" "evince --page-index=%(outpage) %o"))
+  ;;                  TeX-view-program-selection '((output-pdf "Evince")))))
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
@@ -1802,7 +1805,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (add-hook 'gnus-summary-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'image-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
-)
+  )
 
 ;; Set the font to size 9 (90/10).
 (set-face-attribute 'default nil :height my-font-size)
@@ -1905,114 +1908,114 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
     "Setup a mode-line with major and minor modes on the right side."
     (interactive)
     (setq-default mode-line-format
-		  '("%e"
-		    (:eval
-		     (let* ((active (powerline-selected-window-active))
-			    (mode-line-buffer-id (if active 'mode-line-buffer-id
+		          '("%e"
+		            (:eval
+		             (let* ((active (powerline-selected-window-active))
+			                (mode-line-buffer-id (if active 'mode-line-buffer-id
                                                    'mode-line-buffer-id-inactive))
-			    (mode-line (if active 'mode-line 'mode-line-inactive))
-			    (face0 (if active 'powerline-active0 'powerline-inactive0))
-			    (face1 (if active 'powerline-active1 'powerline-inactive1))
-			    (face2 (if active 'powerline-active2 'powerline-inactive2))
-			    (separator-left (intern (format "powerline-%s-%s"
-							    (powerline-current-separator)
-							    (car powerline-default-separator-dir))))
-			    (separator-right (intern (format "powerline-%s-%s"
-							     (powerline-current-separator)
-							     (cdr powerline-default-separator-dir))))
-			    (lhs (list (powerline-raw "%*" face0 'l)
-				       (powerline-buffer-size face0 'l)
-				       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
-				       (powerline-raw " ")
-				       (funcall separator-left face0 face1)
-				       (powerline-narrow face1 'l)
-				       (powerline-vc face1)))
-			    (center (list (powerline-raw global-mode-string face1 'r)
-					  (powerline-raw '(" P" (:eval (number-to-string
+			                (mode-line (if active 'mode-line 'mode-line-inactive))
+			                (face0 (if active 'powerline-active0 'powerline-inactive0))
+			                (face1 (if active 'powerline-active1 'powerline-inactive1))
+			                (face2 (if active 'powerline-active2 'powerline-inactive2))
+			                (separator-left (intern (format "powerline-%s-%s"
+							                                (powerline-current-separator)
+							                                (car powerline-default-separator-dir))))
+			                (separator-right (intern (format "powerline-%s-%s"
+							                                 (powerline-current-separator)
+							                                 (cdr powerline-default-separator-dir))))
+			                (lhs (list (powerline-raw "%*" face0 'l)
+				                       (powerline-buffer-size face0 'l)
+				                       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
+				                       (powerline-raw " ")
+				                       (funcall separator-left face0 face1)
+				                       (powerline-narrow face1 'l)
+				                       (powerline-vc face1)))
+			                (center (list (powerline-raw global-mode-string face1 'r)
+					                      (powerline-raw '(" P" (:eval (number-to-string
                                                                         (pdf-view-current-page))))
                                                          face1 'r)
-					  (powerline-raw "/" face1)
-					  (powerline-raw '((:eval (number-to-string
+					                      (powerline-raw "/" face1)
+					                      (powerline-raw '((:eval (number-to-string
                                                                    (pdf-cache-number-of-pages))))
                                                          face1 'r)
-					  (funcall separator-right face1 face0)
-					  (powerline-raw " ")
-					  (powerline-raw "%6p" face0 'r)
-					  (powerline-hud face2 face1)
-					  (powerline-raw evil-mode-line-tag face1 'r)
-					  ))
-			    (rhs (list (powerline-raw " " face1)
-				       (funcall separator-left face1 face2)
-				       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-					 (powerline-raw erc-modified-channels-object face2 'l))
-				       (powerline-major-mode face2 'l)
-				       (powerline-process face2)
-				       (powerline-raw " :" face2)
-				       (powerline-minor-modes face2 'l)
-				       (powerline-raw " " face2)
-				       (funcall separator-right face2 face1)
-				       ))
-			    )
-		       (concat (powerline-render lhs)
-			       (powerline-fill-center face1 (/ (powerline-width center) 2.0))
-			       (powerline-render center)
-			       (powerline-fill face1 (powerline-width rhs))
-			       (powerline-render rhs))))
-		    ))
+					                      (funcall separator-right face1 face0)
+					                      (powerline-raw " ")
+					                      (powerline-raw "%6p" face0 'r)
+					                      (powerline-hud face2 face1)
+					                      (powerline-raw evil-mode-line-tag face1 'r)
+					                      ))
+			                (rhs (list (powerline-raw " " face1)
+				                       (funcall separator-left face1 face2)
+				                       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+					                     (powerline-raw erc-modified-channels-object face2 'l))
+				                       (powerline-major-mode face2 'l)
+				                       (powerline-process face2)
+				                       (powerline-raw " :" face2)
+				                       (powerline-minor-modes face2 'l)
+				                       (powerline-raw " " face2)
+				                       (funcall separator-right face2 face1)
+				                       ))
+			                )
+		               (concat (powerline-render lhs)
+			                   (powerline-fill-center face1 (/ (powerline-width center) 2.0))
+			                   (powerline-render center)
+			                   (powerline-fill face1 (powerline-width rhs))
+			                   (powerline-render rhs))))
+		            ))
     )
   (defun powerline-general-theme ()
     (interactive)
     (setq-default mode-line-format
-		  '("%e"
-		    (:eval
-		     (let* ((active (powerline-selected-window-active))
-			    (mode-line-buffer-id (if active 'mode-line-buffer-id
+		          '("%e"
+		            (:eval
+		             (let* ((active (powerline-selected-window-active))
+			                (mode-line-buffer-id (if active 'mode-line-buffer-id
                                                    'mode-line-buffer-id-inactive))
-			    (mode-line (if active 'mode-line 'mode-line-inactive))
-			    (face0 (if active 'powerline-active0 'powerline-inactive0))
-			    (face1 (if active 'powerline-active1 'powerline-inactive1))
-			    (face2 (if active 'powerline-active2 'powerline-inactive2))
-			    (separator-left (intern (format "powerline-%s-%s"
-							    (powerline-current-separator)
-							    (car powerline-default-separator-dir))))
-			    (separator-right (intern (format "powerline-%s-%s"
-							     (powerline-current-separator)
-							     (cdr powerline-default-separator-dir))))
-			    (lhs (list (powerline-raw "%*" face0 'l)
-				       (powerline-buffer-size face0 'l)
-				       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
-				       (powerline-raw " ")
-				       (funcall separator-left face0 face1)
-				       (powerline-narrow face1 'l)
-				       (powerline-vc face1)))
-			    (center (list (powerline-raw global-mode-string face1 'r)
-					  (powerline-raw "%4l" face1 'r)
-					  (powerline-raw ":" face1)
-					  (powerline-raw "%3c" face1 'r)
-					  (funcall separator-right face1 face0)
-					  (powerline-raw " ")
-					  (powerline-raw "%6p" face0 'r)
-					  (powerline-hud face2 face1)
-					  (powerline-raw evil-mode-line-tag face1 'r)
-					  ))
-			    (rhs (list (powerline-raw " " face1)
-				       (funcall separator-left face1 face2)
-				       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-					 (powerline-raw erc-modified-channels-object face2 'l))
-				       (powerline-major-mode face2 'l)
-				       (powerline-process face2)
-				       (powerline-raw " :" face2)
-				       (powerline-minor-modes face2 'l)
-				       (powerline-raw " " face2)
-				       (funcall separator-right face2 face1)
-				       ))
-			    )
-		       (concat (powerline-render lhs)
-			       (powerline-fill-center face1 (/ (powerline-width center) 2.0))
-			       (powerline-render center)
-			       (powerline-fill face1 (powerline-width rhs))
-			       (powerline-render rhs))))
-		    ))
+			                (mode-line (if active 'mode-line 'mode-line-inactive))
+			                (face0 (if active 'powerline-active0 'powerline-inactive0))
+			                (face1 (if active 'powerline-active1 'powerline-inactive1))
+			                (face2 (if active 'powerline-active2 'powerline-inactive2))
+			                (separator-left (intern (format "powerline-%s-%s"
+							                                (powerline-current-separator)
+							                                (car powerline-default-separator-dir))))
+			                (separator-right (intern (format "powerline-%s-%s"
+							                                 (powerline-current-separator)
+							                                 (cdr powerline-default-separator-dir))))
+			                (lhs (list (powerline-raw "%*" face0 'l)
+				                       (powerline-buffer-size face0 'l)
+				                       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
+				                       (powerline-raw " ")
+				                       (funcall separator-left face0 face1)
+				                       (powerline-narrow face1 'l)
+				                       (powerline-vc face1)))
+			                (center (list (powerline-raw global-mode-string face1 'r)
+					                      (powerline-raw "%4l" face1 'r)
+					                      (powerline-raw ":" face1)
+					                      (powerline-raw "%3c" face1 'r)
+					                      (funcall separator-right face1 face0)
+					                      (powerline-raw " ")
+					                      (powerline-raw "%6p" face0 'r)
+					                      (powerline-hud face2 face1)
+					                      (powerline-raw evil-mode-line-tag face1 'r)
+					                      ))
+			                (rhs (list (powerline-raw " " face1)
+				                       (funcall separator-left face1 face2)
+				                       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+					                     (powerline-raw erc-modified-channels-object face2 'l))
+				                       (powerline-major-mode face2 'l)
+				                       (powerline-process face2)
+				                       (powerline-raw " :" face2)
+				                       (powerline-minor-modes face2 'l)
+				                       (powerline-raw " " face2)
+				                       (funcall separator-right face2 face1)
+				                       ))
+			                )
+		               (concat (powerline-render lhs)
+			                   (powerline-fill-center face1 (/ (powerline-width center) 2.0))
+			                   (powerline-render center)
+			                   (powerline-fill face1 (powerline-width rhs))
+			                   (powerline-render rhs))))
+		            ))
     )
   ;; (powerline-general-theme)
   )

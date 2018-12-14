@@ -32,3 +32,5 @@ doc/auto
 *.elc
 doc/
 image-dired/
+/ac-comphist.dat
+/octave-workspace

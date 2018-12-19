@@ -182,6 +182,10 @@ amount of spaces."
             (local-set-key (kbd "C-\-") 'image-decrease-size)
             ))
 
+;; Specify buffers that should appear in the same window
+(add-to-list 'same-window-buffer-names "*Proced*")
+(add-to-list 'same-window-buffer-names "*SQL*")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pdf-tools
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -286,6 +290,7 @@ rotate entire document."
                   slime-repl-mode
 		          image-dired-thumbnail-mode
                   inferior-octave-mode
+                  Custom-mode
 		          eshell-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
@@ -298,6 +303,7 @@ rotate entire document."
   (evil-set-initial-state 'gud-mode 'emacs)
   (evil-set-initial-state 'sage-shell-mode 'emacs)
   (evil-set-initial-state 'message-mode 'emacs)
+  (evil-set-initial-state 'sql-interactive-mode 'emacs)
 
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
@@ -333,7 +339,7 @@ rotate entire document."
 
 ;; Auto-wrap at 100 characters
 (setq-default auto-fill-function 'do-auto-fill)
-(setq-default fill-column 100)
+(setq-default fill-column 120)
 (turn-on-auto-fill)
 ;; Disable auto-fill-mode in programming mode
 (add-hook 'prog-mode-hook (lambda () (auto-fill-mode -1)))
@@ -399,7 +405,7 @@ rotate entire document."
   #'endless/toggle-comint-compilation)
 
 ;; rgrep
-(global-set-key (kbd "<f6>") #'rgrep)
+(global-set-key (kbd "<f7>") #'rgrep)
 
 ;; We don't want to type yes and no all the time so, do y and n
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -502,7 +508,12 @@ rotate entire document."
 (add-hook 'sage-shell-mode-hook
           (lambda ()
             (set-fill-column 1000)))
-(global-set-key (kbd "<f7>") 'sage-shell:run-sage)
+(global-set-key (kbd "<f6>") 'sage-shell:run-sage)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; proced
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(global-set-key (kbd "<f9>") 'proced)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ibuffer - better buffer list
@@ -575,7 +586,7 @@ rotate entire document."
 ;; symon - display CPU/mem/etc usage
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'symon)
-(symon-mode 0)
+(symon-mode)
 (global-set-key (kbd "<f1> z") 'symon-mode)
 ;; (setq symon-delay 10)
 
@@ -829,22 +840,22 @@ rotate entire document."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Edit server to allow editing of things in Chrome with Emacs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package edit-server
-  :ensure t
-  :config
-  (progn
-    (eval-when-compile
-      ;; Silence missing function warnings
-      (declare-function edit-server-start "edit-server-start.el"))
-    (when (daemonp)
-      (edit-server-start)
-      )
-    (add-hook 'edit-server-start-hook
-              (lambda ()
-                (when (string-match "github.com" (buffer-name))
-                  (markdown-mode))))
-    )
-  )
+;; (use-package edit-server
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (eval-when-compile
+;;       ;; Silence missing function warnings
+;;       (declare-function edit-server-start "edit-server-start.el"))
+;;     (when (daemonp)
+;;       (edit-server-start)
+;;       )
+;;     (add-hook 'edit-server-start-hook
+;;               (lambda ()
+;;                 (when (string-match "github.com" (buffer-name))
+;;                   (markdown-mode))))
+;;     )
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Origami - Does code folding, ie hide the body of an
@@ -1295,8 +1306,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
      "  " mode-name mode-line-misc-info mode-line-end-spaces)))
  '(package-selected-packages
    (quote
-    (ac-octave es-mode eterm-256color xterm-color helm-systemd helm magit yasnippet-snippets company-ycmd ycmd flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this symon company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+    (systemd ac-octave es-mode eterm-256color xterm-color helm-systemd helm magit yasnippet-snippets company-ycmd ycmd flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/opt/plantuml/plantuml.jar")
+ '(sql-electric-stuff nil)
  '(symon-mode nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1393,18 +1405,68 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; autopair
+;; sql customization
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Automatically at closing brace, bracket and quote
-(use-package autopair
-  :ensure t
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function autopair-global-mode "autopair.el"))
-  :config
-  (autopair-global-mode t)
-  )
+;; Silence compiler warnings
+(defvar sql-product)
+(defvar sql-prompt-regexp)
+(defvar sql-prompt-cont-regexp)
+
+(add-hook 'sql-interactive-mode-hook
+          (lambda ()
+            (set-fill-column 1000)))
+
+(add-hook 'sql-interactive-mode-hook 'my-sql-interactive-mode-hook)
+(defun my-sql-interactive-mode-hook ()
+  "Custom interactive SQL mode behaviours. See `sql-interactive-mode-hook'."
+  (when (eq sql-product 'postgres)
+    ;; Allow symbol chars in database names in prompt.
+    ;; Default postgres pattern was: "^\\w*=[#>] " (see `sql-product-alist').
+    (setq sql-prompt-regexp "^\\(?:\\sw\\|\\s_\\)*=[#>] ")
+    ;; Ditto for continuation prompt: "^\\w*[-(][#>] "
+    (setq sql-prompt-cont-regexp "^\\(?:\\sw\\|\\s_\\)*[-(][#>] "))
+
+  ;; Deal with inline prompts in query output.
+  ;; Runs after `sql-interactive-remove-continuation-prompt'.
+  (add-hook 'comint-preoutput-filter-functions
+            'my-sql-comint-preoutput-filter :append :local))
+
+(defun my-sql-comint-preoutput-filter (output)
+  "Filter prompts out of SQL query output.
+
+Runs after `sql-interactive-remove-continuation-prompt' in
+`comint-preoutput-filter-functions'."
+  ;; If the entire output is simply the main prompt, return that.
+  ;; (i.e. When simply typing RET at the sqli prompt.)
+  (if (string-match (concat "\\`\\(" sql-prompt-regexp "\\)\\'") output)
+      output
+    ;; Otherwise filter all leading prompts from the output.
+    ;; Store the buffer-local prompt patterns before changing buffers.
+    (let ((main-prompt sql-prompt-regexp)
+          (any-prompt comint-prompt-regexp) ;; see `sql-interactive-mode'
+          (prefix-newline nil))
+      (with-temp-buffer
+        (insert output)
+        (goto-char (point-min))
+        (when (looking-at main-prompt)
+          (setq prefix-newline t))
+        (while (looking-at any-prompt)
+          (replace-match ""))
+        ;; Prepend a newline to the output, if necessary.
+        (when prefix-newline
+          (goto-char (point-min))
+          (unless (looking-at "\n")
+            (insert "\n")))
+        ;; Return the filtered output.
+        (buffer-substring-no-properties (point-min) (point-max))))))
+
+(defadvice sql-send-string (before my-prefix-newline-to-sql-string)
+  "Force all `sql-send-*' commands to include an initial newline.
+
+This is a trivial solution to single-line queries tripping up my
+custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
+  (ad-set-arg 0 (concat "\n" (ad-get-arg 0))))
+(ad-activate 'sql-send-string)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load hungry Delete, caus we're lazy
@@ -1450,8 +1512,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
     (ispell-word))
 
   (global-set-key (kbd "<f8>") 'flyspell-buffer)
-  (global-set-key (kbd "<f9>") 'flyspell-correct-next)
-  ;; (global-set-key (kbd "<f9>") 'flyspell-correct-previous)
 
   (add-hook 'text-mode-hook #'flyspell-mode)
   ;; (add-hook 'prog-mode-hook #'flyspell-prog-mode)
@@ -1538,6 +1598,12 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
                           ))
     )
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; windmove - enables shift + arrow keys to move between open windows
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yaml-mode
@@ -1736,7 +1802,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   "Runs latexindent on the current buffer."
   (interactive)
   (with-no-warnings
-    (shell-command (concat "latexindent.pl " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
+    (shell-command (concat "latexindent " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
 			               (buffer-file-name) ".tmp " (buffer-file-name)))))
 
 (defun add-auctex-keys ()
@@ -1761,9 +1827,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :config
   (setq-default TeX-auto-save t
                 TeX-parse-self t
+                TeX-master nil
                 TeX-source-correlate-start-server t
 		        LaTeX-indent-level 8
-
 		        )
   ;;  (cond
   ;;   ((string-equal system-type "windows-nt") ; Microsoft Windows
@@ -1793,7 +1859,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; This prevents certain special characters from causing issues in those environments.
 ;; For instance, $ and _
 ;; See: https://tex.stackexchange.com/questions/111289/how-to-make-auctex-ignore-syntax-highlighting-within-environment
-(setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting" "minted"))
+(setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting" "minted" "lstinline" "mintinline"))
 
 ;; (TeX-add-style-hook
 ;;  "latex"
@@ -1832,12 +1898,14 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; (set-face-background 'hl-line "#372E2D")
 ;; The minibuffer default colors with my theme are impossible to read, so change
 ;; them to something better using ivy-minibuffer-match-face.
+(set-cursor-color "#c2c2b0")
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((type tty) (background dark)) (:background "nil"))))
+ '(default ((t (:inherit nil :stipple nil :background "#222222" :foreground "#c2c2b0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 102 :width normal :foundry "PfEd" :family "SF Mono"))))
  '(auto-dim-other-buffers-face ((t (:background "#111"))))
  '(company-preview ((t (:background "#073642" :foreground "#2aa198"))))
  '(company-preview-common ((t (:foreground "#93a1a1" :underline t))))
@@ -1872,7 +1940,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
                              (horizontal-scroll-bars . nil))))
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 ;; Set font size
-(defvar my-font-size 100)
+(defvar my-font-size 80)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my-font-size)
 ;; Set the header bar font
@@ -1908,6 +1976,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (add-hook 'gnus-summary-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'image-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'sql-interactive-mode-hook (lambda () (display-line-numbers-mode -1)))
   )
 
 ;; Set the font to size 9 (90/10).

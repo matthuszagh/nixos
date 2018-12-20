@@ -14,9 +14,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Specify the ycmd server command and path to the ycmd directory *inside *the;
                                         ; cloned ycmd directory
-(defvar my:ycmd-server-command '("python" "/home/matt/developer/software/ycmd/ycmd"))
-(defvar my:ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
-(defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
+;; (defvar my:ycmd-server-command '("python" "/home/matt/developer/software/ycmd/ycmd"))
+;; (defvar my:ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
+;; (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
 
 ;; Specify the jupyter executable name, and the start dir of the server
 (defvar my:jupyter_location (executable-find "jupyter"))
@@ -288,10 +288,10 @@ rotate entire document."
                   pdf-occur-buffer-mode
                   mpdel-nav-mode
                   slime-repl-mode
-		          image-dired-thumbnail-mode
+		  image-dired-thumbnail-mode
                   inferior-octave-mode
                   Custom-mode
-		          eshell-mode))
+		  eshell-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
   (evil-set-initial-state 'term-mode 'emacs)
@@ -315,7 +315,7 @@ rotate entire document."
   ;; Evil binds M-. which overrides the behavior of counsel-etags find tag.
   ;; This only seems to be an issue in normal mode with this keybinding.
   ;; If others are issues, perform similar actions with them.
-  (define-key evil-normal-state-map (kbd "M-.") 'counsel-etags-find-tag-at-point)
+  (define-key evil-normal-state-map (kbd "M-.") 'rtags-find-symbol-at-point)
   )
 
 ;; Unbind toggling Emacs state. I don't need this and would rather use it for term-mode.
@@ -502,6 +502,11 @@ rotate entire document."
 (use-package async
   :ensure t)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; electric pair mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(electric-pair-mode 1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sage
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -531,14 +536,14 @@ rotate entire document."
 
 ;; Modify the default ibuffer-formats
 (setq ibuffer-formats
-	  '((mark modified read-only " "
-		      (name 18 18 :left :elide)
-		      " "
-		      (size-h 9 -1 :right)
-		      " "
-		      (mode 16 16 :left :elide)
-		      " "
-		      filename-and-process)))
+      '((mark modified read-only " "
+	      (name 18 18 :left :elide)
+	      " "
+	      (size-h 9 -1 :right)
+	      " "
+	      (mode 16 16 :left :elide)
+	      " "
+	      filename-and-process)))
 
 (setq ibuffer-saved-filter-groups
       (quote (("default"
@@ -670,147 +675,194 @@ rotate entire document."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ivy config
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package ivy
-  :ensure t
-  :commands (ivy-mode)
-  :config
-  (require 'ivy)
-  (ivy-mode t)
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-wrap t)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  ;; Show #/total when scrolling buffers
-  (setq ivy-count-format "%d/%d ")
-  )
+;; (use-package ivy
+;;   :ensure t
+;;   :commands (ivy-mode)
+;;   :config
+;;   (require 'ivy)
+;;   (ivy-mode t)
+;;   (setq ivy-use-virtual-buffers t)
+;;   (setq enable-recursive-minibuffers t)
+;;   (setq ivy-wrap t)
+;;   (global-set-key (kbd "C-c C-r") 'ivy-resume)
+;;   ;; Show #/total when scrolling buffers
+;;   (setq ivy-count-format "%d/%d ")
+;;   )
 
-(use-package swiper
-  :ensure t
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper))
-  )
+;; (use-package swiper
+;;   :ensure t
+;;   :bind (("C-s" . swiper)
+;;          ("C-r" . swiper))
+;;   )
 
-(use-package counsel
-  :ensure t
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("<f1> f" . counsel-describe-function)
-         ("<f1> v" . counsel-describe-variable)
-         ("<f1> l" . counsel-find-library)
-         ("<f2> i" . counsel-info-lookup-symbol)
-         ("<f2> u" . counsel-unicode-char)
-         ("C-c g" . counsel-git-grep)
-         ("C-c j" . counsel-git)
-         ("C-c k" . counsel-ag)
-         ("C-c r" . counsel-rg)
-         ("C-x l" . counsel-locate)
-         :map minibuffer-local-map
-         ("C-r" . counsel-minibuffer-add)
-         )
-  :config
-  (if (executable-find "rg")
-      ;; use ripgrep instead of grep because it's way faster
-      (setq counsel-grep-base-command
-            "rg -i -M 120 --no-heading --line-number --color never '%s' %s"
-            counsel-rg-base-command
-            "rg -i -M 120 --no-heading --line-number --color never %s ."
-            )
-    (warn "\nWARNING: Could not find the ripgrep executable. It "
-          "is recommended you install ripgrep.")
-    )
-  )
+;; (use-package counsel
+;;   :ensure t
+;;   :bind (("M-x" . counsel-M-x)
+;;          ("C-x C-f" . counsel-find-file)
+;;          ("<f1> f" . counsel-describe-function)
+;;          ("<f1> v" . counsel-describe-variable)
+;;          ("<f1> l" . counsel-find-library)
+;;          ("<f2> i" . counsel-info-lookup-symbol)
+;;          ("<f2> u" . counsel-unicode-char)
+;;          ("C-c g" . counsel-git-grep)
+;;          ("C-c j" . counsel-git)
+;;          ("C-c k" . counsel-ag)
+;;          ("C-c r" . counsel-rg)
+;;          ("C-x l" . counsel-locate)
+;;          :map minibuffer-local-map
+;;          ("C-r" . counsel-minibuffer-add)
+;;          )
+;;   :config
+;;   (if (executable-find "rg")
+;;       ;; use ripgrep instead of grep because it's way faster
+;;       (setq counsel-grep-base-command
+;;             "rg -i -M 120 --no-heading --line-number --color never '%s' %s"
+;;             counsel-rg-base-command
+;;             "rg -i -M 120 --no-heading --line-number --color never %s ."
+;;             )
+;;     (warn "\nWARNING: Could not find the ripgrep executable. It "
+;;           "is recommended you install ripgrep.")
+;;     )
+;;   )
 
-;; Use universal ctags to build the tags database for the project.
-;; When you first want to build a TAGS database run 'touch TAGS'
-;; in the root directory of your project.
-(use-package counsel-etags
-  :ensure t
-  :init
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function counsel-etags-virtual-update-tags "counsel-etags.el")
-    (declare-function counsel-etags-guess-program "counsel-etags.el")
-    (declare-function counsel-etags-locate-tags-file "counsel-etags.el"))
-  :bind (
-         ("M-." . counsel-etags-find-tag-at-point)
-         ("M-t" . counsel-etags-grep-symbol-at-point)
-         ("M-s" . counsel-etags-find-tag))
-  :config
-  ;; Ignore files above 800kb
-  (setq counsel-etags-max-file-size 800)
-  ;; Ignore build directories for tagging
-  (add-to-list 'counsel-etags-ignore-directories '"build*")
-  (add-to-list 'counsel-etags-ignore-directories '".vscode")
-  (add-to-list 'counsel-etags-ignore-filenames '".clang-format")
-  ;; Don't ask before rereading the TAGS files if they have changed
-  (setq tags-revert-without-query t)
-  ;; Don't warn when TAGS files are large
-  (setq large-file-warning-threshold nil)
-  ;; How many seconds to wait before rerunning tags for auto-update
-  (setq counsel-etags-update-interval 180)
-  ;; Set up auto-update
-  (add-hook
-   'prog-mode-hook
-   (lambda () (add-hook 'after-save-hook
-                        (lambda ()
-                          (counsel-etags-virtual-update-tags))))
-   )
+;; ;; Use universal ctags to build the tags database for the project.
+;; ;; When you first want to build a TAGS database run 'touch TAGS'
+;; ;; in the root directory of your project.
+;; (use-package counsel-etags
+;;   :ensure t
+;;   :init
+;;   (eval-when-compile
+;;     ;; Silence missing function warnings
+;;     (declare-function counsel-etags-virtual-update-tags "counsel-etags.el")
+;;     (declare-function counsel-etags-guess-program "counsel-etags.el")
+;;     (declare-function counsel-etags-locate-tags-file "counsel-etags.el"))
+;;   :bind (
+;;          ("M-." . counsel-etags-find-tag-at-point)
+;;          ("M-t" . counsel-etags-grep-symbol-at-point)
+;;          ("M-s" . counsel-etags-find-tag))
+;;   :config
+;;   ;; Ignore files above 800kb
+;;   (setq counsel-etags-max-file-size 800)
+;;   ;; Ignore build directories for tagging
+;;   (add-to-list 'counsel-etags-ignore-directories '"build*")
+;;   (add-to-list 'counsel-etags-ignore-directories '".vscode")
+;;   (add-to-list 'counsel-etags-ignore-filenames '".clang-format")
+;;   ;; Don't ask before rereading the TAGS files if they have changed
+;;   (setq tags-revert-without-query t)
+;;   ;; Don't warn when TAGS files are large
+;;   (setq large-file-warning-threshold nil)
+;;   ;; How many seconds to wait before rerunning tags for auto-update
+;;   (setq counsel-etags-update-interval 180)
+;;   ;; Set up auto-update
+;;   (add-hook
+;;    'prog-mode-hook
+;;    (lambda () (add-hook 'after-save-hook
+;;                         (lambda ()
+;;                           (counsel-etags-virtual-update-tags))))
+;;    )
 
-  ;; The function provided by counsel-etags is broken (at least on Linux)
-  ;; and doesn't correctly exclude directories, leading to an excessive
-  ;; amount of incorrect tags. The issue seems to be that the trailing '/'
-  ;; in e.g. '*dirname/*' causes 'find' to not correctly exclude all files
-  ;; in that directory, only files in sub-directories of the dir set to be
-  ;; ignore.
-  (defun my-scan-dir (src-dir &optional force)
-    "Create tags file from SRC-DIR. \
-     If FORCE is t, the commmand is executed without \
-     checking the timer."
-    (let* ((find-pg (or
-                     counsel-etags-find-program
-                     (counsel-etags-guess-program "find")))
-           (ctags-pg (or
-                      counsel-etags-tags-program
-                      (format "%s -e -L" (counsel-etags-guess-program
-                                          "ctags"))))
-           (default-directory src-dir)
-           ;; run find&ctags to create TAGS
-           (cmd (format
-                 "%s . \\( %s \\) -prune -o -type f -not -size +%sk %s | %s -"
-                 find-pg
-                 (mapconcat
-                  (lambda (p)
-                    (format "-iwholename \"*%s*\"" p))
-                  counsel-etags-ignore-directories " -or ")
-                 counsel-etags-max-file-size
-                 (mapconcat (lambda (n)
-                              (format "-not -name \"%s\"" n))
-                            counsel-etags-ignore-filenames " ")
-                 ctags-pg))
-           (tags-file (concat (file-name-as-directory src-dir) "TAGS"))
-           (doit (or force (not (file-exists-p tags-file)))))
-      ;; always update cli options
-      (when doit
-        (message "%s at %s" cmd default-directory)
-        (shell-command cmd)
-        (visit-tags-table tags-file t)
-        )
-      )
-    )
+;;   ;; The function provided by counsel-etags is broken (at least on Linux)
+;;   ;; and doesn't correctly exclude directories, leading to an excessive
+;;   ;; amount of incorrect tags. The issue seems to be that the trailing '/'
+;;   ;; in e.g. '*dirname/*' causes 'find' to not correctly exclude all files
+;;   ;; in that directory, only files in sub-directories of the dir set to be
+;;   ;; ignore.
+;;   (defun my-scan-dir (src-dir &optional force)
+;;     "Create tags file from SRC-DIR. \
+;;      If FORCE is t, the commmand is executed without \
+;;      checking the timer."
+;;     (let* ((find-pg (or
+;;                      counsel-etags-find-program
+;;                      (counsel-etags-guess-program "find")))
+;;            (ctags-pg (or
+;;                       counsel-etags-tags-program
+;;                       (format "%s -e -L" (counsel-etags-guess-program
+;;                                           "ctags"))))
+;;            (default-directory src-dir)
+;;            ;; run find&ctags to create TAGS
+;;            (cmd (format
+;;                  "%s . \\( %s \\) -prune -o -type f -not -size +%sk %s | %s -"
+;;                  find-pg
+;;                  (mapconcat
+;;                   (lambda (p)
+;;                     (format "-iwholename \"*%s*\"" p))
+;;                   counsel-etags-ignore-directories " -or ")
+;;                  counsel-etags-max-file-size
+;;                  (mapconcat (lambda (n)
+;;                               (format "-not -name \"%s\"" n))
+;;                             counsel-etags-ignore-filenames " ")
+;;                  ctags-pg))
+;;            (tags-file (concat (file-name-as-directory src-dir) "TAGS"))
+;;            (doit (or force (not (file-exists-p tags-file)))))
+;;       ;; always update cli options
+;;       (when doit
+;;         (message "%s at %s" cmd default-directory)
+;;         (shell-command cmd)
+;;         (visit-tags-table tags-file t)
+;;         )
+;;       )
+;;     )
 
-  (setq counsel-etags-update-tags-backend
-        (lambda ()
-          (interactive)
-          (let* ((tags-file (counsel-etags-locate-tags-file)))
-            (when tags-file
-              (my-scan-dir (file-name-directory tags-file) t)
-              (run-hook-with-args
-               'counsel-etags-after-update-tags-hook tags-file)
-              (unless counsel-etags-quiet-when-updating-tags
-                (message "%s is updated!" tags-file))))
-          )
-        )
-  )
+;;   (setq counsel-etags-update-tags-backend
+;;         (lambda ()
+;;           (interactive)
+;;           (let* ((tags-file (counsel-etags-locate-tags-file)))
+;;             (when tags-file
+;;               (my-scan-dir (file-name-directory tags-file) t)
+;;               (run-hook-with-args
+;;                'counsel-etags-after-update-tags-hook tags-file)
+;;               (unless counsel-etags-quiet-when-updating-tags
+;;                 (message "%s is updated!" tags-file))))
+;;           )
+;;         )
+;;   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Helm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'helm)
+(require 'helm-config)
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+(helm-autoresize-mode 1)
+
+(helm-mode 1)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+(setq helm-locate-fuzzy-match t)
+(global-set-key (kbd "C-c h o") 'helm-occur)
+(setq helm-apropos-fuzzy-match t)
+(setq helm-lisp-fuzzy-completion t)
+;; (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+(global-set-key (kbd "C-c h g") 'helm-google-suggest)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Window numbering
@@ -1033,8 +1085,8 @@ rotate entire document."
 
 (defun my-c-mode-common-hook ()
   (setq c-basic-offset 8
-	    tab-width 8
-	    indent-tabs-mode t))
+	tab-width 8
+	indent-tabs-mode t))
 
 (use-package cc-mode
   :ensure t
@@ -1112,72 +1164,72 @@ rotate entire document."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: ycmd (YouCompleteMeDaemon)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set up YouCompleteMe for emacs:
-;; https://github.com/Valloric/ycmd
-;; https://github.com/abingham/emacs-ycmd
-(defvar my:python-location (executable-find (nth 0 my:ycmd-server-command)))
-(if (not my:python-location)
-    (message
-     "Could not start YouCompleteMeDaemon because the python executable could
-not be found.\nSpecified executable is: '%s'\nPlease set my:ycmd-server-command
-appropriately in ~/.emacs.d/init.el.\n" (nth 0 my:ycmd-server-command)))
-(if (not (file-directory-p (nth 1 my:ycmd-server-command)))
-    (message "Could not YouCompleteMeDaemon because the specified directory does
-not exist.\nSpecified directory is: '%s'
-Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
-             (nth 1 my:ycmd-server-command)))
-(if (and my:python-location
-         (file-directory-p (nth 1 my:ycmd-server-command)))
-    (use-package ycmd
-      :ensure t
-      :init
-      (eval-when-compile
-        ;; Silence missing function warnings
-        (declare-function global-ycmd-mode "ycmd.el")
-	    (declare-function ycmd-mode "ycmd.el"))
-      (add-hook 'after-init-hook #'global-ycmd-mode)
-      :config
-      (progn
-        (set-variable 'ycmd-server-command my:ycmd-server-command)
-        (set-variable 'ycmd-extra-conf-whitelist my:ycmd-extra-conf-whitelist)
-        (set-variable 'ycmd-global-config my:ycmd-global-config)
-        (setq ycmd-force-semantic-completion t)
-        (setq ycmd-request-message-level -1)
-        (setq ycmd-url-show-status nil)
-        (setq ycmd--log-enabled t)
-        (use-package company-ycmd
-          :ensure t
-          :init
-          (eval-when-compile
-            ;; Silence missing function warnings
-            (declare-function company-ycmd-setup "company-ycmd.el"))
-          :config
-          (company-ycmd-setup)
-          )
+;; ;; Set up YouCompleteMe for emacs:
+;; ;; https://github.com/Valloric/ycmd
+;; ;; https://github.com/abingham/emacs-ycmd
+;; (defvar my:python-location (executable-find (nth 0 my:ycmd-server-command)))
+;; (if (not my:python-location)
+;;     (message
+;;      "Could not start YouCompleteMeDaemon because the python executable could
+;; not be found.\nSpecified executable is: '%s'\nPlease set my:ycmd-server-command
+;; appropriately in ~/.emacs.d/init.el.\n" (nth 0 my:ycmd-server-command)))
+;; (if (not (file-directory-p (nth 1 my:ycmd-server-command)))
+;;     (message "Could not YouCompleteMeDaemon because the specified directory does
+;; not exist.\nSpecified directory is: '%s'
+;; Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
+;;              (nth 1 my:ycmd-server-command)))
+;; (if (and my:python-location
+;;          (file-directory-p (nth 1 my:ycmd-server-command)))
+;;     (use-package ycmd
+;;       :ensure t
+;;       :init
+;;       (eval-when-compile
+;;         ;; Silence missing function warnings
+;;         (declare-function global-ycmd-mode "ycmd.el")
+;; 	    (declare-function ycmd-mode "ycmd.el"))
+;;       (add-hook 'after-init-hook #'global-ycmd-mode)
+;;       :config
+;;       (progn
+;;         (set-variable 'ycmd-server-command my:ycmd-server-command)
+;;         (set-variable 'ycmd-extra-conf-whitelist my:ycmd-extra-conf-whitelist)
+;;         (set-variable 'ycmd-global-config my:ycmd-global-config)
+;;         (setq ycmd-force-semantic-completion t)
+;;         (setq ycmd-request-message-level -1)
+;;         (setq ycmd-url-show-status nil)
+;;         (setq ycmd--log-enabled t)
+;;         (use-package company-ycmd
+;;           :ensure t
+;;           :init
+;;           (eval-when-compile
+;;             ;; Silence missing function warnings
+;;             (declare-function company-ycmd-setup "company-ycmd.el"))
+;;           :config
+;;           (company-ycmd-setup)
+;;           )
 
-        ;; (use-package flycheck-ycmd
-        ;;   :ensure t
-        ;;   :init
-        ;;   (add-hook 'c-mode-common-hook 'flycheck-ycmd-setup)
-        ;;   )
+;;         ;; (use-package flycheck-ycmd
+;;         ;;   :ensure t
+;;         ;;   :init
+;;         ;;   (add-hook 'c-mode-common-hook 'flycheck-ycmd-setup)
+;;         ;;   )
 
-        ;; Add displaying the function arguments in mini buffer using El Doc
-        (require 'ycmd-eldoc)
-        (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
-        ;; disable ycmd in tramp mode when editing C++ and python files
-        ;; (ycmd doesn't work with tramp)
-        (add-hook 'c++-mode-hook
-                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
-                    (ycmd-mode)))
-        (add-hook 'c-mode-hook
-                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
-                    (ycmd-mode)))
-        (add-hook 'python-mode-hook
-                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
-                    (ycmd-mode)))
-        )
-      )
-  )
+;;         ;; Add displaying the function arguments in mini buffer using El Doc
+;;         (require 'ycmd-eldoc)
+;;         (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
+;;         ;; disable ycmd in tramp mode when editing C++ and python files
+;;         ;; (ycmd doesn't work with tramp)
+;;         (add-hook 'c++-mode-hook
+;;                   (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+;;                     (ycmd-mode)))
+;;         (add-hook 'c-mode-hook
+;;                   (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+;;                     (ycmd-mode)))
+;;         (add-hook 'python-mode-hook
+;;                   (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+;;                     (ycmd-mode)))
+;;         )
+;;       )
+;;   )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1198,11 +1250,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   ;; Disable company in specific major modes.
   (setq company-global-modes '(not web-mode plantuml-mode))
   ;; remove unused backends
-  (setq company-backends (delete 'company-semantic company-backends))
   (setq company-backends (delete 'company-eclim company-backends))
   (setq company-backends (delete 'company-xcode company-backends))
-  (setq company-backends (delete 'company-clang company-backends))
-  (setq company-backends (delete 'company-bbdb company-backends))
   (setq company-backends (delete 'company-oddmuse company-backends))
   )
 
@@ -1263,20 +1312,47 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; (add-hook 'c++-mode-hook 'flymake-cppcheck-load)
 
 ;; ;; Rtags
-;; (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
-;; (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-;; (add-hook 'objc-mode-hook 'rtags-start-process-unless-running)
+;; ensure that we use only rtags checking
+;; https://github.com/Andersbakken/rtags#optional-1
+(defun setup-flycheck-rtags ()
+  (interactive)
+  (flycheck-select-checker 'rtags)
+  ;; RTags creates more accurate overlays.
+  ;; (setq-local flycheck-highlighting-mode nil)
+  ;; (setq-local flycheck-check-syntax-automatically nil))
+  )
 
-;; ;; cmake ide
-;; (require 'rtags) ;; optional, must have rtags installed
-;; (cmake-ide-setup)
+;; only run this if rtags is installed
+(when (require 'rtags nil :noerror)
+  ;; make sure you have company-mode installed
+  (require 'company)
+  (define-key c-mode-base-map (kbd "M-.")
+    (function rtags-find-symbol-at-point))
+  (define-key c-mode-base-map (kbd "M-,")
+    (function rtags-find-references-at-point))
+  ;; install standard rtags keybindings. Do M-. on the symbol below to
+  ;; jump to definition and see the keybindings.
+  (rtags-enable-standard-keybindings)
+  ;; comment this out if you don't have or don't use helm
+  (setq rtags-use-helm t)
+  ;; company completion setup
+  (setq rtags-autostart-diagnostics t)
+  (rtags-diagnostics)
+  (setq rtags-completions-enabled t)
+  (push 'company-rtags company-backends)
+  (global-company-mode)
+  (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+  ;; use rtags flycheck mode -- clang warnings shown inline
+  (require 'flycheck-rtags)
+  ;; c-mode-common-hook is also called by c++-mode
+  (add-hook 'c-mode-common-hook #'setup-flycheck-rtags))
 
-;; ;; Irony mode
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;; (add-hook 'c-mode-hook 'irony-mode)
-;; (add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'rtags-start-process-unless-running)
+(add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
 
-;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+;; cmake ide
+(require 'rtags) ;; optional, must have rtags installed
+(cmake-ide-setup)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -1296,6 +1372,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
            (mode 16 16 :left :elide)
            " " filename-and-process))))
  '(jit-lock-context-time 0.1)
+ '(line-number-mode nil)
  '(mode-line-format
    (quote
     ("%e"
@@ -1306,7 +1383,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
      "  " mode-name mode-line-misc-info mode-line-end-spaces)))
  '(package-selected-packages
    (quote
-    (systemd ac-octave es-mode eterm-256color xterm-color helm-systemd helm magit yasnippet-snippets company-ycmd ycmd flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+    (flycheck-rtags helm-rtags helm-projectile rtags helm-system-packages systemd ac-octave es-mode eterm-256color xterm-color helm-systemd helm magit yasnippet-snippets flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/opt/plantuml/plantuml.jar")
  '(sql-electric-stuff nil)
  '(symon-mode nil))
@@ -1415,6 +1492,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (add-hook 'sql-interactive-mode-hook
           (lambda ()
             (set-fill-column 1000)))
+
+;; (add-hook 'sql-interactive-mode-hook
+;;           (lambda ()
+;;             (electric-pair-local-mode -1)))
 
 (add-hook 'sql-interactive-mode-hook 'my-sql-interactive-mode-hook)
 (defun my-sql-interactive-mode-hook ()
@@ -1671,19 +1752,19 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 
 (when (require 'term nil t)
   (setq term-bind-key-alist
-	    (list (cons "C-c C-c" 'term-interrupt-subjob)
-	          (cons "C-z" 'term-stop-subjob)
-	          (cons "C-r" 'term-send-raw)
-	          (cons "C-s" 'term-send-raw)
-	          (cons "M-f" 'term-send-forward-word)
+	(list (cons "C-c C-c" 'term-interrupt-subjob)
+	      (cons "C-z" 'term-stop-subjob)
+	      (cons "C-r" 'term-send-raw)
+	      (cons "C-s" 'term-send-raw)
+	      (cons "M-f" 'term-send-forward-word)
               (cons "M-b" 'term-send-backward-word)
-	          (cons "C-c C-j" 'term-line-mode)
+	      (cons "C-c C-j" 'term-line-mode)
               (cons "C-c C-k" 'term-char-mode)
-	          (cons "M-DEL" 'term-send-backward-kill-word)
+	      (cons "M-DEL" 'term-send-backward-kill-word)
               (cons "M-d" 'term-send-forward-kill-word)
-	          (cons "<C-left>" 'term-send-backward-word)
+	      (cons "<C-left>" 'term-send-backward-word)
               (cons "<C-right>" 'term-send-forward-word)
-	          (cons "C-y" 'term-paste))))
+	      (cons "C-y" 'term-paste))))
 
 ;; (add-hook 'term-mode-hook #'eterm-256color-mode)
 
@@ -1803,7 +1884,7 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (interactive)
   (with-no-warnings
     (shell-command (concat "latexindent " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
-			               (buffer-file-name) ".tmp " (buffer-file-name)))))
+			   (buffer-file-name) ".tmp " (buffer-file-name)))))
 
 (defun add-auctex-keys ()
   (local-set-key (kbd "C-c <C-i> f") 'insert-frac)
@@ -1815,7 +1896,7 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   )
 
 (add-hook 'latex-mode-hook '(lambda ()
-			                  (local-set-key (kbd "C-c C-f") 'latex-indent)))
+			      (local-set-key (kbd "C-c C-f") 'latex-indent)))
 
 (use-package tex-site
   :ensure auctex
@@ -1829,8 +1910,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
                 TeX-parse-self t
                 TeX-master nil
                 TeX-source-correlate-start-server t
-		        LaTeX-indent-level 8
-		        )
+		LaTeX-indent-level 8
+		)
   ;;  (cond
   ;;   ((string-equal system-type "windows-nt") ; Microsoft Windows
   ;;    (progn
@@ -1920,11 +2001,6 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
  '(company-tooltip-selection ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(cursor ((t (:background "dim gray"))))
  '(header-line ((t (:background "#003366"))))
- '(ivy-current-match ((((class color) (background light)) (:background "#555555")) (((class color) (background dark)) (:background "DodgerBlue4"))))
- '(ivy-minibuffer-match-face-1 ((((class color) (background light)) (:background "#555555")) (((class color) (background dark)) (:background "#555555"))))
- '(ivy-minibuffer-match-face-2 ((t (:background "#314f30" :weight bold))))
- '(ivy-minibuffer-match-face-3 ((t (:background "#48225b" :weight bold))))
- '(ivy-minibuffer-match-face-4 ((t (:background "#680a0a" :weight bold))))
  '(term-color-red ((t (:background "#aa4450" :foreground "#aa4450"))))
  '(which-func ((t (:foreground "#8fb28f")))))
 
@@ -1941,6 +2017,7 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 ;; Set font size
 (defvar my-font-size 80)
+;; (defvar my-font-size 80)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my-font-size)
 ;; Set the header bar font
@@ -1952,6 +2029,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
         ))
 
 ;; Enable line numbers on the LHS
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode)
   (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
@@ -2080,114 +2159,114 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
     "Setup a mode-line with major and minor modes on the right side."
     (interactive)
     (setq-default mode-line-format
-		          '("%e"
-		            (:eval
-		             (let* ((active (powerline-selected-window-active))
-			                (mode-line-buffer-id (if active 'mode-line-buffer-id
+		  '("%e"
+		    (:eval
+		     (let* ((active (powerline-selected-window-active))
+			    (mode-line-buffer-id (if active 'mode-line-buffer-id
                                                    'mode-line-buffer-id-inactive))
-			                (mode-line (if active 'mode-line 'mode-line-inactive))
-			                (face0 (if active 'powerline-active0 'powerline-inactive0))
-			                (face1 (if active 'powerline-active1 'powerline-inactive1))
-			                (face2 (if active 'powerline-active2 'powerline-inactive2))
-			                (separator-left (intern (format "powerline-%s-%s"
-							                                (powerline-current-separator)
-							                                (car powerline-default-separator-dir))))
-			                (separator-right (intern (format "powerline-%s-%s"
-							                                 (powerline-current-separator)
-							                                 (cdr powerline-default-separator-dir))))
-			                (lhs (list (powerline-raw "%*" face0 'l)
-				                       (powerline-buffer-size face0 'l)
-				                       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
-				                       (powerline-raw " ")
-				                       (funcall separator-left face0 face1)
-				                       (powerline-narrow face1 'l)
-				                       (powerline-vc face1)))
-			                (center (list (powerline-raw global-mode-string face1 'r)
-					                      (powerline-raw '(" P" (:eval (number-to-string
+			    (mode-line (if active 'mode-line 'mode-line-inactive))
+			    (face0 (if active 'powerline-active0 'powerline-inactive0))
+			    (face1 (if active 'powerline-active1 'powerline-inactive1))
+			    (face2 (if active 'powerline-active2 'powerline-inactive2))
+			    (separator-left (intern (format "powerline-%s-%s"
+							    (powerline-current-separator)
+							    (car powerline-default-separator-dir))))
+			    (separator-right (intern (format "powerline-%s-%s"
+							     (powerline-current-separator)
+							     (cdr powerline-default-separator-dir))))
+			    (lhs (list (powerline-raw "%*" face0 'l)
+				       (powerline-buffer-size face0 'l)
+				       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
+				       (powerline-raw " ")
+				       (funcall separator-left face0 face1)
+				       (powerline-narrow face1 'l)
+				       (powerline-vc face1)))
+			    (center (list (powerline-raw global-mode-string face1 'r)
+					  (powerline-raw '(" P" (:eval (number-to-string
                                                                         (pdf-view-current-page))))
                                                          face1 'r)
-					                      (powerline-raw "/" face1)
-					                      (powerline-raw '((:eval (number-to-string
+					  (powerline-raw "/" face1)
+					  (powerline-raw '((:eval (number-to-string
                                                                    (pdf-cache-number-of-pages))))
                                                          face1 'r)
-					                      (funcall separator-right face1 face0)
-					                      (powerline-raw " ")
-					                      (powerline-raw "%6p" face0 'r)
-					                      (powerline-hud face2 face1)
-					                      (powerline-raw evil-mode-line-tag face1 'r)
-					                      ))
-			                (rhs (list (powerline-raw " " face1)
-				                       (funcall separator-left face1 face2)
-				                       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-					                     (powerline-raw erc-modified-channels-object face2 'l))
-				                       (powerline-major-mode face2 'l)
-				                       (powerline-process face2)
-				                       (powerline-raw " :" face2)
-				                       (powerline-minor-modes face2 'l)
-				                       (powerline-raw " " face2)
-				                       (funcall separator-right face2 face1)
-				                       ))
-			                )
-		               (concat (powerline-render lhs)
-			                   (powerline-fill-center face1 (/ (powerline-width center) 2.0))
-			                   (powerline-render center)
-			                   (powerline-fill face1 (powerline-width rhs))
-			                   (powerline-render rhs))))
-		            ))
+					  (funcall separator-right face1 face0)
+					  (powerline-raw " ")
+					  (powerline-raw "%6p" face0 'r)
+					  (powerline-hud face2 face1)
+					  (powerline-raw evil-mode-line-tag face1 'r)
+					  ))
+			    (rhs (list (powerline-raw " " face1)
+				       (funcall separator-left face1 face2)
+				       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+					 (powerline-raw erc-modified-channels-object face2 'l))
+				       (powerline-major-mode face2 'l)
+				       (powerline-process face2)
+				       (powerline-raw " :" face2)
+				       (powerline-minor-modes face2 'l)
+				       (powerline-raw " " face2)
+				       (funcall separator-right face2 face1)
+				       ))
+			    )
+		       (concat (powerline-render lhs)
+			       (powerline-fill-center face1 (/ (powerline-width center) 2.0))
+			       (powerline-render center)
+			       (powerline-fill face1 (powerline-width rhs))
+			       (powerline-render rhs))))
+		    ))
     )
   (defun powerline-general-theme ()
     (interactive)
     (setq-default mode-line-format
-		          '("%e"
-		            (:eval
-		             (let* ((active (powerline-selected-window-active))
-			                (mode-line-buffer-id (if active 'mode-line-buffer-id
+		  '("%e"
+		    (:eval
+		     (let* ((active (powerline-selected-window-active))
+			    (mode-line-buffer-id (if active 'mode-line-buffer-id
                                                    'mode-line-buffer-id-inactive))
-			                (mode-line (if active 'mode-line 'mode-line-inactive))
-			                (face0 (if active 'powerline-active0 'powerline-inactive0))
-			                (face1 (if active 'powerline-active1 'powerline-inactive1))
-			                (face2 (if active 'powerline-active2 'powerline-inactive2))
-			                (separator-left (intern (format "powerline-%s-%s"
-							                                (powerline-current-separator)
-							                                (car powerline-default-separator-dir))))
-			                (separator-right (intern (format "powerline-%s-%s"
-							                                 (powerline-current-separator)
-							                                 (cdr powerline-default-separator-dir))))
-			                (lhs (list (powerline-raw "%*" face0 'l)
-				                       (powerline-buffer-size face0 'l)
-				                       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
-				                       (powerline-raw " ")
-				                       (funcall separator-left face0 face1)
-				                       (powerline-narrow face1 'l)
-				                       (powerline-vc face1)))
-			                (center (list (powerline-raw global-mode-string face1 'r)
-					                      (powerline-raw "%4l" face1 'r)
-					                      (powerline-raw ":" face1)
-					                      (powerline-raw "%3c" face1 'r)
-					                      (funcall separator-right face1 face0)
-					                      (powerline-raw " ")
-					                      (powerline-raw "%6p" face0 'r)
-					                      (powerline-hud face2 face1)
-					                      (powerline-raw evil-mode-line-tag face1 'r)
-					                      ))
-			                (rhs (list (powerline-raw " " face1)
-				                       (funcall separator-left face1 face2)
-				                       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-					                     (powerline-raw erc-modified-channels-object face2 'l))
-				                       (powerline-major-mode face2 'l)
-				                       (powerline-process face2)
-				                       (powerline-raw " :" face2)
-				                       (powerline-minor-modes face2 'l)
-				                       (powerline-raw " " face2)
-				                       (funcall separator-right face2 face1)
-				                       ))
-			                )
-		               (concat (powerline-render lhs)
-			                   (powerline-fill-center face1 (/ (powerline-width center) 2.0))
-			                   (powerline-render center)
-			                   (powerline-fill face1 (powerline-width rhs))
-			                   (powerline-render rhs))))
-		            ))
+			    (mode-line (if active 'mode-line 'mode-line-inactive))
+			    (face0 (if active 'powerline-active0 'powerline-inactive0))
+			    (face1 (if active 'powerline-active1 'powerline-inactive1))
+			    (face2 (if active 'powerline-active2 'powerline-inactive2))
+			    (separator-left (intern (format "powerline-%s-%s"
+							    (powerline-current-separator)
+							    (car powerline-default-separator-dir))))
+			    (separator-right (intern (format "powerline-%s-%s"
+							     (powerline-current-separator)
+							     (cdr powerline-default-separator-dir))))
+			    (lhs (list (powerline-raw "%*" face0 'l)
+				       (powerline-buffer-size face0 'l)
+				       (powerline-buffer-id `(mode-line-buffer-id ,face0) 'l)
+				       (powerline-raw " ")
+				       (funcall separator-left face0 face1)
+				       (powerline-narrow face1 'l)
+				       (powerline-vc face1)))
+			    (center (list (powerline-raw global-mode-string face1 'r)
+					  (powerline-raw "%4l" face1 'r)
+					  (powerline-raw ":" face1)
+					  (powerline-raw "%3c" face1 'r)
+					  (funcall separator-right face1 face0)
+					  (powerline-raw " ")
+					  (powerline-raw "%6p" face0 'r)
+					  (powerline-hud face2 face1)
+					  (powerline-raw evil-mode-line-tag face1 'r)
+					  ))
+			    (rhs (list (powerline-raw " " face1)
+				       (funcall separator-left face1 face2)
+				       (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+					 (powerline-raw erc-modified-channels-object face2 'l))
+				       (powerline-major-mode face2 'l)
+				       (powerline-process face2)
+				       (powerline-raw " :" face2)
+				       (powerline-minor-modes face2 'l)
+				       (powerline-raw " " face2)
+				       (funcall separator-right face2 face1)
+				       ))
+			    )
+		       (concat (powerline-render lhs)
+			       (powerline-fill-center face1 (/ (powerline-width center) 2.0))
+			       (powerline-render center)
+			       (powerline-fill face1 (powerline-width rhs))
+			       (powerline-render rhs))))
+		    ))
     )
   ;; (powerline-general-theme)
   )

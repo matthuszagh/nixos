@@ -128,9 +128,14 @@ These are the links I've found that address related issues:
 
 \section{Run Emacs as Daemon}
 
-Apparently, running Emacs as a server and then using emacsclient gives better results. I should
-investigate how this is done.
+The Emacs daemon starts up using a systemd script, \mintinline{text}{/usr/lib/systemd/user/emacs.service}. It's enabled
+for a user with the command
 
+\begin{minted}{text}
+$ systemctl --user enable --now emacs
+\end{minted}
+
+Running this without superuser privileges is intentional.
 
 \section{Get much better at Gnus}
 

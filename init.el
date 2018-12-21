@@ -33,7 +33,7 @@
                          ("gnu" . "http://elpa.gnu.org/packages/")))
 ;; Disable package initialize after us.  We either initialize it
 ;; anyway in case of interpreted .emacs, or we don't want slow
-;; initizlization in case of byte-compiled .emacs.elc.
+;; initialization in case of byte-compiled .emacs.elc.
 (setq package-enable-at-startup nil)
 ;; Ask package.el to not add (package-initialize) to .emacs.
 (setq package--init-file-ensured t)
@@ -291,6 +291,9 @@ rotate entire document."
 		  image-dired-thumbnail-mode
                   inferior-octave-mode
                   Custom-mode
+                  rtags-mode
+                  ein:notebooklist-mode
+                  ein:notebook-multilang-mode
 		  eshell-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
@@ -339,7 +342,7 @@ rotate entire document."
 
 ;; Auto-wrap at 100 characters
 (setq-default auto-fill-function 'do-auto-fill)
-(setq-default fill-column 120)
+(setq-default fill-column 100)
 (turn-on-auto-fill)
 ;; Disable auto-fill-mode in programming mode
 (add-hook 'prog-mode-hook (lambda () (auto-fill-mode -1)))
@@ -519,6 +522,12 @@ rotate entire document."
 ;; proced
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "<f9>") 'proced)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; pandoc
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package pandoc-mode
+  :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ibuffer - better buffer list
@@ -1011,6 +1020,9 @@ rotate entire document."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python mode settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
+
 (setq-default python-indent 4)
 (setq-default python-indent-offset 4)
 (add-hook 'python-mode-hook
@@ -1241,6 +1253,10 @@ rotate entire document."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set up code completion with company
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package company-auctex
+  :after (auctex company)
+  :config (company-auctex-init))
+
 (use-package company
   :ensure t
   :config
@@ -1248,11 +1264,18 @@ rotate entire document."
   (setq company-idle-delay 0)
   (add-hook 'after-init-hook 'global-company-mode)
   ;; Disable company in specific major modes.
-  (setq company-global-modes '(not web-mode plantuml-mode))
+  ;; (setq company-global-modes '(not web-mode plantuml-mode))
+  ;; Add backends
+  (add-to-list 'company-backends 'company-math-symbols-unicode)
+  (add-to-list 'company-backends 'company-reftex-citations)
+  (add-to-list 'company-backends 'company-reftex-labels)
   ;; remove unused backends
   (setq company-backends (delete 'company-eclim company-backends))
   (setq company-backends (delete 'company-xcode company-backends))
   (setq company-backends (delete 'company-oddmuse company-backends))
+  ;; Maintain case information for completions.
+  (setq company-dabbrev-downcase nil)
+  (setq company-dabbrev-ignore-case nil)
   )
 
 ;; Setup loading company-jedi for python completion
@@ -1383,7 +1406,7 @@ rotate entire document."
      "  " mode-name mode-line-misc-info mode-line-end-spaces)))
  '(package-selected-packages
    (quote
-    (flycheck-rtags helm-rtags helm-projectile rtags helm-system-packages systemd ac-octave es-mode eterm-256color xterm-color helm-systemd helm magit yasnippet-snippets flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
+    (latex-extra pandoc-mode company-reftex company-auctex company-math flycheck-rtags helm-rtags helm-projectile rtags helm-system-packages systemd ac-octave es-mode eterm-256color xterm-color helm-systemd helm magit yasnippet-snippets flycheck-plantuml flycheck-clang-analyzer flycheck-pyflakes flycheck debbugs exec-path-from-shell libmpdee ivy-mpdel mpdel auto-dim-other-buffers flycheck-verilator flycheck-verilog-verilator ov hide-lines flymake-cppcheck py-autopep8 djvu plantuml-mode etable el-get deadgrep 0xc ac-slime slime sx google-this company-restclient restclient sage-shell-mode auctex-latexmk nov nasm-mode x86-lookup buffer-move evil pdf-tools qt-pro-mode auto-complete-exuberant-ctags markdown-mode elpy realgud beacon wgrep use-package zzz-to-char yasnippet yapfify yaml-mode writegood-mode window-numbering which-key web-mode vlf test-simple swiper-helm string-inflection sourcerer-theme ripgrep rainbow-delimiters pyvenv powerline origami multiple-cursors modern-cpp-font-lock magit-gerrit loc-changes load-relative json-mode hungry-delete highlight-indentation google-c-style git-gutter flyspell-correct-ivy elscreen-multi-term ein edit-server cuda-mode counsel-etags company-jedi cmake-font-lock clang-format bind-key autopair auto-package-update auctex 0blayout)))
  '(plantuml-jar-path "/opt/plantuml/plantuml.jar")
  '(sql-electric-stuff nil)
  '(symon-mode nil))
@@ -1457,29 +1480,28 @@ rotate entire document."
 ;; ein - ipython notebooks in gui emacs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Only launch if the executable exists.
-;; (if (and my:jupyter_location
-;;          my:jupyter_start_dir)
-;;     (use-package ein
-;;       :ensure t
-;;       :commands (ein:jupyter-server-start)
-;;       :defer 5
-;;       :config
-;;       (require 'ein)
-;;       (require 'ein-loaddefs)
-;;       (require 'ein-notebook)
-;;       (require 'ein-subpackages)
-;;       ;; when editing the emacs.el file, we do not want to start a new
-;;       ;; Jupyter server each time we save, so we only start a new Jupyter
-;;       ;; server if there currently isn't one running.
-;;       (defvar my-found-ein-server nil)
-;;       (dolist (my-current-process (process-list))
-;;         (when (string-match "EIN: Jupyter*" (process-name my-current-process))
-;;           (setq my-found-ein-server t))
-;;         )
-;;       (when (not my-found-ein-server)
-;;         (ein:jupyter-server-start my:jupyter_location my:jupyter_start_dir))
-;;       )
-;;   )
+(if (and my:jupyter_location
+         my:jupyter_start_dir)
+    (use-package ein
+      :ensure t
+      :commands (ein:jupyter-server-start)
+      :defer 5
+      :config
+      (require 'ein)
+      (require 'ein-notebook)
+      (require 'ein-subpackages)
+      ;; when editing the emacs.el file, we do not want to start a new
+      ;; Jupyter server each time we save, so we only start a new Jupyter
+      ;; server if there currently isn't one running.
+      (defvar my-found-ein-server nil)
+      (dolist (my-current-process (process-list))
+        (when (string-match "EIN: Jupyter*" (process-name my-current-process))
+          (setq my-found-ein-server t))
+        )
+      (when (not my-found-ein-server)
+        (ein:jupyter-server-start my:jupyter_location my:jupyter_start_dir))
+      )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sql customization
@@ -1637,6 +1659,12 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 (el-get 'sync)
+
+(use-package magithub
+  :after magit
+  :config
+  (magithub-feature-autoinject t)
+  (setq magithub-clone-default-directory "~/developer"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GitGutter
@@ -1912,21 +1940,6 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
                 TeX-source-correlate-start-server t
 		LaTeX-indent-level 8
 		)
-  ;;  (cond
-  ;;   ((string-equal system-type "windows-nt") ; Microsoft Windows
-  ;;    (progn
-  ;;      (message "Windows does not have a PDF viewer set for auctex")))
-  ;;   ((string-equal system-type "darwin") ; Mac OS X
-  ;;    (setq-default
-  ;;     TeX-view-program-list
-  ;;     '(("Skim"
-  ;;        "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
-  ;;       )
-  ;;     TeX-view-program-selection '((output-pdf "Skim"))))
-  ;;   ((string-equal system-type "gnu/linux") ; linux
-  ;;    (setq-default TeX-view-program-list
-  ;;                  '(("Evince" "evince --page-index=%(outpage) %o"))
-  ;;                  TeX-view-program-selection '((output-pdf "Evince")))))
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
@@ -1934,6 +1947,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
   (add-hook 'LaTeX-mode-hook 'add-auctex-keys)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  ;; Allows code folding. This is the same functionality that org mode uses.
+  (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
   (setq-default reftex-plug-into-AUCTeX t)
   )
 ;; Disable default syntax highlighting in certain LaTeX environments.
@@ -2016,7 +2031,7 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
                              (horizontal-scroll-bars . nil))))
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 ;; Set font size
-(defvar my-font-size 80)
+(defvar my-font-size 100)
 ;; (defvar my-font-size 80)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my-font-size)
@@ -2029,34 +2044,45 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
         ))
 
 ;; Enable line numbers on the LHS
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'LaTeX-mode-hook 'display-line-numbers-mode)
 
-(when (version<= "26.0.50" emacs-version )
-  (global-display-line-numbers-mode)
-  (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'pdf-outline-buffer-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'term-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'Info-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'Man-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gud-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gdb-locals-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gdb-registers-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gdb-memory-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gdb-frames-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gdb-breakpoints-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gdb-inferior-io-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'compilation-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'comint-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'special-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'message-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gnus-group-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'gnus-summary-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'image-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'sql-interactive-mode-hook (lambda () (display-line-numbers-mode -1)))
+(defun display-line-numbers-on-files ()
+  "Enable line numbers for most files, except some."
+  (unless (eq major-mode 'pdf-view-mode)
+    'display-line-numbers-mode)
   )
+(add-hook 'find-file-hook 'display-line-numbers-on-files)
+
+;; (when (version<= "26.0.50" emacs-version )
+;;   (global-display-line-numbers-mode)
+;;   (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'pdf-outline-buffer-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'term-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'Info-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'Man-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gud-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gdb-locals-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gdb-registers-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gdb-memory-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gdb-frames-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gdb-breakpoints-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gdb-inferior-io-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'compilation-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'comint-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'special-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'message-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gnus-group-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'gnus-summary-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'image-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'Custom-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'sql-interactive-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'ein:notebook-multilang-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'helm-minibuffer-set-up-hook (lambda () (display-line-numbers-mode -1)))
+;;   (add-hook 'helm-mode-hook (lambda () (display-line-numbers-mode -1)))
+;;   )
 
 ;; Set the font to size 9 (90/10).
 (set-face-attribute 'default nil :height my-font-size)

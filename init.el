@@ -168,6 +168,10 @@
 (setq-default indent-tabs-mode nil)   ;; don't use tabs to indent
 (setq-default tab-width 8) ;; but maintain correct appearance
 
+;; Use the PgUp and PgDn keys to cycle between buffers.
+(global-set-key (kbd "<next>") 'next-buffer)
+(global-set-key (kbd "<prior>") 'previous-buffer)
+
 ;; Change tabs to spaces when copying text. This is useful for copying to external applications.
 (defun copy-untabify (start end)
   "Copy the region.
@@ -575,10 +579,13 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
               'my-sql-comint-preoutput-filter :append :local)))
 
 (use-package term
+  :bind ("<f1>" . (lambda () (interactive)
+                    (term "/bin/bash")))
   :config
   (setq term-bind-key-alist
 	(list (cons "C-c C-c" 'term-interrupt-subjob)
 	      (cons "C-z" 'term-stop-subjob)
+              (cons "C-l" 'term-send-raw)
 	      (cons "C-r" 'term-send-raw)
 	      (cons "C-s" 'term-send-raw)
 	      (cons "M-f" 'term-send-forward-word)
@@ -690,6 +697,8 @@ rotate entire document."
 (use-package pdf-tools
   :mode "\\.pdf\\'"
   :magic ("%PDF" . pdf-view-mode)
+  :bind* (("<next>" . next-buffer)
+	  ("<prior>" . previous-buffer))
   :hook ((kill-buffer . pdf-set-last-viewed-bookmark)
          (pdf-view-mode . pdf-jump-last-viewed-bookmark))
   :config
@@ -1463,9 +1472,8 @@ rotate entire document."
   (setq emamux:completing-read-type 'helm))
 
 (use-package multi-term
-  :bind (("<f1>" . multi-term)
-         ("<C-next>" . multi-term-next)
-         ("<C-prior>" . multi-term-prev))
+  ;; :bind (("<C-next>" . multi-term-next)
+  ;;        ("<C-prior>" . multi-term-prev))
   :config
   (require 'multi-term-ext)
   (setq multi-term-program "/bin/bash"))

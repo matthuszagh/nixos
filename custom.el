@@ -21,7 +21,6 @@
  '(company-tooltip-common-selection ((t (:foreground "#93a1a1" :underline t))))
  '(company-tooltip-mouse ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(company-tooltip-selection ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
- '(cursor ((t (:background "dim gray"))))
  '(header-line ((t (:background "#003366"))))
  '(term-color-red ((t (:background "#aa4450" :foreground "#aa4450"))))
  '(which-func ((t (:foreground "#8fb28f")))))

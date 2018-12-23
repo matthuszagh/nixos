@@ -6,10 +6,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General configurations.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; straight is a better package manager than package.el.
-;; Necessary to fix an issue with AUCTeX.
+;; Use the straight package manager instead of package.el.
+
+;; We use a straight-maintained mirror, which fixes an issue that makes tex-sites.el unavailable to
+;; AUCTeX.
 (setq straight-recipes-gnu-elpa-use-mirror t)
 
+;; Retreive straight if we don't have it.
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -34,7 +37,7 @@
 ;;                 (gnus-group-exit))))
 
 ;; Always load newest byte code
-(setq load-prefer-newer t)
+;;(setq load-prefer-newer t)
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
@@ -213,8 +216,6 @@ amount of spaces."
       (select-window (active-minibuffer-window))
     (error "Minibuffer is not active")))
 (global-set-key (kbd "C-c o") 'switch-to-minibuffer)
-
-
 
 ;; Keybindings for image mode
 (add-hook 'image-mode-hook
@@ -499,7 +500,8 @@ amount of spaces."
 
 ;; Spelling correction.
 (use-package flyspell
-  :bind ("<f8>" . flyspell-buffer)
+  :bind (("<f6>" . flyspell-buffer)
+	 ("<f7>" . flyspell-correct-at-point))
   :functions (flyspell-mode flyspell-goto-next-error)
   :hook ((text-mode . flyspell-mode)
          (org-mode . flyspell-mode))
@@ -571,6 +573,35 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
     ;; Runs after `sql-interactive-remove-continuation-prompt'.
     (add-hook 'comint-preoutput-filter-functions
               'my-sql-comint-preoutput-filter :append :local)))
+
+(use-package term
+  :config
+  (setq term-bind-key-alist
+	(list (cons "C-c C-c" 'term-interrupt-subjob)
+	      (cons "C-z" 'term-stop-subjob)
+	      (cons "C-r" 'term-send-raw)
+	      (cons "C-s" 'term-send-raw)
+	      (cons "M-f" 'term-send-forward-word)
+              (cons "M-b" 'term-send-backward-word)
+	      (cons "C-c C-j" 'term-line-mode)
+              (cons "C-c C-k" 'term-char-mode)
+	      (cons "M-DEL" 'term-send-backward-kill-word)
+              (cons "M-d" 'term-send-forward-kill-word)
+	      (cons "<C-left>" 'term-send-backward-word)
+              (cons "<C-right>" 'term-send-forward-word)
+	      (cons "C-y" 'term-paste))))
+
+(use-package image-dired
+  :config
+  (eval-after-load "image-dired"
+    '(progn
+       (setq image-dired-cmd-create-thumbnail-options
+             (replace-regexp-in-string "-strip" "-auto-orient
+             -strip" image-dired-cmd-create-thumbnail-options)
+             image-dired-cmd-create-temp-image-options
+             (replace-regexp-in-string "-strip" "-auto-orient
+             -strip"
+                                       image-dired-cmd-create-temp-image-options)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Third-party packages.
@@ -657,8 +688,13 @@ rotate entire document."
   (add-hook 'kill-emacs-hook #'pdf-set-all-last-viewed-bookmarks))
 
 (use-package pdf-tools
+  :mode "\\.pdf\\'"
+  :magic ("%PDF" . pdf-view-mode)
   :hook ((kill-buffer . pdf-set-last-viewed-bookmark)
-         (pdf-view-mode . pdf-jump-last-viewed-bookmark)))
+         (pdf-view-mode . pdf-jump-last-viewed-bookmark))
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page))
 
 (use-package a)
 
@@ -677,9 +713,11 @@ rotate entire document."
                   mpdel-nav-mode
                   slime-repl-mode
 		  image-dired-thumbnail-mode
+                  image-dired-display-image-mode
                   inferior-octave-mode
                   Custom-mode
                   rtags-mode
+                  nov-mode
                   ein:notebooklist-mode
                   ein:notebook-multilang-mode
 		  eshell-mode))
@@ -693,7 +731,6 @@ rotate entire document."
   (evil-set-initial-state 'Man-mode 'emacs)
   (evil-set-initial-state 'gud-mode 'emacs)
   (evil-set-initial-state 'sage-shell-mode 'emacs)
-  (evil-set-initial-state 'ein:notebook-multilang-mode)
   (evil-set-initial-state 'sql-interactive-mode 'emacs)
 
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
@@ -723,11 +760,19 @@ rotate entire document."
 
 (use-package pandoc-mode)
 
+;; Looks for bugs in elisp files.
+(use-package bug-hunter)
+
+;; Startup profiler.
+(use-package esup
+  :config
+  (autoload 'esup "esup" "Emacs Start Up Profiler." nil))
+
 ;; Display CPU/mem/etc usage.
 (use-package symon
-  :bind ("<f1> z" . symon-mode)
+  :disable
   :config
-  (symon-mode))
+  (symon-mode nil))
 
 ;; Enable plantuml-mode for PlantUML files
 (use-package plantuml-mode
@@ -775,20 +820,21 @@ rotate entire document."
             with auto-package-update..."))))
 
 (use-package helm
-  :init (setq helm-command-prefix-key "C-c h")
+  ;; Needed for "bind" keys to work on first loading.
+  :demand t
   :bind (("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
          ("C-x C-f" . helm-find-files)
          ("C-c h o" . helm-occur)
          ("C-c h g" . helm-google-suggest)
-         ("C-x c" . nil)
-         (:map helm-map
-               ("<tab>" . helm-execute-persistent-action)
-               ;; make tab work in terminal
-               ("C-i" . helm-execute-persistent-action)
-               ("C-z" . helm-select-action)
-               ))
+         ("M-:" . helm-eval-expression-with-eldoc)
+         :map helm-map
+         ("<tab>" . helm-execute-persistent-action)
+         ;; make tab work in terminal
+         ("C-i" . helm-execute-persistent-action)
+         ("C-z" . helm-select-action))
+  :init (setq helm-command-prefix-key "C-c h")
   :config
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
   (when (executable-find "curl")
@@ -817,6 +863,7 @@ rotate entire document."
 
 (use-package projectile
   :after (helm)
+  :bind ("C-c p" . helm-projectile)
   :config
   (projectile-global-mode)
   (setq projectile-completion-system 'helm))
@@ -834,7 +881,8 @@ rotate entire document."
 
 ;; Manage local packages with helm.
 (use-package helm-system-packages
-  :after (helm seq))
+  :after (helm seq)
+  :bind ("<f11>" . helm-system-packages))
 
 ;; Package window-numbering installed from package list
 ;; Allows switching between buffers using meta-(# key)
@@ -941,7 +989,6 @@ rotate entire document."
   :after company
   :diminish
   :hook (company-mode . company-box-mode))
-
 
 ;; Completions for references in AUCTeX
 (use-package company-reftex
@@ -1060,11 +1107,11 @@ rotate entire document."
 
 ;; git integration.
 (use-package magit
+  :after (async ghub dash git-commit magit-popup with-editor)
   :hook (magit-mode . (lambda ()
                         (setq whitespace-mode -1)))
-  :after (async ghub dash git-commit magit-popup with-editor)
-  :commands (magit-checkout)
-  :bind (("C-x g" . magit-status)))
+  :commands (magit-checkout))
+(global-set-key (kbd "C-x g") 'magit-status)
 
 (use-package magit-gerrit
   :after magit)
@@ -1088,7 +1135,15 @@ rotate entire document."
   ;; Set the foreground color of modified lines to something obvious
   (set-face-foreground 'git-gutter:modified "purple"))
 
-(use-package git-timemachine)
+(use-package git-timemachine
+  :bind* ("<f10>" . git-timemachine)
+  :config
+  ;; Make git-timemachine work with evil.
+  (eval-after-load 'git-timemachine
+    '(progn
+       (evil-make-overriding-map git-timemachine-mode-map 'normal)
+       ;; force update evil keymaps after git-timemachine-mode loaded
+       (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps))))
 
 ;; Access GNU bug tracker from within Emacs.
 (use-package debbugs
@@ -1112,8 +1167,9 @@ rotate entire document."
 
 ;; Fast, interactive greping.
 (use-package deadgrep
-  :after (dash s spinner)
-  :bind ("<f7>" . deadgrep))
+  :after (dash s spinner))
+
+(global-set-key (kbd "<f5>") 'deadgrep)
 
 ;; Easy radix conversion
 (use-package 0xc)
@@ -1250,7 +1306,14 @@ rotate entire document."
 ;; Read EPUB.
 (use-package nov
   :after (dash esxml)
-  :mode "\\.epub\\'")
+  :mode "\\.epub\\'"
+  :config
+  (setq nov-text-width 80)
+  (defun my-nov-font-setup ()
+    (face-remap-add-relative 'variable-pitch :family "San Francisco Text"
+                             :height 1.0))
+  (add-hook 'nov-mode-hook 'my-nov-font-setup))
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
 ;; Lookup Intel assembly mnemonics in Intel documentation.
 (use-package x86-lookup
@@ -1326,8 +1389,8 @@ rotate entire document."
 (use-package multiple-cursors
   :bind (("M-n" . mc/mark-next-like-this)
          ("M-p" . mc/mark-previous-like-this)
-         ("C-c a" . mc/mark-all-like-this)
-         ("C-c e" . mc/edit-lines)))
+         ("C-c a" . mc/mark-all-like-this)))
+;; ("C-c e" . mc/edit-lines)))
 
 (use-package json-mode
   :mode (".json" ".imp"))
@@ -1352,8 +1415,10 @@ rotate entire document."
 (if (and my:jupyter_location
          my:jupyter_start_dir)
     (use-package ein
-      :bind ("<f6>" . ein:run)
+      :bind ("<f2>" . ein:login)
       :commands (ein:jupyter-server-start)
+      :hook (ein:notebook-multilang-mode . (lambda ()
+                                             (display-line-numbers-mode -1)))
       :defer 5
       :config
       (require 'ein-notebook)
@@ -1390,30 +1455,20 @@ rotate entire document."
 (use-package dockerfile-mode
   :mode ("Dockerfile"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Terminal configuration.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (and (require 'multi-term nil t) (require 'multi-term-ext nil t))
-  (global-set-key (kbd "<f5>") 'multi-term)
-  (global-set-key (kbd "<C-next>") 'multi-term-next)
-  (global-set-key (kbd "<C-prior>") 'multi-term-prev)
-  (setq multi-term-program "/bin/bash"))
+;; Allows the use of tmux in Emacs.
+(use-package emamux
+  ;; :bind ("C-c e" . emamux:keymap)
+  :bind-keymap ("C-c e" . emamux:keymap)
+  :config
+  (setq emamux:completing-read-type 'helm))
 
-(when (require 'term nil t)
-  (setq term-bind-key-alist
-	(list (cons "C-c C-c" 'term-interrupt-subjob)
-	      (cons "C-z" 'term-stop-subjob)
-	      (cons "C-r" 'term-send-raw)
-	      (cons "C-s" 'term-send-raw)
-	      (cons "M-f" 'term-send-forward-word)
-              (cons "M-b" 'term-send-backward-word)
-	      (cons "C-c C-j" 'term-line-mode)
-              (cons "C-c C-k" 'term-char-mode)
-	      (cons "M-DEL" 'term-send-backward-kill-word)
-              (cons "M-d" 'term-send-forward-kill-word)
-	      (cons "<C-left>" 'term-send-backward-word)
-              (cons "<C-right>" 'term-send-forward-word)
-	      (cons "C-y" 'term-paste))))
+(use-package multi-term
+  :bind (("<f1>" . multi-term)
+         ("<C-next>" . multi-term-next)
+         ("<C-prior>" . multi-term-prev))
+  :config
+  (require 'multi-term-ext)
+  (setq multi-term-program "/bin/bash"))
 
 ;; info+ is a plugin.
 (require 'info+)
@@ -1440,7 +1495,12 @@ rotate entire document."
   (load-theme 'sourcerer t))
 
 (set-face-background 'hl-line "gray16")
-(set-cursor-color "#c2c2b0")
+;; (set-cursor-color "#c2c2b0")
+
+(set-face-attribute 'cursor nil :foreground "#c2c2b0")
+(setq default-frame-alist '((cursor-color . "#c2c2b0")))
+;; Start emacsclient maximized.
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; config changes made through the customize UI will be stored here
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

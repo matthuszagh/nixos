@@ -56,44 +56,14 @@ define how they wish.
 
 \chapter{To-Do}\label{cha:to-do}
 
-\section{Ivy/Swiper to Helm}\label{sec:ivyswiper-helm}
-
-Consider changing ivy and swiper to Helm. Helm is a larger project and may therefore be better
-maintained with more features. The downside to this might be slower autocompletion times in which
-case it may not be worth changing. If you do make the change, make sure to adjust
-\lstinline{custom-set-faces} for Helm instead of ivy.
-
-
-\section{Powerline Custom Mode-Line Configuration for Specific Modes}
-\label{sec:powerl-cust-mode}
-
-I'm experiencing an issue with powerline. I'd like to be able to display 2 different mode lines
-depending on whether I'm in pdf-view-mode or not. When displaying a PDF I'd like to display the
-current page and the total number of pages instead of the current row/column position of the
-cursor. In all other modes I'd like to display the row/column position of the cursor. The issue
-seems to be that powerline does not allow setting different configurations for different major
-modes. For instance, if I set a hook for pdf-view-mode, it will then stay in force for other
-buffers. I'm not eager to go back to the default mode line because it doesn't show the file size and
-
-powerline developers that different modes are not possible. Another possible solution might be
-spaceline. Or, maybe I can get the buffer size in the default mode line display (look at powerline
-function).
-
-The file size can be displayed in the mode line of certain buffers by enabling
-\mintinline{text}{size-indication-mode}. Critically though, this doesn't work when displaying PDF's
-and potentially other file types as well. I've currently disabled powerline until I have a better
-solution: seeing the PDF page number outweighs the cost of a slightly worse aesthetic and seeing the
-file size for PDFs.
-
 \section{Customize Mode Line}
 \label{sec:customize-mode-line}
 
-This should supersede the prior section (Powerline customization). I can customize mode-line-format
-on a per-mode basis (see
+I can customize mode-line-format on a per-mode basis (see
 \href{https://emacs.stackexchange.com/questions/13652/how-to-customize-mode-line-format}{this
   StackExchange question}). Also, see the
 \href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html#Mode-Line-Variables}{Emacs
-documentation} on the subject.
+  documentation} on the subject.
 
 \section{Disable cursor in pdf-view-mode}
 
@@ -125,30 +95,29 @@ These are the links I've found that address related issues:
 
 \href{https://www.gnu.org/software/emacs/manual/html_node/emacs/Cursor-Display.html}{Cursor Display}
 
-
-\section{Run Emacs as Daemon}
-
-The Emacs daemon starts up using a systemd script, \mintinline{text}{/usr/lib/systemd/user/emacs.service}. It's enabled
-for a user with the command
-
-\begin{minted}{text}
-$ systemctl --user enable --now emacs
-\end{minted}
-
-Running this without superuser privileges is intentional.
-
 \section{Get much better at Gnus}
-
-
 
 \section{Display header when buffer is displayed}
 
 Currently, a header displays only when you cursor to it. It should be displayed immediately when the
 buffer opens.
 
+\section{Company Backends}
 
-\section{Remap keybindings to adhere to best practices}
+There are various company backends that don't work. At the very least company-reftex and
+company-auctex aren't working. Based on info from the company-backends variable, it sounds like only
+one backend can be used at a time. This might be the issue.
 
+\section{load-file from Emacs}
+
+This causes cursor color to change and potentially other behavior as well.
+
+\section{align-current AUCTeX}
+
+align-current works well for tables with limited text. However, it propagates line breaks and so
+takes up a needless number of lines for long text sections that have to be manually adjusted. Also,
+I'd like to be able to run this globally for a whole buffer. The most similar action is align-entire
+but this aligns all tables to one another; I'd like aligning to be done on a per-table basis.
 
 
 \end{document}

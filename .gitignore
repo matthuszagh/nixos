@@ -38,3 +38,4 @@ image-dired/
 /savefile
 /straight
 /%backup%~
+flycheck_init.el

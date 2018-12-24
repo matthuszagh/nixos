@@ -36,9 +36,6 @@
 ;;             (if (boundp 'gnus-buffers)
 ;;                 (gnus-group-exit))))
 
-;; Always load newest byte code
-;;(setq load-prefer-newer t)
-
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
 (setq gc-cons-threshold 50000000)
@@ -55,9 +52,6 @@
 
 (defconst savefile-dir (expand-file-name "savefile" user-emacs-directory))
 
-;; Disable the horrid auto-save
-;; (setq auto-save-default nil)
-
 ;; create the savefile dir if it doesn't exist
 (unless (file-exists-p savefile-dir)
   (make-directory savefile-dir))
@@ -65,9 +59,6 @@
 ;; Extra plugins and config files are stored here
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins"))
 (add-to-list 'load-path "~/.emacs.d/lib/mpdel")
-;; Automatically byte-compiles everything in ~/.emacs.d. This adds some startup time, but makes
-;; Emacs run faster.
-;;(byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
 
 ;; Disable toolbar
 (when (fboundp 'tool-bar-mode)
@@ -580,8 +571,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 
 (use-package term
   :after helm
-  :bind ("<f1>" . (lambda () (interactive)
-                    (term "/bin/bash")))
+  ;; :bind ("<f1>" . (lambda () (interactive)
+  ;;                   (term "/bin/bash")))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
@@ -708,8 +699,8 @@ rotate entire document."
   :hook ((kill-buffer . pdf-set-last-viewed-bookmark)
          (pdf-view-mode . pdf-jump-last-viewed-bookmark))
   :config
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-page))
+  (pdf-tools-install))
+;; (setq-default pdf-view-display-size 'fit-page))
 
 (use-package a)
 
@@ -784,10 +775,9 @@ rotate entire document."
   (autoload 'esup "esup" "Emacs Start Up Profiler." nil))
 
 ;; Display CPU/mem/etc usage.
-(use-package symon
-  :disable
-  :config
-  (symon-mode nil))
+(use-package symon)
+;; :config
+;; (symon-mode nil))
 
 ;; Enable plantuml-mode for PlantUML files
 (use-package plantuml-mode
@@ -1279,6 +1269,12 @@ rotate entire document."
                 TeX-source-correlate-start-server t
 		LaTeX-indent-level 8
                 reftex-plug-into-AUCTeX t)
+  (eval-after-load "tex-fold"
+    '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("href"))))
+  (eval-after-load "tex-fold"
+    '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("mintinline"))))
+  (eval-after-load "tex-fold"
+    '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("hyperlink"))))
   ;; Disable default syntax highlighting in certain LaTeX environments.  This prevents certain
   ;; special characters from causing issues in those environments.  For instance, $ and _ See:
   ;; https://tex.stackexchange.com/questions/111289/how-to-make-auctex-ignore-syntax-highlighting-within-environment
@@ -1288,6 +1284,9 @@ rotate entire document."
          (LaTeX-mode . auto-fill-mode)
          (LaTeX-mode . flyspell-mode)
          (LaTeX-mode . flyspell-buffer)
+         (LaTeX-mode . (lambda ()
+                         (TeX-fold-mode 1)
+			 (add-hook 'find-file-hook 'TeX-fold-buffer t t)))
          (LaTeX-mode . turn-on-reftex)
          (LaTeX-mode . add-auctex-keys)
          (LaTeX-mode . LaTeX-math-mode)
@@ -1295,12 +1294,13 @@ rotate entire document."
          ;; Allows code folding. This is the same functionality that org mode uses.
          (LaTeX-mode . outline-minor-mode)))
 
+
 ;; Completions for AUCTeX.
 (use-package company-auctex
-  :after (auctex company)
+  :after (auctex company yasnippet)
   :config
-  (company-auctex-init)
-  (add-to-list 'company-backends 'company-auctex))
+  (add-to-list 'company-backends 'company-auctex)
+  (company-auctex-init))
 
 ;; Usability improvements for LaTeX.
 (use-package latex-extra
@@ -1478,8 +1478,9 @@ rotate entire document."
   (setq emamux:completing-read-type 'helm))
 
 (use-package multi-term
-  ;; :bind (("<C-next>" . multi-term-next)
-  ;;        ("<C-prior>" . multi-term-prev))
+  :bind (("<C-next>" . multi-term-next)
+         ("<C-prior>" . multi-term-prev)
+         ("<f1>" . multi-term))
   :config
   (require 'multi-term-ext)
   (setq multi-term-program "/bin/bash"))
@@ -1497,9 +1498,11 @@ rotate entire document."
 (require 'syslog-mode)
 
 ;; Keep folding between sessions.
-(use-package persistent-overlays
-  :config
-  (persistent-overlays-minor-mode 1))
+(use-package persistent-overlays)
+(add-hook 'prog-mode-hook (lambda ()
+                            (persistent-overlays-minor-mode 1)))
+(add-hook 'find-filehook (lambda ()
+                           (persistent-overlays-minor-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance

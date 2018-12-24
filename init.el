@@ -56,7 +56,7 @@
 (defconst savefile-dir (expand-file-name "savefile" user-emacs-directory))
 
 ;; Disable the horrid auto-save
-(setq auto-save-default nil)
+;; (setq auto-save-default nil)
 
 ;; create the savefile dir if it doesn't exist
 (unless (file-exists-p savefile-dir)
@@ -425,7 +425,7 @@ amount of spaces."
   :config
   (setq save-place-file (expand-file-name "saveplace" savefile-dir))
   ;; activate it for all buffers
-  (setq-default save-place t))
+  (save-place-mode t))
 
 ;; Save minibuffer history.
 (use-package savehist
@@ -579,9 +579,15 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
               'my-sql-comint-preoutput-filter :append :local)))
 
 (use-package term
+  :after helm
   :bind ("<f1>" . (lambda () (interactive)
                     (term "/bin/bash")))
   :config
+  (defun expose-global-binding-in-term (binding)
+    (define-key term-raw-map binding
+      (lookup-key (current-global-map) binding)))
+  (expose-global-binding-in-term (kbd "C-x"))
+  (define-key term-raw-map (kbd "M-x") 'helm-M-x)
   (setq term-bind-key-alist
 	(list (cons "C-c C-c" 'term-interrupt-subjob)
 	      (cons "C-z" 'term-stop-subjob)

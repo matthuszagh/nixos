@@ -27,7 +27,7 @@ There is some issue with highlighting in version 27.050 (potentially font-lock?)
 annoying to write code. In general I should only use stable releases, which are specified on the
 \href{https://www.gnu.org/software/emacs/}{Emacs website}.
 
-\chapter{Packages}\label{cha:packages}
+\chapter{Package Setup}\label{cha:package-setup}
 
 \section{Gnus}
 \label{sec:gnus}
@@ -40,6 +40,24 @@ Gnus was a huge pain to setup. I finally got it working with the information at 
 Ansi term uses 8 colors for the terminal GUI. We can redefine these colors in an Emacs terminal by
 customizing their values with \mintinline{text}{M-x customize-group RET term RET}. The colors must
 also be configured in \mintinline{text}{~/.bashrc}.
+
+\chapter{Functionality}
+\label{cha:functionality}
+
+\section{Code Tagging and Navigation}
+\label{sec:code-tagging}
+
+
+
+\section{Code Completion}
+\label{sec:code-completion}
+
+I'm currently using company with various backends for completion in different major modes. For C/C++
+I'm using company-rtags. This potentially has the benefit of being aware of the current project
+(e.g. completions for functions I've defined and custom headers) although this is
+unconfirmed. However, it's a bit slow and some of the completions don't seem entirely
+accurate. Another option could be company-ycmd. I believe this is faster although it may come at the
+expense of being unaware of the environment. This should be verified.
 
 \chapter{Structure}\label{cha:structure}
 
@@ -97,11 +115,6 @@ These are the links I've found that address related issues:
 
 \section{Get much better at Gnus}
 
-\section{Display header when buffer is displayed}
-
-Currently, a header displays only when you cursor to it. It should be displayed immediately when the
-buffer opens.
-
 \section{Company Backends}
 
 There are various company backends that don't work. At the very least company-reftex and
@@ -119,6 +132,25 @@ takes up a needless number of lines for long text sections that have to be manua
 I'd like to be able to run this globally for a whole buffer. The most similar action is align-entire
 but this aligns all tables to one another; I'd like aligning to be done on a per-table basis.
 
+\section{Shortcut keys not working in Auctex}
+
+I have to manually load the init file after emacsclient -nc in order for C-i keybindings to
+work. This should work off the bat, and in general its weird that loading the init file has any
+effect at all.
+
+\section{align uses 2 spaces in Emacs}
+
+The align environment seems to use 2 spaces in Auctex instead of the 8 used by everything else. It
+should be 8.
+
+\section{C++ company completions are not always accurate}
+
+For instance, find_last_not_of has incorrect completions. The old configuration did provide correct
+completions.
+
+\section{When Emacs opens it is not completely maximized}
+
+The right side of the frame is not quite right.
 
 \end{document}
 %%% Local Variables:

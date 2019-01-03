@@ -1,4 +1,4 @@
-;;; initfile --- Summary:
+;; initfile --- Summary:
 ;;; Commentary:
 
 ;;; Code:
@@ -44,7 +44,18 @@
 (setq large-file-warning-threshold 1000000000)
 
 ;; Set image thumbnail size in image-dired
-(setq image-dired-thumb-size 500)
+(setq image-dired-thumb-size 1000)
+
+;; Human-readable sizes in dired mode.
+(setq dired-listing-switches "-alh")
+
+;; Load dired-x when in dired mode.
+(add-hook 'dired-load-hook
+          (lambda ()
+            (load "dired-x")))
+
+;; Make C-i usable.
+(define-key input-decode-map "\C-i" [C-i])
 
 ;; Improve PDF resolution in DocView
 (require 'doc-view)
@@ -73,13 +84,16 @@
 ;; wide as that tab on the display.
 (setq x-stretch-cursor t)
 
+;; Increase splitting threshold so that new buffers don't split existing ones.
+(setq split-height-threshold 160)
+
 (setq ring-bell-function 'ignore)
 
 (setq inhibit-startup-screen t)
 
 (setq scroll-margin 0
-      scroll-conservatively 100000
-      scroll-preserve-screen-position 1)
+      scroll-conservatively 0
+      scroll-preserve-screen-position nil)
 
 ;; Mode line settings.
 (line-number-mode t)
@@ -109,12 +123,14 @@
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
 ;; Set font size
-(defvar my-font-size 100)
-;; (defvar my-font-size 80)
+;; (defvar font-size 100)
+(defvar font-size 80)
 ;; Make mode bar small
-(set-face-attribute 'mode-line nil  :height my-font-size)
+(set-face-attribute 'mode-line nil  :height font-size)
 ;; Set the header bar font
-(set-face-attribute 'header-line nil  :height my-font-size)
+(set-face-attribute 'header-line nil  :height font-size)
+;; Set the font to size 9 (90/10).
+(set-face-attribute 'default nil :height font-size)
 
 ;; Enable line numbers on the LHS
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
@@ -126,9 +142,6 @@
     'display-line-numbers-mode)
   )
 (add-hook 'find-file-hook 'display-line-numbers-on-files)
-
-;; Set the font to size 9 (90/10).
-(set-face-attribute 'default nil :height my-font-size)
 
 (setq-default indicate-empty-lines t)
 (when (not indicate-empty-lines)
@@ -595,17 +608,30 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
               (cons "<C-right>" 'term-send-forward-word)
 	      (cons "C-y" 'term-paste))))
 
-(use-package image-dired
-  :config
-  (eval-after-load "image-dired"
-    '(progn
-       (setq image-dired-cmd-create-thumbnail-options
-             (replace-regexp-in-string "-strip" "-auto-orient
-             -strip" image-dired-cmd-create-thumbnail-options)
-             image-dired-cmd-create-temp-image-options
-             (replace-regexp-in-string "-strip" "-auto-orient
-             -strip"
-                                       image-dired-cmd-create-temp-image-options)))))
+(use-package image-dired)
+;; :config
+;; (eval-after-load "image-dired"
+;;   '(progn
+;;      (setq image-dired-cmd-create-thumbnail-options
+;;            (replace-regexp-in-string "-strip" "-auto-orient
+;;            -strip" image-dired-cmd-create-thumbnail-options)
+;;            image-dired-cmd-create-temp-image-options
+;;            (replace-regexp-in-string "-strip" "-auto-orient
+;;            -strip"
+;;                                      image-dired-cmd-create-temp-image-options)))))
+
+(defun ediff-copy-both-to-C ()
+  "Copy both changes to the merge resolution buffer."
+  (interactive)
+  (ediff-copy-diff ediff-current-difference nil 'C nil
+                   (concat
+                    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
+                    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
+(defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
+(add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
+
+;; .dcm files are opening in imagemagick mode, they should open in fundamental mode.
+(add-to-list 'auto-mode-alist '("\\.dcm\\'" . fundamental-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Third-party packages.
@@ -693,14 +719,15 @@ rotate entire document."
 
 (use-package pdf-tools
   :mode "\\.pdf\\'"
-  :magic ("%PDF" . pdf-view-mode)
+  ;; :magic ("%PDF" . pdf-view-mode)
   :bind* (("<next>" . next-buffer)
 	  ("<prior>" . previous-buffer))
   :hook ((kill-buffer . pdf-set-last-viewed-bookmark)
          (pdf-view-mode . pdf-jump-last-viewed-bookmark))
   :config
   (pdf-tools-install))
-;; (setq-default pdf-view-display-size 'fit-page))
+
+(setq-default pdf-view-display-size 'fit-page)
 
 (use-package a)
 
@@ -720,6 +747,7 @@ rotate entire document."
                   slime-repl-mode
 		  image-dired-thumbnail-mode
                   image-dired-display-image-mode
+                  dired-mode
                   inferior-octave-mode
                   Custom-mode
                   rtags-mode
@@ -866,6 +894,13 @@ rotate entire document."
   (helm-autoresize-mode 1)
   (helm-mode 1))
 
+;; Always use helm follow mode.
+(setq-default helm-follow-mode-persistent t)
+(with-eval-after-load 'helm-regexp
+  (setq helm-source-occur
+        (helm-make-source "Occur" 'helm-source-multi-occur
+          :follow 1)))
+
 (use-package projectile
   :after (helm)
   :bind ("C-c p" . helm-projectile)
@@ -987,7 +1022,13 @@ rotate entire document."
   (global-company-mode)
   ;; Maintain case information for completions.
   (setq company-dabbrev-downcase nil)
-  (setq company-dabbrev-ignore-case nil))
+  (setq company-dabbrev-ignore-case nil)
+  ;; Default backends.
+  (setq company-backends '((company-files company-keywords
+					  company-capf
+					  company-yasnippet)
+			   (company-abbrev company-dabbrev
+					   company-dabbrev-code))))
 
 ;; Provides icons with company completions.
 (use-package company-box
@@ -997,23 +1038,25 @@ rotate entire document."
 
 ;; Completions for references in AUCTeX
 (use-package company-reftex
-  :after company
-  :config
-  (add-to-list 'company-backends 'company-reftex-labels)
-  (add-to-list 'company-backends 'company-reftex-citations))
+  :after company)
 
 ;; Provides math completions in AUCTeX
 (use-package company-math
-  :after company
+  :after company)
+
+;; Completions for AUCTeX.
+(use-package company-auctex
+  :after (auctex company yasnippet)
   :config
-  (add-to-list 'company-backends 'company-math-symbols-unicode))
+  (company-auctex-init))
 
 ;; Provides python completion
 (use-package company-jedi
   :after (python company)
   :config
   (jedi:install-server)
-  (add-to-list 'company-backends 'company-jedi))
+  ;; (add-to-list 'company-backends 'company-jedi)
+  )
 
 ;; Code syntax checking.
 (use-package flycheck
@@ -1076,6 +1119,7 @@ rotate entire document."
   :config
   (add-to-list 'company-backends 'company-rtags))
 
+(require 'flycheck-rtags)
 (use-package flycheck-rtags
   :after (flycheck rtags)
   :hook (c-mode-common . setup-flycheck-rtags))
@@ -1272,6 +1316,8 @@ rotate entire document."
   (eval-after-load "tex-fold"
     '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("href"))))
   (eval-after-load "tex-fold"
+    '(add-to-list 'TeX-fold-macro-spec-list '("{1}" ("hyperref"))))
+  (eval-after-load "tex-fold"
     '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("mintinline"))))
   (eval-after-load "tex-fold"
     '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("hyperlink"))))
@@ -1289,18 +1335,16 @@ rotate entire document."
 			 (add-hook 'find-file-hook 'TeX-fold-buffer t t)))
          (LaTeX-mode . turn-on-reftex)
          (LaTeX-mode . add-auctex-keys)
+	 ;; Add backends
+	 (LaTeX-mode . (lambda ()
+			 (add-to-list (make-local-variable 'company-backends)
+				      '(company-math-symbols-unicode
+					company-reftex-labels
+					company-reftex-citations))))
          (LaTeX-mode . LaTeX-math-mode)
          (TeX-after-compilation-finished-functions . TeX-revert-document-buffer)
          ;; Allows code folding. This is the same functionality that org mode uses.
          (LaTeX-mode . outline-minor-mode)))
-
-
-;; Completions for AUCTeX.
-(use-package company-auctex
-  :after (auctex company yasnippet)
-  :config
-  (add-to-list 'company-backends 'company-auctex)
-  (company-auctex-init))
 
 ;; Usability improvements for LaTeX.
 (use-package latex-extra

@@ -584,8 +584,10 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 
 (use-package term
   :after helm
-  ;; :bind ("<f1>" . (lambda () (interactive)
-  ;;                   (term "/bin/bash")))
+  :hook (term-mode . (lambda ()
+                       ;; Stop the buffer from recentering in term-mode.
+                       (setq-local scroll-conservatively 10000)
+                       (setq-local scroll-preserve-screen-position 1)))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding

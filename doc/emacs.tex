@@ -152,6 +152,16 @@ completions.
 
 The right side of the frame is not quite right.
 
+\section{Single quote delimeter not working}
+
+Pressing \' twice causes three single quotes to be inserted.
+
+\section{Command that closes all buffers for which underlying file was deleted}
+
+Probably better, just do this automatically. One worry is if file was accidentally deleted and
+buffer allows you to keep the file alive. Still, existing buffers shouldn't be used as a sort of
+backup.
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex

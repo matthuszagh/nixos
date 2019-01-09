@@ -586,7 +586,7 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   :after helm
   :hook (term-mode . (lambda ()
                        ;; Stop the buffer from recentering in term-mode.
-                       (setq-local scroll-conservatively 10000)
+                       (setq-local scroll-conservatively 100000)
                        (setq-local scroll-preserve-screen-position 1)))
   :config
   (defun expose-global-binding-in-term (binding)
@@ -631,6 +631,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
                     (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
 (defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
 (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
+
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; .dcm files are opening in imagemagick mode, they should open in fundamental mode.
 (add-to-list 'auto-mode-alist '("\\.dcm\\'" . fundamental-mode))
@@ -756,6 +758,7 @@ rotate entire document."
                   nov-mode
                   ein:notebooklist-mode
                   ein:notebook-multilang-mode
+                  deadgrep-mode
 		  eshell-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
@@ -1284,7 +1287,7 @@ rotate entire document."
     (insert "\\right)")))
 
 (defun latex-indent ()
-  "Runs latexindent on the current buffer."
+  "Run latexindent on the current buffer."
   (interactive)
   (with-no-warnings
     (shell-command (concat "latexindent " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
@@ -1298,7 +1301,7 @@ rotate entire document."
   (local-set-key (kbd "C-c <C-i> r") 'insert-right-delimiter)
   (local-set-key (kbd "C-c C-f") 'indent-buffer))
 
-(add-hook 'latex-mode-hook '(lambda ()
+(add-hook 'LaTeX-mode-hook '(lambda ()
 			      (local-set-key (kbd "C-c C-f") 'latex-indent)))
 
 (use-package tex-site

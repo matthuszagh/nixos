@@ -1237,6 +1237,10 @@ rotate entire document."
 
 ;; Have Emacs inherit PATH.
 (use-package exec-path-from-shell
+  :init
+  ;; Allows ssh-agent password caching use in Emacs.
+  (exec-path-from-shell-copy-envs '("SSH_AGENT_PID"
+                                    "SSH_AUTH_SOCK"))
   :config
   (exec-path-from-shell-initialize))
 

@@ -1235,6 +1235,9 @@ rotate entire document."
   :straight (debbugs :type git :host github :repo "emacsmirror/debbugs"
                      :files (:defaults "Debbugs.wsdl")))
 
+;; Major mode for editing PKGBUILD files.
+(use-package pkgbuild-mode)
+
 ;; Have Emacs inherit PATH.
 (use-package exec-path-from-shell
   :init

@@ -594,10 +594,6 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 
 (use-package term
   :after helm
-  ;; :hook (term-mode . (lambda ()
-  ;;                      ;; Stop the buffer from recentering in term-mode.
-  ;;                      (setq-local scroll-conservatively 100000)
-  ;;                      (setq-local scroll-preserve-screen-position 1)))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
@@ -896,19 +892,14 @@ rotate entire document."
         helm-apropos-fuzzy-match t
         helm-lisp-fuzzy-completion t)
   (require 'helm-config)
-  ;; open helm buffer inside current window, not occupy whole other window
-  (setq helm-split-window-inside-p t
-        ;; move to end or beginning of source when reaching top or bottom of source.
-        helm-move-to-line-cycle-in-source t
+  ;; move to end or beginning of source when reaching top or bottom of source.
+  (setq helm-move-to-line-cycle-in-source t
         ;; search for library in `require' and `declare-function' sexp.
         helm-ff-search-library-in-sexp t
         ;; scroll 8 lines other window using M-<next>/M-<prior>
-        helm-scroll-amount 8
+        ;; helm-scroll-amount 8
         helm-ff-file-name-history-use-recentf t
         helm-echo-input-in-header-line t)
-  (setq helm-autoresize-max-height 0
-        helm-autoresize-min-height 40)
-  (helm-autoresize-mode 1)
   (helm-mode 1))
 
 ;; Always use helm follow mode.
@@ -1123,10 +1114,10 @@ rotate entire document."
   :hook ((c-mode-common . rtags-start-process-unless-running))
   :config
   (rtags-enable-standard-keybindings)
-  (setq rtags-use-helm t)
+  ;; (setq rtags-use-helm t)
   (setq rtags-autostart-diagnostics t)
   (rtags-diagnostics)
-  (setq rtags-use-helm t)
+  ;; (setq rtags-use-helm t)
   ;; company completion setup
   (setq rtags-completions-enabled t)
   )
@@ -1141,8 +1132,8 @@ rotate entire document."
   :after (flycheck rtags)
   :hook (c-mode-common . setup-flycheck-rtags))
 
-(use-package helm-rtags
-  :after (helm rtags))
+;; (use-package helm-rtags
+;;   :after (helm rtags))
 
 (use-package cmake-ide
   :after rtags
@@ -1152,7 +1143,7 @@ rotate entire document."
 ;; Mode for interacting with systemd files.
 (use-package systemd)
 
-(use-package helm-systemd)
+;; (use-package helm-systemd)
 
 ;; Completions in octave.
 (use-package ac-octave

@@ -123,8 +123,8 @@
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
 ;; Set font size
-;; (defvar font-size 100)
-(defvar font-size 80)
+(defvar font-size 100)
+;; (defvar font-size 80)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height font-size)
 ;; Set the header bar font
@@ -462,7 +462,13 @@ amount of spaces."
 
 (use-package cl-lib)
 
+(use-package multi-line
+  :config
+  (global-set-key (kbd "C-c d") 'multi-line))
+
 (use-package proced
+  ;; :hook (proced-mode . (lambda ()
+  ;;                        (symon-mode 1)))
   :bind ("<f9>" . proced))
 
 (use-package python
@@ -497,6 +503,10 @@ amount of spaces."
 (use-package man
   :config
   (setq Man-notify-method (quote pushy)))
+
+(autoload 'octave-mode "octave-mod" nil t)
+(setq auto-mode-alist
+      (cons '("\\.m$" . octave-mode) auto-mode-alist))
 
 (use-package seq)
 
@@ -584,16 +594,18 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 
 (use-package term
   :after helm
-  :hook (term-mode . (lambda ()
-                       ;; Stop the buffer from recentering in term-mode.
-                       (setq-local scroll-conservatively 100000)
-                       (setq-local scroll-preserve-screen-position 1)))
+  ;; :hook (term-mode . (lambda ()
+  ;;                      ;; Stop the buffer from recentering in term-mode.
+  ;;                      (setq-local scroll-conservatively 100000)
+  ;;                      (setq-local scroll-preserve-screen-position 1)))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
       (lookup-key (current-global-map) binding)))
   (expose-global-binding-in-term (kbd "C-x"))
   (define-key term-raw-map (kbd "M-x") 'helm-M-x)
+  (setq term-scroll-to-bottom-on-output t)
+  (setq term-scroll-show-maximum-output t)
   (setq term-bind-key-alist
 	(list (cons "C-c C-c" 'term-interrupt-subjob)
 	      (cons "C-z" 'term-stop-subjob)

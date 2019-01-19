@@ -145,8 +145,8 @@ should be 8.
 
 \section{C++ company completions are not always accurate}
 
-For instance, find_last_not_of has incorrect completions. The old configuration did provide correct
-completions.
+For instance, \mintinline{text}{find_last_not_of} has incorrect completions. The old configuration
+did provide correct completions.
 
 \section{When Emacs opens it is not completely maximized}
 
@@ -168,7 +168,9 @@ Often, when I type a character in term mode the window recenters instead of just
 position where it is. I want it to just leave it there. This seems to relate to scrolling,
 specifically scroll-conservatively,
 etc. \href{https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html}{This link}
-is useful.
+is useful. \href{https://emacs.stackexchange.com/a/21466/20317}{This SO answer} describes how window
+points work and may also be useful. This appears to be caused by an interaction with helm. Test this
+by fully disabling helm and then testing.
 
 \end{document}
 %%% Local Variables:

@@ -472,6 +472,7 @@ amount of spaces."
   :bind ("<f9>" . proced))
 
 (use-package python
+  :mode (("\\.py\\'" . python-mode))
   :hook (python-mode . (lambda ()
                          (setq tab-width 4)))
   :config
@@ -488,12 +489,16 @@ amount of spaces."
 
 ;; Mode for editing C and related languages such as C++.
 (use-package cc-mode
+  :mode (("\\.c\\'" . c-mode)
+         ("\\.cc\\'" . c++-mode)
+         ("\\.cpp\\'" . c++-mode)
+         ("\\.tpp\\'" . c++-mode))
   :bind (:map c-mode-base-map
               ("C-c C-c" . compile)
               ("C-c C-k" . kill-compilation)
               ("RET" . newline-and-indent))
-  :init
-  (add-to-list 'auto-mode-alist '("\\.tpp\\'" . c++-mode))
+  ;; :init
+  ;; (add-to-list 'auto-mode-alist '("\\.tpp\\'" . c++-mode))
   :config
   (setq c-basic-offset 8
 	tab-width 8
@@ -981,10 +986,12 @@ rotate entire document."
 
 ;; Enhanced editing for python files.
 (use-package elpy
+  :bind (([remap rtags-find-symbol-at-point] . elpy-goto-definition))
   :commands (elpy-enable)
-  :after python
+  :hook (python-mode . elpy-mode)
   :config
   (elpy-enable)
+  (delete 'elpy-module-highlight-indentation elpy-modules)
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode)))
@@ -1498,7 +1505,7 @@ rotate entire document."
 ;; ("C-c e" . mc/edit-lines)))
 
 (use-package json-mode
-  :mode (".json" ".imp"))
+  :mode ("\\.json\\'" "\\.imp\\'"))
 
 ;; Delete all whitespace until the next whitespace character.
 (use-package hungry-delete

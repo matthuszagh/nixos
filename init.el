@@ -54,9 +54,6 @@
           (lambda ()
             (load "dired-x")))
 
-;; Make C-i usable.
-(define-key input-decode-map "\C-i" [C-i])
-
 ;; Improve PDF resolution in DocView
 (require 'doc-view)
 (setq doc-view-resolution 300)
@@ -752,7 +749,6 @@ rotate entire document."
 (use-package evil
   :config
   (evil-mode 1)
-
   ;; Set some modes to default to Emacs keybindings.
   (dolist (mode '(git-rebase-mode
                   flycheck-error-list-mode
@@ -1013,7 +1009,7 @@ rotate entire document."
 
 (use-package verilog-mode
   :mode "\\.[st]*v[hp]*\\'"
-  :bind ("C-c C-f" . indent-buffer)
+  :bind (("C-c C-f" . indent-buffer))
   :config
   ;; Turns off automatic newline after typing a semicolon, which is annoying.
   (setq verilog-auto-newline nil
@@ -1342,6 +1338,8 @@ rotate entire document."
 			   (buffer-file-name) ".tmp " (buffer-file-name)))))
 
 (defun add-auctex-keys ()
+  ;; Make C-i distinguishable from tab.
+  (define-key input-decode-map "\C-i" [C-i])
   (local-set-key (kbd "C-c <C-i> f") 'insert-frac)
   (local-set-key (kbd "C-c <C-i> t") 'insert-text)
   (local-set-key (kbd "C-c <C-i> s") 'insert-math-subscript)

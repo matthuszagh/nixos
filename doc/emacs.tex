@@ -132,12 +132,6 @@ takes up a needless number of lines for long text sections that have to be manua
 I'd like to be able to run this globally for a whole buffer. The most similar action is align-entire
 but this aligns all tables to one another; I'd like aligning to be done on a per-table basis.
 
-\section{Shortcut keys not working in Auctex}
-
-I have to manually load the init file after emacsclient -nc in order for C-i keybindings to
-work. This should work off the bat, and in general its weird that loading the init file has any
-effect at all.
-
 \section{align uses 2 spaces in Emacs}
 
 The align environment seems to use 2 spaces in Auctex instead of the 8 used by everything else. It
@@ -171,6 +165,20 @@ backup.
 I'm getting the error: ``BUG: missing headers nil'' when using magit with ghub. This is a known
 issue and is tracked \href{https://github.com/magit/ghub/issues/81}{here}. I guess the solution is
 to just wait for someone to fix it there.
+
+\section{Verilog mode escape}
+
+When in evil insert mode and the cursor position is after a reg or wire, pressing escape tries to
+vectorize the reg/wire instead of entering evil normal state.
+
+\section{Verilog code tagging}
+
+Verilog mode should have code tagging and navigation. See
+\href{https://scripter.co/ctags-systemverilog-and-emacs/}{this link} for ideas on code tagging.
+
+\section{Verilog syntax highlighting}
+
+Syntax highlighting is not currently working in verilog-mode.
 
 \end{document}
 %%% Local Variables:

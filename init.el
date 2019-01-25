@@ -780,6 +780,7 @@ rotate entire document."
   (evil-set-initial-state 'gud-mode 'emacs)
   (evil-set-initial-state 'sage-shell-mode 'emacs)
   (evil-set-initial-state 'sql-interactive-mode 'emacs)
+  (evil-set-initial-state 'erc-mode 'emacs)
 
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)

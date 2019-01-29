@@ -1500,8 +1500,9 @@ rotate entire document."
 (use-package multiple-cursors
   :bind (("M-n" . mc/mark-next-like-this)
          ("M-p" . mc/mark-previous-like-this)
-         ("C-c a" . mc/mark-all-like-this)))
-;; ("C-c e" . mc/edit-lines)))
+         ("C-c a" . mc/mark-all-like-this))
+  :config
+  (setq mc/always-repeat-command t))
 
 (use-package json-mode
   :mode ("\\.json\\'" "\\.imp\\'"))

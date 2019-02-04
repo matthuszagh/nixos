@@ -120,8 +120,8 @@
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
 ;; Set font size
-(defvar font-size 100)
-;; (defvar font-size 80)
+;; (defvar font-size 100)
+(defvar font-size 80)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height font-size)
 ;; Set the header bar font
@@ -934,6 +934,11 @@ rotate entire document."
   :after (helm seq)
   :bind ("<f11>" . helm-system-packages))
 
+;; Use Helm interface to GNU Global.
+(use-package helm-gtags)
+
+(use-package ggtags)
+
 ;; Package window-numbering installed from package list
 ;; Allows switching between buffers using meta-(# key)
 (use-package window-numbering
@@ -1085,7 +1090,7 @@ rotate entire document."
   (when (not (display-graphic-p))
     (setq flycheck-indication-mode nil))
   ;; Verilog Verilator static analyzer
-  (setq-default flycheck-verilog-verilator-executable "/usr/local/bin/verilator_bin"))
+  (setq-default flycheck-verilog-verilator-executable "/usr/bin/verilator_bin"))
 
 ;; Flycheck for python.
 (use-package flycheck-pyflakes
@@ -1126,10 +1131,10 @@ rotate entire document."
   (setq rtags-completions-enabled t)
   )
 
-(use-package company-rtags
-  :after (rtags company)
-  :config
-  (add-to-list 'company-backends 'company-rtags))
+;; (use-package company-rtags
+;;   :after (rtags company)
+;;   :config
+;;   (add-to-list 'company-backends 'company-rtags))
 
 (require 'flycheck-rtags)
 (use-package flycheck-rtags
@@ -1138,6 +1143,79 @@ rotate entire document."
 
 ;; (use-package helm-rtags
 ;;   :after (helm rtags))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package: ycmd (YouCompleteMeDaemon)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set up YouCompleteMe for emacs:
+;; https://github.com/Valloric/ycmd
+;; https://github.com/abingham/emacs-ycmd
+
+(defvar my:ycmd-server-command '("python" "/home/matt/developer/src/third-party/ycmd/ycmd"))
+(defvar my:ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
+(defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
+
+(defvar my:python-location (executable-find (nth 0 my:ycmd-server-command)))
+(if (not my:python-location)
+    (message
+     "Could not start YouCompleteMeDaemon because the python executable could
+not be found.\nSpecified executable is: '%s'\nPlease set my:ycmd-server-command
+appropriately in ~/.emacs.d/init.el.\n" (nth 0 my:ycmd-server-command)))
+(if (not (file-directory-p (nth 1 my:ycmd-server-command)))
+    (message "Could not YouCompleteMeDaemon because the specified directory does
+not exist.\nSpecified directory is: '%s'
+Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
+             (nth 1 my:ycmd-server-command)))
+(if (and my:python-location
+         (file-directory-p (nth 1 my:ycmd-server-command)))
+    (use-package ycmd
+      :init
+      (eval-when-compile
+        ;; Silence missing function warnings
+        (declare-function global-ycmd-mode "ycmd.el")
+        (declare-function ycmd-mode "ycmd.el"))
+      (add-hook 'after-init-hook #'global-ycmd-mode)
+      :config
+      (progn
+        (set-variable 'ycmd-server-command my:ycmd-server-command)
+        (set-variable 'ycmd-extra-conf-whitelist my:ycmd-extra-conf-whitelist)
+        (set-variable 'ycmd-global-config my:ycmd-global-config)
+        (setq ycmd-force-semantic-completion t)
+        (setq ycmd-request-message-level -1)
+        (setq ycmd-url-show-status nil)
+        (setq ycmd--log-enabled t)
+        (use-package company-ycmd
+          :init
+          (eval-when-compile
+            ;; Silence missing function warnings
+            (declare-function company-ycmd-setup "company-ycmd.el"))
+          :config
+          (company-ycmd-setup)
+          )
+
+        ;; (use-package flycheck-ycmd
+        ;;   :ensure t
+        ;;   :init
+        ;;   (add-hook 'c-mode-common-hook 'flycheck-ycmd-setup)
+        ;;   )
+
+        ;; Add displaying the function arguments in mini buffer using El Doc
+        (require 'ycmd-eldoc)
+        (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
+        ;; disable ycmd in tramp mode when editing C++ and python files
+        ;; (ycmd doesn't work with tramp)
+        (add-hook 'c++-mode-hook
+                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+                    (ycmd-mode)))
+        (add-hook 'c-mode-hook
+                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+                    (ycmd-mode)))
+        (add-hook 'python-mode-hook
+                  (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
+                    (ycmd-mode)))
+        )
+      )
+  )
 
 (use-package cmake-ide
   :after rtags

@@ -137,11 +137,6 @@ but this aligns all tables to one another; I'd like aligning to be done on a per
 The align environment seems to use 2 spaces in Auctex instead of the 8 used by everything else. It
 should be 8.
 
-\section{C++ company completions are not always accurate}
-
-For instance, \mintinline{text}{find_last_not_of} has incorrect completions. The old configuration
-did provide correct completions.
-
 \section{When Emacs opens it is not completely maximized}
 
 The right side of the frame is not quite right.
@@ -176,9 +171,13 @@ vectorize the reg/wire instead of entering evil normal state.
 Verilog mode should have code tagging and navigation. See
 \href{https://scripter.co/ctags-systemverilog-and-emacs/}{this link} for ideas on code tagging.
 
-\section{Verilog syntax highlighting}
+\section{Better Code Tagging}
 
-Syntax highlighting is not currently working in verilog-mode.
+The problem with RTags is that it only works for C-based languages. gtags should work for many
+others. See \href{https://tuhdo.github.io/c-ide.html}{this link}. It probably makes sense to use the
+\href{https://github.com/leoliu/ggtags}{ggtags} interface. Also use the
+\href{https://github.com/syohex/emacs-helm-gtags/}{helm interface}. This may also be the wrong
+question, but maybe it's also possible to use rtags as a backend for a common gtags frontend?
 
 \end{document}
 %%% Local Variables:

@@ -1015,7 +1015,8 @@ rotate entire document."
 
 (use-package verilog-mode
   :mode "\\.[st]*v[hp]*\\'"
-  :bind (("C-c C-f" . indent-buffer))
+  :bind (:map verilog-mode-map
+              ("C-c C-f" . indent-buffer))
   :config
   ;; Turns off automatic newline after typing a semicolon, which is annoying.
   (setq verilog-auto-newline nil

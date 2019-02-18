@@ -110,6 +110,14 @@
         (vc-mode vc-mode)
         "  " mode-name mode-line-misc-info mode-line-end-spaces)))
 
+;; Align comments
+(defun align-comments (beginning end)
+  "Align comments within marked region."
+  (interactive "*r")
+  (let (indent-tabs-mode align-to-tab-stop)
+    (align-regexp beginning end (concat "\\(\\s-*\\)"
+                                        (regexp-quote comment-start)))))
+
 ;; Hide the scroll bar
 (scroll-bar-mode -1)
 ;; Ensure that scrollbar is also disabled for new frames.
@@ -253,6 +261,7 @@ amount of spaces."
 ;; Specify buffers that should appear in the same window
 (add-to-list 'same-window-buffer-names "*Proced*")
 (add-to-list 'same-window-buffer-names "*SQL*")
+(add-to-list 'same-window-buffer-names "*Inferior Octave*")
 
 ;; Newline at end of file
 (setq require-final-newline t)
@@ -768,6 +777,7 @@ rotate entire document."
                   ein:notebooklist-mode
                   ein:notebook-multilang-mode
                   deadgrep-mode
+                  inferior-python-mode
 		  eshell-mode))
     (add-to-list 'evil-emacs-state-modes mode))
 
@@ -833,20 +843,6 @@ rotate entire document."
 
 (use-package flycheck-plantuml
   :after (flycheck plantuml-mode))
-
-;; Common lisp package.
-(use-package slime
-  :init
-  (setq inferior-lisp-program "/usr/bin/sbcl")
-  :config
-  (slime-setup '(slime-fancy)))
-
-(use-package slime-company
-  :after (slime company)
-  :config
-  (slime-setup '(slime-company)))
-
-(use-package elisp-slime-nav)
 
 (use-package google-this
   :config
@@ -1037,16 +1033,20 @@ rotate entire document."
   :config
   ;; Zero delay when pressing tab
   (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (setq company-show-numbers t)
   (global-company-mode)
   ;; Maintain case information for completions.
   (setq company-dabbrev-downcase nil)
   (setq company-dabbrev-ignore-case nil)
   ;; Default backends.
-  (setq company-backends '((company-files company-keywords
-					  company-capf
-					  company-yasnippet)
-			   (company-abbrev company-dabbrev
-					   company-dabbrev-code))))
+  (setq company-backends '((company-files
+                            company-keywords
+			    company-capf
+			    company-yasnippet)
+			   (company-abbrev
+                            company-dabbrev
+                            company-dabbrev-code))))
 
 ;; Provides icons with company completions.
 (use-package company-box
@@ -1090,6 +1090,7 @@ rotate entire document."
   ;; https://github.com/abingham/emacs-ycmd
   (when (not (display-graphic-p))
     (setq flycheck-indication-mode nil))
+  (setq flycheck-clang-language-standard nil)
   ;; Verilog Verilator static analyzer
   (setq-default flycheck-verilog-verilator-executable "/usr/bin/verilator_bin"))
 
@@ -1129,7 +1130,7 @@ rotate entire document."
   (rtags-diagnostics)
   ;; (setq rtags-use-helm t)
   ;; company completion setup
-  (setq rtags-completions-enabled t)
+  ;; (setq rtags-completions-enabled t)
   )
 
 ;; (use-package company-rtags
@@ -1137,10 +1138,10 @@ rotate entire document."
 ;;   :config
 ;;   (add-to-list 'company-backends 'company-rtags))
 
-(require 'flycheck-rtags)
-(use-package flycheck-rtags
-  :after (flycheck rtags)
-  :hook (c-mode-common . setup-flycheck-rtags))
+;; (require 'flycheck-rtags)
+;; (use-package flycheck-rtags
+;;   :after (flycheck rtags)
+;;   :hook (c-mode-common . setup-flycheck-rtags))
 
 ;; (use-package helm-rtags
 ;;   :after (helm rtags))
@@ -1191,8 +1192,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
             ;; Silence missing function warnings
             (declare-function company-ycmd-setup "company-ycmd.el"))
           :config
-          (company-ycmd-setup)
-          )
+          (company-ycmd-setup))
 
         ;; (use-package flycheck-ycmd
         ;;   :ensure t
@@ -1217,6 +1217,20 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
         )
       )
   )
+
+;; Common lisp package.
+(use-package slime
+  :init
+  (setq inferior-lisp-program "/usr/bin/sbcl")
+  :config
+  (slime-setup '(slime-fancy)))
+
+(use-package slime-company
+  :after (slime company)
+  :config
+  (slime-setup '(slime-company)))
+
+(use-package elisp-slime-nav)
 
 (use-package cmake-ide
   :after rtags
@@ -1256,42 +1270,42 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (use-package magit-gerrit
   :after magit)
 
-(use-package magithub
-  :after magit
-  :config
-  (magithub-feature-autoinject t)
-  ;; limit filters
-  (with-eval-after-load 'magithub
-    (require 'parse-time)
+;; (use-package magithub
+;;   :after magit
+;;   :config
+;;   (magithub-feature-autoinject t)
+;;   ;; limit filters
+;;   (with-eval-after-load 'magithub
+;;     (require 'parse-time)
 
-    (defmacro magithub--time-number-of-days-since-string (iso8601)
-      `(time-to-number-of-days
-        (time-since
-         (parse-iso8601-time-string
-	  (concat ,iso8601 "+00:00")))))
+;;     (defmacro magithub--time-number-of-days-since-string (iso8601)
+;;       `(time-to-number-of-days
+;;         (time-since
+;;          (parse-iso8601-time-string
+;; 	  (concat ,iso8601 "+00:00")))))
 
-    (defun issue-filter-to-days (days type)
-      `(lambda (issue)
-         (let ((created_at (magithub--time-number-of-days-since-string
-			    (alist-get 'created_at issue)))
-	       (updated_at (magithub--time-number-of-days-since-string
-			    (alist-get 'updated_at issue))))
-	   (or (< created_at ,days) (< updated_at ,days)))))
+;;     (defun issue-filter-to-days (days type)
+;;       `(lambda (issue)
+;;          (let ((created_at (magithub--time-number-of-days-since-string
+;; 			    (alist-get 'created_at issue)))
+;; 	       (updated_at (magithub--time-number-of-days-since-string
+;; 			    (alist-get 'updated_at issue))))
+;; 	   (or (< created_at ,days) (< updated_at ,days)))))
 
-    (defun magithub-filter-maybe (&optional limit)
-      "Add filters to magithub only if number of issues is greter than LIMIT."
-      (let ((max-issues (length (ignore-errors (magithub-issues))))
-	    (max-pull-requests (length (ignore-errors (magithub-pull-requests))))
-	    (limit (or limit 15)))
-        (when (> max-issues limit)
-	  (add-to-list (make-local-variable 'magithub-issue-issue-filter-functions)
-		       (issue-filter-to-days limit "issues")))
-        (when (> max-pull-requests limit)
-	  (add-to-list (make-local-variable 'magithub-issue-pull-request-filter-functions)
-		       (issue-filter-to-days limit "pull-requests")))))
+;;     (defun magithub-filter-maybe (&optional limit)
+;;       "Add filters to magithub only if number of issues is greter than LIMIT."
+;;       (let ((max-issues (length (ignore-errors (magithub-issues))))
+;; 	    (max-pull-requests (length (ignore-errors (magithub-pull-requests))))
+;; 	    (limit (or limit 15)))
+;;         (when (> max-issues limit)
+;; 	  (add-to-list (make-local-variable 'magithub-issue-issue-filter-functions)
+;; 		       (issue-filter-to-days limit "issues")))
+;;         (when (> max-pull-requests limit)
+;; 	  (add-to-list (make-local-variable 'magithub-issue-pull-request-filter-functions)
+;; 		       (issue-filter-to-days limit "pull-requests")))))
 
-    (add-to-list 'magit-status-mode-hook #'magithub-filter-maybe))
-  (setq magithub-clone-default-directory "~/developer"))
+;;     (add-to-list 'magit-status-mode-hook #'magithub-filter-maybe))
+;;   (setq magithub-clone-default-directory "~/developer"))
 
 ;; Displays small signals to the left of line numbers in git repos to indicate diffs since the last
 ;; commit. A purple '=' means modified, a red '-' means deleted and a green '+' means added.
@@ -1606,7 +1620,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (if (and my:jupyter_location
          my:jupyter_start_dir)
     (use-package ein
-      :bind ("<f2>" . ein:login)
+      :bind (("<f2>" . ein:login))
       :commands (ein:jupyter-server-start)
       :hook (ein:notebook-multilang-mode . (lambda ()
                                              (display-line-numbers-mode -1)))

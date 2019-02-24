@@ -1530,7 +1530,11 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (setq x86-lookup-pdf "~/Documents/library/Intel Software Developer’s Manual (2017).pdf"))
 
 ;; Easily switch window positions.
-(use-package buffer-move)
+(use-package buffer-move
+  :bind (("<C-S-right>" . buf-move-right)
+	 ("<C-S-left>" . buf-move-left)
+	 ("<C-S-up>" . buf-move-up)
+	 ("<C-S-down>" . buf-move-down)))
 
 ;; Qt build system files.
 (use-package qt-pro-mode

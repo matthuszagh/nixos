@@ -1159,8 +1159,8 @@ rotate entire document."
 ;; https://github.com/abingham/emacs-ycmd
 
 (defvar my:ycmd-server-command '("python" "/home/matt/developer/src/third-party/ycmd/ycmd"))
-(defvar my:ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
-(defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
+(defvar my:ycmd-extra-conf-whitelist '("./.ycm_extra_conf.py"))
+(defvar my:ycmd-global-config "./.ycm_extra_conf.py")
 
 (defvar my:python-location (executable-find (nth 0 my:ycmd-server-command)))
 (if (not my:python-location)

@@ -1223,6 +1223,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
       )
   )
 
+;; Disable ycmd in Emacs Lisp mode.
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+				  (ycmd-mode -1)))
+
 ;; Common lisp package.
 (use-package slime
   :init
@@ -1535,6 +1539,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 	 ("<C-S-left>" . buf-move-left)
 	 ("<C-S-up>" . buf-move-up)
 	 ("<C-S-down>" . buf-move-down)))
+
+()
 
 ;; Qt build system files.
 (use-package qt-pro-mode

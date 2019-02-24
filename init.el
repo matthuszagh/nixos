@@ -130,6 +130,16 @@
 ;; Set font size
 ;; (defvar font-size 100)
 (defvar font-size 80)
+
+(defun set-font-size (sz)
+  "Set font size."
+  (interactive
+   (list
+    (read-number "size: ")))
+  (set-face-attribute 'mode-line nil  :height sz)
+  (set-face-attribute 'header-line nil  :height sz)
+  (set-face-attribute 'default nil :height sz))
+
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height font-size)
 ;; Set the header bar font
@@ -603,8 +613,18 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
     (add-hook 'comint-preoutput-filter-functions
               'my-sql-comint-preoutput-filter :append :local)))
 
+;; term has 2 submodes: term-line-mode and term-char-mode. term-char-mode behaves like a normal
+;; terminal whereas term-line-mode allows you to treat the terminal like a traditional
+;; buffer. Keybindings for term-line-mode can be set in term-line-map whereas keybindings for
+;; term-char-mode are set in term-raw-map. term-raw-escape-map is used to set keybindings for "C-c"
+;; escaped commands. When setting escaped keys, omit the escaping "C-c".
 (use-package term
-  :after helm
+  :after (helm evil)
+  :bind (:map term-mode-map
+              ("C-c C-k" . (lambda () (interactive)
+                             (evil-emacs-state)
+                             (term-char-mode)
+                             (goto-char (point-max)))))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
@@ -612,22 +632,7 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (expose-global-binding-in-term (kbd "C-x"))
   (define-key term-raw-map (kbd "M-x") 'helm-M-x)
   (setq term-scroll-to-bottom-on-output t)
-  (setq term-scroll-show-maximum-output t)
-  (setq term-bind-key-alist
-	(list (cons "C-c C-c" 'term-interrupt-subjob)
-	      (cons "C-z" 'term-stop-subjob)
-              (cons "C-l" 'term-send-raw)
-	      (cons "C-r" 'term-send-raw)
-	      (cons "C-s" 'term-send-raw)
-	      (cons "M-f" 'term-send-forward-word)
-              (cons "M-b" 'term-send-backward-word)
-	      (cons "C-c C-j" 'term-line-mode)
-              (cons "C-c C-k" 'term-char-mode)
-	      (cons "M-DEL" 'term-send-backward-kill-word)
-              (cons "M-d" 'term-send-forward-kill-word)
-	      (cons "<C-left>" 'term-send-backward-word)
-              (cons "<C-right>" 'term-send-forward-word)
-	      (cons "C-y" 'term-paste))))
+  (setq term-scroll-show-maximum-output t))
 
 (use-package image-dired)
 ;; :config
@@ -1673,7 +1678,26 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
          ("<f1>" . multi-term))
   :config
   (require 'multi-term-ext)
-  (setq multi-term-program "/bin/bash"))
+  (setq multi-term-program "/bin/bash")
+  (setq term-bind-key-alist
+        (list (cons "C-c C-c" 'term-interrupt-subjob)
+              (cons "C-z" 'term-stop-subjob)
+              (cons "C-l" 'term-send-raw)
+              (cons "C-r" 'term-send-raw)
+              (cons "C-s" 'term-send-raw)
+              (cons "M-f" 'term-send-forward-word)
+              (cons "M-b" 'term-send-backward-word)
+	      ;; I've defined "C-c C-k" in term's configuration since it must be defined in
+	      ;; term-mode-map.  It could be placed here as a define-key in config, but this way we
+	      ;; get to keep use-package's typical syntax.
+              (cons "C-c C-j" '(lambda () (interactive)
+                                 (term-line-mode)
+                                 (evil-normal-state)))
+              (cons "M-DEL" 'term-send-backward-kill-word)
+              (cons "M-d" 'term-send-forward-kill-word)
+              (cons "<C-left>" 'term-send-backward-word)
+              (cons "<C-right>" 'term-send-forward-word)
+              (cons "C-y" 'term-paste))))
 
 ;; info+ is a plugin.
 (require 'info+)

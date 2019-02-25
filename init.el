@@ -762,7 +762,6 @@ rotate entire document."
 
 (use-package a)
 
-;; evil
 (use-package evil
   :config
   (evil-mode 1)
@@ -800,6 +799,8 @@ rotate entire document."
   (evil-set-initial-state 'sql-interactive-mode 'emacs)
   (evil-set-initial-state 'erc-mode 'emacs)
 
+  ;; Evil sets keys in an unusual way and so we must use the define key directive instead of the
+  ;; typical :bind.
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-insert-state-map (kbd "C-u")
@@ -811,12 +812,19 @@ rotate entire document."
   ;; This only seems to be an issue in normal mode with this keybinding.
   ;; If others are issues, perform similar actions with them.
   (define-key evil-normal-state-map (kbd "M-.") 'rtags-find-symbol-at-point)
-  )
 
-;; Unbind toggling Emacs state. I don't need this and would rather use it for term-mode.
-;; If this functionality needs to be performed it can be done so with 'evil-emacs-state and
-;; 'evil-exit-emacs-state.
-(define-key evil-emacs-state-map (kbd "C-z") nil)
+  ;; Keep window navigation keys in evil Emacs state map.
+  (define-key evil-emacs-state-map (kbd "C-w h") 'evil-window-left)
+  (define-key evil-emacs-state-map (kbd "C-w j") 'evil-window-down)
+  (define-key evil-emacs-state-map (kbd "C-w k") 'evil-window-up)
+  (define-key evil-emacs-state-map (kbd "C-w l") 'evil-window-right)
+
+  ;; Unbind toggling Emacs state. I don't need this and would rather use it for term-mode.
+  ;; If this functionality needs to be performed it can be done so with 'evil-emacs-state and
+  ;; 'evil-exit-emacs-state.
+  (define-key evil-emacs-state-map (kbd "C-z") nil))
+
+
 
 ;; library for async/thread processing
 (use-package async)
@@ -1686,6 +1694,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (setq emamux:completing-read-type 'helm))
 
 (use-package multi-term
+  :after (evil)
   :bind (("<C-next>" . multi-term-next)
          ("<C-prior>" . multi-term-prev)
          ("<f1>" . multi-term))
@@ -1710,7 +1719,14 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
               (cons "M-d" 'term-send-forward-kill-word)
               (cons "<C-left>" 'term-send-backward-word)
               (cons "<C-right>" 'term-send-forward-word)
-              (cons "C-y" 'term-paste))))
+              (cons "C-y" 'term-paste)
+              ;; Keep evil mode window move keys. This replaces the normal Bash C-w key that cuts
+              ;; the word before the cursor. If you want that back, remove the next 5 lines.
+              (cons "C-w" 'nil)
+              (cons "C-w h" 'evil-window-left)
+              (cons "C-w j" 'evil-window-down)
+              (cons "C-w k" 'evil-window-up)
+              (cons "C-w l" 'evil-window-right))))
 
 ;; info+ is a plugin.
 (require 'info+)

@@ -485,8 +485,8 @@ amount of spaces."
 (use-package proced
   :after (symon)
   :bind (("<f9>" . (lambda () (interactive)
-                    (proced)
-                    (command-execute 'symon-mode)))
+                     (proced)
+                     (command-execute 'symon-mode)))
          :map proced-mode-map
          ("q" . (lambda () (interactive)
                   (quit-window)
@@ -641,6 +641,18 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (setq term-scroll-show-maximum-output t)
   ;; Don't limit term size
   (setq term-buffer-maximum-size 0))
+
+;; Provide better bindings for shell commands.
+(global-set-key (kbd "C-c s") 'with-editor-shell-command)
+(global-set-key (kbd "C-c S") (lambda (cmd) (interactive "sSudo shell command: ")
+                                (let ((default-directory "/sudo::"))
+                                  (with-editor-shell-command cmd))))
+
+(defun updatedb ()
+  "Update mlocate database."
+  (interactive)
+  (let ((default-directory "/sudo::"))
+    (shell-command "updatedb")))
 
 (use-package image-dired)
 ;; :config
@@ -1414,7 +1426,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Query/browse stack exchange sites.
 (use-package sx
   :config
-  (bind-keys :prefix "C-c s"
+  (bind-keys :prefix "C-c C-s"
              :prefix-map my-sx-map
              :prefix-docstring "Global keymap for SX."
              ("q" . sx-tab-all-questions)

@@ -643,16 +643,16 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (setq term-buffer-maximum-size 0))
 
 ;; Provide better bindings for shell commands.
-(global-set-key (kbd "C-c s") 'with-editor-shell-command)
-(global-set-key (kbd "C-c S") (lambda (cmd) (interactive "sSudo shell command: ")
+(global-set-key (kbd "C-c s") 'with-editor-async-shell-command)
+(global-set-key (kbd "C-c S") (lambda (cmd) (interactive "sSudo async shell command: ")
                                 (let ((default-directory "/sudo::"))
-                                  (with-editor-shell-command cmd))))
+                                  (with-editor-async-shell-command cmd))))
 
 (defun updatedb ()
   "Update mlocate database."
   (interactive)
   (let ((default-directory "/sudo::"))
-    (shell-command "updatedb")))
+    (async-shell-command "updatedb")))
 
 (use-package image-dired)
 ;; :config
@@ -813,6 +813,7 @@ rotate entire document."
   (evil-set-initial-state 'Man-mode 'emacs)
   (evil-set-initial-state 'gud-mode 'emacs)
   (evil-set-initial-state 'sage-shell-mode 'emacs)
+  (evil-set-initial-state 'shell-mode 'emacs)
   (evil-set-initial-state 'sql-interactive-mode 'emacs)
   (evil-set-initial-state 'erc-mode 'emacs)
 

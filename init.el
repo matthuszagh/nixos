@@ -483,9 +483,14 @@ amount of spaces."
   (global-set-key (kbd "C-c d") 'multi-line))
 
 (use-package proced
-  ;; :hook (proced-mode . (lambda ()
-  ;;                        (symon-mode 1)))
-  :bind ("<f9>" . proced))
+  :after (symon)
+  :bind (("<f9>" . (lambda () (interactive)
+                    (proced)
+                    (command-execute 'symon-mode)))
+         :map proced-mode-map
+         ("q" . (lambda () (interactive)
+                  (quit-window)
+                  (command-execute 'symon-mode)))))
 
 (use-package python
   :mode (("\\.py\\'" . python-mode))
@@ -844,9 +849,11 @@ rotate entire document."
   (autoload 'esup "esup" "Emacs Start Up Profiler." nil))
 
 ;; Display CPU/mem/etc usage.
-(use-package symon)
-;; :config
-;; (symon-mode nil))
+(use-package symon
+  :init
+  ;; No delay when updating usage.
+  (setq symon-delay 0)
+  (setq symon-refresh-rate 1))
 
 ;; Enable plantuml-mode for PlantUML files
 (use-package plantuml-mode

@@ -1709,6 +1709,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :after (evil)
   :bind (("<C-next>" . multi-term-next)
          ("<C-prior>" . multi-term-prev)
+         ("C-c t" . multi-term-next)
          ("<f1>" . multi-term))
   :config
   (require 'multi-term-ext)

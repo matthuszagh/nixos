@@ -1671,7 +1671,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (if (and my:jupyter_location
          my:jupyter_start_dir)
     (use-package ein
-      :bind (("<f2>" . ein:login))
+      :bind (("<f2>" . ein:connect-to-notebook))
       :commands (ein:jupyter-server-start)
       :hook (ein:notebook-multilang-mode . (lambda ()
                                              (display-line-numbers-mode -1)))

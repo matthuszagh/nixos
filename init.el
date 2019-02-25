@@ -624,7 +624,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
               ("C-c C-k" . (lambda () (interactive)
                              (evil-emacs-state)
                              (term-char-mode)
-                             (goto-char (point-max)))))
+                             (goto-char (point-max))
+                             (term-send-down))))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
@@ -632,7 +633,9 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (expose-global-binding-in-term (kbd "C-x"))
   (define-key term-raw-map (kbd "M-x") 'helm-M-x)
   (setq term-scroll-to-bottom-on-output t)
-  (setq term-scroll-show-maximum-output t))
+  (setq term-scroll-show-maximum-output t)
+  ;; Don't limit term size
+  (setq term-buffer-maximum-size 0))
 
 (use-package image-dired)
 ;; :config

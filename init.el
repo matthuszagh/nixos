@@ -824,6 +824,11 @@ rotate entire document."
   (define-key evil-emacs-state-map (kbd "C-w k") 'evil-window-up)
   (define-key evil-emacs-state-map (kbd "C-w l") 'evil-window-right)
 
+  (define-key evil-emacs-state-map (kbd "C-w H") 'evil-window-move-far-left)
+  (define-key evil-emacs-state-map (kbd "C-w J") 'evil-window-move-very-bottom)
+  (define-key evil-emacs-state-map (kbd "C-w K") 'evil-window-move-very-top)
+  (define-key evil-emacs-state-map (kbd "C-w L") 'evil-window-move-far-right)
+
   ;; Unbind toggling Emacs state. I don't need this and would rather use it for term-mode.
   ;; If this functionality needs to be performed it can be done so with 'evil-emacs-state and
   ;; 'evil-exit-emacs-state.

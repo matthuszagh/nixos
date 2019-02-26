@@ -22,6 +22,8 @@
  '(company-tooltip-mouse ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(company-tooltip-selection ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(header-line ((t (:background "#003366"))))
+ '(mode-line ((t (:background "DodgerBlue4" :distant-foreground "#5c5d56" :weight normal :height 80))))
+ '(mode-line-buffer-id ((t (:foreground "#8686ae"))))
  '(term-color-red ((t (:background "#aa4450" :foreground "#aa4450"))))
  '(which-func ((t (:foreground "#8fb28f")))))
 

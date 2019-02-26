@@ -648,11 +648,21 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
                                 (let ((default-directory "/sudo::"))
                                   (with-editor-async-shell-command cmd))))
 
+(use-package shell
+  :bind (:map shell-mode-map
+              ("C-d" . nil)))
+
 (defun updatedb ()
   "Update mlocate database."
   (interactive)
   (let ((default-directory "/sudo::"))
     (async-shell-command "updatedb")))
+
+(defun upgrade-software ()
+  "Use pacman to upgrade installed software."
+  (interactive)
+  (let ((default-directory "/sudo::"))
+    (async-shell-command "pacman -Syu --ignore vtk")))
 
 (use-package image-dired)
 ;; :config

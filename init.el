@@ -272,6 +272,7 @@ amount of spaces."
 (add-to-list 'same-window-buffer-names "*Proced*")
 (add-to-list 'same-window-buffer-names "*SQL*")
 (add-to-list 'same-window-buffer-names "*Inferior Octave*")
+(add-to-list 'same-window-regexps ".*ein.*")
 
 ;; Newline at end of file
 (setq require-final-newline t)
@@ -1497,7 +1498,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (interactive)
   (with-no-warnings
     (shell-command (concat "latexindent " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
-			   (buffer-file-name) ".tmp " (buffer-file-name)))))
+        		   (buffer-file-name) ".tmp " (buffer-file-name)))))
 
 (defun add-auctex-keys ()
   ;; Make C-i distinguishable from tab.
@@ -1694,7 +1695,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (if (and my:jupyter_location
          my:jupyter_start_dir)
     (use-package ein
-      :bind (("<f2>" . ein:connect-to-notebook))
+      :bind (("<f2>" . ein:connect-to-notebook)
+             :map ein:connect-mode-map
+             ;; Preserve "M-," for for jumping back after jumping to a definition, etc.
+             ("M-," . nil))
       :commands (ein:jupyter-server-start)
       :hook (ein:notebook-multilang-mode . (lambda ()
                                              (display-line-numbers-mode -1)))

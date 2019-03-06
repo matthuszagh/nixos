@@ -802,7 +802,6 @@ rotate entire document."
                   sx-question-list-mode
                   pdf-occur-buffer-mode
                   mpdel-nav-mode
-                  slime-repl-mode
 		  image-dired-thumbnail-mode
                   image-dired-display-image-mode
                   dired-mode
@@ -828,6 +827,7 @@ rotate entire document."
   (evil-set-initial-state 'shell-mode 'emacs)
   (evil-set-initial-state 'sql-interactive-mode 'emacs)
   (evil-set-initial-state 'erc-mode 'emacs)
+  (evil-set-initial-state 'slime-repl-mode 'emacs)
 
   ;; Evil sets keys in an unusual way and so we must use the define key directive instead of the
   ;; typical :bind.
@@ -1291,14 +1291,12 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Common lisp package.
 (use-package slime
   :init
-  (setq inferior-lisp-program "/usr/bin/sbcl")
-  :config
-  (slime-setup '(slime-fancy)))
+  (setq inferior-lisp-program "/usr/bin/sbcl"))
 
 (use-package slime-company
   :after (slime company)
   :config
-  (slime-setup '(slime-company)))
+  (slime-setup '(slime-company slime-fancy)))
 
 (use-package elisp-slime-nav)
 

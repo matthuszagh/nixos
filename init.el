@@ -150,6 +150,7 @@
 ;; Enable line numbers on the LHS
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'LaTeX-mode-hook 'display-line-numbers-mode)
+(add-hook 'plain-TeX-mode-hook 'display-line-numbers-mode)
 
 (defun display-line-numbers-on-files ()
   "Enable line numbers for most files, except some."
@@ -1513,19 +1514,29 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (add-hook 'LaTeX-mode-hook '(lambda ()
 			      (local-set-key (kbd "C-c C-f") 'latex-indent)))
 
+(add-hook 'LaTeX-mode-hook '(lambda () (interactive)
+                              (if (null (TeX-PDF-mode))
+                                  (command-execute 'TeX-PDF-mode))))
+
+(add-hook 'plain-TeX-mode-hook '(lambda () (interactive)
+                                  (if (TeX-PDF-mode)
+			              (command-execute 'TeX-PDF-mode))))
 (use-package tex-site
   :straight auctex
-  :mode ("\\.tex\\'" . latex-mode)
+  ;; :mode ("\\.tex\\'" . latex-mode)
   ;; When we byte-compile we need to have the autoloads loaded in order to
   ;; properly get auctex working, otherwise auctex is not loaded correctly
   :init
   (load "auctex-autoloads" nil t)
   :config
+  ;; Use latex-mode by default when it is unclear whether plain-tex-mode or latex-mode should be
+  ;; used.
+  ;; (setq tex-default-mode 'latex-mode)
   (setq-default TeX-auto-save t
                 TeX-parse-self t
                 TeX-master nil
                 TeX-source-correlate-start-server t
-		LaTeX-indent-level 8
+		;; LaTeX-indent-level 8
                 reftex-plug-into-AUCTeX t)
   (eval-after-load "tex-fold"
     '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("href"))))

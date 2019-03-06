@@ -124,7 +124,6 @@
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
 ;; Set font size
-;; (defvar font-size 100)
 (defvar font-size 80)
 
 (defun set-font-size (sz)

@@ -244,12 +244,10 @@ amount of spaces."
 ;; Keybindings for image mode
 (add-hook 'image-mode-hook
           (lambda ()
-            (local-set-key (kbd "C-\+") 'image-increase-size)
-            ))
+            (local-set-key (kbd "C-\+") 'image-increase-size)))
 (add-hook 'image-mode-hook
           (lambda ()
-            (local-set-key (kbd "C-\-") 'image-decrease-size)
-            ))
+            (local-set-key (kbd "C-\-") 'image-decrease-size)))
 
 ;; Check (on save) whether the file edited contains a shebang, if yes,
 ;; make it executable from
@@ -1521,7 +1519,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 			              (command-execute 'TeX-PDF-mode))))
 (use-package tex-site
   :straight auctex
-  ;; :mode ("\\.tex\\'" . latex-mode)
   ;; When we byte-compile we need to have the autoloads loaded in order to
   ;; properly get auctex working, otherwise auctex is not loaded correctly
   :init
@@ -1529,12 +1526,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :config
   ;; Use latex-mode by default when it is unclear whether plain-tex-mode or latex-mode should be
   ;; used.
-  ;; (setq tex-default-mode 'latex-mode)
   (setq-default TeX-auto-save t
                 TeX-parse-self t
                 TeX-master nil
                 TeX-source-correlate-start-server t
-		;; LaTeX-indent-level 8
                 reftex-plug-into-AUCTeX t)
   (eval-after-load "tex-fold"
     '(add-to-list 'TeX-fold-macro-spec-list '("{2}" ("href"))))
@@ -1572,13 +1567,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Usability improvements for LaTeX.
 (use-package latex-extra
   :after (auctex cl-lib))
-
-;; (TeX-add-style-hook
-;;  "latex"
-;;  (lambda ()
-;;    (LaTeX-add-environments
-;;     '("minted" LaTeX-env-document)
-;;     )))
 
 (use-package auctex-latexmk
   :config

@@ -1214,11 +1214,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
           :config
           (company-ycmd-setup))
 
-        ;; (use-package flycheck-ycmd
-        ;;   :ensure t
-        ;;   :init
-        ;;   (add-hook 'c-mode-common-hook 'flycheck-ycmd-setup)
-        ;;   )
+        (use-package flycheck-ycmd
+          :init
+          (add-hook 'c-mode-common-hook 'flycheck-ycmd-setup))
 
         ;; Add displaying the function arguments in mini buffer using El Doc
         (require 'ycmd-eldoc)

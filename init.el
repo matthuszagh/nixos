@@ -1260,7 +1260,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Mode for interacting with systemd files.
 (use-package systemd)
 
-;; (use-package helm-systemd)
+(use-package helm-systemd)
 
 ;; Completions in octave.
 (use-package ac-octave

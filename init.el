@@ -1271,14 +1271,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
          (octave-mode . (lambda ()
                           (ac-octave-setup)))))
 
-;; TODO: I've commented these out because I haven't yet configured 256 color mode, but it's probably
-;; worthwhile to do so.
-;; (use-package xterm-color
-;;   :after cl-lib)
-
-;; (use-package eterm-256color
-;;   :after (xterm-color f))
-
 ;; git integration.
 (use-package magit
   :after (async ghub dash git-commit magit-popup with-editor)

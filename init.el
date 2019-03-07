@@ -1116,9 +1116,7 @@ rotate entire document."
 (use-package company-jedi
   :after (python company)
   :config
-  (jedi:install-server)
-  ;; (add-to-list 'company-backends 'company-jedi)
-  )
+  (jedi:install-server))
 
 ;; Code syntax checking.
 (use-package flycheck

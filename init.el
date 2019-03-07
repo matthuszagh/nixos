@@ -1243,7 +1243,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (use-package slime-company
   :after (slime company)
   :config
-  (slime-setup '(slime-company slime-fancy)))
+  (slime-setup '(slime-fancy slime-company)))
 
 (use-package elisp-slime-nav)
 

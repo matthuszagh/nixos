@@ -758,7 +758,6 @@ rotate entire document."
 
 (use-package pdf-tools
   :mode "\\.pdf\\'"
-  ;; :magic ("%PDF" . pdf-view-mode)
   :bind* (("<next>" . next-buffer)
 	  ("<prior>" . previous-buffer))
   :hook ((kill-buffer . pdf-set-last-viewed-bookmark)

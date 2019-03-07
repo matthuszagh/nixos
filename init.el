@@ -656,16 +656,6 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
     (async-shell-command "pacman -Syu --ignore vtk")))
 
 (use-package image-dired)
-;; :config
-;; (eval-after-load "image-dired"
-;;   '(progn
-;;      (setq image-dired-cmd-create-thumbnail-options
-;;            (replace-regexp-in-string "-strip" "-auto-orient
-;;            -strip" image-dired-cmd-create-thumbnail-options)
-;;            image-dired-cmd-create-temp-image-options
-;;            (replace-regexp-in-string "-strip" "-auto-orient
-;;            -strip"
-;;                                      image-dired-cmd-create-temp-image-options)))))
 
 (defun ediff-copy-both-to-C ()
   "Copy both changes to the merge resolution buffer."

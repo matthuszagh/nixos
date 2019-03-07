@@ -511,8 +511,6 @@ amount of spaces."
               ("C-c C-c" . compile)
               ("C-c C-k" . kill-compilation)
               ("RET" . newline-and-indent))
-  ;; :init
-  ;; (add-to-list 'auto-mode-alist '("\\.tpp\\'" . c++-mode))
   :config
   (setq c-basic-offset 8
 	tab-width 8

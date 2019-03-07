@@ -363,8 +363,6 @@ amount of spaces."
 ;; replace buffer-menu with ibuffer
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
-  ;; :hook (ibuffer-mode (lambda ()
-  ;; 			(ibuffer-switch-to-saved-filter-groups "default")))
   :config
   (autoload 'ibuffer "ibuffer" "List buffers." t)
   ;; Use human readable Size column instead of original one

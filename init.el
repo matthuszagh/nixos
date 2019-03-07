@@ -1152,11 +1152,7 @@ rotate entire document."
 ;; https://github.com/Andersbakken/rtags#optional-1
 (defun setup-flycheck-rtags ()
   (interactive)
-  (flycheck-select-checker 'rtags)
-  ;; RTags creates more accurate overlays.
-  ;; (setq-local flycheck-highlighting-mode nil)
-  ;; (setq-local flycheck-check-syntax-automatically nil))
-  )
+  (flycheck-select-checker 'rtags))
 
 (use-package rtags
   :after company

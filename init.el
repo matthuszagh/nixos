@@ -1311,6 +1311,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Have Emacs inherit PATH.
 (use-package exec-path-from-shell
   :init
+  ;; Remove environment variables warning.
+  (setq exec-path-from-shell-check-startup-files nil)
   ;; Allows ssh-agent password caching use in Emacs.
   (exec-path-from-shell-copy-envs '("SSH_AGENT_PID"
                                     "SSH_AUTH_SOCK"))

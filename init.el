@@ -1163,26 +1163,8 @@ rotate entire document."
   :hook ((c-mode-common . rtags-start-process-unless-running))
   :config
   (rtags-enable-standard-keybindings)
-  ;; (setq rtags-use-helm t)
   (setq rtags-autostart-diagnostics t)
-  (rtags-diagnostics)
-  ;; (setq rtags-use-helm t)
-  ;; company completion setup
-  ;; (setq rtags-completions-enabled t)
-  )
-
-;; (use-package company-rtags
-;;   :after (rtags company)
-;;   :config
-;;   (add-to-list 'company-backends 'company-rtags))
-
-;; (require 'flycheck-rtags)
-;; (use-package flycheck-rtags
-;;   :after (flycheck rtags)
-;;   :hook (c-mode-common . setup-flycheck-rtags))
-
-;; (use-package helm-rtags
-;;   :after (helm rtags))
+  (rtags-diagnostics))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: ycmd (YouCompleteMeDaemon)

@@ -150,8 +150,8 @@
 (defun display-line-numbers-on-files ()
   "Enable line numbers for most files, except some."
   (unless (eq major-mode 'pdf-view-mode)
-    'display-line-numbers-mode)
-  )
+    'display-line-numbers-mode))
+
 (add-hook 'find-file-hook 'display-line-numbers-on-files)
 
 (setq-default indicate-empty-lines t)
@@ -258,9 +258,7 @@ amount of spaces."
               (font-lock-add-keywords
                nil
                '(("\\<\\(FIXME\\|TODO\\|BUG\\|DONE\\)"
-                  1 font-lock-warning-face t))))
-            )
-          )
+                  1 font-lock-warning-face t))))))
 
 ;; Specify buffers that should appear in the same window
 (add-to-list 'same-window-buffer-names "*Proced*")
@@ -1231,10 +1229,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
                     (ycmd-mode)))
         (add-hook 'python-mode-hook
                   (unless (tramp-tramp-file-p (buffer-file-name (current-buffer)))
-                    (ycmd-mode)))
-        )
-      )
-  )
+                    (ycmd-mode))))))
 
 ;; Disable ycmd in Emacs Lisp mode.
 (add-hook 'emacs-lisp-mode-hook (lambda ()
@@ -1646,7 +1641,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 
 ;; Allows the use of tmux in Emacs.
 (use-package emamux
-  ;; :bind ("C-c e" . emamux:keymap)
   :bind-keymap ("C-c e" . emamux:keymap)
   :config
   (setq emamux:completing-read-type 'helm))
@@ -1714,7 +1708,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (load-theme 'sourcerer t))
 
 (set-face-background 'hl-line "gray16")
-;; (set-cursor-color "#c2c2b0")
 
 (set-face-attribute 'cursor nil :foreground "#c2c2b0")
 (setq default-frame-alist '((cursor-color . "#c2c2b0")))

@@ -8,7 +8,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#222222" :foreground "#c2c2b0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 102 :width normal :foundry "PfEd" :family "SF Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "#222222" :foreground "#c2c2b0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :width normal :foundry "PfEd" :family "SF Mono"))))
  '(auto-dim-other-buffers-face ((t (:background "#111"))))
  '(company-preview ((t (:background "#073642" :foreground "#2aa198"))))
  '(company-preview-common ((t (:foreground "#93a1a1" :underline t))))
@@ -22,7 +22,7 @@
  '(company-tooltip-mouse ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(company-tooltip-selection ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
  '(header-line ((t (:background "#003366"))))
- '(mode-line ((t (:background "DodgerBlue4" :distant-foreground "#5c5d56" :weight normal :height 80))))
+ '(mode-line ((t (:background "DodgerBlue4" :distant-foreground "#5c5d56" :weight normal))))
  '(mode-line-buffer-id ((t (:foreground "#8686ae"))))
  '(term-color-red ((t (:background "#aa4450" :foreground "#aa4450"))))
  '(which-func ((t (:foreground "#8fb28f")))))

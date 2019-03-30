@@ -124,8 +124,6 @@
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
 ;; Set font size
-(defvar font-size 80)
-
 (defun set-font-size (sz)
   "Set font size."
   (interactive
@@ -135,12 +133,7 @@
   (set-face-attribute 'header-line nil  :height sz)
   (set-face-attribute 'default nil :height sz))
 
-;; Make mode bar small
-(set-face-attribute 'mode-line nil  :height font-size)
-;; Set the header bar font
-(set-face-attribute 'header-line nil  :height font-size)
-;; Set the font to size 9 (90/10).
-(set-face-attribute 'default nil :height font-size)
+(set-font-size 80)
 
 ;; Enable line numbers on the LHS
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)

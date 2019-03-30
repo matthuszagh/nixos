@@ -664,6 +664,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 ;; .dcm files are opening in imagemagick mode, they should open in fundamental mode.
 (add-to-list 'auto-mode-alist '("\\.dcm\\'" . fundamental-mode))
 
+(use-package bookmark)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Third-party packages.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -745,17 +747,16 @@ rotate entire document."
     (with-current-buffer buf
       (pdf-set-last-viewed-bookmark))))
 
-(unless noninteractive  ; as `save-place-mode' does
-  (add-hook 'kill-emacs-hook #'pdf-set-all-last-viewed-bookmarks))
-
 (use-package pdf-tools
   :mode "\\.pdf\\'"
   :bind* (("<next>" . next-buffer)
 	  ("<prior>" . previous-buffer))
-  :hook ((kill-buffer . pdf-set-last-viewed-bookmark)
-         (pdf-view-mode . pdf-jump-last-viewed-bookmark))
   :config
   (pdf-tools-install))
+
+(add-hook 'kill-buffer-hook 'pdf-set-last-viewed-bookmark)
+(add-hook 'kill-emacs-hook #'pdf-set-all-last-viewed-bookmarks)
+(add-hook 'pdf-view-mode-hook 'pdf-jump-last-viewed-bookmark)
 
 (setq-default pdf-view-display-size 'fit-page)
 

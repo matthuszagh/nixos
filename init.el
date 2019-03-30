@@ -501,7 +501,8 @@ amount of spaces."
   :bind (:map c-mode-base-map
               ("C-c C-c" . compile)
               ("C-c C-k" . kill-compilation)
-              ("RET" . newline-and-indent))
+              ("RET" . newline-and-indent)
+              ("C-c d" . 'manual-entry))
   :config
   (setq c-basic-offset 8
 	tab-width 8

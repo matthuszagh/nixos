@@ -1159,9 +1159,7 @@ rotate entire document."
   (setq rtags-autostart-diagnostics t)
   (rtags-diagnostics))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package: ycmd (YouCompleteMeDaemon)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; YCMD (YouCompleteMeDaemon)
 ;; Set up YouCompleteMe for emacs:
 ;; https://github.com/Valloric/ycmd
 ;; https://github.com/abingham/emacs-ycmd

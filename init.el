@@ -935,7 +935,8 @@ rotate entire document."
         ;; helm-scroll-amount 8
         helm-ff-file-name-history-use-recentf t
         helm-echo-input-in-header-line t)
-  (helm-mode 1))
+  (helm-mode 1)
+  (setq helm-buffer-max-length 60))
 
 ;; Always use helm follow mode.
 (setq-default helm-follow-mode-persistent t)
@@ -1495,8 +1496,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 	 ("<C-S-left>" . buf-move-left)
 	 ("<C-S-up>" . buf-move-up)
 	 ("<C-S-down>" . buf-move-down)))
-
-()
 
 ;; Qt build system files.
 (use-package qt-pro-mode

@@ -503,6 +503,8 @@ amount of spaces."
               ("C-c C-k" . kill-compilation)
               ("RET" . newline-and-indent)
               ("C-c d" . 'manual-entry))
+  :hook (c-mode-common . (lambda ()
+                            (add-hook 'before-save-hook 'clang-format-buffer nil t)))
   :config
   (setq c-basic-offset 8
 	tab-width 8

@@ -1706,6 +1706,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (setq default-frame-alist '((cursor-color . "#c2c2b0")))
 ;; Start emacsclient maximized.
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; Set font.
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-8"))
 
 ;; config changes made through the customize UI will be stored here
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

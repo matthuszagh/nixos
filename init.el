@@ -781,7 +781,6 @@ rotate entire document."
                   rtags-mode
                   nov-mode
                   ein:notebooklist-mode
-                  ein:notebook-multilang-mode
                   deadgrep-mode
                   inferior-python-mode
 		  eshell-mode))

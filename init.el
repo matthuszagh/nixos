@@ -1422,6 +1422,26 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   ;; properly get auctex working, otherwise auctex is not loaded correctly
   :init
   (load "auctex-autoloads" nil t)
+  :hook ((LaTeX-mode . TeX-source-correlate-mode)
+         (LaTeX-mode . auto-fill-mode)
+         (LaTeX-mode . flyspell-mode)
+         (LaTeX-mode . flyspell-buffer)
+         (LaTeX-mode . (lambda ()
+                         (TeX-fold-mode 1)
+			 (add-hook 'find-file-hook 'TeX-fold-buffer t t)
+                         (add-hook 'after-save-hook 'TeX-fold-buffer nil t)))
+         (LaTeX-mode . turn-on-reftex)
+         (LaTeX-mode . add-auctex-keys)
+	 ;; Add backends
+	 (LaTeX-mode . (lambda ()
+			 (add-to-list (make-local-variable 'company-backends)
+				      '(company-math-symbols-unicode
+					company-reftex-labels
+					company-reftex-citations))))
+         (LaTeX-mode . LaTeX-math-mode)
+         (TeX-after-compilation-finished-functions . TeX-revert-document-buffer)
+         ;; Allows code folding. This is the same functionality that org mode uses.
+         (LaTeX-mode . outline-minor-mode))
   :config
   ;; Use latex-mode by default when it is unclear whether plain-tex-mode or latex-mode should be
   ;; used.
@@ -1442,26 +1462,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   ;; special characters from causing issues in those environments.  For instance, $ and _ See:
   ;; https://tex.stackexchange.com/questions/111289/how-to-make-auctex-ignore-syntax-highlighting-within-environment
   (setq LaTeX-verbatim-environments-local
-        '("Verbatim" "lstlisting" "minted" "lstinline" "mintinline"))
-  :hook ((LaTeX-mode . TeX-source-correlate-mode)
-         (LaTeX-mode . auto-fill-mode)
-         (LaTeX-mode . flyspell-mode)
-         (LaTeX-mode . flyspell-buffer)
-         (LaTeX-mode . (lambda ()
-                         (TeX-fold-mode 1)
-			 (add-hook 'find-file-hook 'TeX-fold-buffer t t)))
-         (LaTeX-mode . turn-on-reftex)
-         (LaTeX-mode . add-auctex-keys)
-	 ;; Add backends
-	 (LaTeX-mode . (lambda ()
-			 (add-to-list (make-local-variable 'company-backends)
-				      '(company-math-symbols-unicode
-					company-reftex-labels
-					company-reftex-citations))))
-         (LaTeX-mode . LaTeX-math-mode)
-         (TeX-after-compilation-finished-functions . TeX-revert-document-buffer)
-         ;; Allows code folding. This is the same functionality that org mode uses.
-         (LaTeX-mode . outline-minor-mode)))
+        '("Verbatim" "lstlisting" "minted" "lstinline" "mintinline")))
 
 ;; Usability improvements for LaTeX.
 (use-package latex-extra

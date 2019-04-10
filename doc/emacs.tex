@@ -197,6 +197,57 @@ others. See \href{https://tuhdo.github.io/c-ide.html}{this link}. It probably ma
 \href{https://github.com/syohex/emacs-helm-gtags/}{helm interface}. This may also be the wrong
 question, but maybe it's also possible to use rtags as a backend for a common gtags frontend?
 
+\section{Make Comint mode behave more like term mode}
+
+It's annoying that term mode and comint mode use different bindings for navigating command history
+(C-p and M-p, respectively). They should both use C-p. Additionally, find a way to use the
+equivalent of term-line-mode/term-char-mode for comint.
+
+\section{Create Add-On that allows you to edit Anki HTML in Emacs}
+
+Adapt \href{https://github.com/louietan/anki-editor}{this} for your needs. That add-on should
+contain nearly all of the required functionality.
+
+\section{Get XWidget Webkit working}
+
+See \href{https://emacsnotes.wordpress.com/2018/08/18/why-a-minimal-browser-when-there-is-a-full-featured-one-introducingxwidget-webkit-a-state-of-the-art-browser-for-your-modern-emacs/}{this}.
+
+\section{Get LaTeX SVGs working in EWW}
+
+EWW is unable to render latex/mathjax directly and so renders the resulting svg instead. This
+appears as dark text on a dark background. See
+\href{https://emacs.stackexchange.com/questions/3622/use-a-different-color-theme-for-eww-buffers}{this
+  post}.
+
+\section{Improve org-books}
+
+\begin{enumerate}
+\item Query user for file when running org-capture and base title on that.
+\item Make table of contents entries links to the corresponding page in the pdf.
+\item Write a program to extract a table of contents from pdf. Run this automatically when running
+  org-capture.
+\item Bind org-capture to a keybinding.
+\item Write scripts to get info from Goodreads and Amazon (Goodreads API
+  \href{https://www.goodreads.com/api}{here}).
+\item Add description property so that you can make comments on the quality (e.g. ``Definitive book
+  on GR'').
+\item Potentially use Wikipedia categories to categorize books in list and in directories.
+\end{enumerate}
+
+\section{Org Capture Extension}
+
+Consider using \href{https://github.com/sprig/org-capture-extension}{org-capture-extension} which
+allows you to run org-capture from a browser.
+
+\section{Git Bug}
+
+Consider using \href{https://github.com/MichaelMure/git-bug}{git-bug} instead of this file to track
+issues and improvements.
+
+\section{Eyebrowse}
+
+Use \href{https://github.com/wasamasa/eyebrowse}{eyebrowse} to easily navigate between Emacs workstations.
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex

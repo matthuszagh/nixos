@@ -323,6 +323,9 @@ amount of spaces."
 ;; smart tab behavior - indent or complete
 (setq tab-always-indent 'complete)
 
+;; Global variables
+(setq org-books-file "~/library/book-list.org")
+
 ;; Utility to find keybinding in all modes.
 (with-eval-after-load "s"
   (defun list-known-bindings (key)
@@ -553,7 +556,13 @@ amount of spaces."
   :config
   (setq org-log-done 'time
         org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
-        org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold)))))
+        org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
+  (setq org-directory (concat user-emacs-directory "org"))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+  (setq org-capture-templates
+        '(("b" "Book" item (file "~/library/book-list.org")
+           "* %^{TITLE}\n:PROPERTIES:\n:Author:\n:Edition:\n:Pub-Year:\n:File:\n:Goodreads-Ranking:\n:Goodreads-#-Reviews:\n:Amazon-Ranking:\n:Amazon-#-Reviews:\n:Goodreads-URL:\n:Amazon-URL:\n:OpenLibrary-URL:\n:ISBN:\n:END:\n%?" :empty-lines 1)))
+  (setq org-agenda-files (list org-directory "~/library/book-list.org")))
 
 ;; Spelling correction.
 (use-package flyspell
@@ -1724,13 +1733,12 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (add-hook 'find-filehook (lambda ()
                            (persistent-overlays-minor-mode 1)))
 
-(setq org-books-file-global "~/library/book-list.org")
 (straight-register-package
  '(org-books :type git :host github :repo "matthuszagh/org-books"))
 (use-package org-books
   :after (org enlive org s helm helm-org dash)
   :config
-  (setq org-books-file org-books-file-global))
+  (setq org-books-file org-books-file))
 
 (defun read-book (file)
   "Open a PDF in the left buffer and the org book list in the right."
@@ -1741,7 +1749,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (split-window-right)
   (find-file file)
   (evil-window-right 1)
-  (find-file org-books-file-global)
+  (find-file org-books-file)
   (evil-window-left 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

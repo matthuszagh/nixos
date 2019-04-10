@@ -61,7 +61,7 @@
   (make-directory savefile-dir))
 
 ;; Extra plugins and config files are stored here
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/local-repo"))
 (add-to-list 'load-path "~/.emacs.d/lib/mpdel")
 
 ;; Disable toolbar

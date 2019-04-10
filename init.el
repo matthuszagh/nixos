@@ -504,7 +504,7 @@ amount of spaces."
               ("RET" . newline-and-indent)
               ("C-c d" . 'manual-entry))
   :hook (c-mode-common . (lambda ()
-                            (add-hook 'before-save-hook 'clang-format-buffer nil t)))
+                           (add-hook 'before-save-hook 'clang-format-buffer nil t)))
   :config
   (setq c-basic-offset 8
 	tab-width 8
@@ -1695,6 +1695,26 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
                             (persistent-overlays-minor-mode 1)))
 (add-hook 'find-filehook (lambda ()
                            (persistent-overlays-minor-mode 1)))
+
+(setq org-books-file-global "~/library/book-list.org")
+(straight-register-package
+ '(org-books :type git :host github :repo "matthuszagh/org-books"))
+(use-package org-books
+  :after (org enlive org s helm helm-org dash)
+  :config
+  (setq org-books-file org-books-file-global))
+
+(defun read-book (file)
+  "Open a PDF in the left buffer and the org book list in the right."
+  (interactive
+   (list
+    (read-file-name "File: ")))
+  (delete-other-windows)
+  (split-window-right)
+  (find-file file)
+  (evil-window-right 1)
+  (find-file org-books-file-global)
+  (evil-window-left 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance

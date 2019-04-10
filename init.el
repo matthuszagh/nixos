@@ -326,6 +326,14 @@ amount of spaces."
 ;; Global variables
 (setq org-books-file "~/library/book-list.org")
 
+;; Shortcuts for opening frequently visited files.
+(global-set-key (kbd "C-c f i") (lambda ()
+                                  (interactive)
+                                  (find-file user-init-file)))
+(global-set-key (kbd "C-c f l") (lambda ()
+                                  (interactive)
+                                  (find-file org-books-file)))
+
 ;; Utility to find keybinding in all modes.
 (with-eval-after-load "s"
   (defun list-known-bindings (key)

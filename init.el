@@ -694,6 +694,14 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (let ((default-directory "/sudo::"))
     (async-shell-command "pacman -Syu --ignore vtk")))
 
+(defun sudo-locate (pattern)
+  "Locate files with superuser privileges."
+  (interactive
+   (list
+    (read-string "pattern: ")))
+  (let ((default-directory "/sudo::"))
+    (async-shell-command (format "locate %s" pattern))))
+
 (use-package image-dired)
 
 (defun ediff-copy-both-to-C ()

@@ -124,14 +124,13 @@ def TraverseSubdirsExcept(dir_to_traverse, not_this_dir, db,
             return None
         # Try getting flags from one directory up, otherwise traverse
         # directories
-        return GetAnyCompilationInfo( os.path.split(dir_to_traverse)[0], db) \
+        return GetAnyCompilationInfo(os.path.split(dir_to_traverse)[0], db) \
             or TraverseSubdirsExcept(
                 os.path.split(dir_to_traverse)[0],
                 dir_to_traverse, db,
                 db_root_dir,
                 jump_up_dir_if_failed)
     return None
-
 
 
 def GetCompilationInfoForFile(filename, dir_of_db, db):

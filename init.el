@@ -29,6 +29,9 @@
 (setq user-full-name "Matt Huszagh"
       user-mail-address "huszaghmatt@gmail.com")
 
+;; Make system library paths available for tagging.
+(setenv "GTAGSLIBPATH" "/home/matt/.gtags/")
+
 ;;; gnus init file
 (setq gnus-init-file "~/.emacs.d/.gnus.el")
 
@@ -551,8 +554,7 @@ amount of spaces."
          (c-mode-common . (lambda ()
                             (set (make-local-variable 'company-backends)
 				 (list
-                                  (cons 'company-c-headers
-                                        (cons 'company-clang default-company-backends)))))))
+                                  (cons 'company-c-headers default-company-backends))))))
   :config
   (setq c-basic-offset 8
 	tab-width 8
@@ -568,8 +570,12 @@ amount of spaces."
   :config
   ;; Cache parses for faster future access.
   (global-semanticdb-minor-mode 1)
+  ;; Check if buffer is outdated when user is idle. If so, reparse.
   (global-semantic-idle-scheduler-mode 1)
-  (semantic-mode 1))
+  (semantic-mode 1)
+  ;; Additional include paths.
+  (semantic-add-system-include "/usr/include/boost" 'c++-mode)
+  (semantic-add-system-include linux-header-path))
 
 (use-package man
   :config
@@ -1042,9 +1048,22 @@ rotate entire document."
   :bind ("<f11>" . helm-system-packages))
 
 ;; Use Helm interface to GNU Global.
-(use-package helm-gtags)
-
-(use-package ggtags)
+(use-package helm-gtags
+  :after (helm)
+  :init (setq helm-gtags-prefix-key "\C-cg"
+              helm-gtags-ignore-case t
+              helm-gtags-auto-update t
+              helm-gtags-use-input-at-cursor t
+              helm-gtags-pulse-at-cursor t
+              helm-gtags-suggested-key-mapping t)
+  :hook ((dired-mode . helm-gtags-mode)
+         (eshell-mode . helm-gtags-mode)
+         (c-mode-common . helm-gtags-mode)
+         (asm-mode . helm-gtags-mode))
+  :bind (("C-c g a" . helm-gtags-tags-in-this-function)
+         ("C-j" . helm-gtags-select)
+         ("C-c <" . helm-gtags-previous-history)
+         ("C-c >" . helm-gtags-next-history)))
 
 ;; Package window-numbering installed from package list
 ;; Allows switching between buffers using meta-(# key)
@@ -1095,7 +1114,7 @@ rotate entire document."
 
 ;; Enhanced editing for python files.
 (use-package elpy
-  :bind (([remap rtags-find-symbol-at-point] . elpy-goto-definition))
+  ;; :bind (([remap rtags-find-symbol-at-point] . elpy-goto-definition))
   :commands (elpy-enable)
   :hook (python-mode . elpy-mode)
   :config
@@ -1141,6 +1160,7 @@ rotate entire document."
 
 ;; Code completions.
 (setq default-company-backends '(company-ycmd
+				 company-semantic
                                  company-gtags
                                  company-files
                                  company-keywords
@@ -1229,20 +1249,21 @@ rotate entire document."
 ;; Rtags
 ;; ensure that we use only rtags checking
 ;; https://github.com/Andersbakken/rtags#optional-1
-(defun setup-flycheck-rtags ()
-  (interactive)
-  (flycheck-select-checker 'rtags))
+;; (defun setup-flycheck-rtags ()
+;;   (interactive)
+;;   (flycheck-select-checker 'rtags))
 
 (use-package rtags
   :after company
   :bind (:map c-mode-base-map
               ("M-." . rtags-find-symbol-at-point)
-              ("M-," . rtags-find-references-at-point)
-              ("<C-tab>" . company-complete))
+              ("M-," . rtags-find-references-at-point))
   :hook ((c-mode-common . rtags-start-process-unless-running))
   :config
   (rtags-enable-standard-keybindings)
-  (setq rtags-autostart-diagnostics t)
+  (setq rtags-autostart-diagnostics t
+        rtags-completions-enabled t
+        rtags-use-helm t)
   (rtags-diagnostics))
 
 ;; YCMD (YouCompleteMeDaemon)
@@ -1679,7 +1700,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
     (use-package ein
       :bind (("<f2>" . ein:connect-to-notebook)
              :map ein:connect-mode-map
-             ;; Preserve "M-," for for jumping back after jumping to a definition, etc.
+             ;; Preserve "M-," for jumping back after jumping to a definition, etc.
              ("M-," . nil))
       :commands (ein:jupyter-server-start)
       :hook (ein:notebook-multilang-mode . (lambda ()

@@ -326,6 +326,9 @@ amount of spaces."
 ;; Global variables
 (setq org-books-file "~/library/book-list.org")
 
+(setq
+ linux-header-path (concat "/lib/modules/" (shell-command-to-string "echo -n $(uname -r)") "/build/include"))
+
 ;; Shortcuts for opening frequently visited files.
 (global-set-key (kbd "C-c f i") (lambda ()
                                   (interactive)
@@ -533,6 +536,7 @@ amount of spaces."
 
 ;; Mode for editing C and related languages such as C++.
 (use-package cc-mode
+  :after (company company-c-headers)
   :mode (("\\.c\\'" . c-mode)
          ("\\.cc\\'" . c++-mode)
          ("\\.cpp\\'" . c++-mode)
@@ -542,13 +546,30 @@ amount of spaces."
               ("C-c C-k" . kill-compilation)
               ("RET" . newline-and-indent)
               ("C-c d" . 'manual-entry))
-  :hook (c-mode-common . (lambda ()
-                           (add-hook 'before-save-hook 'clang-format-buffer nil t)))
+  :hook ((c-mode-common . (lambda ()
+                            (add-hook 'before-save-hook 'clang-format-buffer nil t)))
+         (c-mode-common . (lambda ()
+                            (set (make-local-variable 'company-backends)
+				 (list
+                                  (cons 'company-c-headers
+                                        (cons 'company-clang default-company-backends)))))))
   :config
   (setq c-basic-offset 8
 	tab-width 8
 	indent-tabs-mode t)
   (setq compile-command my:compile-command))
+
+;; Semantic provides better code completion than many other frameworks. It does this by using a
+;; realtime source code parser. It can therefore provide contextual code completion. For instance,
+;; if you include a header file, it will parse that header and customize the completions based on
+;; what's available in that header. The obvious downside is that it can create a lag after a header
+;; is included. If this becomes unbearable, consider disabling it.
+(use-package semantic
+  :config
+  ;; Cache parses for faster future access.
+  (global-semanticdb-minor-mode 1)
+  (global-semantic-idle-scheduler-mode 1)
+  (semantic-mode 1))
 
 (use-package man
   :config
@@ -897,8 +918,6 @@ rotate entire document."
   ;; 'evil-exit-emacs-state.
   (define-key evil-emacs-state-map (kbd "C-z") nil))
 
-
-
 ;; library for async/thread processing
 (use-package async)
 
@@ -1121,6 +1140,16 @@ rotate entire document."
   :mode "\\.es$")
 
 ;; Code completions.
+(setq default-company-backends '(company-ycmd
+                                 company-gtags
+                                 company-files
+                                 company-keywords
+			         company-capf
+			         company-yasnippet
+			         company-abbrev
+                                 company-dabbrev
+                                 company-dabbrev-code))
+
 (use-package company
   :config
   ;; Zero delay when pressing tab
@@ -1132,15 +1161,19 @@ rotate entire document."
   (setq company-dabbrev-downcase nil)
   (setq company-dabbrev-ignore-case nil)
   ;; Default backends.
-  (setq company-backends '((company-files
-                            company-keywords
-			    company-capf
-			    company-yasnippet)
-			   (company-abbrev
-                            company-dabbrev
-                            company-dabbrev-code))))
+  (setq company-backends (list default-company-backends)))
+
+(use-package company-c-headers
+  :config
+  ;; Include C++ header files in completions.
+  (add-to-list 'company-c-headers-path-system "/usr/include/c++/8.2.1/" t)
+  (add-to-list 'company-c-headers-path-system "/usr/include/c++/8.2.1/x86_64-pc-linux-gnu/" t)
+  (add-to-list 'company-c-headers-path-system "/usr/include/c++/8.2.1/backward/" t)
+  ;; Include Linux header files in completions.
+  (add-to-list 'company-c-headers-path-system linux-header-path t))
 
 ;; Provides icons with company completions.
+;; This does not need to be added to `company-backends'
 (use-package company-box
   :after company
   :diminish
@@ -1156,9 +1189,7 @@ rotate entire document."
 
 ;; Completions for AUCTeX.
 (use-package company-auctex
-  :after (auctex company yasnippet)
-  :config
-  (company-auctex-init))
+  :after (auctex company yasnippet))
 
 ;; Provides python completion
 (use-package company-jedi
@@ -1252,13 +1283,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
         (setq ycmd-request-message-level -1)
         (setq ycmd-url-show-status nil)
         (setq ycmd--log-enabled t)
-        (use-package company-ycmd
-          :init
-          (eval-when-compile
-            ;; Silence missing function warnings
-            (declare-function company-ycmd-setup "company-ycmd.el"))
-          :config
-          (company-ycmd-setup))
+        (use-package company-ycmd)
 
         (use-package flycheck-ycmd
           :init
@@ -1404,8 +1429,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 
 (use-package company-restclient
   :after (company cl-lib restclient know-your-http-well)
-  :config
-  (add-to-list 'company-backends 'company-restclient))
+  :hook (restclient-mode . (lambda ()
+                             (set (make-local-variable 'company-backends)
+                                  (list
+                                   (cons 'company-restclient default-company-backends))))))
 
 ;; auctex
 (defun insert-frac ()
@@ -1487,16 +1514,21 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
                          (add-hook 'after-save-hook 'TeX-fold-buffer nil t)))
          (LaTeX-mode . turn-on-reftex)
          (LaTeX-mode . add-auctex-keys)
-	 ;; Add backends
-	 (LaTeX-mode . (lambda ()
-			 (add-to-list (make-local-variable 'company-backends)
-				      '(company-math-symbols-unicode
-					company-reftex-labels
-					company-reftex-citations))))
          (LaTeX-mode . LaTeX-math-mode)
          (TeX-after-compilation-finished-functions . TeX-revert-document-buffer)
          ;; Allows code folding. This is the same functionality that org mode uses.
-         (LaTeX-mode . outline-minor-mode))
+         (LaTeX-mode . outline-minor-mode)
+         ;; configure backend for tex source files.
+         (LaTeX-mode . (lambda ()
+                         (set (make-local-variable 'company-backends)
+                              (list
+                               (cons 'company-auctex-symbols
+                                     (cons 'company-auctex-macros
+                                           (cons 'company-auctex-environments
+                                                 (cons 'company-auctex-bibs
+                                                       (cons 'company-auctex-labels
+                                                             (cons 'company-reftex
+                                                                   (cons 'company-math default-company-backends))))))))))))
   :config
   ;; Use latex-mode by default when it is unclear whether plain-tex-mode or latex-mode should be
   ;; used.
@@ -1662,8 +1694,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
       (defvar my-found-ein-server nil)
       (dolist (my-current-process (process-list))
         (when (string-match "EIN: Jupyter*" (process-name my-current-process))
-          (setq my-found-ein-server t))
-        )
+          (setq my-found-ein-server t)))
       (when (not my-found-ein-server)
         (ein:jupyter-server-start my:jupyter_location my:jupyter_start_dir))))
 
@@ -1674,7 +1705,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (use-package cmake-mode
   :mode ("CMakeLists.txt" ".cmake")
   :hook (cmake-mode . (lambda ()
-                        (add-to-list 'company-backends 'company-cmake)))
+                        (set (make-local-variable 'company-backends)
+                             (list
+                              (cons 'company-cmake default-company-backends)))))
   :config
   (use-package cmake-font-lock
     :defer t

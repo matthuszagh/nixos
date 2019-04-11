@@ -48,17 +48,6 @@ also be configured in \mintinline{text}{~/.bashrc}.
 \label{sec:code-tagging}
 
 
-
-\section{Code Completion}
-\label{sec:code-completion}
-
-I'm currently using company with various backends for completion in different major modes. For C/C++
-I'm using company-rtags. This potentially has the benefit of being aware of the current project
-(e.g. completions for functions I've defined and custom headers) although this is
-unconfirmed. However, it's a bit slow and some of the completions don't seem entirely
-accurate. Another option could be company-ycmd. I believe this is faster although it may come at the
-expense of being unaware of the environment. This should be verified.
-
 \chapter{Structure}\label{cha:structure}
 
 
@@ -115,25 +104,11 @@ These are the links I've found that address related issues:
 
 \section{Get much better at Gnus}
 
-\section{Company Backends}
-
-There are various company backends that don't work. At the very least company-reftex and
-company-auctex aren't working. Based on info from the company-backends variable, it sounds like only
-one backend can be used at a time. This might be the issue.
-
-\section{Slime completions not working}
-
-Not getting slime completions in elisp.
-
 \section{Flycheck doesn't work with C}
 
 I'm getting an error that the flag -std=c++17 doesn't work with
 C\@. \href{https://github.com/alexmurray/flycheck-clang-analyzer/issues/6}{This error seems somewhat
 similar}.
-
-\section{Change appearance of completions}
-
-Completions window and dropdown visually doesn't fit well with the rest of the theme.
 
 \section{load-file from Emacs}
 
@@ -149,15 +124,6 @@ but this aligns all tables to one another; I'd like aligning to be done on a per
 \section{Consider switching to sane-term from multi-term}
 
 \href{https://github.com/adamrt/sane-term}{sane-term} seems like it might be a better alternative to multi-term.
-
-\section{align uses 2 spaces in Emacs}
-
-The align environment seems to use 2 spaces in Auctex instead of the 8 used by everything else. It
-should be 8.
-
-\section{When Emacs opens it is not completely maximized}
-
-The right side of the frame is not quite right.
 
 \section{Single quote delimeter not working}
 

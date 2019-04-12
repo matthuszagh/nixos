@@ -1676,7 +1676,12 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (setq mc/always-repeat-command t))
 
 (use-package json-mode
-  :mode ("\\.json\\'" "\\.imp\\'"))
+  :after (origami)
+  :mode ("\\.json\\'" "\\.imp\\'")
+  ;; Origami allows folding, which is really useful when viewing json.
+  :hook (json-mode . origami-mode))
+
+(use-package origami)
 
 ;; Delete all whitespace until the next whitespace character.
 (use-package hungry-delete

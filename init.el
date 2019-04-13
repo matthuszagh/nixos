@@ -846,42 +846,11 @@ rotate entire document."
 (use-package a)
 
 (use-package evil
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
   :config
   (evil-mode 1)
-  ;; Set some modes to default to Emacs keybindings.
-  (dolist (mode '(git-rebase-mode
-                  flycheck-error-list-mode
-                  pdf-outline-buffer-mode
-                  sx-question-mode
-                  sx-question-list-mode
-                  pdf-occur-buffer-mode
-                  mpdel-nav-mode
-		  image-dired-thumbnail-mode
-                  image-dired-display-image-mode
-                  dired-mode
-                  inferior-octave-mode
-                  Custom-mode
-                  rtags-mode
-                  nov-mode
-                  ein:notebooklist-mode
-                  deadgrep-mode
-                  inferior-python-mode
-		  eshell-mode))
-    (add-to-list 'evil-emacs-state-modes mode))
-
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'term-char-mode 'emacs)
-  (evil-set-initial-state 'term-line-mode 'emacs)
-  (evil-set-initial-state 'Info-mode 'emacs)
-  (evil-set-initial-state 'help-mode 'emacs)
-  (evil-set-initial-state 'Man-mode 'emacs)
-  (evil-set-initial-state 'gud-mode 'emacs)
-  (evil-set-initial-state 'sage-shell-mode 'emacs)
-  (evil-set-initial-state 'shell-mode 'emacs)
-  (evil-set-initial-state 'sql-interactive-mode 'emacs)
-  (evil-set-initial-state 'erc-mode 'emacs)
-  (evil-set-initial-state 'slime-repl-mode 'emacs)
-
   ;; Evil sets keys in an unusual way and so we must use the define key directive instead of the
   ;; typical :bind.
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
@@ -890,23 +859,19 @@ rotate entire document."
     (lambda ()
       (interactive)
       (evil-delete (point-at-bol) (point))))
-
   ;; Evil binds M-. which overrides the behavior of counsel-etags find tag.
   ;; This only seems to be an issue in normal mode with this keybinding.
   ;; If others are issues, perform similar actions with them.
   (define-key evil-normal-state-map (kbd "M-.") 'rtags-find-symbol-at-point)
-
   ;; Keep window navigation keys in evil Emacs state map.
   (define-key evil-emacs-state-map (kbd "C-w h") 'evil-window-left)
   (define-key evil-emacs-state-map (kbd "C-w j") 'evil-window-down)
   (define-key evil-emacs-state-map (kbd "C-w k") 'evil-window-up)
   (define-key evil-emacs-state-map (kbd "C-w l") 'evil-window-right)
-
   (define-key evil-emacs-state-map (kbd "C-w H") 'evil-window-move-far-left)
   (define-key evil-emacs-state-map (kbd "C-w J") 'evil-window-move-very-bottom)
   (define-key evil-emacs-state-map (kbd "C-w K") 'evil-window-move-very-top)
   (define-key evil-emacs-state-map (kbd "C-w L") 'evil-window-move-far-right)
-
   ;; Alse keep it in evil insert state. This interferes with the normal vim keybinding of C-w. If
   ;; you want that back, delete these next lines.
   (define-key evil-insert-state-map (kbd "C-w") nil)
@@ -914,16 +879,24 @@ rotate entire document."
   (define-key evil-insert-state-map (kbd "C-w j") 'evil-window-down)
   (define-key evil-insert-state-map (kbd "C-w k") 'evil-window-up)
   (define-key evil-insert-state-map (kbd "C-w l") 'evil-window-right)
-
   (define-key evil-insert-state-map (kbd "C-w H") 'evil-window-move-far-left)
   (define-key evil-insert-state-map (kbd "C-w J") 'evil-window-move-very-bottom)
   (define-key evil-insert-state-map (kbd "C-w K") 'evil-window-move-very-top)
   (define-key evil-insert-state-map (kbd "C-w L") 'evil-window-move-far-right)
-
   ;; Unbind toggling Emacs state. I don't need this and would rather use it for term-mode.
   ;; If this functionality needs to be performed it can be done so with 'evil-emacs-state and
   ;; 'evil-exit-emacs-state.
   (define-key evil-emacs-state-map (kbd "C-z") nil))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init)
+  ;; Jump to the bottom of the window when entering insert mode in terminal.
+  (evil-collection-define-key 'normal 'term-mode-map (kbd "i") (lambda ()
+                                                                 (interactive)
+      				                                 (evil-insert 1)
+      				                                 (term-show-maximum-output))))
 
 ;; library for async/thread processing
 (use-package async)
@@ -1357,12 +1330,23 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
                           (ac-octave-setup)))))
 
 ;; git integration.
+(use-package transient
+  :straight (transient :type git :host github :repo "magit/transient")
+  :config
+  ;; Only display magit popup at the bottom of the current window rather than the entire frame.
+  (setq transient-display-buffer-action '(display-buffer-below-selected)))
+
 (use-package magit
-  :after (async ghub dash git-commit magit-popup with-editor)
+  :straight (magit :type git :host github :repo "magit/magit")
+  :after (async ghub dash git-commit with-editor transient)
   :hook (magit-mode . (lambda ()
                         (setq whitespace-mode -1)))
   :commands (magit-checkout))
+
 (global-set-key (kbd "C-x g") 'magit-status)
+
+(use-package evil-magit
+  :after (magit transient))
 
 (use-package magit-gerrit
   :after magit)
@@ -1757,33 +1741,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
          ("<f1>" . multi-term))
   :config
   (require 'multi-term-ext)
-  (setq multi-term-program "/bin/bash")
-  (setq term-bind-key-alist
-        (list (cons "C-c C-c" 'term-interrupt-subjob)
-              (cons "C-z" 'term-stop-subjob)
-              (cons "C-l" 'term-send-raw)
-              (cons "C-r" 'term-send-raw)
-              (cons "C-s" 'term-send-raw)
-              (cons "M-f" 'term-send-forward-word)
-              (cons "M-b" 'term-send-backward-word)
-	      ;; I've defined "C-c C-k" in term's configuration since it must be defined in
-	      ;; term-mode-map.  It could be placed here as a define-key in config, but this way we
-	      ;; get to keep use-package's typical syntax.
-              (cons "C-c C-j" '(lambda () (interactive)
-                                 (term-line-mode)
-                                 (evil-normal-state)))
-              (cons "M-DEL" 'term-send-backward-kill-word)
-              (cons "M-d" 'term-send-forward-kill-word)
-              (cons "<C-left>" 'term-send-backward-word)
-              (cons "<C-right>" 'term-send-forward-word)
-              (cons "C-y" 'term-paste)
-              ;; Keep evil mode window move keys. This replaces the normal Bash C-w key that cuts
-              ;; the word before the cursor. If you want that back, remove the next 5 lines.
-              (cons "C-w" 'nil)
-              (cons "C-w h" 'evil-window-left)
-              (cons "C-w j" 'evil-window-down)
-              (cons "C-w k" 'evil-window-up)
-              (cons "C-w l" 'evil-window-right))))
+  (setq multi-term-program "/bin/bash"))
 
 ;; info+ is a plugin.
 (require 'info+)

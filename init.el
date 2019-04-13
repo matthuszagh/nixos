@@ -1198,7 +1198,10 @@ rotate entire document."
 (use-package company-box
   :after company
   :diminish
-  :hook (company-mode . company-box-mode))
+  :hook (company-mode . company-box-mode)
+  :config
+  (setq company-box-doc-delay 0
+	company-box-enable-icon nil))
 
 ;; Completions for references in AUCTeX
 (use-package company-reftex

@@ -260,6 +260,7 @@ amount of spaces."
 (add-to-list 'same-window-buffer-names "*Proced*")
 (add-to-list 'same-window-buffer-names "*SQL*")
 (add-to-list 'same-window-buffer-names "*Inferior Octave*")
+(add-to-list 'same-window-buffer-names "*Faces*")
 (add-to-list 'same-window-regexps ".*ein.*")
 
 ;; Newline at end of file

@@ -1193,16 +1193,6 @@ rotate entire document."
   ;; Include Linux header files in completions.
   (add-to-list 'company-c-headers-path-system linux-header-path t))
 
-;; Provides icons with company completions.
-;; This does not need to be added to `company-backends'
-(use-package company-box
-  :after company
-  :diminish
-  :hook (company-mode . company-box-mode)
-  :config
-  (setq company-box-doc-delay 0
-	company-box-enable-icon nil))
-
 ;; Completions for references in AUCTeX
 (use-package company-reftex
   :after company)

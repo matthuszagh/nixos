@@ -532,8 +532,6 @@ amount of spaces."
   (setq-default pdb-command-name "python -m pdb"))
 
 (use-package gdb-mi
-  :config
-  (setq gdb-many-windows t))
 
 ;; Compilation command for C/C++
 (defvar my:compile-command "make && ./")

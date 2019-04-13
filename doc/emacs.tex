@@ -102,6 +102,11 @@ These are the links I've found that address related issues:
 
 \href{https://www.gnu.org/software/emacs/manual/html_node/emacs/Cursor-Display.html}{Cursor Display}
 
+Instead of trying to get rid of the cursor, maybe just make its color the same as the
+background. Check out these links:
+\href{https://emacs.stackexchange.com/questions/7281/how-to-modify-face-for-a-specific-buffer}{se}
+and \href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Face-Remapping.html}{manual}.
+
 \section{Get much better at Gnus}
 
 \section{Flycheck doesn't work with C}
@@ -134,10 +139,6 @@ Pressing \' twice causes three single quotes to be inserted.
 Probably better, just do this automatically. One worry is if file was accidentally deleted and
 buffer allows you to keep the file alive. Still, existing buffers shouldn't be used as a sort of
 backup.
-
-\section{run-octave opens in other buffer}
-
-\mintinline{text}{M-x run-octave} opens the octave shell in the other buffer.
 
 \section{Magit bug missing headers}
 
@@ -214,15 +215,71 @@ issues and improvements.
 
 Use \href{https://github.com/wasamasa/eyebrowse}{eyebrowse} to easily navigate between Emacs workstations.
 
-\section{Fill column 50 in commit message}
-
-Make fill-column 50 (locally) when editing commit messages with magit.
-
 \section{Setup BBDB or other contact list for GNUs}
 
 bbdb keeps a contact list that can be used in gnus. Set this up, or look for an alternative
 (potentially one that does not require manual additions). Note that there is also a company backend
 for this, company-bbdb.
+
+\section{Company specifies backend for each completion}
+
+It would be nice to be able to show backend used for each completion with company. This could be a
+configurable setting in company, for instance. Maybe look at company-box for a possible way to
+implement this.
+
+\section{Implement method to see what is causing lag in Emacs}
+
+It would be really nice to be able to see what is causing Emacs to lag in certain contexts. This
+could be enabled by calling a sort of record function and then disabling it when done. When the
+record function is toggled off, display a list of functions called and how much collective time they
+took, ordered by that time.
+
+\section{Create a new gdb many windows mode that spans 2 screens}
+
+This should also have a function to restore windows. It should delegate most responsibility to GDB\@.
+
+\section{Set C modes indent automatically from clang-format}
+
+Instead of automatically using a configured indent size and style (tabs or not) set it dynamically
+when entering a c-mode buffer based one of the following in descending order of preference: (1) the
+clang-format file used in that project, (2) the style already used and (3) your fallback style. This
+Emacs manual
+\href{https://www.gnu.org/software/emacs/manual/html_node/emacs/C-Indent.html#C-Indent}{link} should
+be useful. Also, look at this
+\href{https://www.reddit.com/r/emacs/comments/7uq9w1/replace_emacs_c_autoformatting_with_clangformat/dtmbq1j?utm_source=share&utm_medium=web2x}{reddit
+  forum post}.
+
+Consider whether it makes sense to do this in other programming modes as well. How do those modes
+set the indentation style?
+
+\section{Change company completion face}
+
+The red text face used for company completion is ugly. Find a thematic alternative.
+
+\section{Fix YCMD no flags error}
+
+YCMD sometimes complains and repeatedly throws a flags missing error. Figure out what causes this
+(look at the YCMD code), then figure out how to solve it. This probably involves reconfiguration the
+ycm extra conf file.
+
+\section{Keep company-box?}
+
+Consider the functionality of company-box and potentially get rid of it.
+
+\section{Completion drop-down vs fill-in}
+
+Sometimes completions provide a drop-down and sometimes it doesn't and instead presents a sole
+completion as a differently colored rest of the word. What logic regulates this? Is it when only a
+single completion is available? Is this disadvantageous for a sole completion when the dropdown
+could also provide documentation for the completion?
+
+\section{Improve GDB behavior for opening windows}
+
+The current GDB split window behavior isn't great. It splits up existing windows into overly small
+sizes. I'm not exactly sure what I want here, but I'd like a strong priority given to the gdb buffer
+and the source buffer. In any event these two links should be helpful:
+\href{https://emacs.stackexchange.com/questions/38945/m-x-gdb-dont-create-new-frames}{this} and
+\href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Display-Action-Functions.html}{this}.
 
 \end{document}
 %%% Local Variables:

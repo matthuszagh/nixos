@@ -1344,6 +1344,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :commands (magit-checkout))
 
 (global-set-key (kbd "C-x g") 'magit-status)
+;; Set fill-column to 50 in commit message buffer.
+(add-hook 'git-commit-setup-hook (lambda ()
+                                   (set-fill-column 50)))
 
 (use-package evil-magit
   :after (magit transient))

@@ -1030,6 +1030,7 @@ rotate entire document."
   :bind ("C-c p" . helm-projectile)
   :config
   (projectile-global-mode)
+  (setq helm-projectile-truncate-lines t)
   (setq projectile-completion-system 'helm))
 
 (use-package helm-projectile
@@ -1251,7 +1252,8 @@ rotate entire document."
   :after company
   :bind (:map c-mode-base-map
               ("M-." . rtags-find-symbol-at-point)
-              ("M-," . rtags-find-references-at-point))
+              ("M-," . rtags-location-stack-back)
+              ("M-r" . rtags-find-references-at-point))
   :hook ((c-mode-common . rtags-start-process-unless-running))
   :config
   (rtags-enable-standard-keybindings)

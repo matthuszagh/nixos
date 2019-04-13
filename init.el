@@ -532,6 +532,8 @@ amount of spaces."
   (setq-default pdb-command-name "python -m pdb"))
 
 (use-package gdb-mi
+  :hook (gud-mode . (lambda ()
+                      (set (make-local-variable 'company-backends) '(company-capf)))))
 
 ;; Compilation command for C/C++
 (defvar my:compile-command "make && ./")

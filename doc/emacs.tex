@@ -281,6 +281,74 @@ and the source buffer. In any event these two links should be helpful:
 \href{https://emacs.stackexchange.com/questions/38945/m-x-gdb-dont-create-new-frames}{this} and
 \href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Display-Action-Functions.html}{this}.
 
+\section{Enable ability in term mode when at command line to insert at point instead of going to
+  end}
+
+This would allow me to navigate in normal mode and then insert like normal.
+
+\begin{minted}{lisp}
+  (evil-collection-define-key 'normal 'term-mode-map (kbd "i")
+    (lambda ()
+      (interactive)
+      (if (eq (line-number-at-pos)
+              (+ (evil-count-lines (point-min) (point-max)) 1))
+          (let* ((col-str (what-cursor-position))
+                 (col (string-to-number
+                       (when (string-match ".*column=" col-str)
+                         (replace-match "" nil nil col-str)))))
+            (progn (evil-insert-state)
+                   (term-send-end)
+                   (term-show-maximum-output)
+                   (let* ((col-new-str (what-cursor-position))
+                          (col-new (string-to-number
+                                    (when (string-match ".*column=" col-new-str)
+                                      (replace-match "" nil nil col-new-str)))))
+                     (while (> col-new col)
+                       (progn (execute-kbd-macro (kbd "C-b"))
+                              (message (format "%d %d" col col-new))
+                              (setq col-new (1- col-new)))))))
+        (progn (evil-insert-state)
+               (term-show-maximum-output)))))
+\end{minted}
+
+This doesn't work because edits made to the buffer line in term line mode are not affected in
+term-char mode. This would take a lot more work.
+
+\section{Prevent sudo directories from staying in recentf list}
+
+We can probably configure this with tramp, see \href{https://www.gnu.org/software/tramp/tramp-emacs.html}{manual}.
+
+\section{Store source URL of book and write function to detect if changes have occurred}
+
+Use a hash function for this. Hopefully there's a way to do this without redownloading all files
+each time.
+
+\section{Get helm-make working}
+
+See \href{https://github.com/abo-abo/helm-make}{here}.
+
+\section{Code completion should ignore case}
+
+Setup company in code completion modes to ignore entered case and fill in the correct case
+regardless.
+
+\section{Setup rr debugger with gdb interface}
+
+See this
+\href{https://emacs.stackexchange.com/questions/20056/is-it-possible-to-use-mozillas-rr-with-gdb-multi-window?rq=1}{link}
+on setting it up. See this other
+\href{http://fitzgeraldnick.com/2015/11/02/back-to-the-futurre.html}{link} on what it can do.
+
+\section{Function to determine an installed packages dependencies}
+
+Some package is using magit-popup which is causing a warning each time magit is used. Figure out
+which package. More generally, write a function to figure out which packages use a given
+dependency. Additionally, have another function to list all dependencies for a given input.
+
+\section{Fix move-book command}
+
+Rewrite move-book to use the builtin bookmark-relocate command.
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex

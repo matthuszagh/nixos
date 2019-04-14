@@ -389,7 +389,11 @@ amount of spaces."
     (cl-callf (lambda (mode) (if (eq mode t) nil t))
         (elt compilation-arguments 1))
     (recompile))
-  :bind (("C-c C-c" . compile)
+  :bind (("C-c C-c" . (lambda (cmd)
+			(interactive
+			 (list
+			  (compilation-read-command compile-command)))
+			(compile cmd t)))
          :map compilation-mode-map
          ("C-c i" . endless/toggle-comint-compilation)
          :map compilation-minor-mode-map
@@ -535,9 +539,6 @@ amount of spaces."
   :hook (gud-mode . (lambda ()
                       (set (make-local-variable 'company-backends) '(company-capf)))))
 
-;; Compilation command for C/C++
-(defvar my:compile-command "make && ./")
-
 ;; Mode for editing C and related languages such as C++.
 (use-package cc-mode
   :after (company company-c-headers)
@@ -546,7 +547,11 @@ amount of spaces."
          ("\\.cpp\\'" . c++-mode)
          ("\\.tpp\\'" . c++-mode))
   :bind (:map c-mode-base-map
-              ("C-c C-c" . compile)
+	      ("C-c C-c" . (lambda (cmd)
+			     (interactive
+			      (list
+			       (compilation-read-command compile-command)))
+			     (compile cmd t)))
               ("C-c C-k" . kill-compilation)
               ("RET" . newline-and-indent)
               ("C-c d" . 'manual-entry))

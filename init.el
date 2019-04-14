@@ -912,6 +912,10 @@ rotate entire document."
 								       (evil-insert-state)
 								     (progn (comint-show-maximum-output)
       									    (evil-insert-state))))))
+  ;; Use C-p and C-n to cycle through inputs for consistency with term-mode.
+  (evil-collection-define-key 'insert 'comint-mode-map
+    (kbd "C-p") #'comint-previous-input
+    (kbd "C-n") #'comint-next-input))
 
 ;; library for async/thread processing
 (use-package async)

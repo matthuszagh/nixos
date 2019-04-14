@@ -1156,10 +1156,12 @@ rotate entire document."
                                  company-dabbrev-code))
 
 (use-package company
+  :bind
+  ("C-<return>" . company-complete-selection)
   :config
   ;; Zero delay when pressing tab
   (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
+  (setq company-minimum-prefix-length 1)
   (setq company-show-numbers t)
   (global-company-mode)
   ;; Maintain case information for completions.

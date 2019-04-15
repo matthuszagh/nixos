@@ -1640,7 +1640,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; Finds common mistakes in English writing.
 (use-package writegood-mode
   :functions writegood-mode
-  :hook (org-mode . writegood-mode))
+  :hook ((org-mode . writegood-mode)
+         (git-commit-setup . writegood-mode)))
 
 (use-package web-mode
   :mode (("\\.phtml\\'" . web-mode)

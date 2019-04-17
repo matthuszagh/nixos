@@ -1372,9 +1372,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (use-package evil-magit
   :after (magit transient))
 
-(use-package magit-gerrit
-  :after magit)
-
 ;; Displays small signals to the left of line numbers in git repos to indicate diffs since the last
 ;; commit. A purple '=' means modified, a red '-' means deleted and a green '+' means added.
 (use-package git-gutter

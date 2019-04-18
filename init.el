@@ -1792,6 +1792,42 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :config
   (setq org-books-file org-books-file))
 
+(defun bookmark-relocate-noninteractive (bookmark-name newloc)
+"Relocate BOOKMARK-NAME to another file, NEWLOC.
+
+This makes an already existing bookmark point to that file, instead of
+the one it used to point at.  Useful when a file has been renamed
+after a bookmark was set in it.
+
+This is a modified version of the `bookmark-relocate' function
+provided by `bookmark.el'.  I've modified it to be called
+non-interactively."
+  (bookmark-maybe-historicize-string bookmark-name)
+  (bookmark-maybe-load-default-file)
+    (bookmark-set-filename bookmark-name newloc)
+    (setq bookmark-alist-modification-count
+          (1+ bookmark-alist-modification-count))
+    (if (bookmark-time-to-save-p)
+        (bookmark-save))
+    (bookmark-bmenu-surreptitiously-rebuild-list))
+
+(defun move-book (src dst)
+  "Move library book and update the bookmarks file.
+
+SRC is the file to move and DST is the destination directory.
+You will be prompted to confirm the filename later."
+  (interactive
+   (list
+    (read-file-name "src: " "/home/matt/library/")
+    (read-directory-name "dst: " "/home/matt/library/")))
+  (let* ((old-file (-take-last 1 (s-split "/" src)))
+         (file (read-string "file name: " old-file))
+         (bookmark-name-old (concat "PDF-LAST-VIEWED: " src))
+         (bookmark-name-new (concat "PDF-LAST-VIEWED: " (concat dst file))))
+    (progn (bookmark-relocate-noninteractive bookmark-name-old (concat dst file))
+           (bookmark-rename bookmark-name-old bookmark-name-new)
+           (start-process "mv" "*Messages*" "mv" src (concat dst file)))))
+
 (defun read-book (file)
   "Open a PDF in the left buffer and the org book list in the right."
   (interactive

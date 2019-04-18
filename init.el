@@ -693,7 +693,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
                              (evil-emacs-state)
                              (term-char-mode)
                              (goto-char (point-max))
-                             (term-send-down))))
+                             (term-send-down)))
+              ("C-y" . term-paste))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding

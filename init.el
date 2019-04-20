@@ -688,13 +688,6 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 ;; escaped commands. When setting escaped keys, omit the escaping "C-c".
 (use-package term
   :after (helm evil)
-  :bind (:map term-mode-map
-              ("C-c C-k" . (lambda () (interactive)
-                             (evil-emacs-state)
-                             (term-char-mode)
-                             (goto-char (point-max))
-                             (term-send-down)))
-              ("C-y" . term-paste))
   :config
   (defun expose-global-binding-in-term (binding)
     (define-key term-raw-map binding
@@ -903,6 +896,8 @@ rotate entire document."
                                                                  (interactive)
                                                                  (progn (evil-insert-state)
                                                                         (term-show-maximum-output))))
+  (evil-collection-define-key 'insert 'term-raw-map (kbd "C-c C-y") 'term-paste)
+
   ;; Same behavior for comint modes. Prevent this when in the middle of the line at the command
   ;; line. This allows evil navigation to edit the current command. I'd like this for term-mode too,
   ;; but it's much trickier (see emacs tex file).

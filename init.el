@@ -369,6 +369,9 @@ amount of spaces."
        (s-repeat 40 "-") " " (s-repeat 30 "-") "\n")
       (display-buffer (current-buffer)))))
 
+;; Add external info manuals to those displayed by emacs info
+(setq Info-additional-directory-list (list "/home/matt/.local/share/info"))
+
 ;; Install use-package with straight.
 (straight-use-package 'use-package)
 ;; default :straight t

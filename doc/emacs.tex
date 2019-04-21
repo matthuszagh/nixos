@@ -232,20 +232,6 @@ took, ordered by that time.
 
 This should also have a function to restore windows. It should delegate most responsibility to GDB\@.
 
-\section{Set C modes indent automatically from clang-format}
-
-Instead of automatically using a configured indent size and style (tabs or not) set it dynamically
-when entering a c-mode buffer based one of the following in descending order of preference: (1) the
-clang-format file used in that project, (2) the style already used and (3) your fallback style. This
-Emacs manual
-\href{https://www.gnu.org/software/emacs/manual/html_node/emacs/C-Indent.html#C-Indent}{link} should
-be useful. Also, look at this
-\href{https://www.reddit.com/r/emacs/comments/7uq9w1/replace_emacs_c_autoformatting_with_clangformat/dtmbq1j?utm_source=share&utm_medium=web2x}{reddit
-  forum post}.
-
-Consider whether it makes sense to do this in other programming modes as well. How do those modes
-set the indentation style?
-
 \section{Change company completion face}
 
 The red text face used for company completion is ugly. Find a thematic alternative.
@@ -339,9 +325,9 @@ Some package is using magit-popup which is causing a warning each time magit is 
 which package. More generally, write a function to figure out which packages use a given
 dependency. Additionally, have another function to list all dependencies for a given input.
 
-\section{Fix move-book command}
+\section{Fix info manual building with straight}
 
-Rewrite move-book to use the builtin bookmark-relocate command.
+Most info manuals aren't built.
 
 \end{document}
 %%% Local Variables:

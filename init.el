@@ -599,6 +599,11 @@ amount of spaces."
 (use-package seq)
 
 (use-package org
+  :init
+  (setq book-file "/home/matt/library/book-list.org")
+  :hook (org-mode . (lambda ()
+                      (if (equal buffer-file-name book-file)
+                          (add-hook 'after-save-hook 'org-html-export-to-html nil t))))
   :config
   (setq org-log-done 'time
         org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))

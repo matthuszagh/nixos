@@ -53,9 +53,6 @@
           (lambda ()
             (load "dired-x")))
 
-;; Improve PDF resolution in DocView
-(require 'doc-view)
-(setq doc-view-resolution 300)
 
 (defconst savefile-dir (expand-file-name "savefile" user-emacs-directory))
 
@@ -380,6 +377,11 @@ amount of spaces."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Built-in packages.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Improve PDF resolution in DocView
+(use-package doc-view
+  :config
+  (setq doc-view-resolution 192))
+
 ;; Load the compile command
 ;; Use "C-c i" in a compilation buffer to allow user input.
 (use-package compile
@@ -895,26 +897,32 @@ rotate entire document."
   :config
   (evil-collection-init)
   ;; Jump to the bottom of the window when entering insert mode in terminal.
-  (evil-collection-define-key 'normal 'term-mode-map (kbd "i") (lambda ()
-                                                                 (interactive)
-                                                                 (progn (evil-insert-state)
-                                                                        (term-show-maximum-output))))
+  (evil-collection-define-key 'normal 'term-mode-map (kbd "i")
+    (lambda ()
+      (interactive)
+      (progn (evil-insert-state)
+             (term-show-maximum-output))))
+
   (evil-collection-define-key 'insert 'term-raw-map (kbd "C-c C-y") 'term-paste)
 
   ;; Same behavior for comint modes. Prevent this when in the middle of the line at the command
   ;; line. This allows evil navigation to edit the current command. I'd like this for term-mode too,
   ;; but it's much trickier (see emacs tex file).
-  (evil-collection-define-key 'normal 'comint-mode-map (kbd "i") (lambda ()
-                                                                   (interactive)
-								   (if (eq (line-number-at-pos)
-									   (+ (evil-count-lines (point-min) (point-max)) 1))
-								       (evil-insert-state)
-								     (progn (comint-show-maximum-output)
-      									    (evil-insert-state))))))
+  (evil-collection-define-key 'normal 'comint-mode-map (kbd "i")
+    (lambda ()
+      (interactive)
+      (if (eq (line-number-at-pos)
+	      (+ (evil-count-lines (point-min) (point-max)) 1))
+	  (evil-insert-state)
+	(progn (comint-show-maximum-output)
+      	       (evil-insert-state)))))
   ;; Use C-p and C-n to cycle through inputs for consistency with term-mode.
   (evil-collection-define-key 'insert 'comint-mode-map
     (kbd "C-p") #'comint-previous-input
-    (kbd "C-n") #'comint-next-input))
+    (kbd "C-n") #'comint-next-input)
+  ;; Use the same page navigation in doc-view as in pdf-mode.
+  (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "j") 'doc-view-next-page)
+  (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "k") 'doc-view-previous-page))
 
 ;; library for async/thread processing
 (use-package async)

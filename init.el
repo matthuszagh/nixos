@@ -925,9 +925,15 @@ rotate entire document."
   (evil-collection-define-key 'insert 'comint-mode-map
     (kbd "C-p") #'comint-previous-input
     (kbd "C-n") #'comint-next-input)
+
+  ;; doc-view-mode configuration
+  ;;
   ;; Use the same page navigation in doc-view as in pdf-mode.
   (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "j") 'doc-view-next-page)
-  (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "k") 'doc-view-previous-page))
+  (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "k") 'doc-view-previous-page)
+
+  ;; org-mode configuration
+  (evil-collection-define-key 'normal 'org-mode-map (kbd "<tab>") 'org-cycle))
 
 ;; library for async/thread processing
 (use-package async)

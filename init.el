@@ -839,8 +839,11 @@ rotate entire document."
 
 (use-package pdf-tools
   :mode "\\.pdf\\'"
-  :bind* (("<next>" . next-buffer)
-	  ("<prior>" . previous-buffer))
+  :bind (("<next>" . next-buffer)
+         ("<prior>" . previous-buffer)
+         :map pdf-view-mode-map
+         ("j" . pdf-view-next-line-or-next-page)
+         ("k" . pdf-view-previous-line-or-previous-page))
   :config
   (pdf-tools-install))
 
@@ -927,6 +930,10 @@ rotate entire document."
   (evil-collection-define-key 'insert 'comint-mode-map
     (kbd "C-p") #'comint-previous-input
     (kbd "C-n") #'comint-next-input)
+
+  ;; pdf-tools mode configuration
+  (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
+  (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
 
   ;; doc-view-mode configuration
   ;;

@@ -571,6 +571,8 @@ amount of spaces."
 	tab-width 8
 	indent-tabs-mode t)
   (setq compile-command my:compile-command))
+  (setq tab-width 8)
+  (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux"))))
 
 ;; Semantic provides better code completion than many other frameworks. It does this by using a
 ;; realtime source code parser. It can therefore provide contextual code completion. For instance,
@@ -1167,6 +1169,8 @@ otherwise assumed alphabetic."
                                    (shell-command-to-string "clang-format -dump-config"))
                                   (c-offset (get-clang-format-option clang-format-config "IndentWidth" t))
                                   (tabs-str (get-clang-format-option clang-format-config "UseTab" nil))
+                                  (indent-braces (get-clang-format-option
+                                                  clang-format-config "IndentBraces" nil))
                                   (base-style
                                    (get-clang-format-option clang-format-config "BasedOnStyle" nil)))
                              (progn
@@ -1176,7 +1180,8 @@ otherwise assumed alphabetic."
                                      (cond ((or (equal "LLVM" base-style)
                                                 (equal "Google" base-style)
                                                 (equal "Chromium" base-style)
-                                                (equal "Mozilla" base-style))
+                                                (equal "Mozilla" base-style)
+                                                (equal "GNU" base-style))
                                             (setq-local c-basic-offset 2))
                                            ((equal "WebKit" base-style)
                                             (setq-local c-basic-offset 4)))))
@@ -1189,8 +1194,22 @@ otherwise assumed alphabetic."
                                                 (equal "Google" base-style)
                                                 (equal "Chromium" base-style)
                                                 (equal "Mozilla" base-style)
+                                                (equal "WebKit" base-style)
+                                                (equal "GNU" base-style))
+                                            (setq-local indent-tabs-mode nil)))))
+                               (if (not (equal "" indent-braces))
+                                   (if (equal "true" indent-braces)
+                                       (c-set-style "gnu")
+                                     (c-set-style "linux"))
+                                 (if (not (equal "" base-style))
+                                     (cond ((or (equal "LLVM" base-style)
+                                                (equal "Google" base-style)
+                                                (equal "Chromium" base-style)
+                                                (equal "Mozilla" base-style)
                                                 (equal "WebKit" base-style))
-                                            (setq-local indent-tabs-mode nil))))))))))
+                                            (c-set-style "linux"))
+                                           ((equal "GNU" base-style)
+                                            (c-set-style "gnu"))))))))))
 
 ;; Provides better C++ code highlighting.
 (use-package modern-cpp-font-lock

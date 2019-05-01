@@ -329,6 +329,30 @@ dependency. Additionally, have another function to list all dependencies for a g
 
 Most info manuals aren't built.
 
+\section{Keybinding to jump to pdf location from book-list}
+
+When on a line in completion tracking section, have C-<enter> or something similar jump to that page
+location in pdf buffer. Make sure this works when outline section spans multiple lines (i.e.\ page
+number may not be on the same line) and when the document is a DVI or even maybe something else.
+
+\section{PDF navigation not enabled when first PDF opened}
+
+j and k do not work on first pdf opened.
+
+\section{Make c-style-alist style options buffer local from clang-format}
+
+c-style-alist specifies a number of style options that should be set in the same way as the other
+style options from clang-format.
+
+\section{Symon mode no longer exits when proced is quit}
+
+Typing q in proced does not exit symon-mode anymore.
+
+\section{Percent Completed in org book list}
+
+Add a function to display the percentage of a book that is completed based on the completion
+tracking section. It should automatically be triggered when the file is saved.
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex

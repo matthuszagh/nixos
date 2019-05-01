@@ -896,7 +896,7 @@ rotate entire document."
   (define-key evil-emacs-state-map (kbd "C-z") nil))
 
 (use-package evil-collection
-  :after evil
+  :after (evil multi-term)
   :config
   (evil-collection-init)
   ;; Jump to the bottom of the window when entering insert mode in terminal.
@@ -906,8 +906,12 @@ rotate entire document."
       (progn (evil-insert-state)
              (term-show-maximum-output))))
 
+  ;; term-mode configuration
   (evil-collection-define-key 'insert 'term-raw-map (kbd "C-c C-y") 'term-paste)
+  (evil-collection-define-key 'insert 'term-raw-map (kbd "C-w") nil)
 
+  ;; comint-mode configuration
+  ;;
   ;; Same behavior for comint modes. Prevent this when in the middle of the line at the command
   ;; line. This allows evil navigation to edit the current command. I'd like this for term-mode too,
   ;; but it's much trickier (see emacs tex file).

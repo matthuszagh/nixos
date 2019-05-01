@@ -525,11 +525,7 @@ amount of spaces."
   :after (symon)
   :bind (("<f9>" . (lambda () (interactive)
                      (proced)
-                     (command-execute 'symon-mode)))
-         :map proced-mode-map
-         ("q" . (lambda () (interactive)
-                  (quit-window)
-                  (command-execute 'symon-mode)))))
+                     (command-execute 'symon-mode)))))
 
 (use-package python
   :mode (("\\.py\\'" . python-mode))
@@ -935,7 +931,12 @@ rotate entire document."
   (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "k") 'doc-view-previous-page)
 
   ;; org-mode configuration
-  (evil-collection-define-key 'normal 'org-mode-map (kbd "<tab>") 'org-cycle))
+  (evil-collection-define-key 'normal 'org-mode-map (kbd "<tab>") 'org-cycle)
+
+  ;; proced-mode configuration
+  (evil-collection-define-key 'normal 'proced-mode-map (kbd "q") (lambda () (interactive)
+                                                                   (quit-window)
+                                                                   (command-execute 'symon-mode))))
 
 ;; library for async/thread processing
 (use-package async)

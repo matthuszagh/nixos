@@ -609,9 +609,23 @@ amount of spaces."
   (setq org-directory (concat user-emacs-directory "org"))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq org-capture-templates
-        '(("b" "Book" item (file "~/library/book-list.org")
-           "* %^{TITLE}\n:PROPERTIES:\n:Author:\n:Edition:\n:Pub-Year:\n:File:\n:Goodreads-Ranking:\n:Goodreads-#-Reviews:\n:Amazon-Ranking:\n:Amazon-#-Reviews:\n:Goodreads-URL:\n:Amazon-URL:\n:OpenLibrary-URL:\n:ISBN:\n:END:\n%?" :empty-lines 1)))
-  (setq org-agenda-files (list org-directory "~/library/book-list.org")))
+        '(("b" "Book" entry (file book-file)
+           "* %^{TITLE}\n\
+:PROPERTIES:\n\
+:Author:\n\
+:Edition:\n\
+:Pub-Year:\n\
+:File:\n\
+:Goodreads-Ranking:\n\
+:Goodreads-#-Reviews:\n\
+:Amazon-Ranking:\n\
+:Amazon-#-Reviews:\n\
+:Goodreads-URL:\n\
+:Amazon-URL:\n\
+:OpenLibrary-URL:\n\
+:ISBN:\n\
+:END:\n%?" :empty-lines 1)))
+  (setq org-agenda-files (list org-directory book-file))
 
 ;; Spelling correction.
 (use-package flyspell

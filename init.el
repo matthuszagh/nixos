@@ -626,6 +626,9 @@ amount of spaces."
 :ISBN:\n\
 :END:\n%?" :empty-lines 1)))
   (setq org-agenda-files (list org-directory book-file))
+  ;; include plain lists in org cycling, which folds lists by default when a heading is first
+  ;; expanded.
+  (setq org-cycle-include-plain-lists 'integrate))
 
 ;; Spelling correction.
 (use-package flyspell

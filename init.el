@@ -637,7 +637,16 @@ amount of spaces."
   (setq org-agenda-files (list org-directory book-file))
   ;; include plain lists in org cycling, which folds lists by default when a heading is first
   ;; expanded.
-  (setq org-cycle-include-plain-lists 'integrate))
+  (setq org-cycle-include-plain-lists 'integrate)
+  ;; Set file for the current entry.
+  (defun org-set-property-file (file)
+    (interactive
+     (list
+      (read-file-name "file: " "/home/matt/library/")))
+    (org-set-property "Filepath" (concat "[[file:" file "]]")))
+  ;; Outline percentage completion includes all children of node rather than just the direct
+  ;; children.
+  (setq org-checkbox-hierarchical-statistics nil))
 
 ;; Spelling correction.
 (use-package flyspell

@@ -599,9 +599,18 @@ amount of spaces."
 (use-package org
   :init
   (setq book-file "/home/matt/library/book-list.org")
+  (defun open-book-from-outline ()
+    (interactive)
+    (setq file (car (s-split "]" (car (last (s-split ":" (org-entry-get (point) "Filepath")))))))
+    (setq page (string-to-number (car (s-match "[0-9]+"
+                                               (car (s-match "([0-9]+)" (thing-at-point 'line t)))))))
+    (find-file-other-window file)
+    (pdf-view-goto-page page))
   :hook (org-mode . (lambda ()
                       (if (equal buffer-file-name book-file)
                           (add-hook 'after-save-hook 'org-html-export-to-html nil t))))
+  :bind (:map org-mode-map
+              ("C-<return>" . open-book-from-outline))
   :config
   (setq org-log-done 'time
         org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
@@ -615,7 +624,7 @@ amount of spaces."
 :Author:\n\
 :Edition:\n\
 :Pub-Year:\n\
-:File:\n\
+:Filepath:\n\
 :Goodreads-Ranking:\n\
 :Goodreads-#-Reviews:\n\
 :Amazon-Ranking:\n\

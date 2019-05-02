@@ -329,16 +329,19 @@ dependency. Additionally, have another function to list all dependencies for a g
 
 Most info manuals aren't built.
 
-\section{Keybinding to jump to pdf location from book-list}
-
-When on a line in completion tracking section, have C-<enter> or something similar jump to that page
-location in pdf buffer. Make sure this works when outline section spans multiple lines (i.e.\ page
-number may not be on the same line) and when the document is a DVI or even maybe something else.
-
 \section{Make c-style-alist style options buffer local from clang-format}
 
 c-style-alist specifies a number of style options that should be set in the same way as the other
 style options from clang-format.
+
+\section{Setup smartparens}
+
+Use smartparens instead of other packages.
+
+\section{flycheck clang tidy automatically find compile commands}
+
+Find compile\_commands.json recursively in current project directory, rather than needing to specify
+it.
 
 \end{document}
 %%% Local Variables:

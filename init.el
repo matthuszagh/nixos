@@ -601,7 +601,7 @@ amount of spaces."
   (setq book-file "/home/matt/library/book-list.org")
   (defun open-book-from-outline ()
     (interactive)
-    (setq file (car (s-split "]" (car (last (s-split ":" (org-entry-get (point) "Filepath")))))))
+    (setq file (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "Filepath")))))))
     (setq page (string-to-number (car (s-match "[0-9]+"
                                                (car (s-match "([0-9]+)" (thing-at-point 'line t)))))))
     (find-file-other-window file)

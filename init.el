@@ -1990,6 +1990,13 @@ You will be prompted to confirm the filename later."
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
+(use-package smart-mode-line
+  :init
+  :after sourcerer-theme
+  :config
+  (setq sml/theme 'respectful)
+  (setq sml/name-width 40)
+  (sml/setup))
 
 (provide 'init)
 ;;; init.el ends here

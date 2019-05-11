@@ -213,6 +213,16 @@ amount of spaces."
         (clipboard-kill-region (point-min) (point-max)))
       (message filename))))
 
+(defun copy-file-name ()
+  "Copy the file name of the current file to the clipboard."
+  (interactive)
+  (let ((buffername (buffer-name)))
+    (when buffername
+      (with-temp-buffer
+        (insert buffername)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message buffername))))
+
 ;; Indent entire buffer
 (defun indent-buffer ()
   (interactive)

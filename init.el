@@ -1692,6 +1692,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
          (LaTeX-mode . turn-on-reftex)
          (LaTeX-mode . add-auctex-keys)
          (LaTeX-mode . LaTeX-math-mode)
+         (plain-TeX-mode . (lambda ()
+                             (setq flycheck-disabled-checkers '(tex-chktex))))
          (TeX-after-compilation-finished-functions . TeX-revert-document-buffer)
          ;; Allows code folding. This is the same functionality that org mode uses.
          (LaTeX-mode . outline-minor-mode)

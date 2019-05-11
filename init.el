@@ -6,6 +6,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General configurations.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; -*-no-byte-compile: t; -*-
+(setq load-prefer-newer t)
+
+
 ;; Use the straight package manager instead of package.el.
 
 ;; We use a straight-maintained mirror, which fixes an issue that makes tex-sites.el unavailable to
@@ -805,6 +809,11 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 (add-to-list 'auto-mode-alist '("\\.dcm\\'" . fundamental-mode))
 
 (use-package bookmark)
+(use-package auto-compile
+  :config
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Third-party packages.

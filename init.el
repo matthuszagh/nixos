@@ -1537,9 +1537,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   :config
   ;; If you enable global minor mode
   (global-git-gutter-mode t)
-  ;; Auto update every 5 seconds
-  (custom-set-variables
-   '(git-gutter:update-interval 5))
   ;; Set the foreground color of modified lines to something obvious
   (set-face-foreground 'git-gutter:modified "purple"))
 

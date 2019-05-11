@@ -814,6 +814,9 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode))
 
+(use-package aggressive-indent
+  :config
+  (global-aggressive-indent-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Third-party packages.

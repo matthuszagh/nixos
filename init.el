@@ -656,7 +656,12 @@ amount of spaces."
     (org-set-property "Filepath" (concat "[[file:" file "]]")))
   ;; Outline percentage completion includes all children of node rather than just the direct
   ;; children.
-  (setq org-checkbox-hierarchical-statistics nil))
+  (setq org-checkbox-hierarchical-statistics nil)
+  (setq org-confirm-babel-evaluate nil)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (shell . t))))
 
 ;; Spelling correction.
 (use-package flyspell

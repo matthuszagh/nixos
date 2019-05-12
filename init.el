@@ -1999,6 +1999,18 @@ You will be prompted to confirm the filename later."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package smartparens
+  :config
+  (require 'smartparens-config)
+  (sp-pair "$" "$" :wrap "C-$")
+  (smartparens-global-mode t)
+  (define-key smartparens-mode-map (kbd "M-<delete>") 'sp-unwrap-sexp))
+
+(use-package evil-smartparens
+  :after smartparens
+  :hook
+  (smartparens-enabled . evil-smartparens-mode))
+
 (use-package sourcerer-theme
   :config
   (load-theme 'sourcerer t))

@@ -1010,6 +1010,8 @@ rotate entire document."
   (evil-collection-define-key 'normal 'proced-mode-map (kbd "q") (lambda () (interactive)
                                                                    (quit-window)
                                                                    (command-execute 'symon-mode))))
+  ;; elisp
+  (evil-collection-define-key 'normal 'emacs-lisp-mode-map (kbd "M-.") 'xref-find-definitions))
 
 ;; library for async/thread processing
 (use-package async)

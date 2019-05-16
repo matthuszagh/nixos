@@ -628,7 +628,7 @@ amount of spaces."
   :config
   (setq org-log-done 'time
         org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
-        org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
+        org-todo-keyword-faces '(("INPROGRESS" . (:foreground "#cc8800"))))
   (setq org-directory (concat user-emacs-directory "org"))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq org-capture-templates

@@ -1009,7 +1009,11 @@ rotate entire document."
   ;; proced-mode configuration
   (evil-collection-define-key 'normal 'proced-mode-map (kbd "q") (lambda () (interactive)
                                                                    (quit-window)
-                                                                   (command-execute 'symon-mode))))
+                                                                   (command-execute 'symon-mode)))
+  ;; elpy and python
+  (evil-collection-define-key 'normal 'python-mode-map (kbd "M-.") 'elpy-goto-definition)
+  (evil-collection-define-key 'normal 'python-mode-map (kbd "C-M-.") 'elpy-goto-definition-other-window)
+
   ;; elisp
   (evil-collection-define-key 'normal 'emacs-lisp-mode-map (kbd "M-.") 'xref-find-definitions))
 

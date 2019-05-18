@@ -9,6 +9,10 @@
 ;; -*-no-byte-compile: t; -*-
 (setq load-prefer-newer t)
 
+;; config changes made through the customize UI will be stored here
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;; Use the straight package manager instead of package.el.
 
@@ -2030,10 +2034,6 @@ You will be prompted to confirm the filename later."
 ;; Set font.
 (add-to-list 'default-frame-alist '(font . "Source Code Pro-8"))
 
-;; config changes made through the customize UI will be stored here
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
 (use-package smart-mode-line
   :init
   :after sourcerer-theme

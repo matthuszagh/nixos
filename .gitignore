@@ -39,3 +39,4 @@ image-dired/
 /straight
 /%backup%~
 flycheck_init.el
+*.pdf

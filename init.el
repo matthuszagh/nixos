@@ -62,16 +62,11 @@
           (lambda ()
             (load "dired-x")))
 
-
 (defconst savefile-dir (expand-file-name "savefile" user-emacs-directory))
 
 ;; create the savefile dir if it doesn't exist
 (unless (file-exists-p savefile-dir)
   (make-directory savefile-dir))
-
-;; Extra plugins and config files are stored here
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/local-repo"))
-(add-to-list 'load-path "~/.emacs.d/lib/mpdel")
 
 ;; Disable toolbar
 (when (fboundp 'tool-bar-mode)
@@ -396,6 +391,10 @@ amount of spaces."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Built-in packages.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; info+ is a plugin.
+(straight-use-package '(info+ :local-repo "info+"))
+(use-package info+)
+
 ;; Improve PDF resolution in DocView
 (use-package doc-view
   :config
@@ -1051,9 +1050,12 @@ rotate entire document."
   :mode "\\.plantuml\\'"
   :config
   ;; plantuml_helpers is a plugin file.
-  (require 'plantuml_helpers)
   ;; plantuml-mode needs to know where the executable file is.
   (setq plantuml-jar-path "/opt/plantuml/plantuml.jar"))
+
+(straight-use-package '(plantuml-helpers :local-repo "plantuml-helpers"))
+(use-package plantuml-helpers
+  :after (plantuml-mode))
 
 (use-package flycheck-plantuml
   :after (flycheck plantuml-mode))
@@ -1933,8 +1935,34 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (require 'multi-term-ext)
   (setq multi-term-program "/bin/bash"))
 
-;; info+ is a plugin.
-(require 'info+)
+  (setq multi-term-program "/bin/bash")
+  (setq term-bind-key-alist
+        (list (cons "C-c C-c" 'term-interrupt-subjob)
+              (cons "C-c C-e" 'term-send-esc)
+              (cons "C-p" 'previous-line)
+              (cons "C-n" 'next-line)
+              (cons "C-z" 'term-stop-subjob)
+              (cons "C-l" 'term-send-raw)
+              (cons "C-s" 'term-send-raw)
+              (cons "C-r" 'term-send-raw)
+              (cons "C-m" 'term-send-return)
+              (cons "C-y" 'term-paste)
+              (cons "M-f" 'term-send-forward-word)
+              (cons "M-b" 'term-send-backward-word)
+              (cons "M-DEL" 'term-send-backward-kill-word)
+              (cons "M-d" 'term-send-forward-kill-word)
+              (cons "<C-left>" 'term-send-backward-word)
+              (cons "<C-right>" 'term-send-forward-word)
+              ;; Keep evil mode window move keys. This replaces the normal Bash C-w key that cuts
+              ;; the word before the cursor. If you want that back, remove the next 5 lines.
+              (cons "C-w" 'nil)
+              (cons "C-w h" 'evil-window-left)
+              (cons "C-w j" 'evil-window-down)
+              (cons "C-w k" 'evil-window-up)
+              (cons "C-w l" 'evil-window-right))))
+
+(straight-use-package '(multi-term-ext :local-repo "multi-term-ext"))
+(use-package multi-term-ext)
 
 (use-package asm-mode
   :mode ("\\.s\\'"))
@@ -1943,7 +1971,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 (use-package hide-lines)
 (use-package ov)
 ;; syslog-mode is a plugin for viewing log files.
-(require 'syslog-mode)
+(use-package syslog-mode
+  :after (hide-lines ov)
+  :straight (syslog-mode :type git :host github :repo "vapniks/syslog-mode"))
 
 ;; Keep folding between sessions.
 (use-package persistent-overlays)

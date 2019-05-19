@@ -40,8 +40,9 @@
 ;; Make system library paths available for tagging.
 (setenv "GTAGSLIBPATH" "/home/matt/.gtags/")
 
-;;; gnus init file
+;;; gnus
 (setq gnus-init-file "~/.emacs.d/.gnus.el")
+(setq gnus-use-full-window nil)
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)

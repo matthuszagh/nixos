@@ -343,6 +343,41 @@ Use smartparens instead of other packages.
 Find compile\_commands.json recursively in current project directory, rather than needing to specify
 it.
 
+\section{Init file unit testing}
+
+I'd like to have some sort of testing for the init file to ensure that all configurations are
+actually implemented and other changes do not affect them. The builtin ERT framework might be able
+to achieve this. Also use auto-compile, which ensures byte-compiled files are up-to-date with the
+source versions.
+
+\section{PDFs open in both buffers sometimes}
+
+This seems to happen when a PDF file is first opened. Investigate what happens when I disable the
+bookmarking functionality. I may no longer need bookmarking anyway with org tracking.
+
+\section{Ensure evil collection bindings are working}
+
+Evil collection defines a framework for vim-like bindings that make a lot of sense. Become familiar
+with these and make sure they're working. Finally, it would be great to set up testing for them.
+
+\section{pdf tools fails to define function}
+
+I get this error at startup. File mode specification error: (error Autoloading file /home/matt/.emacs.d/straight/build/pdf-tools/pdf-tools.elc failed to define function pdf-tools)
+
+\section{jedi core installs each startup}
+
+I get this message at each startup. Is this right? Running: pip install --upgrade /home/matt/.emacs.d/straight/build/jedi-core/...Done
+
+\section{show links in pdf}
+
+Implement a feature similar to Vimium's f key, which shows keys associated with each link on a
+page. The links can be followed by typing the corresponding key. This would be useful in PDF mode so
+the cursor does not need to be used.
+
+\section{Org align contents of lists}
+
+Org does not currently left-align the content of a list item.
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex

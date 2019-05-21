@@ -204,9 +204,8 @@ amount of spaces."
   (let ((tramp-file-name (concat "/sudo::" (expand-file-name file-name))))
     (find-file tramp-file-name)))
 
-;; Copy file fath to clipboard
 (defun copy-file-path ()
-  "Put the current file name on the clipboard"
+  "Copy the absolute file path of the current file to the clipboard."
   (interactive)
   (let ((filename (if (equal major-mode 'dired-mode)
                       default-directory
@@ -388,9 +387,8 @@ amount of spaces."
 ;; default :straight t
 (setq straight-use-package-by-default t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Built-in packages.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; Built-in packages.
 ;; info+ is a plugin.
 (straight-use-package '(info+ :local-repo "info+"))
 (use-package info+)
@@ -813,6 +811,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 (add-to-list 'auto-mode-alist '("\\.dcm\\'" . fundamental-mode))
 
 (use-package bookmark)
+;;;; Third-party packages.
+
 (use-package auto-compile
   :config
   (auto-compile-on-load-mode)
@@ -822,9 +822,6 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
   :config
   (global-aggressive-indent-mode 1))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Third-party packages.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package undo-tree
   :bind (:map undo-tree-map
               ("C-/" . nil))
@@ -923,7 +920,7 @@ rotate entire document."
 
 (use-package evil
   :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-integration t) ; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
   :config
   (evil-mode 1)
@@ -1970,6 +1967,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
 ;; These are required for syslog.
 (use-package hide-lines)
 (use-package ov)
+
 ;; syslog-mode is a plugin for viewing log files.
 (use-package syslog-mode
   :after (hide-lines ov)
@@ -1990,7 +1988,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.d/init.el.\n"
   (setq org-books-file org-books-file))
 
 (defun bookmark-relocate-noninteractive (bookmark-name newloc)
-"Relocate BOOKMARK-NAME to another file, NEWLOC.
+  "Relocate BOOKMARK-NAME to another file, NEWLOC.
 
 This makes an already existing bookmark point to that file, instead of
 the one it used to point at.  Useful when a file has been renamed
@@ -2037,9 +2035,6 @@ You will be prompted to confirm the filename later."
   (find-file org-books-file)
   (evil-window-left 1))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Appearance
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package smartparens
   :config
   (require 'smartparens-config)
@@ -2051,6 +2046,8 @@ You will be prompted to confirm the filename later."
   :after smartparens
   :hook
   (smartparens-enabled . evil-smartparens-mode))
+
+;;;; Appearance
 
 (use-package sourcerer-theme
   :config

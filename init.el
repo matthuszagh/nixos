@@ -2053,6 +2053,10 @@ You will be prompted to confirm the filename later."
   :hook
   (smartparens-enabled . evil-smartparens-mode))
 
+(use-package helpful
+  :config
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point))
+
 ;;;; Appearance
 
 (use-package sourcerer-theme

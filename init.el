@@ -389,6 +389,12 @@ amount of spaces."
 
 
 ;;;; Built-in packages.
+
+(global-set-key (kbd "C-c m") 'eshell)
+
+(use-package esh-autosuggest
+  :hook (eshell-mode . esh-autosuggest-mode))
+
 ;; info+ is a plugin.
 (straight-use-package '(info+ :local-repo "info+"))
 (use-package info+)

@@ -14,6 +14,7 @@
 (setq nnmail-split-fancy
       '(| (any "linux-kernel@vger\\.kernel\\.org" "LKML")
           (any "emacs-devel@gnu\\.org" "emacs-devel")
+          (any "kicad-developers@lists\\.launchpad\\.net" "kicad-developers")
           "mail.misc"))
 
 (setq nnmail-split-methods 'nnmail-split-fancy)

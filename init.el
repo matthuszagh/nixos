@@ -819,6 +819,10 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 (use-package bookmark)
 ;;;; Third-party packages.
 
+(use-package dired+
+  :init
+  (setq diredp-hide-details-initially-flag nil))
+
 (use-package auto-compile
   :config
   (auto-compile-on-load-mode)

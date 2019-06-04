@@ -630,8 +630,7 @@ amount of spaces."
                             (add-hook 'before-save-hook 'clang-format-buffer nil t)))
          (c-mode-common . (lambda ()
                             (set (make-local-variable 'company-backends)
-				 (list
-                                  (cons 'company-c-headers default-company-backends))))))
+                                 (list '(company-c-headers company-rtags company-files))))))
   :config
   (setq c-basic-offset 8
 	tab-width 8

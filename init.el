@@ -412,6 +412,10 @@ amount of spaces."
   :config
   (setq erc-prompt-for-password nil)
   (setq erc-autojoin-channels-alist '(("freenode.net" "#emacs" "#guix" "#coreboot"))))
+
+;; wrap text at 70 in eww
+(setq shr-width 70)
+
 (global-set-key (kbd "C-c m") 'eshell)
 
 (use-package esh-autosuggest

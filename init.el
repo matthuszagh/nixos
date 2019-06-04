@@ -1,4 +1,4 @@
-;; initfile --- Summary:
+;; init.el --- Summary: -*-no-byte-compile: t; -*-
 ;;; Commentary:
 
 ;;; Code:
@@ -6,7 +6,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General configurations.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; -*-no-byte-compile: t; -*-
 (setq load-prefer-newer t)
 
 ;; config changes made through the customize UI will be stored here

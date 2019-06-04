@@ -377,6 +377,11 @@ amount of spaces."
 ;; default :straight t
 (setq straight-use-package-by-default t)
 
+;; use eww as default browser
+(setq browse-url-browser-function 'eww-browse-url)
+;; use monospaced rather than proportional fonts
+(setq shr-use-fonts nil)
+
 ;;;; Appearance
 
 (use-package sourcerer-theme

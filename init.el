@@ -592,7 +592,23 @@ amount of spaces."
 
 (use-package gdb-mi
   :hook (gud-mode . (lambda ()
-                      (set (make-local-variable 'company-backends) '(company-capf)))))
+                      (set (make-local-variable 'company-backends) '(company-capf))))
+  :config
+  ;; Don't pop io buffer to top
+  (setq gdb-display-io-nopopup t)
+  ;; Show source buffer at startup
+  (setq gdb-show-main t)
+  ;; Force gdb-mi to not dedicate any windows. Dedicated windows prevent switching it for another window.
+  (advice-add 'gdb-display-buffer
+	      :around (lambda (orig-fun &rest r)
+			(let ((window (apply orig-fun r)))
+			  (set-window-dedicated-p window nil)
+			  window)))
+
+  (advice-add 'gdb-set-window-buffer
+	      :around (lambda (orig-fun name &optional ignore-dedicated window)
+			(funcall orig-fun name ignore-dedicated window)
+			(set-window-dedicated-p window nil))))
 
 ;; Mode for editing C and related languages such as C++.
 (use-package cc-mode

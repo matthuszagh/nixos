@@ -582,7 +582,13 @@ amount of spaces."
   :config
   (setq-default python-indent 4)
   (setq-default python-indent-offset 4)
-  (setq-default pdb-command-name "python -m pdb"))
+  (setq-default pdb-command-name "python -m pdb")
+  ;; Use ipython as the python shell interpreter.
+  (setq python-shell-interpreter "jupyter"
+        python-shell-interpreter-args "console --simple-prompt"
+        python-shell-prompt-detect-failure-warning nil)
+  (add-to-list 'python-shell-completion-native-disabled-interpreters
+               "jupyter"))
 
 (use-package gdb-mi
   :hook (gud-mode . (lambda ()

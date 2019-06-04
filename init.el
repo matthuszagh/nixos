@@ -1135,13 +1135,17 @@ rotate entire document."
         helm-lisp-fuzzy-completion t)
   (require 'helm-config)
   ;; move to end or beginning of source when reaching top or bottom of source.
-  (setq helm-move-to-line-cycle-in-source t
+  (setq helm-split-window-inside-p t
+        helm-move-to-line-cycle-in-source t
         ;; search for library in `require' and `declare-function' sexp.
         helm-ff-search-library-in-sexp t
         ;; scroll 8 lines other window using M-<next>/M-<prior>
-        ;; helm-scroll-amount 8
+        helm-scroll-amount 8
         helm-ff-file-name-history-use-recentf t
         helm-echo-input-in-header-line t)
+  (setq helm-autoresize-max-height 0
+        helm-autoresize-min-height 40)
+  (helm-autoresize-mode 1)
   (helm-mode 1)
   (setq helm-buffer-max-length 60))
 

@@ -129,18 +129,6 @@
                              (horizontal-scroll-bars . nil))))
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
-;; Set font size
-(defun set-font-size (sz)
-  "Set font size."
-  (interactive
-   (list
-    (read-number "size: ")))
-  (set-face-attribute 'mode-line nil  :height sz)
-  (set-face-attribute 'header-line nil  :height sz)
-  (set-face-attribute 'default nil :height sz))
-
-(set-font-size 80)
-
 ;; Enable line numbers on the LHS
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'LaTeX-mode-hook 'display-line-numbers-mode)
@@ -389,6 +377,25 @@ amount of spaces."
 ;; default :straight t
 (setq straight-use-package-by-default t)
 
+;;;; Appearance
+
+(use-package sourcerer-theme
+  :config
+  (load-theme 'sourcerer))
+
+(defvar my-font-size 10)
+(setq default-frame-alist `((cursor-color . "#c2c2b0")
+                            (fullscreen . maximized) ; start emacsclient maximized
+                            (font . ,(concat "Source Code Pro-" (number-to-string my-font-size)))
+                            (hl-line-face . "gray16")))
+
+(use-package smart-mode-line
+  :init
+  :after sourcerer-theme
+  :config
+  (setq sml/theme 'respectful)
+  (setq sml/name-width 40)
+  (sml/setup))
 
 ;;;; Built-in packages.
 

@@ -402,6 +402,8 @@ amount of spaces."
   (setq sml/name-width 40)
   (sml/setup))
 
+(setq outline-minor-mode t)
+
 ;;;; Built-in packages.
 
 (global-set-key (kbd "C-c m") 'eshell)

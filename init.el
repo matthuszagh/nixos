@@ -71,6 +71,9 @@
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 
+;; turn off auto-save
+(setq auto-save-default nil)
+
 ;; Disable menu-bar
 (menu-bar-mode -1)
 

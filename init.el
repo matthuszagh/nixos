@@ -406,6 +406,12 @@ amount of spaces."
 
 ;;;; Built-in packages.
 
+(use-package erc
+  :hook (erc-mode . (lambda ()
+                      (setq-local fill-column nil)))
+  :config
+  (setq erc-prompt-for-password nil)
+  (setq erc-autojoin-channels-alist '(("freenode.net" "#emacs" "#guix" "#coreboot"))))
 (global-set-key (kbd "C-c m") 'eshell)
 
 (use-package esh-autosuggest

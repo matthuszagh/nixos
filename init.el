@@ -992,7 +992,7 @@ rotate entire document."
   (define-key evil-emacs-state-map (kbd "C-z") nil))
 
 (use-package evil-collection
-  :after (evil multi-term)
+  :after (evil)
   :config
   (evil-collection-init)
   ;; Jump to the bottom of the window when entering insert mode in terminal.

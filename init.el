@@ -1114,6 +1114,7 @@ rotate entire document."
          ("C-x b" . helm-mini)
          ("C-x C-f" . helm-find-files)
          ("C-c h o" . helm-occur)
+         ("C-c h l" . helm-locate)
          ("C-c h g" . helm-google-suggest)
          ("M-:" . helm-eval-expression-with-eldoc)
          :map helm-map

@@ -664,6 +664,8 @@ amount of spaces."
 (use-package org
   :init
   (setq book-file "/home/matt/library/book-list.org")
+  (setq emacs-file "/home/matt/.emacs.d/doc/emacs.org")
+  (setq system-file "/home/matt/notes/computing/system/system.org")
   (defun open-book-from-outline ()
     (interactive)
     (setq file (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "Filepath")))))))
@@ -674,9 +676,98 @@ amount of spaces."
   :hook (org-mode . (lambda ()
                       (if (equal buffer-file-name book-file)
                           (add-hook 'after-save-hook 'org-html-export-to-html nil t))))
-  :bind (:map org-mode-map
-              ("C-<return>" . open-book-from-outline))
+  (org-mode . (lambda ()
+                (setq-local fill-column 70)))
+  ;; :bind (:map org-mode-map
+  ;;             ("C-<return>" . open-book-from-outline))
   :config
+  (setq org-startup-with-latex-preview t)
+  (setq org-startup-with-inline-images t)
+
+  ;; set default image background color
+  (defun org-display-inline-images--with-color-theme-background-color (args)
+    "Specify background color of Org-mode inline image through modify `ARGS'."
+    (let* ((file (car args))
+           (type (cadr args))
+           (data-p (caddr args))
+           (props (cdddr args)))
+      ;; get this return result style from `create-image'
+      (append (list file type data-p)
+              (list :background "white")
+              props)))
+
+  (advice-add 'create-image :filter-args
+              #'org-display-inline-images--with-color-theme-background-color)
+
+  ;; allow customizing the image width
+  (setq org-image-actual-width nil)
+
+  ;; preserve src block indentation
+  ;; this works better with aggressive-indent-mode
+  (setq org-edit-src-content-indentation 0)
+  (setq org-src-preserve-indentation t)
+
+  ;; don't display emphasis characters
+  (setq org-hide-emphasis-markers t)
+
+  ;; permit still typing emphasis characters as normal characters
+  ;; see https://emacs.stackexchange.com/a/16746/20317
+  (defun modi/org-entity-get-name (char)
+    "Return the entity name for CHAR. For example, return \"ast\" for *."
+    (let ((ll (append org-entities-user
+                      org-entities))
+          e name utf8)
+      (catch 'break
+        (while ll
+          (setq e (pop ll))
+          (when (not (stringp e))
+            (setq utf8 (nth 6 e))
+            (when (string= char utf8)
+              (setq name (car e))
+              (throw 'break name)))))))
+
+  (defun modi/org-insert-org-entity-maybe (&rest args)
+    "When the universal prefix C-u is used before entering any character,
+    insert the character's `org-entity' name if available.
+
+    If C-u prefix is not used and if `org-entity' name is not available, the
+    returned value `entity-name' will be nil."
+    ;; It would be fine to use just (this-command-keys) instead of
+    ;; (substring (this-command-keys) -1) below in emacs 25+.
+    ;; But if the user pressed "C-u *", then
+    ;;  - in emacs 24.5, (this-command-keys) would return "^U*", and
+    ;;  - in emacs 25.x, (this-command-keys) would return "*".
+    ;; But in both versions, (substring (this-command-keys) -1) will return
+    ;; "*", which is what we want.
+    ;; http://thread.gmane.org/gmane.emacs.orgmode/106974/focus=106996
+    (let ((pressed-key (substring (this-command-keys) -1))
+          entity-name)
+      (when (and (listp args) (eq 4 (car args)))
+        (setq entity-name (modi/org-entity-get-name pressed-key))
+        (when entity-name
+          (setq entity-name (concat "\\" entity-name "{}"))
+          (insert entity-name)
+          (message (concat "Inserted `org-entity' "
+                           (propertize entity-name
+                                       'face 'font-lock-function-name-face)
+                           " for the symbol "
+                           (propertize pressed-key
+                                       'face 'font-lock-function-name-face)
+                           "."))))
+      entity-name))
+
+  ;; Run `org-self-insert-command' only if `modi/org-insert-org-entity-maybe'
+  ;; returns nil.
+  (advice-add 'org-self-insert-command :before-until #'modi/org-insert-org-entity-maybe)
+  (setq org-pretty-entities t)
+
+  ;; set inline code appearance
+  (set-face-background 'org-code "#27323D")
+  (set-face-foreground 'org-code "unspecified")
+
+  ;; `org-adapt-indentation' indents heading contents to the beginning of the heading. This is nice
+  ;; in a way, but limits the amount of horizontal space when you have deeply-nested headings.
+  (setq org-adapt-indentation nil)
   (setq org-log-done 'time
         org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
         org-todo-keyword-faces '(("INPROGRESS" . (:foreground "#cc8800"))))
@@ -699,7 +790,7 @@ amount of spaces."
 :OpenLibrary-URL:\n\
 :ISBN:\n\
 :END:\n%?" :empty-lines 1)))
-  (setq org-agenda-files (list org-directory book-file))
+  (setq org-agenda-files (list org-directory book-file emacs-file system-file))
   ;; include plain lists in org cycling, which folds lists by default when a heading is first
   ;; expanded.
   (setq org-cycle-include-plain-lists 'integrate)
@@ -712,11 +803,71 @@ amount of spaces."
   ;; Outline percentage completion includes all children of node rather than just the direct
   ;; children.
   (setq org-checkbox-hierarchical-statistics nil)
+
   (setq org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((emacs-lisp . t)
-     (shell . t))))
+   '((C . t)
+     (asymptote)
+     (awk)
+     (calc . t)
+     (clojure . t)
+     (comint)
+     (css)
+     (ditaa . t)
+     (dot . t)
+     (emacs-lisp . t)
+     (fortran)
+     (gnuplot . t)
+     (haskell)
+     (io)
+     (java)
+     (js . t)
+     (latex)
+     (ledger . t)
+     (lilypond)
+     (lisp . t)
+     (lua . t)
+     (matlab)
+     (maxima)
+     (mscgen)
+     (ocaml)
+     (octave . t)
+     (org . t)
+     (perl)
+     (picolisp)
+     (plantuml . t)
+     (python . t)
+     ;;     (ipython . t)
+     ;;     (restclient . t)
+     (ref)
+     (ruby)
+     (sass)
+     (scala)
+     (scheme)
+     (screen)
+     (shell . t)
+     (shen)
+     (snippet)
+     (sql . t)
+     (sqlite . t)))
+
+  ;; org crypt
+  (require 'org-crypt)
+  (org-crypt-use-before-save-magic)
+  (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+  (setq org-crypt-key "huszaghmatt@gmail.com"))
+
+(use-package org-ref
+  :after (org)
+  :config
+  (setq org-ref-show-broken-links nil)
+  (setq org-ref-colorize-links nil))
+
+(use-package geiser
+  :config
+  (with-eval-after-load 'geiser-guile
+    (add-to-list 'geiser-guile-load-path "~/src/guix")))
 
 ;; Spelling correction.
 (use-package flyspell
@@ -859,12 +1010,20 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 ;; .dcm files are opening in imagemagick mode, they should open in fundamental mode.
 (add-to-list 'auto-mode-alist '("\\.dcm\\'" . fundamental-mode))
 
-(use-package bookmark)
+(use-package bookmark
+  :config
+  ;; save bookmarks to file whenever they are updated.
+  (setq bookmark-save-flag 1))
+
 ;;;; Third-party packages.
 
 (use-package dired+
   :init
-  (setq diredp-hide-details-initially-flag nil))
+  (setq diredp-hide-details-initially-flag nil)
+  :config
+  (diredp-toggle-find-file-reuse-dir 1))
+
+;; (use-package bookmark+)
 
 (use-package auto-compile
   :config
@@ -953,6 +1112,7 @@ rotate entire document."
     (with-current-buffer buf
       (pdf-set-last-viewed-bookmark))))
 
+;; TODO add hook to set bookmark for file whenever there is a page change.
 (use-package pdf-tools
   :mode "\\.pdf\\'"
   :bind (("<next>" . next-buffer)
@@ -1020,8 +1180,9 @@ rotate entire document."
              (term-show-maximum-output))))
 
   ;; term-mode configuration
-  (evil-collection-define-key 'insert 'term-raw-map (kbd "C-c C-y") 'term-paste)
-  (evil-collection-define-key 'insert 'term-raw-map (kbd "C-w") nil)
+  (add-hook 'term-mode-hook (lambda ()
+                              (evil-collection-define-key 'insert 'term-raw-map (kbd "C-w") nil)
+                              (evil-collection-define-key 'insert 'term-raw-map (kbd "C-y") 'term-paste)))
 
   ;; comint-mode configuration
   ;;
@@ -1032,18 +1193,18 @@ rotate entire document."
     (lambda ()
       (interactive)
       (if (eq (line-number-at-pos)
-	      (+ (evil-count-lines (point-min) (point-max)) 1))
-	  (evil-insert-state)
-	(progn (comint-show-maximum-output)
-      	       (evil-insert-state)))))
+              (+ (evil-count-lines (point-min) (point-max)) 1))
+          (evil-insert-state)
+        (progn (comint-show-maximum-output)
+               (evil-insert-state)))))
   ;; Use C-p and C-n to cycle through inputs for consistency with term-mode.
   (evil-collection-define-key 'insert 'comint-mode-map
     (kbd "C-p") #'comint-previous-input
     (kbd "C-n") #'comint-next-input)
 
   ;; pdf-tools mode configuration
-  (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
-  (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
+  ;; (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
+  ;; (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
 
   ;; doc-view-mode configuration
   ;;
@@ -1110,16 +1271,9 @@ rotate entire document."
 
 (use-package s)
 
-;; Auto update packages once a week
-(use-package auto-package-update
-  :commands (auto-package-update-maybe)
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe)
-  (add-hook 'auto-package-update-before-hook
-            (lambda () (message "Automatically updating packages
-            with auto-package-update..."))))
+;; provides additional list functionality.
+(use-package dash
+  :straight dash)
 
 (use-package helm
   ;; Needed for "bind" keys to work on first loading.
@@ -1283,11 +1437,12 @@ rotate entire document."
 
 ;; Enhanced editing for python files.
 (use-package elpy
-  ;; :bind (([remap rtags-find-symbol-at-point] . elpy-goto-definition))
   :commands (elpy-enable)
   :hook (python-mode . elpy-mode)
   :config
   (elpy-enable)
+  (setq elpy-rpc-backend "jedi")
+  (setq elpy-shell-display-buffer-after-send t)
   (delete 'elpy-module-highlight-indentation elpy-modules)
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
@@ -1310,11 +1465,11 @@ FIELD is specific option, e.g. `IndentWidth'.  IS-NUM is a
 boolean that should be set to 1 if the option is numeric,
 otherwise assumed alphabetic."
     (if is-num
-        (let ((primary-match (s-match (concat "^" field ":[ \t]*[0-9]+") config-str)))
+        (let ((primary-match (s-match (concat "^[ \t]*" field ":[ \t]*[0-9]+") config-str)))
           (if primary-match
               (string-to-number (car (s-match "[0-9]+" (car primary-match))))
             0))
-      (let ((primary-match (s-match (concat "^" field ":[ \t]*[A-Za-z]+") config-str)))
+      (let ((primary-match (s-match (concat "^[ \t]*" field ":[ \t]*[A-Za-z]+") config-str)))
         (if primary-match
             (car (s-match "[A-Za-z]+$" (car primary-match)))
           ""))))
@@ -1366,6 +1521,13 @@ otherwise assumed alphabetic."
                                            ((equal "GNU" base-style)
                                             (c-set-style "gnu"))))))))))
 
+;; (use-package flycheck-clang-tidy
+;;   :straight (flycheck-clang-tidy :type git :host github :repo "matthuszagh/flycheck-clang-tidy")
+;;   :after (flycheck)
+;;   :hook (flycheck-mode . #'flycheck-clang-tidy-setup)
+;;   :config
+;;   (add-to-list 'flycheck-checkers 'c/c++-clang-tidy))
+
 ;; Provides better C++ code highlighting.
 (use-package modern-cpp-font-lock
   :functions modern-c++-font-lock-global-mode
@@ -1392,6 +1554,7 @@ otherwise assumed alphabetic."
   :mode "\\.es$")
 
 ;; Code completions.
+(setq default-company-backends '(company-semantic
                                  company-gtags
                                  company-files
                                  company-keywords
@@ -1461,10 +1624,6 @@ otherwise assumed alphabetic."
   ;; Verilog Verilator static analyzer
   (setq-default flycheck-verilog-verilator-executable "/usr/bin/verilator_bin"))
 
-;; Flycheck for python.
-(use-package flycheck-pyflakes
-  :after python)
-
 ;; Clang static analyzer
 (use-package flycheck-clang-analyzer
   :after flycheck
@@ -1504,8 +1663,6 @@ otherwise assumed alphabetic."
   :config
   (slime-setup '(slime-fancy slime-company)))
 
-(use-package elisp-slime-nav)
-
 (use-package cmake-ide
   :after rtags
   :config
@@ -1543,6 +1700,10 @@ otherwise assumed alphabetic."
 ;; Set fill-column to 50 in commit message buffer.
 (add-hook 'git-commit-setup-hook (lambda ()
                                    (set-fill-column 50)))
+
+(use-package magit-org-todos
+  :config
+  (magit-org-todos-autoinsert))
 
 (use-package evil-magit
   :after (magit transient))
@@ -1599,6 +1760,7 @@ otherwise assumed alphabetic."
 ;; Fast, interactive greping.
 (use-package deadgrep
   :after (dash s spinner))
+;;:bind ("<return>" . deadgrep-visit-result-other-window))
 
 (global-set-key (kbd "<f5>") 'deadgrep)
 
@@ -1627,6 +1789,8 @@ otherwise assumed alphabetic."
                              (set (make-local-variable 'company-backends)
                                   (list
                                    (cons 'company-restclient default-company-backends))))))
+
+(use-package request)
 
 ;; auctex
 (defun insert-frac ()
@@ -1688,10 +1852,15 @@ otherwise assumed alphabetic."
 (add-hook 'LaTeX-mode-hook '(lambda () (interactive)
                               (if (null (TeX-PDF-mode))
                                   (command-execute 'TeX-PDF-mode))))
+(defun my-add-auctex-file-variables ()
+  (interactive)
+  (if (and (not buffer-read-only)
+           (string= (file-name-extension (buffer-file-name)) "tex"))
+      (progn
+        (add-file-local-variable 'coding 'utf-8)
+        ;; (add-file-local-variable 'TeX-engine 'xetex)
+        (goto-char (point-min)))))
 
-(add-hook 'plain-TeX-mode-hook '(lambda () (interactive)
-                                  (if (TeX-PDF-mode)
-			              (command-execute 'TeX-PDF-mode))))
 (use-package tex-site
   :straight auctex
   ;; When we byte-compile we need to have the autoloads loaded in order to
@@ -1709,6 +1878,7 @@ otherwise assumed alphabetic."
          (LaTeX-mode . turn-on-reftex)
          (LaTeX-mode . add-auctex-keys)
          (LaTeX-mode . LaTeX-math-mode)
+         (TeX-mode . my-add-auctex-file-variables)
          (plain-TeX-mode . (lambda ()
                              (setq flycheck-disabled-checkers '(tex-chktex))))
          (TeX-after-compilation-finished-functions . TeX-revert-document-buffer)
@@ -1872,33 +2042,25 @@ otherwise assumed alphabetic."
   :init
   (setq flyspell-correct-interface #'flyspell-correct-helm))
 
-;; ipython notebooks in gui emacs
-(defvar my:jupyter_location (executable-find "jupyter"))
-(defvar my:jupyter_start_dir "/home/matt/.jupyter")
-;; Only launch if the executable exists.
-(if (and my:jupyter_location
-         my:jupyter_start_dir)
-    (use-package ein
-      :bind (("<f2>" . ein:connect-to-notebook)
-             :map ein:connect-mode-map
-             ;; Preserve "M-," for jumping back after jumping to a definition, etc.
-             ("M-," . nil))
-      :commands (ein:jupyter-server-start)
-      :hook (ein:notebook-multilang-mode . (lambda ()
-                                             (display-line-numbers-mode -1)))
-      :defer 5
-      :config
-      (require 'ein-notebook)
-      (require 'ein-subpackages)
-      ;; when editing the emacs.el file, we do not want to start a new
-      ;; Jupyter server each time we save, so we only start a new Jupyter
-      ;; server if there currently isn't one running.
-      (defvar my-found-ein-server nil)
-      (dolist (my-current-process (process-list))
-        (when (string-match "EIN: Jupyter*" (process-name my-current-process))
-          (setq my-found-ein-server t)))
-      (when (not my-found-ein-server)
-        (ein:jupyter-server-start my:jupyter_location my:jupyter_start_dir))))
+(use-package ein
+  :init
+  (defvar my-jupyter-location (executable-find "jupyter"))
+  (defvar my-jupyter-start-dir "/home/matt/.jupyter")
+  :bind (("<f2>" . ein:connect-to-notebook)
+         :map ein:connect-mode-map
+         ;; Preserve "M-," for jumping back after jumping to a definition, etc.
+         ("M-," . nil))
+  :hook (ein:notebook-multilang-mode . (lambda ()
+                                         (display-line-numbers-mode -1)))
+  :config
+  (require 'ein-notebook)
+  (require 'ein-subpackages)
+  (setq ein:polymode t)
+  (ein:run my-jupyter-location my-jupyter-start-dir)
+  ;; (ein:jupyter-server-start my-jupyter-location my-jupyter-start-dir)
+  )
+
+(use-package mediawiki)
 
 (use-package cuda-mode
   :mode (("\\.cu\\'" . cuda-mode)
@@ -1923,12 +2085,6 @@ otherwise assumed alphabetic."
 (use-package dockerfile-mode
   :mode ("Dockerfile"))
 
-;; Allows the use of tmux in Emacs.
-(use-package emamux
-  :bind-keymap ("C-c e" . emamux:keymap)
-  :config
-  (setq emamux:completing-read-type 'helm))
-
 (use-package multi-term
   :after (evil)
   :bind (("<C-next>" . multi-term-next)
@@ -1936,9 +2092,6 @@ otherwise assumed alphabetic."
          ("C-c t" . multi-term-next)
          ("<f1>" . multi-term))
   :config
-  (require 'multi-term-ext)
-  (setq multi-term-program "/bin/bash"))
-
   (setq multi-term-program "/bin/bash")
   (setq term-bind-key-alist
         (list (cons "C-c C-c" 'term-interrupt-subjob)
@@ -2006,12 +2159,12 @@ provided by `bookmark.el'.  I've modified it to be called
 non-interactively."
   (bookmark-maybe-historicize-string bookmark-name)
   (bookmark-maybe-load-default-file)
-    (bookmark-set-filename bookmark-name newloc)
-    (setq bookmark-alist-modification-count
-          (1+ bookmark-alist-modification-count))
-    (if (bookmark-time-to-save-p)
-        (bookmark-save))
-    (bookmark-bmenu-surreptitiously-rebuild-list))
+  (bookmark-set-filename bookmark-name newloc)
+  (setq bookmark-alist-modification-count
+        (1+ bookmark-alist-modification-count))
+  (if (bookmark-time-to-save-p)
+      (bookmark-save))
+  (bookmark-bmenu-surreptitiously-rebuild-list))
 
 (defun move-book (src dst)
   "Move library book and update the bookmarks file.
@@ -2042,44 +2195,28 @@ You will be prompted to confirm the filename later."
   (find-file org-books-file)
   (evil-window-left 1))
 
-(use-package smartparens
-  :config
-  (require 'smartparens-config)
-  (sp-pair "$" "$" :wrap "C-$")
-  (smartparens-global-mode t)
-  (define-key smartparens-mode-map (kbd "M-<delete>") 'sp-unwrap-sexp))
+;; (require 'tracker-dired)
 
-(use-package evil-smartparens
-  :after smartparens
-  :hook
-  (smartparens-enabled . evil-smartparens-mode))
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
 
 (use-package helpful
+  :bind (("C-h f" . helpful-function)
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key))
   :config
   (global-set-key (kbd "C-c C-d") #'helpful-at-point))
 
-;;;; Appearance
+(use-package xwidgete)
 
-(use-package sourcerer-theme
+(use-package polymode)
+
+(use-package poly-org
+  :after (polymode org)
   :config
-  (load-theme 'sourcerer t))
-
-(set-face-background 'hl-line "gray16")
-
-(set-face-attribute 'cursor nil :foreground "#c2c2b0")
-(setq default-frame-alist '((cursor-color . "#c2c2b0")))
-;; Start emacsclient maximized.
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-;; Set font.
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-8"))
-
-(use-package smart-mode-line
-  :init
-  :after sourcerer-theme
-  :config
-  (setq sml/theme 'respectful)
-  (setq sml/name-width 40)
-  (sml/setup))
+  (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
+;; (use-package poly-markdown)
 
 (provide 'init)
 ;;; init.el ends here

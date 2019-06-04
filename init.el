@@ -632,10 +632,6 @@ amount of spaces."
                             (set (make-local-variable 'company-backends)
                                  (list '(company-c-headers company-rtags company-files))))))
   :config
-  (setq c-basic-offset 8
-	tab-width 8
-	indent-tabs-mode t)
-  (setq compile-command my:compile-command))
   (setq tab-width 8)
   (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "linux"))))
 

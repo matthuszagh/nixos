@@ -962,12 +962,6 @@ rotate entire document."
   (evil-mode 1)
   ;; Evil sets keys in an unusual way and so we must use the define key directive instead of the
   ;; typical :bind.
-  (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
-  (define-key evil-visual-state-map (kbd "C-u") 'evil-scroll-up)
-  (define-key evil-insert-state-map (kbd "C-u")
-    (lambda ()
-      (interactive)
-      (evil-delete (point-at-bol) (point))))
   ;; Evil binds M-. which overrides the behavior of counsel-etags find tag.
   ;; This only seems to be an issue in normal mode with this keybinding.
   ;; If others are issues, perform similar actions with them.

@@ -1156,6 +1156,25 @@ rotate entire document."
         (helm-make-source "Occur" 'helm-source-multi-occur
           :follow 1)))
 
+(use-package dash-docs
+  :straight (dash-docs :type git :host github :repo "dash-docs-el/dash-docs")
+  :config
+  (setq dash-docs-browser-func 'eww)
+  (defmacro set-docset (hook &rest docsets)
+    (list 'add-hook (list 'quote hook)
+          (list 'lambda ()
+                (list 'setq-local 'dash-docs-docsets (list 'quote docsets)))))
+  (set-docset emacs-lisp-mode-hook "Emacs Lisp")
+  (set-docset c-mode-hook "C")
+  (set-docset c++-mode-hook "C" "C++")
+  (set-docset cmake-mode-hook "CMake")
+  (set-docset python-mode-hook "Python 3")
+  (set-docset css-mode-hook "CSS")
+  (set-docset html-mode-hook "HTML"))
+
+(use-package helm-dash
+  :after dash-docs)
+
 (use-package projectile
   :after (helm)
   :bind ("C-c p" . helm-projectile)

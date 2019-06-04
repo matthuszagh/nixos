@@ -1217,6 +1217,8 @@ rotate entire document."
          ("C-c <" . helm-gtags-previous-history)
          ("C-c >" . helm-gtags-next-history)))
 
+(use-package helm-eww)
+
 ;; Package window-numbering installed from package list
 ;; Allows switching between buffers using meta-(# key)
 (use-package window-numbering

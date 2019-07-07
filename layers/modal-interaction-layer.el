@@ -1,0 +1,166 @@
+;;; modal-interaction-layer.el -*- lexical-binding: t; -*-
+
+;;; Code:
+
+(layer-def modal-interaction
+  :presetup
+  (:layer straight
+          (straight-use-package 'evil)
+          (straight-use-package 'evil-collection)
+          (straight-use-package 'evil-surround))
+
+  (:layer keybinding-management
+          ;; Commands begin with `SPC' in normal mode and `C-SPC' in insert mode.
+          (general-define-key
+           :states '(emacs normal insert visual)
+           :keymaps 'override
+           :prefix "SPC"
+           :non-normal-prefix "C-SPC"
+           :prefix-command 'mh/command-prefix
+           :prefix-map 'mh/prefix-map)
+
+          ;; major mode bindings
+          (general-create-definer localleader
+            :states '(emacs normal insert visual)
+            :prefix ","
+            :non-normal-prefix "C-,")
+
+          ;; bindings for programming modes, but agnostic to the
+          ;; specific language. e.g. jump to definition
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "p"
+           :prefix-command 'mh/command-prog-prefix
+           :prefix-map 'mh/prefix-prog-map)
+
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "w"
+           :prefix-command 'mh/command-window-prefix
+           :prefix-map 'mh/prefix-window-map
+           "d" 'delete-window
+           "f" 'delete-other-windows
+           "S" 'split-window-below
+           "s" 'split-window-right
+           "m" 'mh/switch-to-minibuffer)
+
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "b"
+           :prefix-command 'mh/command-buffer-prefix
+           :prefix-map 'mh/prefix-buffer-map
+           "r" 'revert-buffer
+           "k" 'kill-buffer)
+
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "f"
+           :prefix-command 'mh/command-file-prefix
+           :prefix-map 'mh/prefix-file-map
+           "s" 'basic-save-buffer
+           "o" 'find-file-other-window
+           ;; "f" 'find-file
+           "F" 'mh/sudo-find-file
+           "c" 'mh/copy-file-name
+           "C" 'mh/copy-file-path)
+
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "z"
+           :prefix-command 'mh/command-format-prefix
+           :prefix-map 'mh/prefix-format-map
+           "i" 'mh/indent-buffer)
+
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "s"
+           :prefix-command 'mh/command-search-prefix
+           :prefix-map 'mh/prefix-search-map
+           "r" 'query-replace-regexp)
+
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "h"
+           :prefix-command 'mh/command-help-prefix
+           :prefix-map 'mh/prefix-help-map)
+
+          (general-define-key
+           :keymaps 'mh/prefix-map
+           :prefix "u"
+           :prefix-command 'mh/command-undo-prefix
+           :prefix-map 'mh/prefix-undo-map))
+
+  :setup
+  (use-package evil
+    :demand t
+    :init
+    (setq evil-want-integration t) ; This is optional since it's already set to t by default.
+    (setq evil-want-keybinding nil)
+    :general
+    (:keymaps 'mh/prefix-window-map
+              "h" 'evil-window-left
+              "j" 'evil-window-down
+              "k" 'evil-window-up
+              "l" 'evil-window-right
+              "H" 'evil-window-move-far-left
+              "J" 'evil-window-move-very-bottom
+              "K" 'evil-window-move-very-top
+              "L" 'evil-window-move-far-right)
+    :config
+    (evil-mode 1))
+
+  (use-package evil-collection
+    :after (evil)
+    :config
+    (evil-collection-init)
+
+    ;; TODO relocate these to appropriate postinits.
+    ;; TODO use general-def instead of evil-define-key
+    ;; Jump to the bottom of the window when entering insert mode in terminal.
+    ;; comint-mode configuration
+    ;;
+    ;; Same behavior for comint modes. Prevent this when in the middle of the line at the command
+    ;; line. This allows evil navigation to edit the current command. I'd like this for term-mode too,
+    ;; but it's much trickier (see emacs tex file).
+    (evil-collection-define-key 'normal 'comint-mode-map (kbd "i")
+      (lambda ()
+        (interactive)
+        (if (eq (line-number-at-pos)
+                (+ (evil-count-lines (point-min) (point-max)) 1))
+            (evil-insert-state)
+          (progn (comint-show-maximum-output)
+                 (evil-insert-state)))))
+    ;; Use C-p and C-n to cycle through inputs for consistency with term-mode.
+    (evil-collection-define-key 'insert 'comint-mode-map
+      (kbd "C-p") #'comint-previous-input
+      (kbd "C-n") #'comint-next-input)
+
+    ;; pdf-tools mode configuration
+    ;; (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
+    ;; (evil-collection-define-key 'normal 'pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
+
+    ;; doc-view-mode configuration
+    ;;
+    ;; Use the same page navigation in doc-view as in pdf-mode.
+    (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "j") 'doc-view-next-page)
+    (evil-collection-define-key 'normal 'doc-view-mode-map (kbd "k") 'doc-view-previous-page)
+
+    ;; org-mode configuration
+    (evil-collection-define-key 'normal 'org-mode-map (kbd "<tab>") 'org-cycle)
+
+    ;; proced-mode configuration
+    (evil-collection-define-key 'normal 'proced-mode-map (kbd "q") (lambda () (interactive)
+                                                                     (quit-window)
+                                                                     (command-execute 'symon-mode)))
+    ;; elpy and python
+    (evil-collection-define-key 'normal 'python-mode-map (kbd "M-.") 'elpy-goto-definition)
+    (evil-collection-define-key 'normal 'python-mode-map (kbd "C-M-.") 'elpy-goto-definition-other-window)
+
+    ;; elisp
+    (evil-collection-define-key 'normal 'emacs-lisp-mode-map (kbd "M-.") 'xref-find-definitions))
+
+  (use-package evil-surround
+    :config
+    (global-evil-surround-mode 1)))
+
+;;; modal-interaction-layer.el ends here

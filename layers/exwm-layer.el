@@ -17,11 +17,10 @@
     (add-hook 'exwm-randr-screen-change-hook
               (lambda ()
                 (start-process-shell-command
-                 "xrandr1" nil "xrandr --output eDP-1-1 --right-of DP-0 --auto")))
-    ;; "xrandr1" nil "xrandr --output DP-0 --left-of eDP-1-1 --auto")))
-    ;; "xrandr1" nil "xrandr --output DP-0 --left-of eDP-1-1 --auto")))
-    ;;              (start-process-shell-command
-    ;;               "xrandr2" nil "xrandr --output DP-2 --right-of eDP-1-1 --auto")))
+                 "xrandr" nil (concat "xrandr --output eDP-1-1 --auto "
+                                      "--output DP-0 --left-of eDP-1-1 "
+                                      "--output DP-2 --right-of eDP-1-1"))))
+    (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0" 2 "DP-2"))
     (exwm-randr-enable)))
 
 ;;; exwm-layer.el ends here

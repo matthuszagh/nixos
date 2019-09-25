@@ -1,11 +1,11 @@
-;;; multiple-cursors-layer.el -*- lexical-binding: t; -*-
+;;; multiple-cursors-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def multiple-cursors
   :presetup
   (:layer straight
-          (straight-use-package 'multiple-cursors))
+   (straight-use-package 'multiple-cursors))
 
   :setup
   (electric-pair-mode 1)
@@ -17,8 +17,8 @@
 
   :postsetup
   (:layer keybinding-management
-          (general-def
-            "M-j" 'mc/mark-next-like-this
-            "M-k" 'mc/mark-previous-like-this)))
+   (general-def
+     "M-j" 'mc/mark-next-like-this
+     "M-k" 'mc/mark-previous-like-this)))
 
 ;;; multiple-cursors-layer.el ends here

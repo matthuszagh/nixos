@@ -1,4 +1,4 @@
-;;; programming-layer.el -*-lexical-binding: t; -*-
+;;; programming-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 

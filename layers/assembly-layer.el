@@ -1,4 +1,4 @@
-;;; assembly-layer.el -*- lexical-binding: t; -*-
+;;; assembly-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -7,7 +7,7 @@
 
   :presetup
   (:layer straight
-          (straight-use-package 'x86-lookup))
+   (straight-use-package 'x86-lookup))
 
   :setup
   ;; Lookup Intel assembly mnemonics in Intel documentation.

@@ -1,4 +1,4 @@
-;;; shell-layer.el -*-lexical-binding: t; -*-
+;;; shell-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -12,29 +12,40 @@
                      (setq-local scroll-margin 0)
                      (setq-local scroll-conservatively 101))))
     :config
-    (add-to-list 'same-window-buffer-names "*shell*"))
+    (add-to-list 'same-window-buffer-names "*shell*")
+    ;; (setq explicit-shell-file-name "/home/matt/.nix-profile/bin/fish")
+    (setq explicit-shell-file-name nil)
+    )
 
   (use-package eshell
     :hook
     ((eshell-mode . (lambda ()
                       (setq-local scroll-margin 0)
-                      (setq-local scroll-conservatively 101)))))
-
-  (use-package load-bash-alias
-    :ensure t
+                      (setq-local scroll-conservatively 101))))
     :config
-    (setq load-bash-alias-bashrc-file "~/.bashrc"))
+    ;; TODO not sure if this works
+    (setq eshell-buffer-maximum-lines 0))
+
+  ;; Don't truncate terminal output
+  (setq term-buffer-maximum-size 0)
 
   :postsetup
-  (:layer keybinding-management
-          (general-def mh/prefix-map
-            "c" 'async-shell-command
-            "C" 'eshell))
-  ;; (:layer completions
-  ;;         (straight-use-package 'bash-completion)
-  ;;         (use-package bash-completion
-  ;;           :config
-  ;;           (bash-completion-setup)))
-  )
+  (:layer modal
+   (general-def mh/prefix-shell-map
+     "c" 'async-shell-command
+     "e" 'eshell
+     "t" 'term)
+
+   (localleader :keymaps 'term-line-mode
+     "c" 'comint-clear-buffer))
+
+  (:layer completions
+   (use-package bash-completion
+     :config
+     (bash-completion-setup))
+   (use-package fish-completion
+     :config
+     (global-fish-completion-mode)
+     (setq fish-completion-fallback-on-bash-p t))))
 
 ;;; shell-layer.el ends here

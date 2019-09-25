@@ -1,4 +1,4 @@
-;;; documentation-layer.el -*- lexical-binding: t; -*-
+;;; documentation-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 

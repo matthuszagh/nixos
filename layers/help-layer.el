@@ -1,11 +1,11 @@
-;;; help-layer.el -*- lexical-binding: t; -*-
+;;; help-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def help
   :presetup
   (:layer straight
-          (straight-use-package 'helpful))
+   (straight-use-package 'helpful))
 
   :setup
   (use-package helpful
@@ -17,14 +17,14 @@
 
   :postsetup
   (:layer keybinding-management
-          (general-def mh/prefix-help-map
-            "h" 'helpful-at-point
-            "f" 'helpful-function
-            "v" 'helpful-variable
-            "k" 'helpful-key
-            "M" 'helpful-macro
-            "i" 'helm-info
-            ;; TODO this should also depend on helm layer
-            "m" 'helm-man-woman)))
+   (general-def mh/prefix-help-map
+     "h" 'helpful-at-point
+     "f" 'helpful-function
+     "v" 'helpful-variable
+     "k" 'helpful-key
+     "M" 'helpful-macro
+     "i" 'helm-info
+     ;; TODO this should also depend on helm layer
+     "m" 'helm-man-woman)))
 
 ;;; help-layer.el ends here

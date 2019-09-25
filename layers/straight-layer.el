@@ -1,4 +1,4 @@
-;;; straight-layer.el -*-lexical-binding: t; -*-
+;;; straight-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 

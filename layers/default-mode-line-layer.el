@@ -1,4 +1,4 @@
-;;; default-mode-line-layer.el -*-lexical-binding: t; -*-
+;;; default-mode-line-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -6,7 +6,7 @@
   :depends (base no-littering)
   :presetup
   (:layer straight
-          (straight-use-package 'smart-mode-line))
+   (straight-use-package 'smart-mode-line))
 
   :setup
   (use-package smart-mode-line

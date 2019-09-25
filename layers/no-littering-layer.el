@@ -1,4 +1,4 @@
-;;; no-littering-layer.el -*-lexical-binding: t; -*-
+;;; no-littering-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -7,7 +7,7 @@
   :depends (base)
   :presetup
   (:layer straight
-          (straight-use-package 'no-littering))
+   (straight-use-package 'no-littering))
 
   :setup
   (use-package no-littering

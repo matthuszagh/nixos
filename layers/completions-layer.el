@@ -1,11 +1,11 @@
-;;; completions-layer.el -*- lexical-binding: t; -*-
+;;; completions-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def completions
   :presetup
   (:layer straight
-          (straight-use-package 'company))
+   (straight-use-package 'company))
 
   :setup
   (use-package company
@@ -22,12 +22,16 @@
     (setq company-backends '(company-files
                              company-keywords
                              company-capf
-                             company-dabbrev
+                             ;; company-dabbrev
                              company-dabbrev-code)))
 
   :postsetup
   (:layer keybinding-management
-          (general-def
-            "C-<return>" 'company-complete-selection)))
+   (general-def
+     "C-<return>" 'company-complete-selection))
+  (:layer lsp
+   (use-package company-lsp
+     :config
+     (add-to-list 'company-backends 'company-lsp))))
 
 ;;; completions-layer.el ends here

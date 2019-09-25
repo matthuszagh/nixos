@@ -29,7 +29,7 @@
 ;; ;; TODO move this to :presetup when that's working and nixpkgs is setup.
 ;; (straight-use-package '(layers :local-repo "layers"))
 
-(load "~/src/layers/layers.el")
+;; (load "~/src/layers/layers.el")
 
 (add-to-list 'load-path (concat user-emacs-directory "layers"))
 (require 'use-package)
@@ -42,19 +42,50 @@
   :config
   (declare-layers '(base
                     keybinding-management
-                    ;; straight
-                    modal-interaction
+                    modal
                     multiple-cursors
                     no-littering
+                    mail
+                    recoll
+                    ledger
+                    pinentry
+
+                    ;; appearance
                     default-theme
                     default-mode-line
                     rainbow-delimiters
+
+                    ;; programming
                     programming
                     vcs
                     completions
                     shell
                     assembly
                     nix
+                    c
+                    lsp
+                    ;; ccls
+                    cmake
+                    sysadmin
+                    octave
+                    clisp
+                    elisp
+                    flycheck
+                    refactor
+                    dumb-jump
+                    calc
+                    verilog
+                    python
+                    sx
+                    elfeed
+                    make
+                    debugging
+                    sage
+                    tex
+                    sql
+                    scad
+
+                    ;; formatting
                     indenting
                     formatting
                     documentation
@@ -65,7 +96,7 @@
                     help
                     org
                     markdown
-                    style
+                    writing
                     exwm
                     pdf
                     epub

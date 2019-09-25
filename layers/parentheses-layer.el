@@ -1,11 +1,11 @@
-;;; parentheses-layer.el -*-lexical-binding: t; -*-
+;;; parentheses-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def rainbow-delimiters
   :presetup
   (:layer straight
-          (straight-use-package 'rainbow-delimiters))
+   (straight-use-package 'rainbow-delimiters))
 
   :setup
   (use-package rainbow-delimiters

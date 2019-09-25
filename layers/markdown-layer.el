@@ -1,11 +1,11 @@
-;;; markdown-layer.el -*-lexical-binding: t; -*-
+;;; markdown-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def markdown
   :presetup
   (:layer straight
-          (straight-use-package 'markdown-mode))
+   (straight-use-package 'markdown-mode))
 
   :setup
   (use-package markdown-mode

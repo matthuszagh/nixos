@@ -1,22 +1,34 @@
-;;; org-layer.el -*- lexical-binding: t; -*-
+;;; org-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def org
   :presetup
   (:layer straight
-          (straight-use-package 'polymode)
-          (straight-use-package 'poly-org))
+   (straight-use-package 'polymode)
+   (straight-use-package 'poly-org))
   (:layer (straight helm)
-          (straight-use-package 'helm-org-rifle))
+   (straight-use-package 'helm-org-rifle))
+  (:layer modal
+   (general-def 'normal 'motion
+     "<tab>" nil))
 
   :setup
   (use-package org
     :demand t
     :hook
     ((org-mode . (lambda ()
-                   (setq-local fill-column 70))))
+                   (setq-local fill-column 70)))
+     (org-babel-after-execute . org-display-inline-images))
     :config
+    ;; TODO this is probably the wrong way to do this, but it does get
+    ;; rid of this really annoying issue.
+    (general-define-key
+     :keymaps 'evil-motion-state-map
+     "TAB" 'org-cycle
+     "C-RET" 'org-insert-heading-respect-content
+     "RET" 'org-insert-heading-respect-content)
+
     (setq org-startup-with-latex-preview t)
     (setq org-startup-with-inline-images t)
 
@@ -33,20 +45,39 @@
           (cons '(:noweb . "yes")
                 (assq-delete-all :noweb org-babel-default-header-args)))
 
-    ;; ;; use habits
-    ;; (add-to-list 'org-habit org-modules)
-    ;; (setq org-habit-show-habits nil)
+    ;; use habits
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-show-habits nil)
+
+    ;; org-drill
+    (add-to-list 'org-modules 'org-drill)
+    (setq org-drill-hide-item-headings-p t)
+
+    ;; property inheritance
+    (setq org-use-property-inheritance t)
 
     ;; agenda view
     (setq org-agenda-custom-commands
           '(("c" "Custom agenda view"
              ((tags-todo "work"
-                         ((org-agenda-overriding-header "Work")))
-              (agenda "" ((org-agenda-span 1)))
-              (tags-todo "productivity"
-                         ((org-agenda-overriding-header "Productivity")))
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Work")))
+              (agenda "" ((org-agenda-span 'day)))
+              (tags-todo "+nix+PRIORITY=\"A\""
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Nix")))
+              (tags-todo "+emacs+PRIORITY=\"A\""
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Emacs")))
               (tags-todo "read"
-                         ((org-agenda-overriding-header "Read")))))))
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Read")))
+              (tags-todo "physics"
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Physics")))
+              (tags-todo "electronics"
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Electronics")))))))
 
     ;; todo statistics should display all recursive children
     (setq org-hierarchical-todo-statistics nil)
@@ -79,9 +110,12 @@
     ;; don't display emphasis characters
     (setq org-hide-emphasis-markers t)
 
+    ;; don't trigger error for broken links during export
+    (setq org-export-with-broken-links t)
+
     ;; permit still typing emphasis characters as normal characters
     ;; see https://emacs.stackexchange.com/a/16746/20317
-    (defun modi/org-entity-get-name (char)
+    (defun mh/org-entity-get-name (char)
       "Return the entity name for CHAR. For example, return \"ast\" for *."
       (let ((ll (append org-entities-user
                         org-entities))
@@ -95,7 +129,7 @@
                 (setq name (car e))
                 (throw 'break name)))))))
 
-    (defun modi/org-insert-org-entity-maybe (&rest args)
+    (defun mh/org-insert-org-entity-maybe (&rest args)
       "When the universal prefix C-u is used before entering any character,
   insert the character's `org-entity' name if available.
 
@@ -112,7 +146,7 @@
       (let ((pressed-key (substring (this-command-keys) -1))
             entity-name)
         (when (and (listp args) (eq 4 (car args)))
-          (setq entity-name (modi/org-entity-get-name pressed-key))
+          (setq entity-name (mh/org-entity-get-name pressed-key))
           (when entity-name
             (setq entity-name (concat "\\" entity-name "{}"))
             (insert entity-name)
@@ -125,9 +159,9 @@
                              "."))))
         entity-name))
 
-    ;; Run `org-self-insert-command' only if `modi/org-insert-org-entity-maybe'
+    ;; Run `org-self-insert-command' only if `mh/org-insert-org-entity-maybe'
     ;; returns nil.
-    (advice-add 'org-self-insert-command :before-until #'modi/org-insert-org-entity-maybe)
+    (advice-add 'org-self-insert-command :before-until #'mh/org-insert-org-entity-maybe)
     (setq org-pretty-entities t)
 
     ;; set inline code appearance
@@ -140,7 +174,7 @@
     (setq org-log-done 'time
           org-todo-keyword-faces '(("INPROGRESS" . (:foreground "#cc8800"))))
     (setq org-todo-keywords
-          '((sequence "HOLD" "TODO" "STARTED" "|" "DONE" "CANCELLED")))
+          '((sequence "HOLD" "TODO" "|" "DONE" "CANCELLED")))
     ;; (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
     (setq org-capture-templates
           ;;         '(("b" "Book" entry (file book-file)
@@ -159,20 +193,31 @@
           ;; :OpenLibrary-URL:\n\
           ;; :ISBN:\n\
           ;; :END:\n%?" :empty-lines 1))
-          '(("p" "pdf" entry (file "/home/matt/doc/notes/wiki.org")
-             (concat "* %f\n"
-                     ":PROPERTIES:\n"
-                     ":Filepath: %a\n"
-                     ":END:\n"
-                     "** description\n"
-                     "** outline [/]\n"
-                     "%(mh/pdf-outline-to-org-headline \"%F\" 2 t)"))))
+          '(("b" "pdf" entry (file "/home/matt/doc/notes/wiki.org")
+             "* %f
+:PROPERTIES:
+:Filepath: %a
+:END:
+** description
+** outline [/]
+%(mh/pdf-outline-to-org-headline \"%F\" 2 nil)")
+            ;; (concat "* %f\n"
+            ;;         ":PROPERTIES:\n"
+            ;;         ":Filepath: %a\n"
+            ;;         ":END:\n"
+            ;;         "** description\n"
+            ;;         "** outline [/]\n"
+            ;;         "%(mh/beta-pdf-outline-to-org-headline \"%F\" 2 nil)"))
+            ("p" "productivity" entry (file+headline "/home/matt/doc/notes/projects/productivity.org" "refile")
+             "* HOLD %^{PROMPT}")
+            ("w" "work" entry (file+headline "/home/matt/doc/notes/projects/work.org" "refile")
+             "* HOLD %^{PROMPT}")))
     (setq org-agenda-files (append
                             '("/home/matt/src/dotfiles/README.org")
                             (directory-files-recursively "/home/matt/doc/notes" "org$")))
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 10))))
     (setq org-refile-use-outline-path t)
-    ;; (setq org-agenda-files (list book-file emacs-file system-file))
+    (setq org-agenda-follow-mode t)
     ;; include plain lists in org cycling, which folds lists by default when a heading is first
     ;; expanded.
     (setq org-cycle-include-plain-lists 'integrate)
@@ -186,10 +231,25 @@
     ;; children.
     (setq org-checkbox-hierarchical-statistics nil)
 
+    (setq org-latex-default-class "standalone")
     (add-to-list 'org-latex-packages-alist
                  '("" "tikz" t))
     (add-to-list 'org-latex-packages-alist
+                 '("" "pgfplots" t))
+    (add-to-list 'org-latex-packages-alist
                  '("" "circuitikz" t))
+    (add-to-list 'org-latex-packages-alist
+                 '("" "tikz-timing" t))
+    (add-to-list 'org-latex-packages-alist
+                 '("" "mathtools" t))
+    (add-to-list 'org-latex-packages-alist
+                 '("" "incgraph" t))
+    (add-to-list 'org-latex-packages-alist
+                 '("" "siunitx" t))
+    (add-to-list 'org-latex-packages-alist
+                 '("" "bm" t))
+    (add-to-list 'org-latex-packages-alist
+                 '("" "tabularx" t))
     (setq org-latex-create-formula-image-program 'imagemagick)
     ;; necessary for drawing electronics circuits with tikz using the `circuits' library.
     ;; (setq org-format-latex-header
@@ -202,8 +262,8 @@
     (org-clock-persistence-insinuate)
 
     ;; set the column view format to include effort
-    (setq org-columns-default-format (concat "%40ITEM(Task) "
-                                             "%TODO %3PRIORITY "
+    (setq org-columns-default-format (concat "%60ITEM(Task) "
+                                             ;; "%TODO %3PRIORITY "
                                              "%17Effort(Estimated Effort){:} "
                                              "%CLOCKSUM"))
     ;; keep the same column format in the agenda columns view
@@ -262,10 +322,12 @@
        (sqlite . t)))
 
     ;; org crypt
-    (require 'org-crypt)
-    (org-crypt-use-before-save-magic)
-    (setq org-tags-exclude-from-inheritance (quote ("crypt")))
-    (setq org-crypt-key "huszaghmatt@gmail.com")
+    (use-package org-crypt
+      :config
+      (setq org-crypt-disable-auto-save t)
+      (org-crypt-use-before-save-magic)
+      (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+      (setq org-crypt-key "huszaghmatt@gmail.com"))
 
     ;; identify org headlines with UUIDs
     ;; see https://writequit.org/articles/emacs-org-mode-generate-ids.html
@@ -276,133 +338,329 @@
     ;; TODO modify this for nixpkgs
     (add-to-list 'load-path "~/.emacs.d/straight/repos/org/contrib/lisp" t))
 
-  (use-package polymode)
+  ;; (use-package polymode)
 
-  (use-package poly-org
-    :after (polymode org)
-    :config
-    (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
+  ;; (use-package poly-org
+  ;;   :after (polymode org)
+  ;;   :config
+  ;;   (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
 
   (use-package org-edna
     :config
     (org-edna-load))
 
+  (use-package ob-sagemath
+    :config
+    (setq org-babel-default-header-args:sage '((:session . t)
+                                               (:results . "output"))))
+
+  ;; use org-board for web archival
+  (use-package org-board
+    ;; :config
+    ;; (setq org-board-wget-switches '("-e robots=off"
+    ;;                                 "--page-requisites"
+    ;;                                 "--adjust-extension"
+    ;;                                 "--convert-links"
+    ;;                                 "--recursive"
+    ;;                                 "-l 1"
+    ;;                                 "--span-hosts"))
+    )
+
   :postsetup
   (:layer pdf
-          (defun mh/open-book-from-outline ()
-            (interactive)
-            (setq file (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "Filepath")))))))
-            (setq page (string-to-number (car (s-match "[0-9]+"
-                                                       (car (s-match "([0-9]+)" (thing-at-point 'line t)))))))
-            (find-file-other-window file)
-            (pdf-view-goto-page page))
+   (defun mh/open-book-from-outline ()
+     (interactive)
+     (setq file (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "Filepath" t)))))))
+     (setq page (string-to-number (car (s-match "[0-9]+"
+                                                (car (s-match "([0-9]+)" (org-entry-get nil "ITEM")))))))
+     (find-file-other-window file)
+     (pdf-view-goto-page page))
 
-          (defun mh/pdf-outline-to-org-headline (file base-depth todop)
-            "Return a set of org headings from a pdf in FILE.
+   (defun mh/pdf-outline-to-org-headline (file base-depth todop)
+     "Return a set of org headings from a pdf in FILE.
 BASE-DEPTH is the depth (i.e. number of '*') of the destination
 org file headline, and TODOP asks whether we should turn the
 outline into a set of todo entries. Set 1 for yes and 0 for no."
-            (interactive)
-            (if todop
-                (let ((outline (pdf-info-outline file))
-                      (org-outline "")
-                      (first-headline t)
-                      (last-item '()))
-                  (dolist (item outline)
-                    (if last-item
-                        (let-alist last-item
-                          (setq i (+ .depth base-depth))
-                          (while (> i 0)
-                            (setq org-outline (concat org-outline "*"))
-                            (setq i (- i 1)))
-                          (if first-headline
-                              (setq org-outline (concat org-outline " TODO"))
-                            (setq org-outline (concat org-outline " HOLD")))
-                          (setq org-outline (concat org-outline " " .title))
-                          (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))
-                          (if (not (> (alist-get 'depth item) .depth))
-                              (setq org-outline (concat org-outline ":PROPERTIES:\n\
+     (interactive
+      "fPDF file: \nnHeadline Depth: \nSTODO Headline? (t / nil): ")
+     (if todop
+         (let ((outline (pdf-info-outline file))
+               (org-outline "")
+               (first-headline t)
+               (last-item '()))
+           (dolist (item outline)
+             (if last-item
+                 (let-alist last-item
+                   (setq i (+ .depth base-depth))
+                   (while (> i 0)
+                     (setq org-outline (concat org-outline "*"))
+                     (setq i (- i 1)))
+                   (if first-headline
+                       (setq org-outline (concat org-outline " TODO"))
+                     (setq org-outline (concat org-outline " HOLD")))
+                   (setq org-outline (concat org-outline " " .title))
+                   (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))
+                   (if (not (> (alist-get 'depth item) .depth))
+                       (setq org-outline (concat org-outline ":PROPERTIES:\n\
 :TRIGGER: next-sibling todo!(TODO)\n\
 :BLOCKER: previous-sibling\n\
 :END:\n")))
-                          (if (and first-headline
-                                   (not (> (alist-get 'depth item) .depth)))
-                              (setq first-headline nil))))
-                    (setq last-item item))
-                  (let-alist (car (-take-last 1 outline))
-                    (setq i (+ .depth base-depth))
-                    (while (> i 0)
-                      (setq org-outline (concat org-outline "*"))
-                      (setq i (- i 1)))
-                    (if first-headline
-                        (setq org-outline (concat org-outline " TODO"))
-                      (setq org-outline (concat org-outline " HOLD")))
-                    (setq org-outline (concat org-outline " " .title))
-                    (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))
-                    (setq org-outline (concat org-outline ":PROPERTIES:\n\
+                   (if (and first-headline
+                            (not (> (alist-get 'depth item) .depth)))
+                       (setq first-headline nil))))
+             (setq last-item item))
+           (let-alist (car (-take-last 1 outline))
+             (setq i (+ .depth base-depth))
+             (while (> i 0)
+               (setq org-outline (concat org-outline "*"))
+               (setq i (- i 1)))
+             (if first-headline
+                 (setq org-outline (concat org-outline " TODO"))
+               (setq org-outline (concat org-outline " HOLD")))
+             (setq org-outline (concat org-outline " " .title))
+             (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))
+             (setq org-outline (concat org-outline ":PROPERTIES:\n\
 :TRIGGER: next-sibling todo!(TODO)\n\
 :BLOCKER: previous-sibling\n\
 :END:\n")))
-                  org-outline)
-              (let ((outline (pdf-info-outline file))
-                    (org-outline ""))
-                (dolist (item outline)
-                  (let-alist item
-                    (setq i (+ .depth base-depth))
-                    (while (> i 0)
-                      (setq org-outline (concat org-outline "*"))
-                      (setq i (- i 1)))
-                    (setq org-outline (concat org-outline " " .title))
-                    (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))))
-                org-outline))))
+           org-outline)
+       (let ((outline (pdf-info-outline file))
+             (org-outline ""))
+         (dolist (item outline)
+           (let-alist item
+             (setq i (+ .depth base-depth))
+             (while (> i 0)
+               (setq org-outline (concat org-outline "*"))
+               (setq i (- i 1)))
+             (setq org-outline (concat org-outline " " .title))
+             (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))))
+         org-outline))))
+
+  (:layer (pdf modal)
+   (localleader :keymaps 'org-mode-map
+     "b" 'mh/open-book-from-outline))
 
   (:layer helm
-          (use-package helm-org-rifle
-            :config
-            (setq helm-org-rifle-show-path t)
-            (setq helm-org-rifle-test-against-path t)))
+   (use-package helm-org-rifle
+     :config
+     (setq helm-org-rifle-show-path t)
+     (setq helm-org-rifle-test-against-path t))
+   (setq helm-org-headings-max-depth 50))
 
-  (:layer (helm modal-interaction)
-          (general-def mh/prefix-search-map
-            "h" 'helm-org-in-buffer-headings))
+  (:layer (helm modal)
+   (general-def mh/prefix-search-map
+     "h" 'helm-org-in-buffer-headings))
 
-  (:layer modal-interaction
-          ;; local org mode commands
-          (localleader :keymaps 'org-mode-map
-            "T" 'org-babel-tangle
-            "l" 'org-insert-link
-            ":" 'org-set-tags-command
-            "i" 'org-id-get-create
-            "c" 'org-columns
-            "e" 'org-set-effort
-            "a" 'org-archive-subtree)
+  (:layer modal
+   ;; evil appears to override certain org-mode keybindings with the
+   ;; outline-mode counterparts. revert them here.
+   (general-define-key
+    :keymaps 'org-mode-map
+    :states '(normal motion)
+    "<tab>" 'org-cycle)
 
-          ;; org agenda keys
-          ;; override org agenda keys and add back the ones you want
-          ;; (setq org-agenda-mode-map (make-composed-keymap general-override-mode-map))
-          (evil-set-initial-state 'org-agenda-mode 'normal)
-          ;; (general-def 'org-agenda-mode-map
-          ;;   "SPC" nil
-          ;;   "j" nil
-          ;;   "k" nil)
-          (localleader :keymaps 'org-agenda-mode-map
-            "c" 'org-agenda-columns
-            "q" 'org-agenda-quit
-            "i" 'org-agenda-clock-in
-            "o" 'org-agenda-clock-out)
+   (defun mh/tex-insert-frac ()
+     "Insert '\frac{}{}' and position point before the first right brace."
+     (interactive)
+     (insert "\\frac{}{}")
+     (backward-char)
+     (backward-char)
+     (backward-char))
 
-          ;; global org keys
-          (general-define-key
-           :keymaps 'mh/prefix-map
-           :prefix "o"
-           :prefix-command 'mh/command-org-prefix
-           :prefix-map 'mh/prefix-org-map
-           "c" 'org-capture
-           "a" 'org-agenda
-           "l" 'org-store-link
-           "o" 'org-clock-out))
+   (defun mh/tex-insert-text-text ()
+     "Insert '\text{}' and position point inside the brace."
+     (interactive)
+     (insert "\\text{}")
+     (backward-char))
+
+   (defun mh/tex-insert-text-bf ()
+     "Insert '\textbf{}' and position point inside the brace."
+     (interactive)
+     (insert "\\textbf{}")
+     (backward-char))
+
+   (defun mh/tex-insert-text-it ()
+     "Insert '\textit{}' and position point inside the brace."
+     (interactive)
+     (insert "\\textit{}")
+     (backward-char))
+
+   (defun mh/tex-insert-text-tt ()
+     "Insert '\texttt{}' and position point inside the brace."
+     (interactive)
+     (insert "\\texttt{}")
+     (backward-char))
+
+   (defun mh/tex-insert-math-subscript ()
+     "Insert '_{\text{}}' and cursor to point inside middle brace."
+     (interactive)
+     (insert "_{\\text{}}")
+     (backward-char)
+     (backward-char))
+
+   (defun mh/tex-insert-left-delimiter ()
+     "Insert '\left('."
+     (interactive)
+     (insert "\\left("))
+
+   (defun mh/tex-insert-right-delimiter ()
+     "Insert '\right)'."
+     (interactive)
+     (insert "\\right)"))
+
+   (defun mh/tex-insert-sine ()
+     (interactive)
+     (insert "\\sin\\left(\\right)")
+     (backward-char 7))
+
+   (defun mh/tex-insert-cosine ()
+     (interactive)
+     (insert "\\cos\\left(\\right)")
+     (backward-char 7))
+
+   (defun mh/tex-insert-tangent ()
+     (interactive)
+     (insert "\\tan\\left(\\right)")
+     (backward-char 7))
+
+   (defun mh/tex-insert-enviro-align ()
+     (interactive)
+     (insert "\\begin{align*}\n")
+     (insert "  \n")
+     (insert "\\end{align*}")
+     (previous-line)
+     (move-end-of-line nil))
+
+   (defun mh/tex-insert-enviro-equation ()
+     (interactive)
+     (insert "\\begin{equation*}\n")
+     (insert "  \n")
+     (insert "\\end{equation*}")
+     (previous-line)
+     (move-end-of-line nil))
+
+   (defun mh/tex-insert-enviro-tikz ()
+     (interactive)
+     (insert "\\begin{tikzpicture}\n")
+     (insert "  \n")
+     (insert "\\end{tikzpicture}")
+     (previous-line)
+     (move-end-of-line nil))
+
+   (defun mh/tex-insert-enviro-circuitikz ()
+     (interactive)
+     (insert "\\begin{circuitikz}\n")
+     (insert "  \n")
+     (insert "\\end{circuitikz}")
+     (previous-line)
+     (move-end-of-line nil))
+
+   (defun mh/tex-insert-enviro-latex ()
+     (interactive)
+     (insert "\\begin{latex}\n")
+     (insert "  \n")
+     (insert "\\end{latex}")
+     (previous-line)
+     (move-end-of-line nil))
+
+   (defun mh/tex-insert-subscript (arg)
+     (interactive "Msubscript: ")
+     (insert (concat "_{" arg "}")))
+
+   (defun mh/tex-insert-superscript (arg)
+     (interactive "Msuperscript: ")
+     (insert (concat "^{" arg "}")))
+
+   ;; latex insert shortcuts
+   (general-define-key
+    :prefix-command 'mh/command-org-tex-insert-enviro-prefix
+    "a" 'mh/tex-insert-enviro-align
+    "e" 'mh/tex-insert-enviro-equation
+    "t" 'mh/tex-insert-enviro-tikz
+    "c" 'mh/tex-insert-enviro-circuitikz
+    "l" 'mh/tex-insert-enviro-latex)
+
+   (general-define-key
+    :prefix-command 'mh/command-org-tex-insert-text-prefix
+    "t" 'mh/tex-insert-text-text
+    "b" 'mh/tex-insert-text-bf
+    "i" 'mh/tex-insert-text-it
+    "p" 'mh/tex-insert-text-tt)
+
+   (general-define-key
+    :prefix-command 'mh/command-org-tex-insert-prefix
+    "f" 'mh/tex-insert-frac
+    "t" 'mh/command-org-tex-insert-text-prefix
+    "l" 'mh/tex-insert-left-delimiter
+    "r" 'mh/tex-insert-right-delimiter
+    "s" 'mh/tex-insert-sine
+    "c" 'mh/tex-insert-cosine
+    "e" 'mh/command-org-tex-insert-enviro-prefix
+    "_" 'mh/tex-insert-subscript
+    "^" 'mh/tex-insert-superscript)
+
+   ;; local org mode commands
+   (localleader :keymaps 'org-mode-map
+     "T" 'org-babel-tangle
+     "l" 'org-insert-link
+     ":" 'org-set-tags-command
+     "i" 'org-id-get-create
+     "C" 'org-columns
+     "E" 'org-set-effort
+     "I" 'org-clock-in
+     "a" 'org-archive-subtree
+     "s" 'org-insert-structure-template
+     "p" 'org-set-property
+     "t" 'org-todo
+     "r" 'org-refile
+     "e" 'org-edit-special
+     "c" 'org-ctrl-c-ctrl-c
+     "P" 'org-priority
+     "L" 'org-toggle-latex-fragment
+     "z" 'mh/command-org-tex-insert-prefix
+     "o" 'org-open-at-point)
+
+   ;; org agenda keys
+   ;; override org agenda keys and add back the ones you want
+   ;; (setq org-agenda-mode-map (make-composed-keymap general-override-mode-map))
+   (evil-set-initial-state 'org-agenda-mode 'normal)
+   (general-def 'normal org-agenda-mode-map
+     "j" 'org-agenda-next-line
+     "k" 'org-agenda-previous-line)
+
+   (localleader :keymaps 'org-agenda-mode-map
+     "c" 'org-agenda-columns
+     "q" 'org-agenda-quit
+     "i" 'org-agenda-clock-in
+     "o" 'org-agenda-clock-out
+     "t" 'org-agenda-todo
+     "e" 'org-agenda-set-effort)
+
+   ;; global org keys
+   (general-define-key
+    :keymaps 'mh/prefix-map
+    :prefix "o"
+    :prefix-command 'mh/command-org-prefix
+    :prefix-map 'mh/prefix-org-map
+    "c" 'org-capture
+    "a" 'org-agenda
+    "l" 'org-store-link
+    "o" 'org-clock-out
+    "i" 'org-clock-in-last))
 
   (:layer internet
-          (use-package org-eww)))
+   (use-package org-eww))
+
+  :func
+  (setq mh-latex-scale 1.0)
+  (defun mh/increase-latex-scale ()
+    (interactive)
+    (setq mh-latex-scale (+ mh-latex-scale 0.1))
+    (call-interactively 'revert-buffer))
+
+  (defun mh/decrease-latex-scale ()
+    (interactive)
+    (setq mh-latex-scale (- mh-latex-scale 0.1))
+    (call-interactively 'revert-buffer)))
 
 ;;; org-layer.el ends here

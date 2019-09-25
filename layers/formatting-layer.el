@@ -1,11 +1,11 @@
-;;; formatting-layer.el -*- lexical-binding: t; -*-
+;;; formatting-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def formatting
   :presetup
   (:layer straight
-          (straight-use-package 'aggressive-indent))
+   (straight-use-package 'aggressive-indent))
 
   :setup
   (use-package aggressive-indent)
@@ -14,9 +14,9 @@
 
   :postsetup
   (:layer keybinding-management
-          (general-def mh/prefix-format-map
-            "c" 'comment-or-uncomment-region
-            "a" 'align-regexp))
+   (general-def mh/prefix-format-map
+     "c" 'comment-or-uncomment-region
+     "a" 'align-regexp))
   ;;(:layer notes
   ;;      (add-to-list 'org-mode aggressive-indent-excluded-modes))
   )

@@ -1,4 +1,4 @@
-;;; undoing-layer.el -*- lexical-binding: t; -*-
+;;; undoing-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -11,9 +11,9 @@
 
   :postsetup
   (:layer keybinding-management
-          (general-def mh/prefix-undo-map
-            "u" 'undo-tree-undo
-            "r" 'undo-tree-redo
-            "U" 'undo-tree-visualize)))
+   (general-def mh/prefix-undo-map
+     "u" 'undo-tree-undo
+     "r" 'undo-tree-redo
+     "U" 'undo-tree-visualize)))
 
 ;;; undoing-layer.el ends here

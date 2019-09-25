@@ -1,14 +1,15 @@
-;;; tex-layer.el -*-lexical-binding: t; -*-
+;;; tex-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
 (layer-def tex
   :presetup
   (:layer straight
-          (straight-use-package 'auctex))
+   (straight-use-package 'auctex))
 
   :setup
   (use-package tex-site
+    :demand t
     :init
     (defun my-add-auctex-file-variables ()
       (interactive)
@@ -65,7 +66,7 @@
       (local-set-key (kbd "C-c <C-i> r") 'insert-right-delimiter)
       (local-set-key (kbd "C-c C-f") 'indent-buffer))
 
-  (defun latex-indent ()
+    (defun latex-indent ()
       "Run latexindent on the current buffer."
       (interactive)
       (with-no-warnings
@@ -94,7 +95,7 @@
                            (if (null (TeX-PDF-mode))
                                (command-execute 'TeX-PDF-mode))))
            (LaTeX-mode . (lambda ()
-                         (local-set-key (kbd "C-c C-f") 'latex-indent))))
+                           (local-set-key (kbd "C-c C-f") 'latex-indent))))
     :config
     ;; Use latex-mode by default when it is unclear whether plain-tex-mode or latex-mode should be
     ;; used.
@@ -118,6 +119,8 @@
           '("Verbatim" "lstlisting" "minted" "lstinline" "mintinline")))
 
   (use-package auctex-latexmk
+    :after tex-site
+    :demand t
     :config
     (auctex-latexmk-setup)
     (setq auctex-latexmk-inherit-TeX-PDF-mode t)))

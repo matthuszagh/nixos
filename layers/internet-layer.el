@@ -1,4 +1,4 @@
-;;; internet-layer.el -*-lexical-binding: t; -*-
+;;; internet-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -6,7 +6,7 @@
   :presetup
   ;; TODO add helm to this layer list
   (:layer straight
-          (straight-use-package 'helm-eww))
+   (straight-use-package 'helm-eww))
 
   :setup
   (use-package eww
@@ -23,15 +23,15 @@
 
   :postsetup
   (:layer helm
-          (use-package helm-eww)
-          ;; TODO should also depend on modal interaction
-          (localleader :keymaps 'eww-mode-map
-            "H" 'helm-eww-history))
-  (:layer modal-interaction
-          (general-def mh/prefix-search-map
-            "i" 'eww)
-          (localleader :keymaps 'eww-mode-map
-            "h" 'eww-back-url
-            "l" 'eww-forward-url)))
+   (use-package helm-eww)
+   ;; TODO should also depend on modal interaction
+   (localleader :keymaps 'eww-mode-map
+     "H" 'helm-eww-history))
+  (:layer modal
+   (general-def mh/prefix-search-map
+     "i" 'eww)
+   (localleader :keymaps 'eww-mode-map
+     "h" 'eww-back-url
+     "l" 'eww-forward-url)))
 
 ;;; internet-layer.el ends here

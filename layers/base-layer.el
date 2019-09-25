@@ -1,4 +1,4 @@
-;;; base-layer.el --- Base Layer -*-lexical-binding: t; -*-
+;;; base-layer.el --- Base Layer -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
@@ -16,6 +16,10 @@
 
   ;; Always start Emacs maximized.
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+  ;; Only show cursor in active window.
+  (setq-default cursor-in-non-selected-windows nil)
+  ;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
   ;; Disable toolbar.
   (when (fboundp 'tool-bar-mode)
@@ -60,6 +64,9 @@
   ;; enable y/n answers
   (fset 'yes-or-no-p 'y-or-n-p)
 
+  ;; automatically make relevant files executable
+  (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
+
   ;; Emacs modes typically provide a standard means to change the
   ;; indentation width -- eg. c-basic-offset: use that to adjust your
   ;; personal indentation width, while maintaining the style (and
@@ -70,7 +77,7 @@
   ;; Set default font.
   ;; TODO set font based on screen dimensions.
   (defconst mh-font "Source Code Pro")
-  (defconst mh-font-size 10)
+  (defconst mh-font-size 8)
   (add-to-list 'default-frame-alist
                `(font . ,(concat mh-font "-" (number-to-string mh-font-size))))
 
@@ -85,6 +92,10 @@
   (setq-default auto-fill-function 'do-auto-fill)
   (setq-default fill-column 70)
   (turn-on-auto-fill)
+  ;; disable automatic newlines in minibuffer.
+  (add-hook 'minibuffer-setup-hook (lambda ()
+                                     (setq-local fill-column nil)
+                                     (electric-pair-local-mode 'toggle)))
 
   ;; Never ring the bell.
   (setq ring-bell-function 'ignore)
@@ -144,6 +155,55 @@
     (interactive)
     (if (active-minibuffer-window)
         (select-window (active-minibuffer-window))
-      (error "Minibuffer is not active"))))
+      (error "Minibuffer is not active")))
+
+  ;; TODO these should probably be in func and customize.
+  (setq mh-face-attribute-height 80)
+  (defun mh/zoom-in ()
+    (interactive)
+    (setq mh-face-attribute-height (+ mh-face-attribute-height 10))
+    (set-face-attribute 'default nil :height mh-face-attribute-height))
+
+  (defun mh/zoom-in-selected-frame ()
+    (interactive)
+    (set-face-attribute 'default (selected-frame) :height
+                        (+ (face-attribute 'default :height) 10)))
+
+  (defun mh/zoom-out ()
+    (interactive)
+    (setq mh-face-attribute-height (- mh-face-attribute-height 10))
+    (set-face-attribute 'default nil :height
+                        mh-face-attribute-height))
+
+  (defun mh/zoom-out-selected-frame ()
+    (interactive)
+    (set-face-attribute 'default (selected-frame) :height
+                        (- (face-attribute 'default :height) 10)))
+
+  :func
+  (defun mh/insert-rand-password-at-point (len include-sp-chars)
+    (interactive "nlength: \nMInclude special characters? (y/n): ")
+    ;; head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo ''
+    ;; </dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 13  ; echo
+    (let ((output ""))
+      (if (string-equal include-sp-chars "y")
+          (setq output (shell-command-to-string
+                        (concat "</dev/urandom tr -dc "
+                                "'A-Za-z0-9!\"#$%&'\\''()*+,-./:;<=>?@[\\]^_`{|}~'"
+                                " | head -c "
+                                (number-to-string len)
+                                " ; echo")))
+        (setq output (shell-command-to-string
+                      (concat "head /dev/urandom | tr -dc A-Za-z0-9 "
+                              "| head -c "
+                              (number-to-string len)
+                              " ; echo ''"))))
+      (insert output)))
+
+  (defun mh/clear-image-cache ()
+    "Sometimes Emacs shows the wrong image when it thinks an image
+hasn't changed. This clears the image cache to prevent this."
+    (interactive)
+    (clear-image-cache t)))
 
 ;;; base-layer.el ends here

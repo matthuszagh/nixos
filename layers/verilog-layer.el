@@ -34,6 +34,14 @@
 
   :postsetup
   (:layer flycheck
-   (setq-default flycheck-verilog-verilator-executable "verilator_bin")))
+   (setq-default flycheck-verilog-verilator-executable "verilator_bin"))
+
+  (:layer modal
+   (localleader :keymaps 'verilog-mode-map
+     "c" (lambda (cmd)
+	   (interactive
+	    (list
+	     (compilation-read-command compile-command)))
+	   (compile cmd t)))))
 
 ;;; verilog-layer.el ends here

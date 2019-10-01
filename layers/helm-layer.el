@@ -63,7 +63,13 @@
      "b" 'helm-buffers-list)
    (general-def helm-map
      "C-j" 'helm-next-line
-     "C-k" 'helm-previous-line))
+     "C-k" 'helm-previous-line
+     "C-h" 'helm-find-files-up-one-level
+     "C-l" 'helm-execute-persistent-action)
+   (general-def helm-read-file-map
+     "C-l" 'helm-execute-persistent-action)
+   (general-def helm-find-files-map
+     "C-l" 'helm-execute-persistent-action))
 
   (:layer org
    (use-package helm-org)

@@ -59,6 +59,8 @@
     (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0" 2 "DP-2"))
     (exwm-randr-enable))
 
+  (use-package pulseaudio-control)
+
   ;; Helps prevent screen artifacts like vertical lines left by the cursor.
   ;; (modify-all-frames-parameters '((inhibit-double-buffering . t)))
 
@@ -68,6 +70,8 @@
    ;; the double whitespace is intentional
    (add-to-list 'exwm-input-prefix-keys ?\C-\  )
    (add-to-list 'exwm-input-prefix-keys ?\  )
+   (exwm-input-set-key (kbd "s-<f5>") #'pulseaudio-control-decrease-volume)
+   (exwm-input-set-key (kbd "s-<f6>") #'pulseaudio-control-increase-volume)
    (evil-set-initial-state 'exwm-mode 'normal))
 
   :func

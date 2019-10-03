@@ -35,6 +35,7 @@
    )
   (:layer default-theme
    (set-face-attribute 'lsp-ui-sideline-symbol-info nil :foreground "#5c5d56" :height 0.8)
-   (set-face-attribute 'lsp-ui-sideline-symbol nil :height 0.8)))
+   (set-face-attribute 'lsp-ui-sideline-symbol nil :height 0.8)
+   (set-face-attribute 'lsp-ui-sideline-current-symbol nil :height 0.8)))
 
 ;;; lsp-layer.el ends here

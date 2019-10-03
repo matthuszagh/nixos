@@ -32,6 +32,9 @@
    (with-eval-after-load 'lsp-mode
      (add-hook 'lsp-after-open-hook (lambda () (lsp-ui-flycheck-enable 1))))
    ;; (add-to-list 'flycheck-checkers 'lsp-ui)
-   ))
+   )
+  (:layer default-theme
+   (set-face-attribute 'lsp-ui-sideline-symbol-info nil :foreground "#5c5d56" :height 0.8)
+   (set-face-attribute 'lsp-ui-sideline-symbol nil :height 0.8)))
 
 ;;; lsp-layer.el ends here

@@ -29,6 +29,11 @@
    ;; bindings for programming modes, but agnostic to the
    ;; specific language. e.g. jump to definition
    (general-define-key
+    :states 'normal
+    "g d" 'xref-find-definitions
+    "g p" 'xref-pop-marker-stack)
+
+   (general-define-key
     :keymaps 'mh/prefix-map
     :prefix "p"
     :prefix-command 'mh/command-prog-prefix
@@ -185,12 +190,13 @@
     (evil-collection-define-key 'normal 'proced-mode-map (kbd "q") (lambda () (interactive)
                                                                      (quit-window)
                                                                      (command-execute 'symon-mode)))
-    ;; elpy and python
-    (evil-collection-define-key 'normal 'python-mode-map (kbd "M-.") 'elpy-goto-definition)
-    (evil-collection-define-key 'normal 'python-mode-map (kbd "C-M-.") 'elpy-goto-definition-other-window)
+    ;; ;; elpy and python
+    ;; (evil-collection-define-key 'normal 'python-mode-map (kbd "M-.") 'elpy-goto-definition)
+    ;; (evil-collection-define-key 'normal 'python-mode-map (kbd "C-M-.") 'elpy-goto-definition-other-window)
 
-    ;; elisp
-    (evil-collection-define-key 'normal 'emacs-lisp-mode-map (kbd "M-.") 'xref-find-definitions))
+    ;; ;; elisp
+    ;; (evil-collection-define-key 'normal 'emacs-lisp-mode-map (kbd "M-.") 'xref-find-definitions)
+    )
 
   (use-package evil-surround
     :config

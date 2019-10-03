@@ -80,6 +80,7 @@
      :after (magit transient))
    (general-def mh/prefix-prog-map
      "s" 'magit-status
-     "S" 'magit-list-repositories)))
+     "S" 'magit-list-repositories
+     "t" 'git-timemachine)))
 
 ;;; vcs-layer.el ends here

@@ -81,6 +81,16 @@
    (general-def mh/prefix-prog-map
      "s" 'magit-status
      "S" 'magit-list-repositories
-     "t" 'git-timemachine)))
+     "t" 'git-timemachine))
+
+  :func
+  (defun mh/magit-fetch-all-repositories ()
+    "Run `magit-fetch-all' in all repositories returned by `magit-list-repos`."
+    (interactive)
+    (dolist (repo (magit-list-repos))
+      (message "Fetching in %s..." repo)
+      (let ((default-directory repo))
+        (magit-fetch-all (magit-fetch-arguments)))
+      (message "Fetching in %s...done" repo))))
 
 ;;; vcs-layer.el ends here

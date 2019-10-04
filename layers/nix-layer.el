@@ -24,7 +24,11 @@
 
   (use-package direnv
     :config
-    (direnv-mode))
+    (direnv-mode)
+    ;; Inhibits the summary unless an update-environment call is
+    ;; made. The summary is annoying because it shifts the buffer
+    ;; contents. This does not stop direnv updating the environment.
+    (setq direnv-always-show-summary nil))
 
   (defun mh/nix-rebuild ()
     (interactive)

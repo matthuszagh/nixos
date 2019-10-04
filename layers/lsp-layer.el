@@ -36,6 +36,12 @@
   (:layer default-theme
    (set-face-attribute 'lsp-ui-sideline-symbol-info nil :foreground "#5c5d56" :height 0.8)
    (set-face-attribute 'lsp-ui-sideline-symbol nil :height 0.8)
-   (set-face-attribute 'lsp-ui-sideline-current-symbol nil :height 0.8)))
+   (set-face-attribute 'lsp-ui-sideline-current-symbol nil :height 0.8))
+
+  (:layer modal
+   (general-define-key
+    :states 'normal
+    "g r" 'lsp-find-references
+    "g i" 'lsp-find-implementation)))
 
 ;;; lsp-layer.el ends here

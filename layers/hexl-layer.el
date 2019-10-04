@@ -4,6 +4,8 @@
 
 (layer-def hexl
   :setup
+  (use-package hexl)
+
   :postsetup
   (:layer modal
    (localleader :keymaps 'hexl-mode-map

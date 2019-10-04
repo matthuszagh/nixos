@@ -84,6 +84,7 @@
                     tex
                     sql
                     scad
+                    hexl
 
                     ;; formatting
                     indenting

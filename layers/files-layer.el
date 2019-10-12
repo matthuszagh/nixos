@@ -5,6 +5,7 @@
 (layer-def files
   :setup
   (setq wiki-file "/home/matt/doc/notes/wiki.org")
+  (setq system-file "/home/matt/src/dotfiles/machines/oryp4.nix")
   (setq config-file "/home/matt/src/dotfiles/config/emacs/init.el")
   (setq productivity-file "/home/matt/doc/notes/projects/productivity.org")
   (setq work-file "/home/matt/doc/notes/projects/work.org")
@@ -18,6 +19,9 @@
      "c" (lambda ()
            (interactive)
            (find-file config-file))
+     "n" (lambda ()
+           (interactive)
+           (find-file system-file))
      "p" (lambda ()
            (interactive)
            (find-file productivity-file))

@@ -231,6 +231,35 @@
     ;; children.
     (setq org-checkbox-hierarchical-statistics nil)
 
+    (setq org-format-latex-header "\\documentclass{article}
+\\usepackage[usenames]{color}
+\[PACKAGES]
+\[DEFAULT-PACKAGES]
+% color definitions
+\\definecolor{bgcolor}{rgb}{0.133333333333, 0.133333333333, 0.133333333333}
+\\definecolor{fgcolor}{rgb}{0.764705882353, 0.764705882353, 0.690196078431}
+% Circuitikz style options
+\\ctikzset{-o/.style = {bipole nodes={none}{ocirc, fill=bgcolor}}}
+\\ctikzset{o-/.style = {bipole nodes={ocirc, fill=bgcolor}{none}}}
+\\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bgcolor}}}
+\\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
+\\ctikzset{resistors/scale=0.6, diodes/scale=0.4}
+%
+\\pagestyle{empty}             % do not remove
+% The settings below are copied from fullpage.sty
+\\setlength{\\textwidth}{\\paperwidth}
+\\addtolength{\\textwidth}{-3cm}
+\\setlength{\\oddsidemargin}{1.5cm}
+\\addtolength{\\oddsidemargin}{-2.54cm}
+\\setlength{\\evensidemargin}{\\oddsidemargin}
+\\setlength{\\textheight}{\\paperheight}
+\\addtolength{\\textheight}{-\\headheight}
+\\addtolength{\\textheight}{-\\headsep}
+\\addtolength{\\textheight}{-\\footskip}
+\\addtolength{\\textheight}{-3cm}
+\\setlength{\\topmargin}{1.5cm}
+\\addtolength{\\topmargin}{-2.54cm}")
+
     (setq org-latex-default-class "standalone")
     (add-to-list 'org-latex-packages-alist
                  '("" "tikz" t))

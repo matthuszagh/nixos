@@ -96,8 +96,8 @@
     (advice-add 'create-image :filter-args
                 #'org-display-inline-images--with-color-theme-background-color)
 
-    ;; allow customizing the image width
-    (setq org-image-actual-width nil)
+    ;; use actual width for inline image
+    (setq org-image-actual-width t)
 
     ;; fontify when not in polymode
     (setq org-src-fontify-natively t)
@@ -231,7 +231,11 @@
     ;; children.
     (setq org-checkbox-hierarchical-statistics nil)
 
-    (setq org-format-latex-header "\\documentclass{article}
+    ;; this uses crop instead of preview for standalone. In this mode
+    ;; math must be inlined, which is annoying, but it does produce
+    ;; correctly sized image outputs. Preview crops the images for
+    ;; some reason.
+    (setq org-format-latex-header "\\documentclass{standalone}
 \\usepackage[usenames]{color}
 \[PACKAGES]
 \[DEFAULT-PACKAGES]
@@ -245,22 +249,23 @@
 \\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
 \\ctikzset{resistors/scale=0.6, diodes/scale=0.4}
 %
-\\pagestyle{empty}             % do not remove
-% The settings below are copied from fullpage.sty
-\\setlength{\\textwidth}{\\paperwidth}
-\\addtolength{\\textwidth}{-3cm}
-\\setlength{\\oddsidemargin}{1.5cm}
-\\addtolength{\\oddsidemargin}{-2.54cm}
-\\setlength{\\evensidemargin}{\\oddsidemargin}
-\\setlength{\\textheight}{\\paperheight}
-\\addtolength{\\textheight}{-\\headheight}
-\\addtolength{\\textheight}{-\\headsep}
-\\addtolength{\\textheight}{-\\footskip}
-\\addtolength{\\textheight}{-3cm}
-\\setlength{\\topmargin}{1.5cm}
-\\addtolength{\\topmargin}{-2.54cm}")
+% \\pagestyle{empty}             % do not remove
+% % The settings below are copied from fullpage.sty
+% \\setlength{\\textwidth}{\\paperwidth}
+% \\addtolength{\\textwidth}{-3cm}
+% \\setlength{\\oddsidemargin}{1.5cm}
+% \\addtolength{\\oddsidemargin}{-2.54cm}
+% \\setlength{\\evensidemargin}{\\oddsidemargin}
+% \\setlength{\\textheight}{\\paperheight}
+% \\addtolength{\\textheight}{-\\headheight}
+% \\addtolength{\\textheight}{-\\headsep}
+% \\addtolength{\\textheight}{-\\footskip}
+% \\addtolength{\\textheight}{-3cm}
+% \\setlength{\\topmargin}{1.5cm}
+% \\addtolength{\\topmargin}{-2.54cm}
+")
 
-    (setq org-latex-default-class "standalone")
+    ;; (setq org-latex-default-class "standalone")
     (add-to-list 'org-latex-packages-alist
                  '("" "tikz" t))
     (add-to-list 'org-latex-packages-alist
@@ -279,6 +284,9 @@
                  '("" "bm" t))
     (add-to-list 'org-latex-packages-alist
                  '("" "tabularx" t))
+    ;; needed for multicolumns in tables
+    (add-to-list 'org-latex-packages-alist
+                 '("" "booktabs" t))
     (setq org-latex-create-formula-image-program 'imagemagick)
     ;; necessary for drawing electronics circuits with tikz using the `circuits' library.
     ;; (setq org-format-latex-header

@@ -26,6 +26,10 @@
     ;; ;; TODO why is this disabled?
     ;; (add-to-list 'python-shell-completion-native-disabled-interpreters
     ;;              "jupyter")
+
+    ;; uses a nicer style for python docstrings. See documentation for
+    ;; details.
+    (setq python-fill-docstring-style 'django)
     )
 
   ;; (use-package elpy

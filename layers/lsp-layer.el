@@ -44,6 +44,7 @@
    (general-define-key
     :states 'normal
     "g r" 'lsp-find-references
-    "g i" 'lsp-find-implementation)))
+    "g i" 'lsp-find-implementation
+    "g x" 'lsp-rename)))
 
 ;;; lsp-layer.el ends here

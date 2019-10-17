@@ -68,6 +68,8 @@ custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
 This is a trivial solution to single-line queries tripping up my
 custom output filter.  (See `my-sql-comint-preoutput-filter'.)"
       (ad-set-arg 0 (concat "\n" (ad-get-arg 0))))
-    (ad-activate 'sql-send-string)))
+    (ad-activate 'sql-send-string))
+
+  (use-package edbi))
 
 ;;; sql-layer.el ends here

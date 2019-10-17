@@ -334,6 +334,7 @@
        (lilypond)
        (lisp . t)
        (lua . t)
+       (makefile . t)
        (matlab)
        (maxima)
        (mscgen)

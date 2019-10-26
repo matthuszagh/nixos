@@ -86,6 +86,7 @@
                     scad
                     hexl
                     rust
+                    rmsbolt
 
                     ;; formatting
                     indenting

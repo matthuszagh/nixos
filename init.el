@@ -85,6 +85,7 @@
                     sql
                     scad
                     hexl
+                    rust
 
                     ;; formatting
                     indenting

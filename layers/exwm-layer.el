@@ -93,6 +93,12 @@
      (concat exwm-class-name ":"
              (if (<= (length exwm-title) 50) exwm-title
                (concat (substring exwm-title 0 49) "...")))))
+  (defun mh/launch-next ()
+    (interactive)
+    (let ((cmd (concat "export WEBKIT_DISABLE_COMPOSITING_MODE=1"
+                       " && export $(dbus-launch)"
+                       " && next")))
+      (start-process-shell-command cmd nil cmd)))
 
   :customize
   (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)

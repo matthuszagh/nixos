@@ -18,6 +18,18 @@
             ;; convenience keybinding, meant to mimic `esc' in Vim bindings
             ([?\s-\[] . exwm-reset)
             ([?\s-w] . exwm-workspace-switch)
+            ([?\s-f] . exwm-floating-toggle-floating)
+            ;; move floating window with s+vim-like keys
+            ([?\s-j] . (lambda ()
+                         (exwm-floating-move 0 -1)))
+            ([?\s-k] . (lambda ()
+                         (exwm-floating-move 0 1)))
+            ([?\s-h] . (lambda ()
+                         (exwm-floating-move -1 0)))
+            ([?\s-l] . (lambda ()
+                         (exwm-floating-move 1 0)))
+            ([?\s-\=] . exwm-layout-enlarge-window)
+            ([?\s-\-] . exwm-layout-shrink-window)
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .
                           (lambda ()

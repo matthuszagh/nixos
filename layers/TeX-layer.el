@@ -123,6 +123,10 @@
     :demand t
     :config
     (auctex-latexmk-setup)
-    (setq auctex-latexmk-inherit-TeX-PDF-mode t)))
+    (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+
+  :postsetup
+  (:layer lsp
+   (add-hook 'TeX-mode-hook 'lsp)))
 
 ;;; tex-layer.el ends here

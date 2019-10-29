@@ -247,23 +247,13 @@
 \\ctikzset{o-/.style = {bipole nodes={ocirc, fill=bgcolor}{none}}}
 \\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bgcolor}}}
 \\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
-\\ctikzset{resistors/scale=0.6, diodes/scale=0.4}
-%
-% \\pagestyle{empty}             % do not remove
-% % The settings below are copied from fullpage.sty
-% \\setlength{\\textwidth}{\\paperwidth}
-% \\addtolength{\\textwidth}{-3cm}
-% \\setlength{\\oddsidemargin}{1.5cm}
-% \\addtolength{\\oddsidemargin}{-2.54cm}
-% \\setlength{\\evensidemargin}{\\oddsidemargin}
-% \\setlength{\\textheight}{\\paperheight}
-% \\addtolength{\\textheight}{-\\headheight}
-% \\addtolength{\\textheight}{-\\headsep}
-% \\addtolength{\\textheight}{-\\footskip}
-% \\addtolength{\\textheight}{-3cm}
-% \\setlength{\\topmargin}{1.5cm}
-% \\addtolength{\\topmargin}{-2.54cm}
-")
+\\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
+% tikzlibraries
+\\usetikzlibrary{intersections}
+% pgfplots
+\\pgfplotsset{compat=newest}
+% tikztiminglibraries
+\\usetikztiminglibrary{counters}")
 
     ;; (setq org-latex-default-class "standalone")
     (add-to-list 'org-latex-packages-alist
@@ -298,6 +288,12 @@
     (setq org-clock-persist 'history)
     (org-clock-persistence-insinuate)
 
+    ;; always leave a newline at the end of a heading section. `auto'
+    ;; doesn't seem to be good enough at guessing.
+    (setq org-blank-before-new-entry
+          '((heading . t)
+            (plain-list-item . auto)))
+
     ;; set the column view format to include effort
     (setq org-columns-default-format (concat "%60ITEM(Task) "
                                              ;; "%TODO %3PRIORITY "
@@ -308,7 +304,56 @@
 
     ;; (plist-put org-format-latex-options :background "white")
 
-    (setq org-latex-pdf-process (list "latexmk -f -pdf %f"))
+    ;; (setq org-latex-pdf-process
+    ;;       (list "sed -i 's/\\begin{latex}//'"
+    ;;             "sed -i 's/\\end{latex}//'"
+    ;;             "latexmk -f -pdf %F"))
+
+    (setq org-preview-latex-process-alist
+          '((dvipng :programs
+              ("latex" "dvipng")
+              :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
+              (1.0 . 1.0)
+              :latex-compiler
+              ("latex -interaction nonstopmode -output-directory %o %f")
+              :image-converter
+              ("dvipng -fg %F -bg %B -D %D -T tight -o %O %f"))
+            (dvisvgm :programs
+              ("latex" "dvisvgm")
+              :description "dvi > svg" :message "you need to install the programs: latex and dvisvgm." :use-xcolor t :image-input-type "dvi" :image-output-type "svg" :image-size-adjust
+              (1.7 . 1.5)
+              :latex-compiler
+              ("latex -interaction nonstopmode -output-directory %o %f")
+              :image-converter
+              ("dvisvgm %f -n -b min -c %S -o %O"))
+            (imagemagick :programs
+              ("latex" "convert")
+              :description "pdf > png" :message "you need to install the programs: latex and imagemagick." :use-xcolor t :image-input-type "pdf" :image-output-type "png" :image-size-adjust
+              (1.0 . 1.0)
+              :post-clean ("")
+              :latex-compiler
+              ("pdflatex -interaction nonstopmode -output-directory %o %f")
+              :image-converter
+              ("convert -density %D -trim -antialias %f -quality 100 %O"))))
+
+    ;; lualatex preview
+    (setq org-latex-pdf-process
+          '("lualatex -shell-escape -interaction nonstopmode %f"
+            "lualatex -shell-escape -interaction nonstopmode %f"))
+
+    (setq luamagick '(luamagick :programs ("lualatex" "convert")
+                                :description "pdf > png"
+                                :message "you need to install lualatex and imagemagick."
+                                :use-xcolor t
+                                :image-input-type "pdf"
+                                :image-output-type "png"
+                                :image-size-adjust (1.0 . 1.0)
+                                :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+                                :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+
+    (add-to-list 'org-preview-latex-process-alist luamagick)
+
+    (setq org-preview-latex-default-process 'luamagick)
 
     (setq org-confirm-babel-evaluate nil)
     (org-babel-do-load-languages
@@ -563,17 +608,17 @@ outline into a set of todo entries. Set 1 for yes and 0 for no."
 
    (defun mh/tex-insert-enviro-align ()
      (interactive)
-     (insert "\\begin{align*}\n")
+     (insert "\\(\\begin{aligned}\n")
      (insert "  \n")
-     (insert "\\end{align*}")
+     (insert "\\end{aligned}\\)")
      (previous-line)
      (move-end-of-line nil))
 
    (defun mh/tex-insert-enviro-equation ()
      (interactive)
-     (insert "\\begin{equation*}\n")
+     (insert "\\(\n")
      (insert "  \n")
-     (insert "\\end{equation*}")
+     (insert "\\)")
      (previous-line)
      (move-end-of-line nil))
 

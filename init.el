@@ -52,7 +52,8 @@
 
                     ;; appearance
                     default-theme
-                    default-mode-line
+                    ;; smart-mode-line
+                    spaceline
                     rainbow-delimiters
 
                     ;; programming

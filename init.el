@@ -60,6 +60,7 @@
                     programming
                     vcs
                     completions
+                    prescient
                     shell
                     assembly
                     nix

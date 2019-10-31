@@ -10,10 +10,6 @@
   ;; memory and slow down the entire system.
   (setq gc-cons-threshold 100000000)
 
-  ;; Prefer `.el' files over outdated `.elc' files. Use this with `auto-compile' to automatically
-  ;; byte-compile outdated files.
-  (setq load-prefer-newer t)
-
   ;; Always start Emacs maximized.
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 

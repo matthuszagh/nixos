@@ -33,6 +33,15 @@
 
 (add-to-list 'load-path (concat user-emacs-directory "layers"))
 (require 'use-package)
+
+;; Prefer `.el' files over outdated `.elc' files. Use this with `auto-compile' to automatically
+;; byte-compile outdated files.
+(setq load-prefer-newer t)
+(use-package auto-compile
+  :config
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
+
 (use-package layers
   :init
   (if (featurep 'straight)

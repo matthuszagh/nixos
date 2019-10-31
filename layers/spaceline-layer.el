@@ -20,7 +20,8 @@
   (:layer helm
    (spaceline-helm-mode))
 
-  (:layer documentation
-   (spaceline-info-mode)))
+  (:layer modal
+   ;; Change evil face depending on active evil mode.
+   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
 
 ;;; spaceline-layer.el ends here

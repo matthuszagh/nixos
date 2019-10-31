@@ -1,8 +1,8 @@
-;;; default-mode-line-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; smart-mode-line-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;;; Code:
 
-(layer-def default-mode-line
+(layer-def smart-mode-line
   :depends (base no-littering)
   :presetup
   (:layer straight
@@ -15,8 +15,8 @@
     (setq size-indication-mode t)
     (setq column-number-mode t)
     (setq line-number-mode t)
-    (setq sml/theme 'respectful)
+    ;; (setq sml/theme 'respectful)
     (setq sml/name-width 40)
     (sml/setup)))
 
-;;; default-mode-line-layer.el ends here
+;;; smart-mode-line-layer.el ends here

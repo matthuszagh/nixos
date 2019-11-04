@@ -9,6 +9,7 @@
 
   :setup
   (use-package pdf-tools
+    :demand t
     :mode "\\.pdf\\'"
     :init
     ;; Only warn when opening files larger than 1GB. This is particularly useful for PDFs which are

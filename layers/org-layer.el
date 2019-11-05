@@ -164,10 +164,6 @@
     (advice-add 'org-self-insert-command :before-until #'mh/org-insert-org-entity-maybe)
     (setq org-pretty-entities t)
 
-    ;; set inline code appearance
-    (set-face-background 'org-code "#27323D")
-    (set-face-foreground 'org-code "unspecified")
-
     ;; `org-adapt-indentation' indents heading contents to the beginning of the heading. This is nice
     ;; in a way, but limits the amount of horizontal space when you have deeply-nested headings.
     (setq org-adapt-indentation nil)
@@ -235,8 +231,10 @@
     ;; math must be inlined, which is annoying, but it does produce
     ;; correctly sized image outputs. Preview crops the images for
     ;; some reason.
-    (setq org-format-latex-header "\\documentclass{standalone}
-\\usepackage[usenames]{color}
+    (setq org-format-latex-header "% Needed for proper rendering with some corner cases in luatex
+\\RequirePackage{luatex85}
+\\PassOptionsToPackage{usenames}{xcolor}
+\\documentclass{standalone}
 \[PACKAGES]
 \[DEFAULT-PACKAGES]
 % color definitions
@@ -248,12 +246,33 @@
 \\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bgcolor}}}
 \\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
 \\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
-% tikzlibraries
+% tikz libraries
 \\usetikzlibrary{intersections}
+\\usetikzlibrary{3d}
+\\usetikzlibrary{perspective}
+\\usetikzlibrary{shapes.geometric}
+\\usetikzlibrary{decorations.markings}
+% tikz settings
+\\tikzset{>=stealth}
 % pgfplots
 \\pgfplotsset{compat=newest}
 % tikztiminglibraries
 \\usetikztiminglibrary{counters}")
+
+    ;; change default latex packages. grffile prevents asymptote from
+    ;; working correctly. inputenc and fontenc aren't needed with
+    ;; luatex.
+    (setq org-latex-default-packages-alist
+          '(("" "graphicx" t)
+            ("" "longtable" nil)
+            ("" "wrapfig" nil)
+            ("" "rotating" nil)
+            ("normalem" "ulem" t)
+            ("" "amsmath" t)
+            ("" "textcomp" t)
+            ("" "amssymb" t)
+            ("" "capt-of" nil)
+            ("" "hyperref" nil)))
 
     ;; (setq org-latex-default-class "standalone")
     (add-to-list 'org-latex-packages-alist
@@ -277,6 +296,8 @@
     ;; needed for multicolumns in tables
     (add-to-list 'org-latex-packages-alist
                  '("" "booktabs" t))
+    (add-to-list 'org-latex-packages-alist
+                 '("inline" "asymptote" t))
     (setq org-latex-create-formula-image-program 'imagemagick)
     ;; necessary for drawing electronics circuits with tikz using the `circuits' library.
     ;; (setq org-format-latex-header
@@ -309,50 +330,37 @@
     ;;             "sed -i 's/\\end{latex}//'"
     ;;             "latexmk -f -pdf %F"))
 
-    (setq org-preview-latex-process-alist
-          '((dvipng :programs
-              ("latex" "dvipng")
-              :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
-              (1.0 . 1.0)
-              :latex-compiler
-              ("latex -interaction nonstopmode -output-directory %o %f")
-              :image-converter
-              ("dvipng -fg %F -bg %B -D %D -T tight -o %O %f"))
-            (dvisvgm :programs
-              ("latex" "dvisvgm")
-              :description "dvi > svg" :message "you need to install the programs: latex and dvisvgm." :use-xcolor t :image-input-type "dvi" :image-output-type "svg" :image-size-adjust
-              (1.7 . 1.5)
-              :latex-compiler
-              ("latex -interaction nonstopmode -output-directory %o %f")
-              :image-converter
-              ("dvisvgm %f -n -b min -c %S -o %O"))
-            (imagemagick :programs
-              ("latex" "convert")
-              :description "pdf > png" :message "you need to install the programs: latex and imagemagick." :use-xcolor t :image-input-type "pdf" :image-output-type "png" :image-size-adjust
-              (1.0 . 1.0)
-              :post-clean ("")
-              :latex-compiler
-              ("pdflatex -interaction nonstopmode -output-directory %o %f")
-              :image-converter
-              ("convert -density %D -trim -antialias %f -quality 100 %O"))))
+    ;; ;; lualatex preview
+    ;; (setq org-latex-pdf-process
+    ;;       '("lualatex -shell-escape -interaction nonstopmode %f"
+    ;;         "lualatex -shell-escape -interaction nonstopmode %f"))
 
-    ;; lualatex preview
-    (setq org-latex-pdf-process
-          '("lualatex -shell-escape -interaction nonstopmode %f"
-            "lualatex -shell-escape -interaction nonstopmode %f"))
-
-    (setq luamagick '(luamagick :programs ("lualatex" "convert")
+    (setq luamagick '(luamagick :programs ("latexmk" "lualatex" "convert")
                                 :description "pdf > png"
-                                :message "you need to install lualatex and imagemagick."
+                                :message "you need to install latexmk, lualatex and imagemagick."
                                 :use-xcolor t
                                 :image-input-type "pdf"
                                 :image-output-type "png"
                                 :image-size-adjust (1.0 . 1.0)
-                                :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+                                :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
                                 :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
 
-    (add-to-list 'org-preview-latex-process-alist luamagick)
+    (setq luasvgm '(luasvgm :programs ("latexmk" "lualatex" "dvisvgm")
+                            :description "pdf > svg"
+                            :message "you need to install latexmk, lualatex and dvisvgm."
+                            :use-xcolor t
+                            :image-input-type "pdf"
+                            :image-output-type "svg"
+                            :image-size-adjust (1.0 . 1.0)
+                            :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
+                            :image-converter ("dvisvgm %f -P -n -b min -c %S -o %O")))
 
+    (add-to-list 'org-preview-latex-process-alist luamagick)
+    (add-to-list 'org-preview-latex-process-alist luasvgm)
+
+    ;; TODO this requires dvisvgm >= 2.7.2, which requires overriding
+    ;; the version texlive uses.
+    ;; (setq org-preview-latex-default-process 'luasvgm)
     (setq org-preview-latex-default-process 'luamagick)
 
     (setq org-confirm-babel-evaluate nil)
@@ -463,7 +471,10 @@
      "Return a set of org headings from a pdf in FILE.
 BASE-DEPTH is the depth (i.e. number of '*') of the destination
 org file headline, and TODOP asks whether we should turn the
-outline into a set of todo entries. Set 1 for yes and 0 for no."
+outline into a set of todo entries. Set 1 for yes and 0 for no.
+
+Do not call this directly! It will simply discard the result. Use
+org-capture instead."
      (interactive
       "fPDF file: \nnHeadline Depth: \nSTODO Headline? (t / nil): ")
      (if todop
@@ -616,7 +627,7 @@ outline into a set of todo entries. Set 1 for yes and 0 for no."
 
    (defun mh/tex-insert-enviro-equation ()
      (interactive)
-     (insert "\\(\n")
+     (insert "\\(\\displaystyle\n")
      (insert "  \n")
      (insert "\\)")
      (previous-line)

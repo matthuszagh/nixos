@@ -46,6 +46,14 @@
    (use-package fish-completion
      :config
      (global-fish-completion-mode)
-     (setq fish-completion-fallback-on-bash-p t))))
+     (setq fish-completion-fallback-on-bash-p t)))
+
+  (:layer flycheck
+   (add-hook 'sh-mode-hook 'flycheck-mode)
+   (setq flycheck-checker 'lsp-ui)
+   (flycheck-add-next-checker 'lsp-ui 'sh-posix-bash))
+
+  (:layer lsp
+   (add-hook 'sh-mode-hook 'lsp)))
 
 ;;; shell-layer.el ends here

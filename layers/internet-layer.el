@@ -1,14 +1,17 @@
-;;; internet-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; internet-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
 (layer-def internet
   :presetup
-  ;; TODO add helm to this layer list
-  (:layer straight
+  (:layer (straight helm)
    (straight-use-package 'helm-eww))
 
   :setup
+  ;; eww normally reuses existing eww buffers. To open a new buffer,
+  ;; use a prefix argument before calling eww.
   (use-package eww
     :config
     ;; use eww as default browser
@@ -23,10 +26,12 @@
 
   :postsetup
   (:layer helm
-   (use-package helm-eww)
-   ;; TODO should also depend on modal interaction
+   (use-package helm-eww))
+
+  (:layer (helm modal)
    (localleader :keymaps 'eww-mode-map
      "H" 'helm-eww-history))
+
   (:layer modal
    (general-def mh/prefix-search-map
      "i" 'eww)

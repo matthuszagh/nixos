@@ -1,4 +1,6 @@
-;;; exwm-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; exwm-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -99,6 +101,11 @@
                        " && export $(dbus-launch)"
                        " && next")))
       (start-process-shell-command cmd nil cmd)))
+
+  (defun mh/display-hdmi ()
+    (interactive)
+    ;; if audio doesn't work try xrandr --output HDMI-0 --set audio on
+    (start-process-shell-command "xrandr-hdmi" nil "xrandr --output HDMI-0"))
 
   :customize
   (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)

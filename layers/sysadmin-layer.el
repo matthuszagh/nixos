@@ -23,17 +23,23 @@
 
   :postsetup
   (:layer modal
-          (general-def mh/prefix-system-map
-            "p" 'proced
-            "s" 'symon-mode
-            "c" 'display-time-mode
-            "b" 'display-battery-mode))
+   (general-def mh/prefix-system-map
+     "p" 'proced
+     "s" 'symon-mode
+     "c" 'display-time-mode
+     "b" 'display-battery-mode))
 
   (:layer helm
-          (use-package helm-systemd))
+   (use-package helm-systemd))
 
   (:layer (helm modal)
-          (general-def mh/prefix-system-map
-            "d" 'helm-systemd)))
+   (general-def mh/prefix-system-map
+     "d" 'helm-systemd))
+
+  :func
+  (defun mh/start-vpn ()
+    (interactive)
+    (start-process-shell-command
+     "pia" nil "sudo systemctl start openvpn-us-east")))
 
 ;;; sysadmin-layer.el ends here

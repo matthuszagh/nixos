@@ -1,4 +1,6 @@
-;;; org-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; org-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -173,22 +175,6 @@
           '((sequence "HOLD" "TODO" "|" "DONE" "CANCELLED")))
     ;; (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
     (setq org-capture-templates
-          ;;         '(("b" "Book" entry (file book-file)
-          ;;            "* %^{TITLE}\n\
-          ;; :PROPERTIES:\n\
-          ;; :Author:\n\
-          ;; :Edition:\n\
-          ;; :Pub-Year:\n\
-          ;; :Filepath:\n\
-          ;; :Goodreads-Ranking:\n\
-          ;; :Goodreads-#-Reviews:\n\
-          ;; :Amazon-Ranking:\n\
-          ;; :Amazon-#-Reviews:\n\
-          ;; :Goodreads-URL:\n\
-          ;; :Amazon-URL:\n\
-          ;; :OpenLibrary-URL:\n\
-          ;; :ISBN:\n\
-          ;; :END:\n%?" :empty-lines 1))
           '(("b" "pdf" entry (file "/home/matt/doc/notes/wiki.org")
              "* %f
 :PROPERTIES:
@@ -197,13 +183,6 @@
 ** description
 ** outline [/]
 %(mh/pdf-outline-to-org-headline \"%F\" 2 nil)")
-            ;; (concat "* %f\n"
-            ;;         ":PROPERTIES:\n"
-            ;;         ":Filepath: %a\n"
-            ;;         ":END:\n"
-            ;;         "** description\n"
-            ;;         "** outline [/]\n"
-            ;;         "%(mh/beta-pdf-outline-to-org-headline \"%F\" 2 nil)"))
             ("p" "productivity" entry (file+headline "/home/matt/doc/notes/projects/productivity.org" "refile")
              "* HOLD %^{PROMPT}")
             ("w" "work" entry (file+headline "/home/matt/doc/notes/projects/work.org" "refile")
@@ -286,8 +265,6 @@
     (add-to-list 'org-latex-packages-alist
                  '("" "mathtools" t))
     (add-to-list 'org-latex-packages-alist
-                 '("" "incgraph" t))
-    (add-to-list 'org-latex-packages-alist
                  '("" "siunitx" t))
     (add-to-list 'org-latex-packages-alist
                  '("" "bm" t))
@@ -331,29 +308,30 @@
     ;;             "latexmk -f -pdf %F"))
 
     ;; ;; lualatex preview
-    ;; (setq org-latex-pdf-process
-    ;;       '("lualatex -shell-escape -interaction nonstopmode %f"
-    ;;         "lualatex -shell-escape -interaction nonstopmode %f"))
+    (setq org-latex-pdf-process
+          '("latexmk -f -interaction=nonstopmode -output-directory=%o %f"))
 
-    (setq luamagick '(luamagick :programs ("latexmk" "lualatex" "convert")
-                                :description "pdf > png"
-                                :message "you need to install latexmk, lualatex and imagemagick."
-                                :use-xcolor t
-                                :image-input-type "pdf"
-                                :image-output-type "png"
-                                :image-size-adjust (1.0 . 1.0)
-                                :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
-                                :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+    (setq luamagick
+          '(luamagick :programs ("latexmk" "lualatex" "convert")
+                      :description "pdf > png"
+                      :message "you need to install latexmk, lualatex and imagemagick."
+                      :use-xcolor t
+                      :image-input-type "pdf"
+                      :image-output-type "png"
+                      :image-size-adjust (1.0 . 1.0)
+                      :latex-compiler ("latexmk -cd -f -diagnostics -interaction=nonstopmode -output-directory=%o %f")
+                      :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
 
-    (setq luasvgm '(luasvgm :programs ("latexmk" "lualatex" "dvisvgm")
-                            :description "pdf > svg"
-                            :message "you need to install latexmk, lualatex and dvisvgm."
-                            :use-xcolor t
-                            :image-input-type "pdf"
-                            :image-output-type "svg"
-                            :image-size-adjust (1.0 . 1.0)
-                            :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
-                            :image-converter ("dvisvgm %f -P -n -b min -c %S -o %O")))
+    (setq luasvgm
+          '(luasvgm :programs ("latexmk" "lualatex" "dvisvgm")
+                    :description "pdf > svg"
+                    :message "you need to install latexmk, lualatex and dvisvgm."
+                    :use-xcolor t
+                    :image-input-type "pdf"
+                    :image-output-type "svg"
+                    :image-size-adjust (1.0 . 1.0)
+                    :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
+                    :image-converter ("dvisvgm %f -P -n -b min -c %S -o %O")))
 
     (add-to-list 'org-preview-latex-process-alist luamagick)
     (add-to-list 'org-preview-latex-process-alist luasvgm)

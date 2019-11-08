@@ -98,6 +98,7 @@
                     hexl
                     rust
                     rmsbolt
+                    asy
 
                     ;; formatting
                     indenting

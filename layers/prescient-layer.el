@@ -1,4 +1,4 @@
-;;; prescient-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; prescient-layer.el -*- lexical-binding: t; -*-
 
 ;;; Code:
 

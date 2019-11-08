@@ -4,7 +4,10 @@
 
 (layer-def calc
   :setup
-  (use-package calc)
+  (use-package calc
+    :config
+    ;; always use two's complement
+    (setq calc-twos-complement-mode t))
 
   :postsetup
   (:layer modal

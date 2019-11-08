@@ -1,4 +1,4 @@
-;;; base-layer.el --- Base Layer -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; base-layer.el --- Base Layer -*- lexical-binding: t; -*-
 
 ;;; Code:
 

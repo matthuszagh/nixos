@@ -99,6 +99,7 @@
                     rust
                     rmsbolt
                     asy
+                    snippet
 
                     ;; formatting
                     indenting

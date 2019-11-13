@@ -16,6 +16,8 @@
                        '(("\\<\\(FIXME\\|TODO\\|BUG\\|DONE\\)"
                           1 font-lock-warning-face t))))))
      ;; Disable auto-fill.
-     (prog-mode . (lambda () (auto-fill-mode -1))))))
+     (prog-mode . (lambda () (auto-fill-mode -1)))))
+
+  (use-package banner-comment))
 
 ;;; programming-layer.el ends here

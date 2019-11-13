@@ -1,4 +1,6 @@
-;;; calc-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; calc-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

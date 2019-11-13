@@ -27,8 +27,8 @@
 
   :postsetup
   (:layer keybinding-management
-   (general-def
-     "C-<return>" 'company-complete-selection))
+   (general-def company-active-map
+     "<tab>" 'company-complete-selection))
   (:layer lsp
    (use-package company-lsp
      :config

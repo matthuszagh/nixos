@@ -1,5 +1,7 @@
 ;;; init.el --- Emacs Initialization File -*- no-byte-compile: t; lexical-binding: t; -*-
 
+;;; Commentary:
+
 ;;; Code:
 
 ;; Use the straight package manager instead of package.el.
@@ -58,12 +60,13 @@
                     recoll
                     ledger
                     pinentry
+                    image
 
                     ;; appearance
                     default-theme
-                    ;; smart-mode-line
                     spaceline
                     rainbow-delimiters
+                    ;; pairs
 
                     ;; programming
                     programming

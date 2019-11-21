@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: layer
+# key: layer
+# --
+;;; $1-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
+(layer-def $1
+  :setup
+  ($2))
+
+;;; $1-layer.el ends here

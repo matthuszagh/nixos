@@ -68,7 +68,7 @@
               (tags-todo "+nix+PRIORITY=\"A\""
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Nix")))
-              (tags-todo "+emacs+PRIORITY=\"A\""
+              (tags-todo "emacs"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Emacs")))
               (tags-todo "read"

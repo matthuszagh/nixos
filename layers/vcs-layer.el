@@ -1,4 +1,6 @@
-;;; vcs-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; vcs-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -34,10 +36,8 @@
     :config
     (setq magit-repository-directories '(("/home/matt/src" . 10))))
 
-  (use-package magithub
-    :after magit
-    :config
-    (magithub-feature-autoinject t))
+  (use-package forge
+    :after magit)
 
   ;; (use-package github-notifier
   ;;   :config

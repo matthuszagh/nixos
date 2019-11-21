@@ -8,6 +8,12 @@
    (straight-use-package 'pdf-tools))
 
   :setup
+  ;; TODO setup mouseless link clicking. Apparently, pdf-tools can
+  ;; find links and present them as key sequences in the same way
+  ;; vimium does. See pdf-links-action-perform. Currently imagemagick
+  ;; is spitting out errors related to fonts. Fix this and set it up.
+
+  ;; TODO change search keybinding.
   (use-package pdf-tools
     :demand t
     :mode "\\.pdf\\'"
@@ -26,6 +32,10 @@
    (general-def pdf-view-mode-map
      "j" 'pdf-view-next-line-or-next-page
      "k" 'pdf-view-previous-line-or-previous-page
-     "SPC" 'mh/command-prefix)))
+     "SPC" 'mh/command-prefix)
+
+   (localleader :keymaps 'pdf-view-mode-map
+     "s" 'pdf-occur
+     "g" 'pdf-view-goto-page)))
 
 ;;; pdf-layer.el ends here

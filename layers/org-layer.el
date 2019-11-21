@@ -720,7 +720,8 @@ org-capture instead."
      "i" 'org-agenda-clock-in
      "o" 'org-agenda-clock-out
      "t" 'org-agenda-todo
-     "e" 'org-agenda-set-effort)
+     "e" 'org-agenda-set-effort
+     "r" 'org-agenda-redo)
 
    ;; global org keys
    (general-define-key

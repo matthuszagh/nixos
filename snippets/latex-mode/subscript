@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: subscript template
+# key: _
+# --
+_{$0}

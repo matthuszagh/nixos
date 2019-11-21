@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: integral template
+# key: int
+# --
+\int_{$1}^{$2} $0

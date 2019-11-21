@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: pgfmathdeclarefunction
+# key: pgffunc
+# --
+\pgfmathdeclarefunction{$1}{$2}{%
+  \pgfmathparse{$3}%
+}$0

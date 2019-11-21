@@ -1,0 +1,52 @@
+# -*- mode: snippet -*-
+# name: skidl pysim
+# key: skidlsim
+# expand-env: ((yas-indent-line nil))
+# --
+#+begin_src python :results output silent
+from skidl.pyspice import *
+
+fname = "data/$1.dat"
+
+vs = SINEV(amplitude=1 @ u_V, frequency=60 @ u_Hz)
+# component declaration
+$2
+
+# component connections
+$3
+
+# generate netlist and waveforms
+circ = generate_netlist()
+sim = circ.simulator()
+waveforms = sim.transient(step_time={$4:0.1 @ u_ms}, end_time={$5:100 @ u_ms})
+
+time = waveforms.time
+vin = waveforms[node(vs["p"])]
+vout = waveforms[node(load["p"])]
+
+with open(fname, "w") as f:
+    f.write("{:6} {:6} {:6}\n".format("t", "vin", "vout"))
+    for t, vin, vout in zip(
+        time.as_ndarray() * 1e3, vin.as_ndarray(), vout.as_ndarray()
+    ):
+        f.write("{:6.5f} {:6.2f} {:6.2f}\n".format(t, vin, vout))
+#+end_src
+
+\begin{tikzpicture}
+\begin{axis}[
+  title=$6,
+  ylabel={$V$},
+  xlabel={$t$ (ms)},
+  legend entries={$V_{in}$, $V_{out}$},
+  legend style={
+    fill=bg,
+    draw=fg
+  }
+]
+  \addplot [] table[x=t, y=vin] {data/$1.dat};
+
+  \addplot [
+    blue!20
+  ] table[x=t, y=vout] {data/$1.dat};
+\end{axis}
+\end{tikzpicture}$0

@@ -143,6 +143,37 @@ otherwise assumed alphabetic."
   (:layer lsp
    ;; (lsp-register-client 'clangd)
    (add-hook 'c-mode-common-hook 'lsp)
-   (add-hook 'c-mode-common-hook 'flycheck-mode)))
+   (add-hook 'c-mode-common-hook 'flycheck-mode)
+   (setq mh-c-common-checks '("--all-scopes-completion"
+                              ;; index in background
+                              "--background-index"
+                              ;; use clang-tidy
+                              "--clang-tidy"
+                              "--completion-style=detailed"
+                              ;; insert missing headers
+                              "--header-insertion=iwyu"
+                              ;; suggest missing headers
+                              "--suggest-missing-includes"
+                              ;; use 8 cores
+                              "-j=8"
+                              ;; store PCH in memory for better performance
+                              "--pch-storage=memory"))
+   (setq mh-c-checks
+         (append mh-c-common-checks
+                 `(,(concat "--clang-tidy-checks=-*,clang-analyzer-*"
+                            ",cert-*,bugprone-*,performance-*,portability-*"
+                            ",readability-*,-clang-analyzer-cplusplus*"))))
+   (setq mh-cpp-checks
+         (append mh-c-common-checks
+                 `(,(concat "--clang-tidy-checks=-*,clang-analyzer-*"
+                            ",cert-*,bugprone-*,performance-*,portability-*"
+                            ",readability-*,modernize-*,cppcoreguidelines-*"))))
+   ;; TODO
+   (setq lsp-clients-clangd-args mh-c-checks)
+   ;; (add-hook 'c-mode-hook (lambda ()
+   ;;                          (setq-local lsp-clients-clangd-args mh-c-checks)))
+   ;; (add-hook 'c++-mode-hook (lambda ()
+   ;;                            (setq-local lsp-clients-clangd-args mh-cpp-checks)))
+   ))
 
 ;;; c-layer.el ends here

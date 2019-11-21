@@ -1,4 +1,6 @@
-;;; writing-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; writing-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -10,9 +12,13 @@
   (use-package writegood-mode
     :functions writegood-mode)
 
+  (use-package langtool
+    :config
+    (setq langtool-bin "languagetool-commandline"))
+
   :postsetup
   (:layer org
-   (add-hook 'org-mode 'writegood-mode))
+   (add-hook 'org-mode 'writegood-turn-on))
   (:layer vcs
    (add-hook 'git-commit-setup 'writegood-mode)))
 

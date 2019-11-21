@@ -216,26 +216,44 @@
 \\documentclass{standalone}
 \[PACKAGES]
 \[DEFAULT-PACKAGES]
-% color definitions
+%% color definitions
 \\definecolor{bgcolor}{rgb}{0.133333333333, 0.133333333333, 0.133333333333}
 \\definecolor{fgcolor}{rgb}{0.764705882353, 0.764705882353, 0.690196078431}
-% Circuitikz style options
+%% Circuitikz style options
 \\ctikzset{-o/.style = {bipole nodes={none}{ocirc, fill=bgcolor}}}
 \\ctikzset{o-/.style = {bipole nodes={ocirc, fill=bgcolor}{none}}}
+\\ctikzset{o-o/.style = {bipole nodes={ocirc, fill=bgcolor}{ocirc, fill=bgcolor}}}
 \\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bgcolor}}}
 \\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
 \\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
-% tikz libraries
+%% tikz libraries
 \\usetikzlibrary{intersections}
 \\usetikzlibrary{3d}
 \\usetikzlibrary{perspective}
 \\usetikzlibrary{shapes.geometric}
 \\usetikzlibrary{decorations.markings}
-% tikz settings
-\\tikzset{>=stealth}
-% pgfplots
+\\usetikzlibrary{positioning}
+\\usetikzlibrary{automata}
+%% tikz settings
+\\tikzset{>=latex}
+%% pgfplots
 \\pgfplotsset{compat=newest}
-% tikztiminglibraries
+\\pgfplotsset{
+  every non boxed x axis/.style={
+    xtick align=center,
+    enlarge x limits=upper,
+    x axis line style={-latex},
+  },
+  every boxed x axis/.style={},
+  every non boxed y axis/.style={
+    ytick align=center,
+    enlarge y limits=upper,
+    y axis line style={-latex},
+  },
+  every boxed y axis/.style={},
+}
+\\usepgfplotslibrary{groupplots}
+%% tikztiminglibraries
 \\usetikztiminglibrary{counters}")
 
     ;; change default latex packages. grffile prevents asymptote from

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: mathbf
-# key: mb
+# key: bf
 # --
 \mathbf{$1}$0

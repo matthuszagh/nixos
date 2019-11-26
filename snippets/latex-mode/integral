@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: integral template
+# name: int
 # key: int
 # --
-\int_{$1}^{$2} $0
+\int_{${1:sub}}^{${2:sup}}$0

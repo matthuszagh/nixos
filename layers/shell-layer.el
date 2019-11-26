@@ -1,4 +1,6 @@
-;;; shell-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; shell-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -35,6 +37,12 @@
      "c" 'async-shell-command
      "e" 'eshell
      "t" 'term)
+
+   (general-define-key
+    :states '(normal insert)
+    :keymaps '(eshell-hist-mode-map)
+    "C-k" 'eshell-previous-matching-input-from-input
+    "C-j" 'eshell-next-matching-input-from-input)
 
    (localleader :keymaps 'term-line-mode
      "c" 'comint-clear-buffer))

@@ -1,4 +1,6 @@
-;;; verilog-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; verilog-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -8,6 +10,8 @@
   :setup
   (use-package verilog-mode
     :mode "\\.[st]*v[hp]*\\'"
+    ;; :hook ((lambda ()
+    ;;          (setq-local paragraph-start "[ 	]*\\(//+\\|\\**\\)[ 	]*$\\|^\f")))
     :bind (:map verilog-mode-map
            ("C-c C-f" . indent-buffer))
     :config
@@ -42,6 +46,13 @@
 	   (interactive
 	    (list
 	     (compilation-read-command compile-command)))
-	   (compile cmd t)))))
+	   (compile cmd t))))
+
+  (:layer (modal dumb-jump)
+   (general-define-key
+    :keymaps 'verilog-mode-map
+    :states 'normal
+    "g d" 'dumb-jump-go
+    "g p" 'dumb-jump-back)))
 
 ;;; verilog-layer.el ends here

@@ -73,7 +73,23 @@
 
   (:layer org
    (use-package helm-org)
+   (setq helm-org-headings-max-depth 100)
 
-   (setq helm-org-headings-max-depth 100)))
+   (setq mh-org-wiki-file "/home/matt/doc/notes/wiki.org")
+   (defun mh/helm-global-search ()
+     (interactive)
+     (helm :sources `(,(helm-source-org-headings-for-files (list mh-org-wiki-file))
+                      ,(helm-def-source--info-files)
+                      helm-source-man-pages
+                      helm-source-recoll-library))))
+
+  (:layer (org modal)
+   (general-def mh/prefix-search-map
+     "g" 'mh/helm-global-search))
+
+  ;; (:layer vcs
+  ;;  (require 'helm-ls-git))
+
+  )
 
 ;;; helm-layer.el ends here

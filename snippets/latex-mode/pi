@@ -1,5 +1,6 @@
 # -*- mode: snippet -*-
 # name: pi
-# key: pi
+# regexp-key: \([^\\]\|^\)pi
+# condition: (and (texmathp) 'auto)
 # --
-\pi
+`(nth 1 yas-matched-regexp-key-groups)`\pi

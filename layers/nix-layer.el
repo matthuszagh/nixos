@@ -33,13 +33,12 @@
   (defun mh/nix-rebuild ()
     (interactive)
     (command-execute
-     (async-shell-command "cd ~/src/dotfiles/scripts/ && make && sudo nixos-rebuild switch" "*nix*")))
+     (async-shell-command "cd ~/src/dotfiles/scripts/ && make" "*nix*")))
 
   (defun mh/nix-rebuild-show-trace ()
     (interactive)
     (command-execute
-     (async-shell-command (concat "cd ~/src/dotfiles/scripts/ && make "
-                                  "&& sudo nixos-rebuild switch --show-trace") "*nix*")))
+     (async-shell-command "cd ~/src/dotfiles/scripts/ && make rebuild_trace" "*nix*")))
 
   :postsetup
   (:layer modal

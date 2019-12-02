@@ -543,7 +543,9 @@ org-capture instead."
    (general-define-key
     :keymaps 'org-mode-map
     :states '(normal motion)
-    "<tab>" 'org-cycle)
+    "<tab>" 'org-cycle
+    "g p" 'org-mark-ring-goto
+    "g d" 'org-open-at-point)
 
    (defun mh/tex-insert-frac ()
      "Insert '\frac{}{}' and position point before the first right brace."

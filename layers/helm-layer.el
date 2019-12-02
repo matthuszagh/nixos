@@ -1,4 +1,6 @@
-;;; helm-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; helm-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -50,8 +52,10 @@
 
     (use-package helm-rg))
 
+  (use-package helm-man)
+
   :postsetup
-  (:layer keybinding-management
+  (:layer modal
    (general-def mh/prefix-map
      "SPC" 'helm-M-x)
    (general-def mh/prefix-search-map
@@ -68,28 +72,30 @@
      "C-l" 'helm-execute-persistent-action)
    (general-def helm-read-file-map
      "C-l" 'helm-execute-persistent-action)
+   ;; keybindings for candidates when invoking `helm-find-files'.
    (general-def helm-find-files-map
-     "C-l" 'helm-execute-persistent-action))
+     ;; navigate into directory at point
+     "C-l" 'helm-execute-persistent-action
+     "C-e" 'helm-ff-run-eshell-command-on-file
+     "C-d" 'helm-ff-run-delete-file
+     "C-s" 'helm-ff-run-grep
+     ;; open file in adjacent window
+     "C-o" 'helm-ff-run-switch-other-window
+     "C-c" 'helm-ff-run-copy-file
+     "C-r" 'helm-ff-run-rename-file
+     "C-y" 'helm-ff-run-symlink-file
+     "C-t" 'helm-ff-run-ediff-file
+     "C-p" 'helm-ff-run-browse-project
+     ;; display file properties
+     "C-i" 'helm-ff-properties-persistent))
 
   (:layer org
    (use-package helm-org)
-   (setq helm-org-headings-max-depth 100)
+   (setq helm-org-headings-max-depth 100))
 
-   (setq mh-org-wiki-file "/home/matt/doc/notes/wiki.org")
-   (defun mh/helm-global-search ()
-     (interactive)
-     (helm :sources `(,(helm-source-org-headings-for-files (list mh-org-wiki-file))
-                      ,(helm-def-source--info-files)
-                      helm-source-man-pages
-                      helm-source-recoll-library))))
-
-  (:layer (org modal)
-   (general-def mh/prefix-search-map
-     "g" 'mh/helm-global-search))
-
-  ;; (:layer vcs
-  ;;  (require 'helm-ls-git))
-
-  )
+  (:layer vcs
+   (use-package helm-ls-git
+     :config
+     (setq helm-locate-project-list '("~/src")))))
 
 ;;; helm-layer.el ends here

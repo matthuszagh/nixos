@@ -87,7 +87,7 @@
      "C-t" 'helm-ff-run-ediff-file
      "C-p" 'helm-ff-run-browse-project
      ;; display file properties
-     "C-i" 'helm-ff-properties-persistent))
+     "C-n" 'helm-ff-properties-persistent))
 
   (:layer org
    (use-package helm-org)

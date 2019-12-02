@@ -42,3 +42,4 @@ flycheck_init.el
 *.pdf
 /semanticdb
 /transient
+**/__pycache__*

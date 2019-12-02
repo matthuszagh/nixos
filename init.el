@@ -67,6 +67,7 @@
                     spaceline
                     rainbow-delimiters
                     ;; pairs
+                    async
 
                     ;; programming
                     programming
@@ -114,6 +115,7 @@
                     helm
                     help
                     org
+                    org-ql
                     markdown
                     writing
                     exwm

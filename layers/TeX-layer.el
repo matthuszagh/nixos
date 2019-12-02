@@ -129,6 +129,24 @@
 
   :postsetup
   (:layer lsp
-   (add-hook 'TeX-mode-hook 'lsp)))
+   (add-hook 'TeX-mode-hook 'lsp))
+
+  :func
+  (defun mh//simplify-tex-string ()
+    (let ((str (buffer-string)))
+      (shell-command-to-string (concat "python "
+                                       (file-truename user-emacs-directory)
+                                       "scripts/sympy_simplify_tex.py"
+                                       " '"
+                                       str
+                                       "'"))))
+
+  (defun mh/simplify-tex (beg end)
+    (interactive
+     (if (use-region-p)
+         (list (region-beginning) (region-end))
+       (list nil nil)))
+    (if (and beg end)
+        (replace-region-contents beg end 'mh//simplify-tex-string))))
 
 ;;; tex-layer.el ends here

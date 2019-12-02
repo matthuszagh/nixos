@@ -1,5 +1,6 @@
 # -*- mode: snippet -*-
 # name: int
-# key: int
+# regexp-key: \([^\\]\|^\)int
+# condition: 'texmathp
 # --
-\int_{${1:sub}}^{${2:sup}}$0
+`(nth 1 yas-matched-regexp-key-groups)`\int_{${1:sub}}^{${2:sup}}$0

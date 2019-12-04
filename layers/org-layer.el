@@ -26,7 +26,7 @@
     ;; TODO this is probably the wrong way to do this, but it does get
     ;; rid of this really annoying issue.
     (general-define-key
-     :keymaps 'evil-motion-state-map
+     :keymaps 'org-mode-map
      "TAB" 'org-cycle
      "C-RET" 'org-insert-heading-respect-content
      "RET" 'org-insert-heading-respect-content)

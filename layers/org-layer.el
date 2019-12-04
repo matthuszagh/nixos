@@ -1,4 +1,4 @@
-;;; org-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; org-layer.el --- Summary -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -23,13 +23,10 @@
                    (setq-local fill-column 70)))
      (org-babel-after-execute . org-display-inline-images))
     :config
-    ;; TODO this is probably the wrong way to do this, but it does get
-    ;; rid of this really annoying issue.
     (general-define-key
      :keymaps 'org-mode-map
      "TAB" 'org-cycle
-     "C-RET" 'org-insert-heading-respect-content
-     "RET" 'org-insert-heading-respect-content)
+     "C-RET" 'org-insert-heading-respect-content)
 
     (setq org-startup-with-latex-preview t)
     (setq org-startup-with-inline-images t)

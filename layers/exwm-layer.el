@@ -1,4 +1,4 @@
-;;; exwm-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; exwm-layer.el --- Summary -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -62,16 +62,22 @@
     (require 'exwm-config)
     (exwm-enable)
     (require 'exwm-randr)
-    (setq exwm-randr-workspace-output-plist '(0 "eDP-1-1" 1 "DP-0" 2 "DP-2"))
-    (add-hook 'exwm-randr-screen-change-hook
-              (lambda ()
-                (start-process-shell-command
-                 "xrandr" nil (concat "xrandr --output eDP-1-1 --auto "
-                                      "--output DP-0 --above eDP-1-1 "
-                                      "--output DP-2 --right-of DP-0"))))
+    (exwm-randr-enable)
+    (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"DP-0 connected\"")))
+        (start-process-shell-command
+         "xrandr" nil (concat "xrandr --output eDP-1-1 --auto"
+                              " --output DP-0 --above eDP-1-1"
+                              " --output DP-2 --right-of DP-0"
+                              " && xrandr --setmonitor external auto DP-0,DP-2")))
     ;; "--set \"PRIME Synchronization\" 1"))))
-    (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0" 2 "DP-2"))
-    (exwm-randr-enable))
+    (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0"))
+
+    ;; Increase screen scaling for main computer monitor
+    (add-hook 'exwm-init-hook
+              (lambda ()
+                (exwm-workspace-switch 0)
+                (mh/zoom-in-selected-frame)
+                (mh/zoom-in-selected-frame))))
 
   (use-package pulseaudio-control)
 

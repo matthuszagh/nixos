@@ -47,7 +47,8 @@
     :states 'normal
     "g r" 'lsp-ui-peek-find-references
     "g i" 'lsp-find-implementation
-    "g x" 'lsp-rename)
+    "g x" 'lsp-rename
+    "g s" 'lsp-ui-find-workspace-symbol)
 
    (general-define-key
     :keymaps 'lsp-ui-peek-mode-map

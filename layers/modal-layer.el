@@ -33,7 +33,8 @@
    (general-define-key
     :states 'normal
     "g d" 'xref-find-definitions
-    "g p" 'xref-pop-marker-stack)
+    "g p" 'xref-pop-marker-stack
+    "g l" 'goto-line)
 
    (general-define-key
     :keymaps 'mh/prefix-map

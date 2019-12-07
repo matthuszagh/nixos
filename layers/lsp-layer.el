@@ -1,4 +1,6 @@
-;;; lsp-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; lsp-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -43,8 +45,13 @@
   (:layer modal
    (general-define-key
     :states 'normal
-    "g r" 'lsp-find-references
+    "g r" 'lsp-ui-peek-find-references
     "g i" 'lsp-find-implementation
-    "g x" 'lsp-rename)))
+    "g x" 'lsp-rename)
+
+   (general-define-key
+    :keymaps 'lsp-ui-peek-mode-map
+    "j" 'lsp-ui-peek--select-next
+    "k" 'lsp-ui-peek--select-prev)))
 
 ;;; lsp-layer.el ends here

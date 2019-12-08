@@ -784,6 +784,16 @@ org-capture instead."
     "_" 'mh/tex-insert-subscript
     "^" 'mh/tex-insert-superscript)
 
+   (general-def 'normal org-mode-map
+     "M-j" 'mc/mark-next-like-this
+     "M-k" 'mc/mark-previous-like-this
+     "g j" 'org-forward-heading-same-level
+     "g k" 'org-backward-heading-same-level
+     "g l" 'org-next-visible-heading
+     "g h" 'org-previous-visible-heading
+     "C-j" 'outline-move-subtree-down
+     "C-k" 'outline-move-subtree-up)
+
    ;; local org mode commands
    (localleader :keymaps 'org-mode-map
      "T" 'org-babel-tangle
@@ -803,7 +813,8 @@ org-capture instead."
      "P" 'org-priority
      "L" 'org-toggle-latex-fragment
      "z" 'mh/command-org-tex-insert-prefix
-     "o" 'org-open-at-point)
+     "o" 'org-open-at-point
+     "d" 'define-word-at-point)
 
    ;; org agenda keys
    ;; override org agenda keys and add back the ones you want

@@ -1,4 +1,6 @@
-;;; default-theme-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; default-theme-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

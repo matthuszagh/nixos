@@ -8,11 +8,13 @@
   :setup
   (use-package image-mode)
 
-  ;; :postsetup
-  ;; (:layer modal
-  ;;         (localleader :keymaps 'image-mode-map
-  ;;           "=" 'image-increase-size
-  ;;           "-" 'image-decrease-size))
-  )
+  :postsetup
+  (:layer modal
+   (general-define-key
+    :keymaps 'image-map
+    "i" 'image-increase-size
+    "o" 'image-decrease-size
+    "l" 'image-next-frame
+    "h" 'image-previous-frame)))
 
 ;;; image-layer.el ends here

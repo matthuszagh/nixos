@@ -860,6 +860,9 @@ org-capture instead."
   (:layer internet
    (use-package org-eww))
 
+  (:layer documentation
+   (use-package ol-man))
+
   :func
   (setq mh-latex-scale 1.0)
   (defun mh/increase-latex-scale ()

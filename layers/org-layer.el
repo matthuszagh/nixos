@@ -452,7 +452,7 @@ a HTML file."
                     :use-xcolor t
                     :image-input-type "pdf"
                     :image-output-type "svg"
-                    :image-size-adjust (1.0 . 1.0)
+                    :image-size-adjust (2.0 . 1.0)
                     :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
                     :image-converter ("dvisvgm %f -P -n -b min -c %S -o %O")))
 

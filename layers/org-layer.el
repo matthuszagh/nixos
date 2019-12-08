@@ -279,9 +279,9 @@ a HTML file."
 ** outline [/]
 %(mh/pdf-outline-to-org-headline \"%F\" 2 nil)")
             ("p" "productivity" entry (file+headline "/home/matt/doc/notes/projects/productivity.org" "refile")
-             "* HOLD %^{PROMPT}")
+             "* TODO %^{PROMPT}")
             ("w" "work" entry (file+headline "/home/matt/doc/notes/projects/work.org" "refile")
-             "* HOLD %^{PROMPT}")))
+             "* TODO %^{PROMPT}")))
     (setq org-agenda-files (append
                             '("/home/matt/src/dotfiles/README.org")
                             (directory-files-recursively "/home/matt/doc/notes" "org$")))

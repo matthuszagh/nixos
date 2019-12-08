@@ -54,6 +54,8 @@
 
   (use-package helm-man)
 
+  (use-package helm-xref)
+
   :postsetup
   (:layer modal
    (general-def mh/prefix-map

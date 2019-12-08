@@ -336,6 +336,10 @@ a HTML file."
 
 %% tikz settings
 \\tikzset{>=latex}
+% Important equation emphasis box
+\\def\\eqnBoxCol{gray!30!bgcolor}
+\\tikzset{emphBox/.style={draw=\\eqnBoxCol, fill=\\eqnBoxCol, thick, rectangle, inner sep=5pt, inner ysep=10pt}}
+
 %% pgfplots
 \\pgfplotsset{compat=newest}
 \\pgfplotsset{
@@ -353,6 +357,7 @@ a HTML file."
   every boxed y axis/.style={},
 }
 \\usepgfplotslibrary{groupplots}
+
 %% tikztiminglibraries
 \\usetikztiminglibrary{counters}")
 

@@ -148,10 +148,6 @@ a HTML file."
     (add-to-list 'org-modules 'org-habit)
     (setq org-habit-show-habits nil)
 
-    ;; org-drill
-    (add-to-list 'org-modules 'org-drill)
-    (setq org-drill-hide-item-headings-p t)
-
     ;; property inheritance
     (setq org-use-property-inheritance t)
 
@@ -517,6 +513,10 @@ a HTML file."
     ;; make contrib files visible
     ;; TODO modify this for nixpkgs
     (add-to-list 'load-path "~/.emacs.d/straight/repos/org/contrib/lisp" t))
+
+  (use-package org-drill
+    :config
+    (setq org-drill-hide-item-headings-p t))
 
   ;; (use-package polymode)
 

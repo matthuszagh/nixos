@@ -21,7 +21,9 @@
     :hook
     ((org-mode . (lambda ()
                    (setq-local fill-column 70)))
-     (org-babel-after-execute . org-display-inline-images))
+     (org-babel-after-execute . org-display-inline-images)
+     (org-mode . (lambda ()
+                   (company-mode -1))))
     :config
     (defun mh//override-org-create-formula-image
         (string tofile options buffer &optional processing-type)

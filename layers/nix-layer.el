@@ -1,4 +1,6 @@
-;;; nix-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; nix-layer.el --- Summary -*-lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

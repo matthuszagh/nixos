@@ -308,12 +308,14 @@ a HTML file."
     (setq org-format-latex-header "% Needed for proper rendering with some corner cases in luatex
 \\RequirePackage{luatex85}
 \\PassOptionsToPackage{usenames}{xcolor}
-\\documentclass{standalone}
+\\documentclass[border={0pt 1pt}]{standalone}
 \[PACKAGES]
 \[DEFAULT-PACKAGES]
+
 %% color definitions
 \\definecolor{bgcolor}{rgb}{0.133333333333, 0.133333333333, 0.133333333333}
 \\definecolor{fgcolor}{rgb}{0.764705882353, 0.764705882353, 0.690196078431}
+
 %% Circuitikz style options
 \\ctikzset{-o/.style = {bipole nodes={none}{ocirc, fill=bgcolor}}}
 \\ctikzset{o-/.style = {bipole nodes={ocirc, fill=bgcolor}{none}}}

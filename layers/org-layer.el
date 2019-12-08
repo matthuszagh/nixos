@@ -323,6 +323,7 @@ a HTML file."
 \\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bgcolor}}}
 \\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
 \\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
+
 %% tikz libraries
 \\usetikzlibrary{intersections}
 \\usetikzlibrary{3d}
@@ -331,6 +332,8 @@ a HTML file."
 \\usetikzlibrary{decorations.markings}
 \\usetikzlibrary{positioning}
 \\usetikzlibrary{automata}
+\\usetikzlibrary{patterns}
+
 %% tikz settings
 \\tikzset{>=latex}
 %% pgfplots

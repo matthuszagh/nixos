@@ -116,6 +116,13 @@ a HTML file."
           image-output-file)))
 
     (advice-add 'org-create-formula-image :override #'mh//override-org-create-formula-image)
+
+    (use-package org-element
+      :config
+      ;; permit the use of latex environments in inline math delimiters
+      (setq org-element--latex-begin-environment "^[ \t]*\\(?:\\\\(\\|\\$\\)?\\\\begin{\\([A-Za-z0-9*]+\\)}")
+      (setq org-element--latex-end-environment "\\\\end{%s}[ \t]*\\(?:\\\\)\\|\\$\\)?$"))
+
     (general-define-key
      :keymaps 'org-mode-map
      "TAB" 'org-cycle

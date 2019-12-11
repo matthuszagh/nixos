@@ -3,5 +3,5 @@
 # key: lbrace
 # --
 \left\\{\begin{alignedat}{2}
-  & $1, & \quad $2 \\\\
+  $1 &, && \quad $2 \\\\
 \end{alignedat}\right.$0

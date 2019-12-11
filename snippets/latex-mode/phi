@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: phi
+# regexp-key: \([^\\]\|^\)phi
+# condition: (and (texmathp) 'auto)
+# --
+`(nth 1 yas-matched-regexp-key-groups)`\phi

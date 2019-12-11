@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: exponent template
-# key: ^
-# --
-^{$0}

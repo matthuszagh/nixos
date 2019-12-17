@@ -15,12 +15,15 @@
   (use-package eww
     :config
     ;; use eww as default browser
-    (setq browse-url-browser-function 'eww-browse-url))
+    (setq browse-url-browser-function 'eww-browse-url)
+    ;; use firefox as backup
+    (setq browse-url-secondary-browser-function 'browse-url-firefox))
 
   (use-package shr
     :config
     ;; use monospaced rather than proportional fonts
     (setq shr-use-fonts nil)
+    (setq shr-use-colors nil)
     ;; wrap text at 70 in eww
     (setq shr-width 70))
 

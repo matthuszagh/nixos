@@ -159,22 +159,19 @@ a HTML file."
              ((tags-todo "work"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Work")))
-              (agenda "" ((org-agenda-span 'day)))
-              (tags-todo "+nix+PRIORITY=\"A\""
+              ;; (agenda "" ((org-agenda-span 'day)))
+              (tags-todo "nix"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Nix")))
               (tags-todo "emacs"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Emacs")))
-              (tags-todo "read"
+              (tags-todo "software"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Read")))
-              (tags-todo "physics"
+                          (org-agenda-overriding-header "Software")))
+              (tags-todo "circuits"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Physics")))
-              (tags-todo "electronics"
-                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Electronics")))))))
+                          (org-agenda-overriding-header "Circuits")))))))
 
     ;; todo statistics should display all recursive children
     (setq org-hierarchical-todo-statistics nil)

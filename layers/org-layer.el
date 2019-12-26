@@ -203,7 +203,14 @@ a HTML file."
     (setq org-src-preserve-indentation t)
 
     ;; don't display emphasis characters
-    (setq org-hide-emphasis-markers t)
+    (setq org-hide-emphasis-markers nil)
+
+    ;; Don't pretty display things like pi. This makes it harder to
+    ;; edit latex code.
+    (setq org-pretty-entities nil)
+    ;; When displaying pretty entities, don't display
+    ;; super/subscripts.
+    (setq org-pretty-entities-include-sub-superscripts nil)
 
     ;; don't trigger error for broken links during export
     (setq org-export-with-broken-links t)
@@ -257,7 +264,6 @@ a HTML file."
     ;; Run `org-self-insert-command' only if `mh/org-insert-org-entity-maybe'
     ;; returns nil.
     (advice-add 'org-self-insert-command :before-until #'mh/org-insert-org-entity-maybe)
-    (setq org-pretty-entities t)
 
     ;; `org-adapt-indentation' indents heading contents to the beginning of the heading. This is nice
     ;; in a way, but limits the amount of horizontal space when you have deeply-nested headings.

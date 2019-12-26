@@ -95,8 +95,8 @@ a HTML file."
           (insert "\n\\begin{document}\n"
 	          "\\definecolor{fg}{rgb}{" fg "}%\n"
 	          "\\definecolor{bg}{rgb}{" bg "}%\n"
-	          "\n\\pagecolor{bg}%\n"
-	          "\n{\\color{fg}\n"
+	          "\n\\nopagecolor%\n"
+	          "\n{\\color{fgcolor}\n"
 	          string
 	          "\n}\n"
 	          "\n\\end{document}\n"))

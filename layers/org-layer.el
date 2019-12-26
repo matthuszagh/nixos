@@ -190,8 +190,9 @@ a HTML file."
     (advice-add 'create-image :filter-args
                 #'org-display-inline-images--with-color-theme-background-color)
 
-    ;; use actual width for inline image
-    (setq org-image-actual-width t)
+    ;; look for a specified attribute width, otherwise fallback to
+    ;; actual image width
+    (setq org-image-actual-width nil)
 
     ;; fontify when not in polymode
     (setq org-src-fontify-natively t)

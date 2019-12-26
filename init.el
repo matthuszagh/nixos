@@ -63,7 +63,8 @@
                     image
 
                     ;; appearance
-                    default-theme
+                    ;; sourcerer-theme
+                    naysayer-theme
                     spaceline
                     rainbow-delimiters
                     ;; pairs

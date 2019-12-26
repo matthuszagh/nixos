@@ -272,7 +272,6 @@ a HTML file."
           org-todo-keyword-faces '(("INPROGRESS" . (:foreground "#cc8800"))))
     (setq org-todo-keywords
           '((sequence "HOLD" "TODO" "|" "DONE" "CANCELLED")))
-    ;; (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
     (setq org-capture-templates
           '(("b" "pdf" entry (file "/home/matt/doc/notes/wiki.org")
              "* %f

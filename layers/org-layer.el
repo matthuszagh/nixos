@@ -339,6 +339,14 @@ a HTML file."
 % Important equation emphasis box
 \\def\\eqnBoxCol{gray!30!bgcolor}
 \\tikzset{emphBox/.style={draw=\\eqnBoxCol, fill=\\eqnBoxCol, thick, rectangle, inner sep=5pt, inner ysep=10pt}}
+% extract x and y coordinates of tikz point
+\\makeatletter
+\\newcommand{\\gettikzxy}[3]{%
+  \\tikz@scan@one@point\\pgfutil@firstofone#1\\relax
+  \\edef#2{\\the\\pgf@x}%
+  \\edef#3{\\the\\pgf@y}%
+}
+\\makeatother
 
 %% pgfplots
 \\pgfplotsset{compat=newest}

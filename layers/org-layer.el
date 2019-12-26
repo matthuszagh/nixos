@@ -394,7 +394,7 @@ a HTML file."
     (add-to-list 'org-latex-packages-alist
                  '("" "pgfplots" t))
     (add-to-list 'org-latex-packages-alist
-                 '("" "circuitikz" t))
+                 '("american" "circuitikz" t))
     (add-to-list 'org-latex-packages-alist
                  '("" "tikz-timing" t))
     (add-to-list 'org-latex-packages-alist

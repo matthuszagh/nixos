@@ -169,6 +169,9 @@ a HTML file."
               (tags-todo "software"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Software")))
+              (tags-todo "hardware"
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Hardware")))
               (tags-todo "circuits"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Circuits")))))))

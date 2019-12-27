@@ -291,8 +291,14 @@ a HTML file."
     (setq org-agenda-files (append
                             '("/home/matt/src/dotfiles/README.org")
                             (directory-files-recursively "/home/matt/doc/notes" "org$")))
-    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 10))))
+    ;; use the current file for refile
+    (setq org-refile-targets '((nil . (:maxlevel . 100))))
+    ;; show candidates as slash-delimited (i.e. science/physics)
     (setq org-refile-use-outline-path t)
+    ;; allows helm to get all completion candidates
+    (setq org-outline-path-complete-in-steps nil)
+    ;; speed up refile
+    (setq org-refile-use-cache t)
     (setq org-agenda-follow-mode t)
     ;; include plain lists in org cycling, which folds lists by default when a heading is first
     ;; expanded.

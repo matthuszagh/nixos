@@ -1,5 +1,7 @@
 ;;; base-layer.el --- Base Layer -*- lexical-binding: t; -*-
 
+;;; Commentary:
+
 ;;; Code:
 
 (layer-def base

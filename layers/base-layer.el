@@ -205,6 +205,10 @@
     "Sometimes Emacs shows the wrong image when it thinks an image
 hasn't changed. This clears the image cache to prevent this."
     (interactive)
-    (clear-image-cache t)))
+    (clear-image-cache t))
+
+  (defun mh/insert-current-date ()
+    (interactive)
+    (insert (shell-command-to-string "echo -n $(date +%d/%m/%Y)"))))
 
 ;;; base-layer.el ends here

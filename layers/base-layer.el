@@ -62,6 +62,9 @@
   ;; enable y/n answers
   (fset 'yes-or-no-p 'y-or-n-p)
 
+  ;; ignore undo discard info warnings
+  (setq warning-suppress-types '((undo discard-info)))
+
   ;; automatically make relevant files executable
   (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 

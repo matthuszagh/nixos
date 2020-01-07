@@ -1,4 +1,6 @@
-;;; python-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; python-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -58,6 +60,11 @@
   :postsetup
   (:layer debugging
    (localleader :keymaps 'python-mode-map
-     "d" 'realgud:pdb)))
+     "d" 'realgud:pdb
+     "c" '(lambda (cmd)
+            (interactive
+             (list
+              (compilation-read-command compile-command)))
+            (compile cmd t)))))
 
 ;;; python-layer.el ends here

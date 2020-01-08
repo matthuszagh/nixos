@@ -146,6 +146,26 @@ a HTML file."
           (cons '(:noweb . "yes")
                 (assq-delete-all :noweb org-babel-default-header-args)))
 
+    ;; allow the use of :hidden to hide certain source blocks when a
+    ;; buffer is opened. All others will be visible by default.
+    (defun mh//individual-visibility-source-blocks ()
+      "Fold some blocks in the current buffer."
+      (interactive)
+      (org-show-block-all)
+      (org-block-map
+       (lambda ()
+         (let ((case-fold-search t))
+           (when (and
+                  (save-excursion
+                    (beginning-of-line 1)
+                    (looking-at org-block-regexp))
+                  (cl-assoc
+                   ':hidden
+                   (cl-third
+                    (org-babel-get-src-block-info))))
+             (org-hide-block-toggle))))))
+    (add-hook 'org-mode-hook (function mh//individual-visibility-source-blocks))
+
     ;; use habits
     (add-to-list 'org-modules 'org-habit)
     (setq org-habit-show-habits nil)

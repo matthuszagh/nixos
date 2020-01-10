@@ -24,6 +24,11 @@
     ((eshell-mode . (lambda ()
                       (setq-local scroll-margin 0)
                       (setq-local scroll-conservatively 101))))
+    ;; :init
+    ;; (add-hook 'eshell-mode-hook (lambda ()
+    ;;                               (general-define-key
+    ;;                                :keymaps 'company-active-map
+    ;;                                "<tab>" 'company-complete-common)) 0 t)
     :config
     ;; TODO not sure if this works
     (setq eshell-buffer-maximum-lines 0))
@@ -31,12 +36,27 @@
   ;; Don't truncate terminal output
   (setq term-buffer-maximum-size 0)
 
+  ;; (use-package eterm-256color
+  ;;   :hook (vterm-mode . eterm-256color-mode))
+
+  (use-package vterm
+    :config
+    (setq vterm-shell "/run/current-system/sw/bin/fish"))
+
+  (use-package vterm-toggle)
+
   :postsetup
   (:layer modal
    (general-def mh/prefix-shell-map
      "c" 'async-shell-command
      "e" 'eshell
      "t" 'term)
+
+   (general-define-key
+    :keymaps 'comint-mode-map
+    "C-k" 'comint-previous-input
+    "C-j" 'comint-next-input
+    "C-r" 'comint-history-isearch-backward-regexp)
 
    (general-define-key
     :states '(normal insert)
@@ -55,6 +75,12 @@
      :config
      (global-fish-completion-mode)
      (setq fish-completion-fallback-on-bash-p t)))
+
+  ;; (:layer (modal completions)
+  ;;  (add-hook 'eshell-mode-hook (lambda ()
+  ;;                                (general-define-key
+  ;;                                 :keymaps 'local
+  ;;                                 "<tab>" 'company-complete-common))))
 
   (:layer flycheck
    (add-hook 'sh-mode-hook 'flycheck-mode)

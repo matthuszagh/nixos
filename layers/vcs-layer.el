@@ -31,7 +31,12 @@
     :hook ((magit-mode . (lambda ()
                            (setq whitespace-mode -1)))
            (git-commit-setup . (lambda ()
-                                 (set-fill-column 50))))
+                                 (set-fill-column 70)))
+           (git-commit-setup . (lambda ()
+                                 (localleader
+                                   :keymaps 'local
+                                   "d" (lambda ()
+                                         (call-interactively 'mh/insert-current-date))))))
     :commands (magit-checkout)
     :config
     (setq magit-repository-directories '(("/home/matt/src" . 10))))
@@ -81,7 +86,9 @@
    (general-def mh/prefix-prog-map
      "s" 'magit-status
      "S" 'magit-list-repositories
-     "t" 'git-timemachine))
+     "t" 'git-timemachine
+     "e" (lambda ()
+           (helm-browse-project-find-files "/home/matt/src/dotfiles/config/emacs"))))
 
   :func
   (defun mh/magit-fetch-all-repositories ()

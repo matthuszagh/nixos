@@ -1,4 +1,4 @@
-;;; naysayer-theme-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; naysayer-theme-layer.el --- Naysayer Theme -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -19,7 +19,11 @@
    ;; set inline code appearance
    (set-face-background 'org-code "unspecified")
    (set-face-foreground 'org-code "#8686ae")
-   (set-face-foreground 'org-link "#86aed5"))
-  )
+   (set-face-foreground 'org-link "#86aed5")
+
+   ;; org todo keyword faces
+   (set-face-foreground 'org-todo "#d4d4d4")
+   (setq org-todo-keyword-faces '(("TODO" . (:foreground "Pink"
+                                             :weight bold))))))
 
 ;;; naysayer-theme-layer.el ends here

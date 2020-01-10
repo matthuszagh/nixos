@@ -1,4 +1,4 @@
-;;; modal-layer.el --- Summary -*-lexical-binding: t; -*-
+;;; modal-layer.el --- Modal Editing Layer -*-lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -127,7 +127,13 @@
     :prefix "m"
     :prefix-command 'mh/command-mark-prefix
     :prefix-map 'mh/prefix-mark-map
-    "a" 'mark-whole-buffer))
+    "a" 'mark-whole-buffer)
+
+   ;; minibuffer keybindings
+   (general-define-key
+    :keymaps 'minibuffer-local-map
+    "C-j" 'next-history-element
+    "C-k" 'previous-history-element))
 
   :setup
   (use-package evil

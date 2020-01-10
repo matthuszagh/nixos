@@ -25,6 +25,8 @@
      (org-mode . (lambda ()
                    (company-mode -1))))
     :config
+    ;; TODO remove when I can get the upstream version of org, since
+    ;; this has been incorporated.
     (defun mh//override-org-create-formula-image
         (string tofile options buffer &optional processing-type)
       "Create an image from LaTeX source using external processes.
@@ -194,7 +196,10 @@ a HTML file."
                           (org-agenda-overriding-header "Hardware")))
               (tags-todo "circuits"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Circuits")))))))
+                          (org-agenda-overriding-header "Circuits")))
+              (tags-todo "read"
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Prioritized Reading Material")))))))
 
     ;; todo statistics should display all recursive children
     (setq org-hierarchical-todo-statistics nil)
@@ -291,8 +296,7 @@ a HTML file."
     ;; `org-adapt-indentation' indents heading contents to the beginning of the heading. This is nice
     ;; in a way, but limits the amount of horizontal space when you have deeply-nested headings.
     (setq org-adapt-indentation nil)
-    (setq org-log-done 'time
-          org-todo-keyword-faces '(("INPROGRESS" . (:foreground "#cc8800"))))
+    (setq org-log-done 'time)
     (setq org-todo-keywords
           '((sequence "HOLD" "TODO" "|" "DONE" "CANCELLED")))
     (setq org-capture-templates
@@ -355,6 +359,7 @@ a HTML file."
 \\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bgcolor}}}
 \\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
 \\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
+\\ctikzset{tripoles/mos style/arrows}
 
 %% tikz libraries
 \\usetikzlibrary{intersections}
@@ -463,8 +468,6 @@ a HTML file."
     ;; keep the same column format in the agenda columns view
     (setq org-agenda-overriding-columns-format org-columns-default-format)
 
-    ;; (plist-put org-format-latex-options :background "white")
-
     ;; (setq org-latex-pdf-process
     ;;       (list "sed -i 's/\\begin{latex}//'"
     ;;             "sed -i 's/\\end{latex}//'"
@@ -482,7 +485,7 @@ a HTML file."
                       :image-input-type "pdf"
                       :image-output-type "png"
                       :image-size-adjust (1.0 . 1.0)
-                      :latex-compiler ("latexmk -cd -f -diagnostics -interaction=nonstopmode -output-directory=%o %f")
+                      :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
                       :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
 
     (setq luasvgm
@@ -501,8 +504,75 @@ a HTML file."
 
     ;; TODO this requires dvisvgm >= 2.7.2, which requires overriding
     ;; the version texlive uses.
-    ;; (setq org-preview-latex-default-process 'luasvgm)
-    (setq org-preview-latex-default-process 'luamagick)
+    (setq org-preview-latex-default-process 'luasvgm)
+    ;; (setq org-preview-latex-default-process 'luamagick)
+
+    ;; export macros
+    (setq org-export-global-macros
+          '((comment . "")))
+    ;; export asynchronously
+    (setq org-export-in-background t)
+
+    ;; fontify latex fragments (inline latex) natively
+    (setq org-highlight-latex-and-related '(native))
+
+    ;; TODO the performance on this is terrible.
+    ;; ;; Automatically add last-modified timestamps to org headings.
+    ;; (defun mh/getentryhash ()
+    ;;   "Get the hash sum of the text in current entry, except :HASH: and :MODIFIED: property texts."
+    ;;   (save-excursion
+    ;;     (let* ((beg (progn (org-back-to-heading) (point)))
+    ;;            (end (progn
+    ;;                   (forward-char)
+    ;;                   (if (not (re-search-forward "^\*+ " (point-max) t))
+    ;;                       (point-max)
+    ;;                     (match-beginning 0))))
+    ;;            (full-str (buffer-substring-no-properties beg end))
+    ;;            (str-nohash (if (string-match "^ *:HASH:.+\n" full-str)
+    ;;                            (replace-match "" nil nil full-str)
+    ;;                          full-str))
+    ;;            (str-nohash-nomod (if (string-match "^ *:MODIFIED:.+\n" str-nohash)
+    ;;                                  (replace-match "" nil nil str-nohash)
+    ;;                                str-nohash))
+    ;;            (str-nohash-nomod-nopropbeg (if (string-match "^ *:PROPERTIES:\n" str-nohash-nomod)
+    ;;                                            (replace-match "" nil nil str-nohash-nomod)
+    ;;                                          str-nohash-nomod))
+    ;;            (str-nohash-nomod-nopropbeg-end (if (string-match "^ *:END:\n" str-nohash-nomod-nopropbeg)
+    ;;                                                (replace-match "" nil nil str-nohash-nomod-nopropbeg)
+    ;;                                              str-nohash-nomod-nopropbeg)))
+    ;;       (sxhash str-nohash-nomod-nopropbeg-end))))
+
+    ;; (defun mh/update-modification-time ()
+    ;;   "Set the :MODIFIED: property of the current entry to NOW and update :HASH: property."
+    ;;   (org-set-property "HASH" (format "%s" (mh/getentryhash)))
+    ;;   (org-set-property "MODIFIED" (format-time-string "%Y-%m-%d %H:%M")))
+
+    ;; (defun mh/skip-nonmodified ()
+    ;;   "Skip org entries, which were not modified according to the :HASH: property"
+    ;;   (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+    ;;     (if (string= (org-entry-get (point) "HASH" nil) (format "%s" (mh/getentryhash)))
+    ;;         next-headline
+    ;;       nil)))
+
+    ;; (add-hook 'org-mode-hook
+    ;;           (lambda ()
+    ;;             (add-hook 'before-save-hook
+    ;;                       '(org-map-entries #'mh/update-modification-time nil 'region #'mh/skip-nonmodified)
+    ;;                       nil t)))
+
+    ;; list of programs to use for opening links from org-mode
+    (setq org-file-apps '((auto-mode . emacs)
+                          ("\\.mm\\'" . default)
+                          ("\\.x?html?\\'" . default)
+                          ("\\.pdf\\'" . default)
+                          ("\\.gif\\'" . (lambda (file link)
+                                           (let ((my-image (create-image file))
+                                                 (tmpbuf (get-buffer-create "*gif")))
+                                             (switch-to-buffer tmpbuf)
+                                             (erase-buffer)
+                                             (insert-image my-image)
+                                             (call-interactively 'image-mode)
+                                             (image-animate my-image))))))
 
     (setq org-confirm-babel-evaluate nil)
     (org-babel-do-load-languages
@@ -576,6 +646,18 @@ a HTML file."
   ;;   :after (polymode org)
   ;;   :config
   ;;   (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
+
+  ;; ;; TODO too slow
+  ;; (use-package org-db)
+
+  ;; links
+  (use-package ol
+    :config
+    (setq org-link-frame-setup '((vm . vm-visit-folder-other-frame)
+                                 (vm-imap . vm-visit-imap-folder-other-frame)
+                                 (gnus . org-gnus-no-new-news)
+                                 (file . find-file-other-window)
+                                 (wl . wl-other-frame))))
 
   (use-package org-edna
     :config
@@ -913,6 +995,15 @@ org-capture instead."
   (defun mh/decrease-latex-scale ()
     (interactive)
     (setq mh-latex-scale (- mh-latex-scale 0.1))
-    (call-interactively 'revert-buffer)))
+    (call-interactively 'revert-buffer))
+
+  (defun mh/org-set-property-from-link ()
+    (interactive)
+    (org-set-property (org-read-property-name)
+                      (org-insert-link)))
+
+  (defun mh/org-clear-cache ()
+    (interactive
+     (org-refile-cache-clear))))
 
 ;;; org-layer.el ends here

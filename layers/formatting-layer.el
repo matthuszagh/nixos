@@ -1,4 +1,6 @@
-;;; formatting-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; formatting-layer.el --- Summary -*-lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -19,6 +21,9 @@
      "a" 'align-regexp))
   ;;(:layer notes
   ;;      (add-to-list 'org-mode aggressive-indent-excluded-modes))
+  (:layer helm
+   (general-def mh/prefix-format-map
+     "p" 'helm-show-kill-ring))
   )
 
 ;;; formatting-layer.el ends here

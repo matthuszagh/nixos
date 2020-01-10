@@ -34,17 +34,17 @@
     (setq python-fill-docstring-style 'django)
     )
 
-  ;; (use-package elpy
-  ;;   :hook (python-mode . elpy-mode)
-  ;;   :config
-  ;;   (elpy-enable)
-  ;;   (setq elpy-rpc-backend "jedi")
-  ;;   (setq elpy-shell-display-buffer-after-send t)
-  ;;   (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
-  ;;   (when (require 'flycheck nil t)
-  ;;     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  ;;     (setq flycheck-python-pylint-executable "pylint")
-  ;;     (add-hook 'elpy-mode-hook 'flycheck-mode)))
+  (use-package elpy
+    :hook (python-mode . elpy-mode)
+    :config
+    (elpy-enable))
+  ;; (setq elpy-rpc-backend "jedi")
+  ;; (setq elpy-shell-display-buffer-after-send t)
+  ;; (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
+  ;; (when (require 'flycheck nil t)
+  ;;   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  ;;   (setq flycheck-python-pylint-executable "pylint")
+  ;;   (add-hook 'elpy-mode-hook 'flycheck-mode)))
 
   ;; (use-package py-autopep8
   ;;   :hook (elpy-mode . py-autopep8-enable-on-save))
@@ -56,6 +56,9 @@
     :hook (python-mode . blacken-mode)
     :config
     (setq blacken-line-length 79))
+
+  (use-package cython-mode)
+  (use-package flycheck-cython)
 
   :postsetup
   (:layer debugging

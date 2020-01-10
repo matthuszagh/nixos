@@ -2,6 +2,6 @@
 # name: full template of circuitkz enivornment
 # key: circ
 # --
-\begin{circuitikz}[color=fg]
+\begin{circuitikz}[color=fgcolor]
 $0
 \end{circuitikz}

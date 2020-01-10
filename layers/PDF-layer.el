@@ -1,4 +1,6 @@
-;;; pdf-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; pdf-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -33,6 +35,11 @@
      "j" 'pdf-view-next-line-or-next-page
      "k" 'pdf-view-previous-line-or-previous-page
      "SPC" 'mh/command-prefix)
+
+   (general-define-key
+    :state 'normal
+    :keymaps 'pdf-outline-buffer-mode-map
+    "<tab>" 'outline-toggle-children)
 
    (localleader :keymaps 'pdf-view-mode-map
      "s" 'pdf-occur

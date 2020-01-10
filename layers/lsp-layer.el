@@ -1,4 +1,4 @@
-;;; lsp-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; lsp-layer.el --- Language Server Protocol Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -12,19 +12,25 @@
     :config
     (setq lsp-enable-snippet nil)
     (require 'lsp-clients)
+    (add-to-list 'lsp-language-id-configuration '(cython-mode . "cython"))
     (setq lsp-log-io t)
     ;; automatically guess project root with projectile
     (setq lsp-auto-guess-root t))
 
   (use-package lsp-ui
     :demand t
-    :hook (lsp-mode . lsp-ui-mode)
-    :commands lsp-ui-mode)
+    :hook ((lsp-mode . lsp-ui-mode)
+           (lsp-ui-mode . lsp-ui-peek-mode)
+           (lsp-ui-mode . lsp-ui-doc-mode))
+    :commands lsp-ui-mode
+    :config
+    ;;(setq lsp-ui-doc-use-webkit t)
+    )
 
   (use-package company-lsp
     :commands company-lsp
     :config
-    (add-to-list 'company-backends 'company-lsp ))
+    (add-to-list 'company-backends 'company-lsp))
 
   :postsetup
   (:layer flycheck

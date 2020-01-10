@@ -1,28 +1,32 @@
 # -*- mode: snippet -*-
-# name: skidl pysim
-# key: skidlsim
+# name: skidl time simulation
+# key: skidlt
 # expand-env: ((yas-indent-line nil))
 # --
 #+begin_src python :results output silent
 from skidl.pyspice import *
+import numpy as np
 
 fname = "data/$1.dat"
 
 vs = SINEV(amplitude=1 @ u_V, frequency=60 @ u_Hz)
 # component declaration
+rload=R(value=1 @ u_kOhm)
 $2
 
 # component connections
+vs["n"] += gnd
 $3
+rload["n"] += gnd
 
 # generate netlist and waveforms
-circ = generate_netlist()
+circ = generate_netlist(libs="/home/matt/src/spicelib")
 sim = circ.simulator()
-waveforms = sim.transient(step_time={$4:0.1 @ u_ms}, end_time={$5:100 @ u_ms})
+waveforms = sim.transient(step_time=${4:0.1 @ u_ms}, end_time=${5:50 @ u_ms})
 
 time = waveforms.time
 vin = waveforms[node(vs["p"])]
-vout = waveforms[node(load["p"])]
+vout = waveforms[node(rload["p"])]
 
 with open(fname, "w") as f:
     f.write("{:6} {:6} {:6}\n".format("t", "vin", "vout"))

@@ -9,7 +9,8 @@
   (use-package calc
     :config
     ;; always use two's complement
-    (setq calc-twos-complement-mode t))
+    ;; (setq calc-twos-complement-mode t)
+    )
 
   :postsetup
   (:layer modal

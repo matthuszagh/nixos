@@ -1,4 +1,6 @@
-;;; make-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; make-layer.el --- Make Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

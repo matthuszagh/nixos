@@ -1,0 +1,58 @@
+# -*- mode: snippet -*-
+# name: skidl frequency simulation
+# key: skidlf
+# expand-env: ((yas-indent-line nil))
+# --
+#+begin_src python :results output silent
+from skidl.pyspice import *
+import numpy as np
+
+fname = "data/$1.dat"
+
+vs = SINEV(amplitude=1 @ u_V)
+# component declaration
+rload=R(value=1 @ u_kOhm)
+$2
+
+# component connections
+vs["n"] += gnd
+$3
+rload["n"] += gnd
+
+# generate netlist and waveforms
+circ = generate_netlist(libs="/home/matt/src/spicelib")
+sim = circ.simulator()
+waveforms = sim.ac(
+    variation="dec",
+    number_of_points=${4:100},
+    start_frequency=${5:1},
+    stop_frequency=${6:1e5},
+)
+
+freq = waveforms.frequency
+vin = waveforms[node(vs["p"])]
+vout = waveforms[node(c["p"])]
+
+with open(fname, "w") as f:
+    f.write("{:15} {:15} {:15}\n".format("freq", "vratio", "phase"))
+    for fr, vin, vout in zip(
+        freq.as_ndarray(), vin.as_ndarray(), vout.as_ndarray()
+    ):
+        arg = np.imag(vout / vin) / np.real(vout / vin)
+        f.write(
+            "{:15.5f} {:15.5f} {:15.5f}\n".format(
+                fr, abs(vout) / abs(vin), np.arctan(arg)
+            )
+        )
+#+end_src
+
+\begin{tikzpicture}
+\begin{semilogxaxis}[
+  title=$7,
+  ylabel={$\frac{|V_{out}|}{|V_{in}|}$},
+  xlabel={$f$},
+  xticklabels=\empty
+]
+  \addplot [] table[x=freq, y=vratio] {data/rc-lowpass-sim.dat};
+\end{semilogxaxis}
+\end{tikzpicture}$0

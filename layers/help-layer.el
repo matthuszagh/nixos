@@ -1,4 +1,6 @@
-;;; help-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; help-layer.el --- Summary -*-lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

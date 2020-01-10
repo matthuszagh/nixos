@@ -1,4 +1,6 @@
-;;; sx-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; sx-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -10,8 +12,6 @@
   (:layer modal
    (general-def 'normal sx-inbox-mode-map
      "RET" 'sx-display)
-   (general-def mh/prefix-prog-map
-     "e" 'sx-inbox)
    (general-def mh/prefix-search-map
      "S" 'sx-search)
    (localleader :keymaps 'sx-question-mode-map

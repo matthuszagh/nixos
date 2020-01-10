@@ -1,10 +1,10 @@
-;;; default-theme-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; sourcerer-theme-layer.el --- Summary -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
 ;;; Code:
 
-(layer-def default-theme
+(layer-def sourcerer-theme
   :depends (base no-littering)
   :presetup
   (:layer straight
@@ -34,4 +34,4 @@
    (set-face-foreground 'sml/filename "gold")))
 
 
-;;; default-theme-layer.el ends here
+;;; sourcerer-theme-layer.el ends here

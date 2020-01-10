@@ -1,4 +1,6 @@
-;;; emacs-lisp-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; emacs-lisp-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -12,6 +14,13 @@
   (:layer modal
    (localleader :keymaps 'emacs-lisp-mode-map
      "e" 'eval-last-sexp))
+
+  (:layer (modal dumb-jump)
+   (general-define-key
+    :keymaps 'emacs-lisp-mode-map
+    :states 'normal
+    "g d" 'dumb-jump-go
+    "g p" 'dumb-jump-back))
 
   (:layer flycheck
    (use-package flycheck-elsa

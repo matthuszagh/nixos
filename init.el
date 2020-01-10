@@ -105,6 +105,8 @@
                     rmsbolt
                     asy
                     snippet
+                    dap
+                    spice
 
                     ;; formatting
                     indenting

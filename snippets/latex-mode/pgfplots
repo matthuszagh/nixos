@@ -10,7 +10,7 @@
   legend entries={$4},
   legend style={
     fill=bg,
-    draw=fg
+    draw=fgcolor
   },
   set layers=axis on top,
   xticklabel style={

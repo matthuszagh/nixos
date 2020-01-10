@@ -30,7 +30,7 @@ WINDOW-WIDTH should be the width of the Helm window."
   (:layer (helm org modal)
    (cl-defun mh//helm-org-ql-olp-source (buffers-files &key (name "helm-org-ql-olp"))
      (helm-make-source name 'helm-source-sync
-       :candidates (lambda ()
+       :candidates (lambda nil
                      (let* ((query (->> helm-pattern
                                         s-split-words
                                         (apply #'list 'olp)))
@@ -66,6 +66,13 @@ WINDOW-WIDTH should be the width of the Helm window."
    (defun mh/helm-global-search ()
      (interactive)
      (helm :sources `(,(mh//helm-org-ql-olp-source (list mh-org-wiki-file))
+                      ,(helm-def-source--info-files)
+                      helm-source-man-pages
+                      helm-source-recoll-library)))
+
+   (defun mh/helm-global-search ()
+     (interactive)
+     (helm :sources `(,(helm-org-ql-source (list mh-org-wiki-file))
                       ,(helm-def-source--info-files)
                       helm-source-man-pages
                       helm-source-recoll-library)))

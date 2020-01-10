@@ -1,4 +1,6 @@
-;;; c-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; c-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -22,6 +24,8 @@ otherwise assumed alphabetic."
           (if primary-match
               (car (s-match "[A-Za-z]+$" (car primary-match)))
             ""))))
+    ;; TODO this leaves many settings unset. Look at
+    ;; `c-offsets-alist', particularly in C++ for finer-tuned options.
     :hook (c-mode-common . (lambda ()
                              (let* ((clang-format-config
                                      (shell-command-to-string "clang-format -dump-config"))
@@ -65,7 +69,9 @@ otherwise assumed alphabetic."
                                                   (equal "Chromium" base-style)
                                                   (equal "Mozilla" base-style)
                                                   (equal "WebKit" base-style))
-                                              (c-set-style "linux"))
+                                              (progn
+                                                (c-set-style "linux")
+                                                (add-to-list 'c-offsets-alist '(substatement . 0))))
                                              ((equal "GNU" base-style)
                                               (c-set-style "gnu"))))))))))
 
@@ -130,18 +136,16 @@ otherwise assumed alphabetic."
      "d" 'manual-entry
      "g" 'gdb))
 
-  ;; TODO get this working. Seems to be a compatibility issue with
-  ;; ccls. See
-  ;; https://github.com/alexmurray/flycheck-clang-analyzer/issues/14
-
-  (:layer flycheck
-   (use-package flycheck-clang-analyzer
-     :after flycheck
-     :config
-     (flycheck-clang-analyzer-setup)))
+  ;; ;; TODO get this working. Seems to be a compatibility issue with
+  ;; ;; ccls. See
+  ;; ;; https://github.com/alexmurray/flycheck-clang-analyzer/issues/14
+  ;; (:layer flycheck
+  ;;  (use-package flycheck-clang-analyzer
+  ;;    :after flycheck
+  ;;    :config
+  ;;    (flycheck-clang-analyzer-setup)))
 
   (:layer lsp
-   ;; (lsp-register-client 'clangd)
    (add-hook 'c-mode-common-hook 'lsp)
    (add-hook 'c-mode-common-hook 'flycheck-mode)
    (setq mh-c-common-checks '("--all-scopes-completion"

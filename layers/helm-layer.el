@@ -13,8 +13,11 @@
   :setup
   (use-package helm
     :demand t
-    :hook (helm-minibuffer-setup-hook . (lambda ()
-                                          (setq-local fill-column nil)))
+    :hook ((helm-minibuffer-setup-hook . (lambda ()
+                                           (setq-local fill-column nil)))
+           ;; (helm-find-files-after-init-hook . (lambda ()
+           ;;                                      ))
+           )
     :config
     (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
     (setq helm-org-format-outline-path t)
@@ -74,6 +77,7 @@
      "C-l" 'helm-execute-persistent-action)
    (general-def helm-read-file-map
      "C-l" 'helm-execute-persistent-action)
+
    ;; keybindings for candidates when invoking `helm-find-files'.
    (general-def helm-find-files-map
      ;; navigate into directory at point
@@ -89,7 +93,11 @@
      "C-t" 'helm-ff-run-ediff-file
      "C-p" 'helm-ff-run-browse-project
      ;; display file properties
-     "C-n" 'helm-ff-properties-persistent))
+     "C-n" 'helm-ff-properties-persistent)
+
+   ;; keybindings for candidates in `helm-buffers-list'
+   (general-def helm-buffer-map
+     "C-d" 'helm-buffer-run-kill-persistent))
 
   (:layer org
    (use-package helm-org)
@@ -98,6 +106,14 @@
   (:layer vcs
    (use-package helm-ls-git
      :config
-     (setq helm-locate-project-list '("~/src")))))
+     (setq helm-locate-project-list '("~/src"))
+     (setq helm-ls-git-status-command 'magit-status-internal)))
+
+  (:layer (vcs modal)
+   (general-def helm-ls-git-map
+     ;; TODO what's the right command for this?
+     "C-s" 'helm-ls-git-status
+     "C-s" (lambda ()
+             (call-interactively 'helm-ff-run-eshell-command-on-file "magit")))))
 
 ;;; helm-layer.el ends here

@@ -1,4 +1,6 @@
-;;; completions-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; completions-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -27,8 +29,11 @@
 
   :postsetup
   (:layer keybinding-management
+   ;; (general-def company-active-map
+   ;;   "<tab>" 'company-complete-selection)
    (general-def company-active-map
-     "<tab>" 'company-complete-selection))
+     "<tab>" 'company-complete-common)
+   )
   (:layer lsp
    (use-package company-lsp
      :config

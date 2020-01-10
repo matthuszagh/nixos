@@ -101,8 +101,9 @@
   ;; Never ring the bell.
   (setq ring-bell-function 'ignore)
 
-  ;; Disable auto-save.
-  ;; (setq auto-save-default nil)
+  ;; ;; Automatically save buffers visiting files, so that I don't have
+  ;; ;; to do it manually.
+  ;; (auto-save-visited-mode)
 
   (defun mh/sudo-find-file (file-name)
     "Like find-file, but opens FILE-NAME as root."

@@ -63,14 +63,24 @@
     (exwm-enable)
     (require 'exwm-randr)
     (exwm-randr-enable)
-    (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"DP-0 connected\"")))
-        (start-process-shell-command
-         "xrandr" nil (concat "xrandr --output eDP-1-1 --auto"
-                              " --output DP-0 --above eDP-1-1"
-                              " --output DP-2 --right-of DP-0"
-                              " && xrandr --setmonitor external auto DP-0,DP-2")))
-    ;; "--set \"PRIME Synchronization\" 1"))))
-    (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0"))
+    ;; set monitor layout
+    (if (string= "oryp4\n" (shell-command-to-string "hostname"))
+        (progn
+          (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"DP-0 connected\"")))
+              (start-process-shell-command
+               "xrandr" nil (concat "xrandr --output eDP-1-1 --auto"
+                                    " --output DP-0 --above eDP-1-1"
+                                    " --output DP-2 --right-of DP-0"
+                                    " && xrandr --setmonitor external auto DP-0,DP-2")))
+          ;; "--set \"PRIME Synchronization\" 1"))))
+          (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0")))
+      (if (string= "mbp\n" (shell-command-to-string "hostname"))
+          (progn
+            (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"HDMI2 connected\"")))
+                (start-process-shell-command
+                 "xrandr" nil (concat "xrandr --output eDP1 --auto"
+                                      " --output HDMI2 --above eDP1 --mode 3840x2160")))
+            (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "HDMI2")))))
 
     ;; Increase screen scaling for main computer monitor
     (add-hook 'exwm-init-hook

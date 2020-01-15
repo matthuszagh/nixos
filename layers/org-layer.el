@@ -613,6 +613,7 @@ a HTML file."
        (python . t)
        (ref . t)
        (ruby . t)
+       (sagemath . t)
        (sass . t)
        (scheme . t)
        (screen . t)

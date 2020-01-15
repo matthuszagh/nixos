@@ -3,7 +3,7 @@
 # key: skidlt
 # expand-env: ((yas-indent-line nil))
 # --
-#+begin_src python :results output silent
+#+begin_src python :results output silent :hidden
 from skidl.pyspice import *
 import numpy as np
 
@@ -44,7 +44,7 @@ with open(fname, "w") as f:
   legend entries={$V_{in}$, $V_{out}$},
   legend style={
     fill=bg,
-    draw=fg
+    draw=fgcolor
   }
 ]
   \addplot [] table[x=t, y=vin] {data/$1.dat};

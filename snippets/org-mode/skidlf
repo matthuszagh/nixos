@@ -3,7 +3,7 @@
 # key: skidlf
 # expand-env: ((yas-indent-line nil))
 # --
-#+begin_src python :results output silent
+#+begin_src python :results output silent :hidden
 from skidl.pyspice import *
 import numpy as np
 

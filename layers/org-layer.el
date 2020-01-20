@@ -948,7 +948,7 @@ org-capture instead."
      "e" 'org-edit-special
      "c" 'org-ctrl-c-ctrl-c
      "P" 'org-priority
-     "L" 'org-toggle-latex-fragment
+     "L" 'org-latex-preview
      "z" 'mh/command-org-tex-insert-prefix
      "o" 'org-open-at-point
      "d" 'define-word-at-point)

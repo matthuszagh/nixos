@@ -112,6 +112,12 @@
 
    (general-define-key
     :keymaps 'mh/prefix-map
+    :prefix "n"
+    :prefix-command 'mh/command-calc-prefix
+    :prefix-map 'mh/prefix-calc-map)
+
+   (general-define-key
+    :keymaps 'mh/prefix-map
     :prefix "u"
     :prefix-command 'mh/command-undo-prefix
     :prefix-map 'mh/prefix-undo-map)

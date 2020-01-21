@@ -403,6 +403,7 @@ a HTML file."
   },
   every boxed y axis/.style={},
 }
+\\pgfplotsset{grid style={help lines}}
 \\usepgfplotslibrary{groupplots}
 
 %% tikztiminglibraries

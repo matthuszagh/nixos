@@ -57,6 +57,9 @@
     :config
     (setq blacken-line-length 79))
 
+  (use-package python-docstring
+    :hook (python-mode . python-docstring-mode))
+
   (use-package cython-mode)
   (use-package flycheck-cython)
 

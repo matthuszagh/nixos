@@ -21,53 +21,6 @@
             (add-file-local-variable 'coding 'utf-8)
             (goto-char (point-min)))))
 
-    ;; shortcuts for using auctex
-    (defun insert-frac ()
-      "Insert '\frac{}{}' and position point before the first right brace."
-      (interactive)
-      (progn
-        (insert "\\frac{}{}")
-        (backward-char)
-        (backward-char)
-        (backward-char)))
-
-    (defun insert-text ()
-      "Insert '\text{}' and position point inside the brace."
-      (interactive)
-      (progn
-        (insert "\\text{}")
-        (backward-char)))
-
-    (defun insert-math-subscript ()
-      "Insert '_{\text{}}' and cursor to point inside middle brace."
-      (interactive)
-      (progn
-        (insert "_{\\text{}}")
-        (backward-char)
-        (backward-char)))
-
-    (defun insert-left-delimiter ()
-      "Insert '\left('."
-      (interactive)
-      (progn
-        (insert "\\left(")))
-
-    (defun insert-right-delimiter ()
-      "Insert '\right)'."
-      (interactive)
-      (progn
-        (insert "\\right)")))
-
-    (defun add-auctex-keys ()
-      ;; Make C-i distinguishable from tab.
-      (define-key input-decode-map "\C-i" [C-i])
-      (local-set-key (kbd "C-c <C-i> f") 'insert-frac)
-      (local-set-key (kbd "C-c <C-i> t") 'insert-text)
-      (local-set-key (kbd "C-c <C-i> s") 'insert-math-subscript)
-      (local-set-key (kbd "C-c <C-i> l") 'insert-left-delimiter)
-      (local-set-key (kbd "C-c <C-i> r") 'insert-right-delimiter)
-      (local-set-key (kbd "C-c C-f") 'indent-buffer))
-
     (defun latex-indent ()
       "Run latexindent on the current buffer."
       (interactive)

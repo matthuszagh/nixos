@@ -1,4 +1,6 @@
-;;; sysadmin-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; sysadmin-layer.el --- System Administration Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

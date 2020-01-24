@@ -36,7 +36,7 @@
            (LaTeX-mode . flyspell-mode)
            (LaTeX-mode . flyspell-buffer)
            (LaTeX-mode . (lambda ()
-                           (TeX-fold-mode 1)
+                           (TeX-fold-mode 0)
                            (add-hook 'find-file-hook 'TeX-fold-buffer t t)
                            (add-hook 'after-save-hook 'TeX-fold-buffer nil t)))
            (LaTeX-mode . turn-on-reftex)

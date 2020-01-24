@@ -1,4 +1,4 @@
-;;; help-layer.el --- Summary -*-lexical-binding: t; -*-
+;;; help-layer.el --- Help Layer -*-lexical-binding: t; -*-
 
 ;;; Commentary:
 

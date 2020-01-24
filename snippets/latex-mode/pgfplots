@@ -19,7 +19,6 @@
 ]
   \addplot[
     $5
-  ]
-  {$6};
+  ] {$6};
 \end{axis}
 \end{tikzpicture}$0

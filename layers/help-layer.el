@@ -24,9 +24,11 @@
      "f" 'helpful-function
      "v" 'helpful-variable
      "k" 'helpful-key
-     "M" 'helpful-macro
+     "M" 'helpful-macro))
+
+  (:layer (keybinding-management helm)
+   (general-def mh/prefix-help-map
      "i" 'helm-info
-     ;; TODO this should also depend on helm layer
      "m" 'helm-man-woman)))
 
 ;;; help-layer.el ends here

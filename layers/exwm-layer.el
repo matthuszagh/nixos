@@ -83,19 +83,19 @@
             (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "HDMI2")))
         (if (string= "ryzen3950\n" (shell-command-to-string "hostname"))
             (progn
-              (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"HDMI2 connected\"")))
-                  (start-process-shell-command
-                   "xrandr" nil (concat "xrandr --output DisplayPort-0 --auto"
-                                        " --output DisplayPort-1 --right-of DisplayPort-0"
-                                        " && xrandr --setmonitor main auto DisplayPort-0,DisplayPort-1")))
+              (start-process-shell-command
+               "xrandr" nil (concat "xrandr --output DisplayPort-0 --auto"
+                                    " --output DisplayPort-1 --right-of DisplayPort-0"
+                                    " && xrandr --setmonitor main auto DisplayPort-0,DisplayPort-1"))
               (setq exwm-randr-workspace-monitor-plist '(0 "DisplayPort-0"))))))
 
     ;; Increase screen scaling for main computer monitor
-    (add-hook 'exwm-init-hook
-              (lambda ()
-                (exwm-workspace-switch 0)
-                (mh/zoom-in-selected-frame)
-                (mh/zoom-in-selected-frame))))
+    (if (not (string= "ryzen3950\n" (shell-command-to-string "hostname")))
+        (add-hook 'exwm-init-hook
+                  (lambda ()
+                    (exwm-workspace-switch 0)
+                    (mh/zoom-in-selected-frame)
+                    (mh/zoom-in-selected-frame)))))
 
   (use-package pulseaudio-control)
 

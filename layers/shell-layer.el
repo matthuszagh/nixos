@@ -50,7 +50,7 @@
    (general-def mh/prefix-shell-map
      "c" 'async-shell-command
      "e" 'eshell
-     "t" 'term)
+     "t" 'vterm)
 
    (general-define-key
     :keymaps 'comint-mode-map

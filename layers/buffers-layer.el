@@ -1,4 +1,6 @@
-;;; buffers-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; buffers-layer.el --- Buffers -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

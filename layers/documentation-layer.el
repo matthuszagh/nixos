@@ -11,6 +11,10 @@
     (setq Man-notify-method 'pushy)
     (add-to-list 'same-window-buffer-names "*Man.*")
     (general-def 'normal Man-mode-map
-      "RET" 'man-follow)))
+      "RET" 'man-follow))
+
+  (use-package info-colors
+    :config
+    (add-hook 'Info-selection-hook 'info-colors-fontify-node)))
 
 ;;; documentation-layer.el ends here

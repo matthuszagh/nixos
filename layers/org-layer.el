@@ -636,6 +636,9 @@ a HTML file."
     (require 'org-id)
     (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
 
+    ;; don't bastardize windows when editing a source block
+    (setq org-src-window-setup 'other-window)
+
     ;; make contrib files visible
     ;; TODO modify this for nixpkgs
     (add-to-list 'load-path "~/.emacs.d/straight/repos/org/contrib/lisp" t))

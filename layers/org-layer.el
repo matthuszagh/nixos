@@ -603,13 +603,6 @@ a HTML file."
     :config
     (setq org-drill-hide-item-headings-p t))
 
-  ;; (use-package polymode)
-
-  ;; (use-package poly-org
-  ;;   :after (polymode org)
-  ;;   :config
-  ;;   (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
-
   ;; links
   (use-package ol
     :config

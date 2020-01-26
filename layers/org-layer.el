@@ -519,50 +519,6 @@ a HTML file."
     ;; fontify latex fragments (inline latex) natively
     (setq org-highlight-latex-and-related '(native))
 
-    ;; TODO the performance on this is terrible.
-    ;; ;; Automatically add last-modified timestamps to org headings.
-    ;; (defun mh/getentryhash ()
-    ;;   "Get the hash sum of the text in current entry, except :HASH: and :MODIFIED: property texts."
-    ;;   (save-excursion
-    ;;     (let* ((beg (progn (org-back-to-heading) (point)))
-    ;;            (end (progn
-    ;;                   (forward-char)
-    ;;                   (if (not (re-search-forward "^\*+ " (point-max) t))
-    ;;                       (point-max)
-    ;;                     (match-beginning 0))))
-    ;;            (full-str (buffer-substring-no-properties beg end))
-    ;;            (str-nohash (if (string-match "^ *:HASH:.+\n" full-str)
-    ;;                            (replace-match "" nil nil full-str)
-    ;;                          full-str))
-    ;;            (str-nohash-nomod (if (string-match "^ *:MODIFIED:.+\n" str-nohash)
-    ;;                                  (replace-match "" nil nil str-nohash)
-    ;;                                str-nohash))
-    ;;            (str-nohash-nomod-nopropbeg (if (string-match "^ *:PROPERTIES:\n" str-nohash-nomod)
-    ;;                                            (replace-match "" nil nil str-nohash-nomod)
-    ;;                                          str-nohash-nomod))
-    ;;            (str-nohash-nomod-nopropbeg-end (if (string-match "^ *:END:\n" str-nohash-nomod-nopropbeg)
-    ;;                                                (replace-match "" nil nil str-nohash-nomod-nopropbeg)
-    ;;                                              str-nohash-nomod-nopropbeg)))
-    ;;       (sxhash str-nohash-nomod-nopropbeg-end))))
-
-    ;; (defun mh/update-modification-time ()
-    ;;   "Set the :MODIFIED: property of the current entry to NOW and update :HASH: property."
-    ;;   (org-set-property "HASH" (format "%s" (mh/getentryhash)))
-    ;;   (org-set-property "MODIFIED" (format-time-string "%Y-%m-%d %H:%M")))
-
-    ;; (defun mh/skip-nonmodified ()
-    ;;   "Skip org entries, which were not modified according to the :HASH: property"
-    ;;   (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-    ;;     (if (string= (org-entry-get (point) "HASH" nil) (format "%s" (mh/getentryhash)))
-    ;;         next-headline
-    ;;       nil)))
-
-    ;; (add-hook 'org-mode-hook
-    ;;           (lambda ()
-    ;;             (add-hook 'before-save-hook
-    ;;                       '(org-map-entries #'mh/update-modification-time nil 'region #'mh/skip-nonmodified)
-    ;;                       nil t)))
-
     ;; list of programs to use for opening links from org-mode
     (setq org-file-apps '((auto-mode . emacs)
                           ("\\.mm\\'" . default)

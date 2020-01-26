@@ -32,9 +32,15 @@
   :postsetup
   (:layer helm
    (use-package helm-notmuch))
+
   (:layer (helm modal)
    (general-def mh/prefix-search-map
-     "m" 'helm-notmuch)))
+     "m" 'helm-notmuch))
+
+  (:layer modal
+   (localleader :keymaps 'notmuch-show-mode-map
+     "r" 'notmuch-show-reply-sender)))
+
 ;; :func
 ;; (defun mh/notmuch-exec-offlineimap ()
 ;;   "execute offlineimap"

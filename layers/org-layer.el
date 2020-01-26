@@ -610,9 +610,6 @@ a HTML file."
   ;;   :config
   ;;   (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode)))
 
-  ;; ;; TODO too slow
-  ;; (use-package org-db)
-
   ;; links
   (use-package ol
     :config

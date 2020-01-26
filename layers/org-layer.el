@@ -992,6 +992,10 @@ org-capture instead."
   (:layer documentation
    (use-package ol-man))
 
+  (:layer windows
+   (add-to-list 'display-buffer-alist
+                '("\\*Org Src.*" . (mh//display-popup-buffer-respect-monitors . ()))))
+
   :func
   (setq mh-latex-scale 1.0)
   (defun mh/increase-latex-scale ()

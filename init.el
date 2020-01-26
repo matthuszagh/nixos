@@ -114,6 +114,7 @@
                     documentation
                     undoing
                     buffers
+                    windows
                     files
                     helm
                     help

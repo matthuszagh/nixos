@@ -1,4 +1,6 @@
-;;; mail-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; mail-layer.el --- Mail -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

@@ -7,7 +7,7 @@
 (layer-def files
   :setup
   (setq wiki-file "/home/matt/doc/notes/wiki.org")
-  (setq system-file "/home/matt/src/dotfiles/machines/oryp4.nix")
+  (setq system-file "/home/matt/src/dotfiles/configuration.nix")
   (setq config-file "/home/matt/src/dotfiles/config/emacs/init.el")
   (setq productivity-file "/home/matt/doc/notes/projects/productivity.org")
   (setq todo-file "/home/matt/doc/notes/todo.org")

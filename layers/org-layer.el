@@ -361,7 +361,8 @@ a HTML file."
 \\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
 \\ctikzset{tripoles/mos style/arrows}
 \\ctikzset{amplifiers/scale=0.75}
-\\ctikzset{tripoles/op amp/font=\footnotesize}
+\\ctikzset{tripoles/op amp/font=\\footnotesize}
+\\ctikzset{tripoles/fd op amp/font=\\footnotesize}
 
 %% tikz libraries
 \\usetikzlibrary{intersections}

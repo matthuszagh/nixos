@@ -31,10 +31,13 @@
 
   :postsetup
   (:layer modal
-   (general-def pdf-view-mode-map
-     "j" 'pdf-view-next-line-or-next-page
-     "k" 'pdf-view-previous-line-or-previous-page
-     "SPC" 'mh/command-prefix)
+   (general-define-key
+    :states 'normal
+    :keymaps 'pdf-view-mode-map
+    "j" 'pdf-view-next-line-or-next-page
+    "k" 'pdf-view-previous-line-or-previous-page
+    "SPC" 'mh/command-prefix
+    "g l" 'pdf-view-goto-page)
 
    (general-define-key
     :state 'normal

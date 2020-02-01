@@ -8,7 +8,18 @@
   :setup
   (use-package proced
     :config
-    (add-to-list 'same-window-buffer-names "*Proced*"))
+    (add-to-list 'same-window-buffer-names "*Proced*")
+    (defun mh/strace-pid-proced (expr)
+      (interactive
+       (list
+        (read-string "trace expression: " "write")))
+      (let ((pid (number-to-string (proced-pid-at-point))))
+        (start-process-shell-command
+         (concat "strace " pid)
+         (concat "strace " pid)
+         (if (string-empty-p expr)
+             (concat "strace -p" pid " -s9999")
+           (concat "strace -p" pid " -s9999 -e " expr))))))
 
   ;; Display CPU/mem/etc usage.
   (use-package symon
@@ -29,7 +40,12 @@
      "p" 'proced
      "s" 'symon-mode
      "c" 'display-time-mode
-     "b" 'display-battery-mode))
+     "b" 'display-battery-mode)
+   (general-define-key
+    :states 'normal
+    :keymaps 'proced-mode-map
+    "g" 'revert-buffer
+    "t" 'mh/strace-pid-proced))
 
   (:layer helm
    (use-package helm-systemd))

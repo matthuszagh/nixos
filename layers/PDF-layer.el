@@ -43,6 +43,7 @@
 
    (localleader :keymaps 'pdf-view-mode-map
      "s" 'pdf-occur
-     "g" 'pdf-view-goto-page)))
+     "g" 'pdf-view-goto-page
+     "l" 'pdf-links-isearch-link)))
 
 ;;; pdf-layer.el ends here

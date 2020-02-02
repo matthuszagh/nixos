@@ -16,6 +16,7 @@
   (:layer modal
    (general-def mh/prefix-calc-map
      "n" 'calc
+     "q" 'quick-calc
      "y" 'calc-grab-region)
 
    (general-define-key

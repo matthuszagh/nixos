@@ -43,6 +43,12 @@
     :config
     (setq vterm-shell "/run/current-system/sw/bin/fish"))
 
+  (defun mh/run-ipython ()
+    (interactive)
+    (call-interactively 'vterm)
+    (vterm-send-string "ipython")
+    (vterm-send-return))
+
   (use-package vterm-toggle)
 
   :postsetup
@@ -51,7 +57,8 @@
      "c" 'async-shell-command
      "e" 'eshell
      "t" 'vterm-toggle
-     "T" 'vterm)
+     "T" 'vterm
+     "p" 'mh/run-ipython)
 
    (general-define-key
     :keymaps 'comint-mode-map

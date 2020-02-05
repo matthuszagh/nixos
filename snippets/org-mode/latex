@@ -1,0 +1,26 @@
+# -*- mode: snippet -*-
+# name: latex source block
+# key: latex
+# --
+#+header: :file "img/$1.svg"
+#+header: :post attr_wrap(width="500", data=*this*)
+#+header: :var fgc=(by-backend (html "0,0,0") (t (org-latex-color :foreground)))
+#+header: :var bgc=(by-backend (html "1,1,1") (t (org-latex-color :background)))
+#+header: :var pc=(by-backend (html 100) (t 20))
+#+begin_src latex
+\documentclass{tikz}
+\definecolor{fg}{rgb}{fgc}
+\definecolor{bg}{rgb}{bgc}
+\def\eqnBoxCol{gray!30!bg}
+\tikzset{emphBox/.style={draw=\eqnBoxCol, fill=\eqnBoxCol, thick, rectangle, inner sep=5pt, inner ysep=10pt}}
+\ctikzset{-o/.style = {bipole nodes={none}{ocirc, fill=bg}}}
+\ctikzset{o-/.style = {bipole nodes={ocirc, fill=bg}{none}}}
+\ctikzset{o-o/.style = {bipole nodes={ocirc, fill=bg}{ocirc, fill=bg}}}
+\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bg}}}
+\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bg}{circ}}}
+\begin{document}
+{\color{fg}
+$2
+}
+\end{document}
+#+end_src$0

@@ -148,6 +148,155 @@ a HTML file."
           (cons '(:noweb . "yes")
                 (assq-delete-all :noweb org-babel-default-header-args)))
 
+
+    (setq org-latex-pdf-process
+          '("latexmk -f -interaction=nonstopmode -output-directory=%o %f"))
+
+    (use-package ox-latex
+      :config
+      (setq org-babel-default-header-args:latex
+            `((:exports . "results")
+              (:results . "output file drawer")))
+      (defmacro by-backend (&rest body)
+        `(case (if (boundp 'backend) (org-export-backend-name backend) nil) ,@body))
+
+      (setq org-latex-img-process
+            '(("svg" . ("dvisvgm --pdf %f -n -b min -c 10 -o %O"))))
+
+      (defun mh//org-babel-execute:latex (body params)
+        "Execute a block of Latex code with Babel.
+This function is called by `org-babel-execute-src-block'."
+        (setq body (org-babel-expand-body:latex body params))
+        (if (cdr (assq :file params))
+            (let* ((out-file (cdr (assq :file params)))
+	           (extension (file-name-extension out-file))
+	           (tex-file (org-babel-temp-file "latex-" ".tex"))
+	           (border (cdr (assq :border params)))
+	           (imagemagick (cdr (assq :imagemagick params)))
+	           (im-in-options (cdr (assq :iminoptions params)))
+	           (im-out-options (cdr (assq :imoutoptions params)))
+	           (fit (or (cdr (assq :fit params)) border))
+	           (height (and fit (cdr (assq :pdfheight params))))
+	           (width (and fit (cdr (assq :pdfwidth params))))
+	           (headers (cdr (assq :headers params)))
+	           (in-buffer (not (string= "no" (cdr (assq :buffer params)))))
+	           (org-latex-packages-alist
+	            (append (cdr (assq :packages params)) org-latex-packages-alist)))
+              (cond
+               ((and (string-suffix-p ".png" out-file) (not imagemagick))
+                (org-create-formula-image
+                 body out-file org-format-latex-options in-buffer))
+               ((string-suffix-p ".tikz" out-file)
+	        (when (file-exists-p out-file) (delete-file out-file))
+	        (with-temp-file out-file
+	          (insert body)))
+               ((and (not imagemagick)
+                     (assoc extension org-latex-img-process))
+                (with-temp-file tex-file
+                  (insert body))
+                (let ((tmp-pdf (org-babel-latex-tex-to-pdf tex-file)))
+                  (when (file-exists-p out-file) (delete-file out-file))
+                  (let* ((log-buf (get-buffer-create "*Org Babel LaTeX Output*"))
+                         (err-msg "fix")
+                         (img-out (org-compile-file
+	                           tmp-pdf
+                                   (cdr (assoc "svg" org-latex-img-process))
+                                   extension err-msg log-buf)))
+                    (shell-command (format "mv %s %s" img-out out-file)))))
+	       ((and (or (string= "svg" extension)
+		         (string= "html" extension))
+	             (executable-find org-babel-latex-htlatex))
+	        ;; TODO: this is a very different way of generating the
+	        ;; frame latex document than in the pdf case.  Ideally, both
+	        ;; would be unified.  This would prevent bugs creeping in
+	        ;; such as the one fixed on Aug 16 2014 whereby :headers was
+	        ;; not included in the SVG/HTML case.
+	        (with-temp-file tex-file
+	          (insert (concat
+		           "\\documentclass[preview]{standalone}
+\\def\\pgfsysdriver{pgfsys-tex4ht.def}
+"
+		           (mapconcat (lambda (pkg)
+				        (concat "\\usepackage" pkg))
+				      org-babel-latex-htlatex-packages
+				      "\n")
+		           (if headers
+			       (concat "\n"
+				       (if (listp headers)
+				           (mapconcat #'identity headers "\n")
+				         headers) "\n")
+		             "")
+		           "\\begin{document}"
+		           body
+		           "\\end{document}")))
+	        (when (file-exists-p out-file) (delete-file out-file))
+	        (let ((default-directory (file-name-directory tex-file)))
+	          (shell-command (format "%s %s" org-babel-latex-htlatex tex-file)))
+	        (cond
+	         ((file-exists-p (concat (file-name-sans-extension tex-file) "-1.svg"))
+	          (if (string-suffix-p ".svg" out-file)
+		      (progn
+		        (shell-command "pwd")
+		        (shell-command (format "mv %s %s"
+					       (concat (file-name-sans-extension tex-file) "-1.svg")
+					       out-file)))
+	            (error "SVG file produced but HTML file requested")))
+	         ((file-exists-p (concat (file-name-sans-extension tex-file) ".html"))
+	          (if (string-suffix-p ".html" out-file)
+		      (shell-command "mv %s %s"
+			             (concat (file-name-sans-extension tex-file)
+				             ".html")
+			             out-file)
+	            (error "HTML file produced but SVG file requested")))))
+	       ((or (string= "pdf" extension) imagemagick)
+	        (with-temp-file tex-file
+	          (require 'ox-latex)
+	          (insert
+	           (org-latex-guess-inputenc
+	            (org-splice-latex-header
+	             org-format-latex-header
+	             (delq
+		      nil
+		      (mapcar
+		       (lambda (el)
+		         (unless (and (listp el) (string= "hyperref" (cadr el)))
+		           el))
+		       org-latex-default-packages-alist))
+	             org-latex-packages-alist
+	             nil))
+	           (if fit "\n\\usepackage[active, tightpage]{preview}\n" "")
+	           (if border (format "\\setlength{\\PreviewBorder}{%s}" border) "")
+	           (if height (concat "\n" (format "\\pdfpageheight %s" height)) "")
+	           (if width  (concat "\n" (format "\\pdfpagewidth %s" width))   "")
+	           (if headers
+		       (concat "\n"
+			       (if (listp headers)
+			           (mapconcat #'identity headers "\n")
+			         headers) "\n")
+	             "")
+	           (if fit
+		       (concat "\n\\begin{document}\n\\begin{preview}\n" body
+			       "\n\\end{preview}\n\\end{document}\n")
+	             (concat "\n\\begin{document}\n" body "\n\\end{document}\n"))))
+                (when (file-exists-p out-file) (delete-file out-file))
+	        (let ((transient-pdf-file (org-babel-latex-tex-to-pdf tex-file)))
+	          (cond
+	           ((string= "pdf" extension)
+	            (rename-file transient-pdf-file out-file))
+	           (imagemagick
+	            (org-babel-latex-convert-pdf
+	             transient-pdf-file out-file im-in-options im-out-options)
+	            (when (file-exists-p transient-pdf-file)
+		      (delete-file transient-pdf-file)))
+	           (t
+	            (error "Can not create %s files, please specify a .png or .pdf file or try the :imagemagick header argument"
+		           extension))))))
+              nil) ;; signal that output has already been written to file
+          body))
+
+      (advice-add 'org-babel-execute:latex :override #'mh//org-babel-execute:latex)
+      )
+
     ;; allow the use of :hidden to hide certain source blocks when a
     ;; buffer is opened. All others will be visible by default.
     (defun mh//individual-visibility-source-blocks ()
@@ -203,20 +352,21 @@ a HTML file."
 
     ;; todo statistics should display all recursive children
     (setq org-hierarchical-todo-statistics nil)
-    ;; set default image background color
-    (defun org-display-inline-images--with-color-theme-background-color (args)
-      "Specify background color of Org-mode inline image through modify `ARGS'."
-      (let* ((file (car args))
-             (type (cadr args))
-             (data-p (caddr args))
-             (props (cdddr args)))
-        ;; get this return result style from `create-image'
-        (append (list file type data-p)
-                (list :background "white")
-                props)))
+    ;; ;; set default image background color
+    ;; (defun org-display-inline-images--with-color-theme-background-color (args)
+    ;;   "Specify background color of Org-mode inline image through modify `ARGS'."
+    ;;   (let* ((file (car args))
+    ;;          (type (cadr args))
+    ;;          (data-p (caddr args))
+    ;;          (props (cdddr args)))
+    ;;     ;; get this return result style from `create-image'
+    ;;     (append (list file type data-p)
+    ;;             (list :background "white")
+    ;;             props)))
 
-    (advice-add 'create-image :filter-args
-                #'org-display-inline-images--with-color-theme-background-color)
+    ;; (advice-add 'create-image :filter-args
+    ;;             #'org-display-inline-images--with-color-theme-background-color)
+    ;; (advice-remove 'create-image #'org-display-inline-images--with-color-theme-background-color)
 
     ;; look for a specified attribute width, otherwise fallback to
     ;; actual image width
@@ -447,7 +597,7 @@ a HTML file."
                  '("" "booktabs" t))
     (add-to-list 'org-latex-packages-alist
                  '("inline" "asymptote" t))
-    (setq org-latex-create-formula-image-program 'imagemagick)
+    ;; (setq org-latex-create-formula-image-program 'imagemagick)
     ;; necessary for drawing electronics circuits with tikz using the `circuits' library.
     ;; (setq org-format-latex-header
     ;;       (concat org-format-latex-header
@@ -471,11 +621,6 @@ a HTML file."
                                              "%CLOCKSUM"))
     ;; keep the same column format in the agenda columns view
     (setq org-agenda-overriding-columns-format org-columns-default-format)
-
-    ;; (setq org-latex-pdf-process
-    ;;       (list "sed -i 's/\\begin{latex}//'"
-    ;;             "sed -i 's/\\end{latex}//'"
-    ;;             "latexmk -f -pdf %F"))
 
     ;; ;; lualatex preview
     (setq org-latex-pdf-process
@@ -600,6 +745,13 @@ a HTML file."
     ;; TODO modify this for nixpkgs
     (add-to-list 'load-path "~/.emacs.d/straight/repos/org/contrib/lisp" t))
 
+  (use-package org-eldoc)
+
+  ;; TODO doesn't work
+  ;; (use-package org-edit-latex
+  ;;   :config
+  ;;   (add-hook 'org-mode-hook 'org-edit-latex-mode))
+
   (use-package org-drill
     :config
     (setq org-drill-hide-item-headings-p t))
@@ -621,6 +773,18 @@ a HTML file."
     :config
     (setq org-babel-default-header-args:sage '((:session . t)
                                                (:results . "output"))))
+
+  (use-package ox-publish
+    :config
+    (setq org-publish-project-alist
+          '(("blog"
+             :base-directory "~/src/blog/org"
+             :base-extension "org"
+             :publishing-directory "~/src/blog/jekyll/_posts"
+             :publishing-function org-html-publish-to-html
+             :html-extension "html"
+             :body-only t
+             :recursive t))))
 
   ;; use org-board for web archival
   (use-package org-board
@@ -793,8 +957,8 @@ org-capture instead."
     "o" 'org-clock-out
     "i" 'org-clock-in-last))
 
-  (:layer internet
-   (use-package org-eww))
+  ;; (:layer internet
+  ;;  (use-package org-eww))
 
   (:layer documentation
    (use-package ol-man))

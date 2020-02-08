@@ -644,9 +644,9 @@ This function is called by `org-babel-execute-src-block'."
                     :use-xcolor t
                     :image-input-type "pdf"
                     :image-output-type "svg"
-                    :image-size-adjust (1.5 . 1.0)
+                    :image-size-adjust (1.5 . 1.5)
                     :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
-                    :image-converter ("dvisvgm %f -P -n -b min -c %S -o %O")))
+                    :image-converter ("dvisvgm --pdf -n -b min -c %S -o %O %f")))
 
     (add-to-list 'org-preview-latex-process-alist luamagick)
     (add-to-list 'org-preview-latex-process-alist luasvgm)

@@ -98,7 +98,7 @@ a HTML file."
 	          "\\definecolor{fg}{rgb}{" fg "}%\n"
 	          "\\definecolor{bg}{rgb}{" bg "}%\n"
 	          "\n\\nopagecolor%\n"
-	          "\n{\\color{fgcolor}\n"
+	          "\n{\\color{fg}\n"
 	          string
 	          "\n}\n"
 	          "\n\\end{document}\n"))

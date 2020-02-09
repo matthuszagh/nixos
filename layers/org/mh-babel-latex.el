@@ -145,5 +145,22 @@ This function is called by `org-babel-execute-src-block'."
 
   (advice-add 'org-babel-execute:latex :override #'mh//org-babel-execute:latex))
 
+(defun mh/update-eqn-numbers-in-section ()
+  (interactive)
+  (let ((beg (if (org-before-first-heading-p) (point-min)
+	       (save-excursion
+		 (org-with-limited-levels (org-back-to-heading t) (point)))))
+	(end (org-with-limited-levels (org-entry-end-position)))
+        (count 1))
+    (save-excursion
+      (goto-char beg)
+      (while (re-search-forward
+              (rx (or "\\tag" "number=")
+                  "{"
+                  (group (+ digit))
+                  "}") end t)
+        (replace-match (format "%d" count) nil nil nil 1)
+        (setq count (1+ count))))))
+
 (provide 'mh-babel-latex)
 ;;; mh-babel-latex.el ends here

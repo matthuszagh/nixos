@@ -149,16 +149,6 @@
     (setq evil-want-abbrev-expand-on-insert-exit nil)
     (setq evil-want-integration t) ; This is optional since it's already set to t by default.
     (setq evil-want-keybinding nil)
-    :general
-    (:keymaps 'mh/prefix-window-map
-     "h" 'evil-window-left
-     "j" 'evil-window-down
-     "k" 'evil-window-up
-     "l" 'evil-window-right
-     "H" 'evil-window-move-far-left
-     "J" 'evil-window-move-very-bottom
-     "K" 'evil-window-move-very-top
-     "L" 'evil-window-move-far-right)
     :config
     (evil-mode 1))
 

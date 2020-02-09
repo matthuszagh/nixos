@@ -1,4 +1,4 @@
-;;; windows-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; windows-layer.el --- Window Behavior -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -20,5 +20,32 @@
                     (window--display-buffer buffer (nth 0 windows) 'reuse alist)
                   (if (equalp pos 0)
                       (window--display-buffer buffer (nth 1 windows) 'reuse alist))))))))))
+  :postsetup
+  (:layer modal
+   (general-define-key
+    :keymaps 'mh/prefix-window-map
+    "h" 'evil-window-left
+    "j" 'evil-window-down
+    "k" 'evil-window-up
+    "l" 'evil-window-right
+    "H" 'evil-window-move-far-left
+    "J" 'evil-window-move-very-bottom
+    "K" 'evil-window-move-very-top
+    "L" 'evil-window-move-far-right))
+
+  (:layer (hydra modal)
+   (defhydra window-nav-hydra ()
+     "window navigation"
+     ("h" evil-window-left)
+     ("j" evil-window-down)
+     ("k" evil-window-up)
+     ("l" evil-window-right)
+     ("H" evil-window-move-far-left)
+     ("J" evil-window-move-very-bottom)
+     ("K" evil-window-move-very-top)
+     ("L" evil-window-move-far-right))
+   (general-define-key
+    :keymaps 'mh/prefix-window-map
+    "n" 'window-nav-hydra/body)))
 
 ;;; windows-layer.el ends here

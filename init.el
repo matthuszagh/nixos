@@ -111,6 +111,7 @@
                     snippet
                     dap
                     spice
+                    hydra
 
                     ;; formatting
                     indenting

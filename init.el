@@ -33,7 +33,11 @@
 
 ;; (load "~/src/layers/layers.el")
 
-(add-to-list 'load-path (concat user-emacs-directory "layers"))
+(let ((default-directory
+        (concat user-emacs-directory "layers")))
+  (add-to-list 'load-path default-directory)
+  (normal-top-level-add-subdirs-to-load-path))
+
 (require 'use-package)
 
 ;; Prefer `.el' files over outdated `.elc' files. Use this with `auto-compile' to automatically

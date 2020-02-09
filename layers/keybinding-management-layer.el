@@ -1,4 +1,6 @@
-;;; keybinding-management-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; keybinding-management-layer.el --- Keybinding layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -7,8 +9,9 @@
   :presetup
   (:layer straight
    (straight-use-package 'general)
-   (straight-use-package 'which-key)
-   ;; TODO this should depend on straight and helm
+   (straight-use-package 'which-key))
+
+  (:layer (straight helm)
    (straight-use-package 'helm-descbinds))
 
   :setup
@@ -25,11 +28,12 @@
   (:layer helm
    (use-package helm-descbinds
      :after helm
-     ;; TODO this should also depend on modal
-     :general
-     (:keymaps 'mh/prefix-help-map
-      "b" 'helm-descbinds)
      :config
-     (helm-descbinds-mode))))
+     (helm-descbinds-mode)))
 
-;;; keybindings-layer.el ends here
+  (:layer (helm modal)
+   (general-define-key
+    :keymaps 'mh/prefix-help-map
+    "b" 'helm-descbinds)))
+
+;;; keybinding-management-layer.el ends here

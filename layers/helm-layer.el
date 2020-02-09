@@ -65,9 +65,10 @@
      "SPC" 'helm-M-x)
    (general-def mh/prefix-search-map
      "s" 'helm-occur)
-   (general-def mh/prefix-file-map
-     "f" 'helm-find-files
-     "l" 'helm-locate)
+   (general-define-key
+    :keymaps 'mh/prefix-file-map
+    "f" 'helm-find-files
+    "l" 'helm-locate)
    (general-def mh/prefix-buffer-map
      "b" 'helm-buffers-list)
    (general-def helm-map
@@ -79,21 +80,22 @@
      "C-l" 'helm-execute-persistent-action)
 
    ;; keybindings for candidates when invoking `helm-find-files'.
-   (general-def helm-find-files-map
-     ;; navigate into directory at point
-     "C-l" 'helm-execute-persistent-action
-     "C-e" 'helm-ff-run-eshell-command-on-file
-     "C-d" 'helm-ff-run-delete-file
-     "C-s" 'helm-ff-run-grep
-     ;; open file in adjacent window
-     "C-o" 'helm-ff-run-switch-other-window
-     "C-c" 'helm-ff-run-copy-file
-     "C-r" 'helm-ff-run-rename-file
-     "C-y" 'helm-ff-run-symlink-file
-     "C-t" 'helm-ff-run-ediff-file
-     "C-p" 'helm-ff-run-browse-project
-     ;; display file properties
-     "C-n" 'helm-ff-properties-persistent)
+   (general-define-key
+    :keymaps 'helm-find-files-map
+    ;; navigate into directory at point
+    "C-l" 'helm-execute-persistent-action
+    "C-e" 'helm-ff-run-eshell-command-on-file
+    "C-d" 'helm-ff-run-delete-file
+    "C-s" 'helm-ff-run-grep
+    ;; open file in adjacent window
+    "C-o" 'helm-ff-run-switch-other-window
+    "C-c" 'helm-ff-run-copy-file
+    "C-r" 'helm-ff-run-rename-file
+    "C-y" 'helm-ff-run-symlink-file
+    "C-t" 'helm-ff-run-ediff-file
+    "C-p" 'helm-ff-run-browse-project
+    ;; display file properties
+    "C-n" 'helm-ff-properties-persistent)
 
    ;; keybindings for candidates in `helm-buffers-list'
    (general-def helm-buffer-map

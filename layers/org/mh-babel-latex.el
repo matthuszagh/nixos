@@ -12,6 +12,7 @@
         `((:exports . "results")
           (:results . "file link replace")
           (:wrap . "results")
+          (:cache . "yes")
           (:file . (lambda ()
                      (concat ".data/"
                              (sha1 (org-element-property :value (org-element-at-point)))
@@ -145,4 +146,4 @@ This function is called by `org-babel-execute-src-block'."
   (advice-add 'org-babel-execute:latex :override #'mh//org-babel-execute:latex))
 
 (provide 'mh-babel-latex)
-;;; babel-latex.el ends here
+;;; mh-babel-latex.el ends here

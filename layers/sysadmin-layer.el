@@ -52,7 +52,8 @@
 
   (:layer (helm modal)
    (general-def mh/prefix-system-map
-     "d" 'helm-systemd))
+     "d" 'helm-systemd
+     "l" 'helm-locate-library))
 
   :func
   (defun mh/start-vpn ()

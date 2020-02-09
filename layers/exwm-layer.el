@@ -31,6 +31,7 @@
             ([?\s-l] . (lambda ()
                          (exwm-floating-move 1 0)))
             ([?\s-\=] . exwm-layout-enlarge-window)
+            ([?\s-\+] . exwm-layout-enlarge-window)
             ([?\s-\-] . exwm-layout-shrink-window)
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .

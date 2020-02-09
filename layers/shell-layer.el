@@ -41,7 +41,11 @@
 
   (use-package vterm
     :config
-    (setq vterm-shell "/run/current-system/sw/bin/fish"))
+    (setq vterm-shell "/run/current-system/sw/bin/fish")
+    (setq vterm-toggle-fullscreen-p nil)
+    (add-to-list 'display-buffer-alist
+                 '("vterm"
+                   (display-buffer-reuse-window display-buffer-same-window))))
 
   (defun mh/run-ipython ()
     (interactive)

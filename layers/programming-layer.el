@@ -1,4 +1,6 @@
-;;; programming-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; programming-layer.el --- Programming Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -18,6 +20,12 @@
      ;; Disable auto-fill.
      (prog-mode . (lambda () (auto-fill-mode -1)))))
 
-  (use-package banner-comment))
+  (use-package banner-comment)
+
+  :postsetup
+  (:layer modal
+   (general-define-key
+    :keymaps 'mh/prefix-prog-map
+    "d" 'edebug-defun)))
 
 ;;; programming-layer.el ends here

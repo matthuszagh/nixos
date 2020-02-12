@@ -16,7 +16,8 @@
     (use-package spaceline-segments)
     (use-package spaceline-config
       :config
-      (spaceline-spacemacs-theme)))
+      (spaceline-spacemacs-theme))
+    (setq spaceline-minor-modes-p nil))
 
   :postsetup
   (:layer helm

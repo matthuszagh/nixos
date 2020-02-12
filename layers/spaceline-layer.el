@@ -1,4 +1,6 @@
-;;; spaceline-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; spaceline-layer.el --- Spaceline Mode Line Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

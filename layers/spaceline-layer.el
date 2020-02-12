@@ -25,6 +25,9 @@
 
   (:layer modal
    ;; Change evil face depending on active evil mode.
-   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)))
+   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state))
+
+  (:layer org
+   (setq spaceline-org-clock-format-function 'mh/org-get-truncated-clock-string)))
 
 ;;; spaceline-layer.el ends here

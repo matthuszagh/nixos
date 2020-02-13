@@ -59,6 +59,10 @@
             ;; cut/copy/paste
             ([y] . [?\C-c])
             ([p] . [?\C-v])))
+
+    ;; Don't send C-g to window in line mode.
+    (define-key exwm-mode-map (kbd "C-g") 'keyboard-quit)
+
     :config
     (require 'exwm-config)
     (exwm-enable)

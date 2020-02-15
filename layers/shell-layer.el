@@ -43,6 +43,8 @@
     :config
     (setq vterm-shell "/run/current-system/sw/bin/fish")
     (setq vterm-toggle-fullscreen-p nil)
+    ;; increase max number of scrollback lines
+    (setq vterm-max-scrollback 10000)
     (add-to-list 'display-buffer-alist
                  '("vterm"
                    (display-buffer-reuse-window display-buffer-same-window))))

@@ -39,7 +39,11 @@
                                          (call-interactively 'mh/insert-current-date))))))
     :commands (magit-checkout)
     :config
-    (setq magit-repository-directories '(("/home/matt/src" . 10))))
+    (setq magit-repository-directories '(("/home/matt/src" . 10)))
+    ;; (add-to-list 'display-buffer-alist
+    ;;              '("magit.*"
+    ;;                (magit-display-buffer)))
+    (setq magit-restore-window-configuration t))
 
   (use-package forge
     :after magit)

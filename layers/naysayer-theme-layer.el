@@ -10,7 +10,10 @@
   :setup
   (use-package naysayer-theme
     :config
-    (load-theme 'naysayer t))
+    (load-theme 'naysayer t)
+    (setq mh-cursor-color (face-background 'cursor))
+    (setq mh-foreground-color (face-foreground 'default))
+    (setq mh-background-color (face-background 'default)))
 
   :postsetup
   (:layer org

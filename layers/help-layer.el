@@ -31,8 +31,9 @@
      "i" 'helm-info
      "m" 'helm-man-woman))
 
-  (:layer windows
-   (add-to-list 'display-buffer-alist
-                '("\\*helpful.*" . (mh//display-popup-buffer-respect-monitors . ())))))
+  ;; (:layer windows
+  ;;  ;; (add-to-list 'display-buffer-alist
+  ;;  ;;              '("\\*helpful.*" . (mh//display-popup-buffer-respect-monitors . ()))))
+  )
 
 ;;; help-layer.el ends here

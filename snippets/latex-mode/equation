@@ -2,6 +2,6 @@
 # name: equation template
 # key: eq
 # --
-\\[
+\\begin{equation*}
 $0
-\\]
+\\end{equation*}

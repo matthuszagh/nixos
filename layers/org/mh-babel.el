@@ -338,6 +338,8 @@ INFO may provide the values of these header arguments (in the
 
 (advice-add 'org-babel-insert-result :override #'mh/org-babel-insert-result)
 
+(org-babel-lob-ingest (concat user-emacs-directory "layers/org/lob.org"))
+
 (require 'mh-babel-latex)
 
 (provide 'mh-babel)

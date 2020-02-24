@@ -50,7 +50,7 @@
     (setq exwm-input-simulation-keys
           `(
             ;; motion
-            ([h] . [left])
+            (,(kbd "h") . [left])
             ([j] . [down])
             ([?\C-j] . [C-down])
             ([k] . [up])
@@ -60,12 +60,12 @@
             ([y] . [?\C-c])
             ([p] . [?\C-v])))
 
-    ;; Don't send C-g to window in line mode.
-    (define-key exwm-mode-map (kbd "C-g") 'keyboard-quit)
-
     :config
     (require 'exwm-config)
     (exwm-enable)
+    ;; Don't send C-g to window in line mode.
+    (define-key exwm-mode-map (kbd "C-g") 'keyboard-quit)
+
     (require 'exwm-randr)
     (exwm-randr-enable)
     ;; set monitor layout

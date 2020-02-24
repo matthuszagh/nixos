@@ -22,6 +22,10 @@
     ;; set this to indent-relative if issues occur.
     (nix-indent-function #'nix-indent-line))
 
+  (add-to-list 'display-buffer-alist
+               '("\\*nix\\*"
+                 (display-buffer-reuse-window display-buffer-same-window)))
+
   (use-package nix-update)
 
   (use-package direnv

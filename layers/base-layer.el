@@ -6,11 +6,18 @@
 
 (layer-def base
   :setup
-  ;; Increases the garbage collection threshold. Specifically, this delays garbage collection until
-  ;; Emacs has allocated 100MB from memory. Setting this value too low triggers garbage collection
-  ;; frequently and adversely affects performance. Setting it too high can deplete your available
-  ;; memory and slow down the entire system.
+  ;; Increases the garbage collection threshold. Specifically, this
+  ;; delays garbage collection until Emacs has allocated 100MB from
+  ;; memory. Setting this value too low triggers garbage collection
+  ;; frequently and adversely affects performance. Setting it too high
+  ;; can deplete your available memory and slow down the entire
+  ;; system.
   (setq gc-cons-threshold 100000000)
+
+  ;; LSP (and maybe other packages) need to read large amounts of data
+  ;; at a time from subprocesses. The default setting is overly
+  ;; restrictive.
+  (setq read-process-output-max (* 10 1024 1024)) ;; 10MB
 
   ;; Always start Emacs maximized.
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -105,6 +112,9 @@
   ;; ;; to do it manually.
   ;; (auto-save-visited-mode)
 
+  ;; Disable performance-affecting features when lines become very long
+  (global-so-long-mode 1)
+
   (defun mh/sudo-find-file (file-name)
     "Like find-file, but opens FILE-NAME as root."
     (interactive "FSudo Find File: ")
@@ -151,13 +161,6 @@
     (interactive)
     (save-excursion
       (indent-region (point-min) (point-max) nil)))
-
-  (defun mh/switch-to-minibuffer ()
-    "Switch to minibuffer window."
-    (interactive)
-    (if (active-minibuffer-window)
-        (select-window (active-minibuffer-window))
-      (error "Minibuffer is not active")))
 
   ;; TODO these should probably be in func and customize.
   (setq mh-face-attribute-height 80)

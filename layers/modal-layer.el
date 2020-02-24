@@ -42,16 +42,16 @@
     :prefix-command 'mh/command-prog-prefix
     :prefix-map 'mh/prefix-prog-map)
 
-   (general-define-key
-    :keymaps 'mh/prefix-map
-    :prefix "w"
-    :prefix-command 'mh/command-window-prefix
-    :prefix-map 'mh/prefix-window-map
-    "d" 'delete-window
-    "f" 'delete-other-windows
-    "S" 'split-window-below
-    "s" 'split-window-right
-    "m" 'mh/switch-to-minibuffer)
+   ;; (general-define-key
+   ;;  :keymaps 'mh/prefix-map
+   ;;  :prefix "w"
+   ;;  :prefix-command 'mh/command-window-prefix
+   ;;  :prefix-map 'mh/prefix-window-map
+   ;;  "d" 'delete-window
+   ;;  "f" 'delete-other-windows
+   ;;  "S" 'split-window-below
+   ;;  "s" 'split-window-right
+   ;;  "m" 'mh/switch-to-minibuffer)
 
    (general-define-key
     :keymaps 'mh/prefix-map

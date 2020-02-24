@@ -14,57 +14,15 @@
           (:wrap . "results")
           (:cache . "yes")
           (:file . (lambda ()
-                     (concat ".data/"
+                     (concat "tmp/"
                              (sha1 (org-element-property :value (org-element-at-point)))
                              (by-backend '((html . "-html") (t . "-org")))
                              ".svg")))
-          (:post . "attr_wrap(width=\"1000\", data=*this*)")))
+          (:post . "attr_wrap(htmlwidth=\"100%\", orgwidth=\"1000\", data=*this*)")))
 
-  (setq org-html-with-latex 'luasvgm)
-
-  ;; (defun mh//org-html-export-link-filter (link backend channel)
-  ;;   (when (org-export-derived-backend-p backend 'html)
-  ;;     (concat "/" link)))
-
-  ;; (add-to-list 'org-export-filter-link-functions
-  ;;              'mh//org-html-export-link-filter)
-
-  (defun mh//org-html-format-latex (latex-frag processing-type info)
-    "Format a LaTeX fragment LATEX-FRAG into HTML.
-PROCESSING-TYPE designates the tool used for conversion.  It can
-be `mathjax', `verbatim', nil, t or symbols in
-`org-preview-latex-process-alist', e.g., `dvipng', `dvisvgm' or
-`imagemagick'.  See `org-html-with-latex' for more information.
-INFO is a plist containing export properties."
-    (let ((cache-relpath "") (cache-dir ""))
-      (unless (eq processing-type 'mathjax)
-        (let ((bfn (or (buffer-file-name)
-		       (make-temp-name
-		        (expand-file-name "latex" temporary-file-directory))))
-	      (latex-header
-	       (let ((header (plist-get info :latex-header)))
-	         (and header
-		      (concat (mapconcat
-			       (lambda (line) (concat "#+LATEX_HEADER: " line))
-			       (org-split-string header "\n")
-			       "\n")
-			      "\n")))))
-	  (setq cache-relpath
-	        (concat (file-name-as-directory org-preview-latex-image-directory)
-		        (file-name-sans-extension
-		         (file-name-nondirectory bfn)))
-	        cache-dir (file-name-directory bfn))
-	  ;; Re-create LaTeX environment from original buffer in
-	  ;; temporary buffer so that dvipng/imagemagick can properly
-	  ;; turn the fragment into an image.
-	  (setq latex-frag (concat latex-header latex-frag))))
-      (with-temp-buffer
-        (insert latex-frag)
-        (org-format-latex cache-relpath nil nil cache-dir nil
-			  "Creating LaTeX Image..." nil processing-type)
-        (replace-regexp-in-string "\\[\\[file:" "[[file:/" (buffer-string)))))
-
-  (advice-add 'org-html-format-latex :override #'mh//org-html-format-latex)
+  (setq org-html-with-latex 'html)
+  (setq org-latex-to-html-convert-command
+        "latexmlc 'literal:%i' --profile=math --preload=siunitx.sty 2>/dev/null | head -c -1")
 
   (defun by-backend (blist)
     (let ((ret nil))

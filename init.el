@@ -62,7 +62,7 @@
                     no-littering
                     mail
                     recoll
-                    ledger
+                    ;; ledger
                     pinentry
                     image
 
@@ -106,12 +106,14 @@
                     scad
                     hexl
                     rust
+                    haskell
                     rmsbolt
                     asy
                     snippet
                     dap
                     spice
                     hydra
+                    perspective
 
                     ;; formatting
                     indenting

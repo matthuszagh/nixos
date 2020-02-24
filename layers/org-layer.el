@@ -127,11 +127,6 @@ a HTML file."
       (setq org-element--latex-begin-environment "^[ \t]*\\(?:\\\\(\\|\\$\\)?\\\\begin{\\([A-Za-z0-9*]+\\)}")
       (setq org-element--latex-end-environment "\\\\end{%s}[ \t]*\\(?:\\\\)\\|\\$\\)?$"))
 
-    (general-define-key
-     :keymaps 'org-mode-map
-     "TAB" 'org-cycle
-     "C-RET" 'org-insert-heading-respect-content)
-
     (setq org-startup-with-latex-preview t)
     (setq org-startup-with-inline-images t)
 
@@ -633,15 +628,62 @@ a HTML file."
 
   (use-package ox-publish
     :config
+    ;; (defun org-custom-link-img-follow (path)
+    ;;   (org-open-file-with-emacs
+    ;;    (format "img/%s" path)))
+
+    ;; (defun org-custom-link-img-export (path desc format)
+    ;;   (cond
+    ;;    ((eq 'html org-export-current-backend)
+    ;;     (format "<img src=\"/%s\" alt=\"%s\"/>" path desc))))
+
+    ;; (org-link-set-parameters "file" :follow 'org-custom-link-img-follow :export 'org-custom-link-img-export)
+
+    ;; only wrap code elements in spans and use a CSS file to fontify elements.
+    (setq org-html-htmlize-output-type 'css)
+
+    (setq blog-dir "~/src/blog/")
     (setq org-publish-project-alist
-          '(("blog"
-             :base-directory "~/src/blog/org"
-             :base-extension "org"
-             :publishing-directory "~/src/blog/jekyll/_posts"
+          `(("blog" :components ("posts" "static"))
+            ("posts"
+             :base-directory ,(concat blog-dir "org")
+             :publishing-directory ,blog-dir
              :publishing-function org-html-publish-to-html
-             :html-extension "html"
+             :htmlize-source t
+             :recursive t
              :body-only t
-             :recursive t))))
+             :with-toc nil
+             :exclude "\\(old\\|purgatory\\)")
+            ("static"
+             :base-directory ,(concat blog-dir "org")
+             :base-extension "svg\\|css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|mathml"
+             :publishing-directory ,blog-dir
+             :publishing-function org-publish-attachment
+             :exclude "\\(old\\|purgatory\\)"
+             :recursive t)))
+
+    ;; (setq org-publish-project-alist
+    ;;       '(("blog" :components ("notes" "static"))
+    ;;         ("notes"
+    ;;          :base-directory "~/src/blog/org"
+    ;;          :base-extension "org"
+    ;;          :publishing-directory "~/src/blog/jekyll/_posts"
+    ;;          :publishing-function org-html-publish-to-html
+    ;;          :html-extension "html"
+    ;;          :section-numbers nil
+    ;;          :with-toc nil
+    ;;          :auto-index nil
+    ;;          :auto-preamble nil
+    ;;          :body-only t
+    ;;          :auto-postamble nil
+    ;;          :recursive t)
+    ;;         ("static"
+    ;;          :base-directory "~/src/blog/org"
+    ;;          :base-extension "svg\\|css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+    ;;          :publishing-directory "~/src/blog/jekyll"
+    ;;          :publishing-function org-publish-attachment
+    ;;          :recursive t)))
+    )
 
   ;; use org-board for web archival
   (use-package org-board
@@ -804,6 +846,11 @@ org-capture instead."
      "o" 'org-open-at-point
      "d" 'define-word-at-point)
 
+   (general-define-key
+    :keymaps 'org-mode-map
+    "TAB" 'org-cycle
+    "C-RET" 'org-insert-heading-respect-content)
+
    ;; org agenda keys
    ;; override org agenda keys and add back the ones you want
    ;; (setq org-agenda-mode-map (make-composed-keymap general-override-mode-map))
@@ -839,9 +886,10 @@ org-capture instead."
   (:layer documentation
    (use-package ol-man))
 
-  (:layer windows
-   (add-to-list 'display-buffer-alist
-                '("\\*Org Src.*" . (mh//display-popup-buffer-respect-monitors . ()))))
+  ;; (:layer windows
+  ;; (add-to-list 'display-buffer-alist
+  ;;              '("\\*Org Src.*" . (mh//display-popup-buffer-respect-monitors . ())))
+  ;; )
 
   :func
   (setq mh-latex-scale 1.0)
@@ -862,6 +910,21 @@ org-capture instead."
 
   (defun mh/org-clear-cache ()
     (interactive
-     (org-refile-cache-clear))))
+     (org-refile-cache-clear)))
 
+  (defun mh/org-mktmp (&optional fname)
+    "Make a temporary directory and return the path of that
+directory plus `FNAME', if `FNAME' is provided. If not simply
+return the directory path. The temporary directory is given a
+unique name based on the full org header path. This is meant as a
+convenient way to create temporary directories for noweb babel
+files from an org buffer."
+    (let* ((tmpdir (sha1 (mapconcat 'identity (org-get-outline-path t) "/")))
+           (dir (concat "/tmp/" tmpdir)))
+      (mkdir dir t)
+      (if fname
+          (concat dir "/" fname)
+        dir))))
+
+(provide 'org-layer)
 ;;; org-layer.el ends here

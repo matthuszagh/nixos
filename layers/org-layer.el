@@ -718,9 +718,13 @@ rid of the headline, which takes too much space."
 
   :postsetup
   (:layer pdf
+   (defun mh/heading-filepath ()
+     (file-truename
+      (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "Filepath" t))))))))
+
    (defun mh/open-book-from-outline ()
      (interactive)
-     (setq file (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "Filepath" t)))))))
+     (setq file (mh/heading-filepath))
      (setq page (string-to-number (car (s-match "[0-9]+"
                                                 (car (s-match "([0-9]+)" (org-entry-get nil "ITEM")))))))
      (find-file-other-window file)

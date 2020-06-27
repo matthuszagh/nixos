@@ -1,0 +1,35 @@
+From 7520da3a0398758d9d375e721825875bf77bac24 Mon Sep 17 00:00:00 2001
+From: gnidorah <gnidorah@users.noreply.github.com>
+Date: Fri, 6 Sep 2019 22:00:18 +0300
+Subject: [PATCH 6/7] nvidia_x11: fix *nvidia*.so* references
+
+---
+ pkgs/os-specific/linux/nvidia-x11/builder.sh | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/pkgs/os-specific/linux/nvidia-x11/builder.sh b/pkgs/os-specific/linux/nvidia-x11/builder.sh
+index b4c6952d44d..30e5d16b60f 100755
+--- a/pkgs/os-specific/linux/nvidia-x11/builder.sh
++++ b/pkgs/os-specific/linux/nvidia-x11/builder.sh
+@@ -75,11 +75,18 @@ installPhase() {
+             fi
+             install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia.json
+         fi
++        if [ -e nvidia_layers.json ]; then
++            sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_layers.json > nvidia_layers.json.fixed
++            install -Dm644 nvidia_layers.json.fixed $i/share/vulkan/implicit_layer.d/nvidia_layers.json
++        fi
+ 
+         # EGL
+         if [ "$useGLVND" = "1" ]; then
+             sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
++            sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
++
+             install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
++            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
+         fi
+ 
+     done
+-- 
+2.24.0
+

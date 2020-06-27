@@ -1,0 +1,150 @@
+From 56332dd2c72ab0535981451a9dd0eaa2afee069b Mon Sep 17 00:00:00 2001
+From: Edmund Wu <fangkazuto@gmail.com>
+Date: Wed, 14 Aug 2019 08:15:43 -0400
+Subject: [PATCH 2/7] nixos/nvidia: optimus_prime -> prime.sync
+
+---
+ nixos/modules/hardware/video/nvidia.nix | 36 ++++++++++++-------------
+ nixos/modules/rename.nix                |  6 +++++
+ 2 files changed, 24 insertions(+), 18 deletions(-)
+
+diff --git a/nixos/modules/hardware/video/nvidia.nix b/nixos/modules/hardware/video/nvidia.nix
+index 63d620bfd9b..119b956994b 100644
+--- a/nixos/modules/hardware/video/nvidia.nix
++++ b/nixos/modules/hardware/video/nvidia.nix
+@@ -34,7 +34,7 @@ let
+   enabled = nvidia_x11 != null;
+ 
+   cfg = config.hardware.nvidia;
+-  optimusCfg = cfg.optimus_prime;
++  syncCfg = cfg.prime.sync;
+ in
+ 
+ {
+@@ -46,13 +46,13 @@ in
+         Enable kernel modesetting when using the NVIDIA proprietary driver.
+ 
+         Enabling this fixes screen tearing when using Optimus via PRIME (see
+-        <option>hardware.nvidia.optimus_prime.enable</option>. This is not enabled
++        <option>hardware.nvidia.prime.sync.enable</option>. This is not enabled
+         by default because it is not officially supported by NVIDIA and would not
+         work with SLI.
+       '';
+     };
+ 
+-    hardware.nvidia.optimus_prime.enable = mkOption {
++    hardware.nvidia.prime.sync.enable = mkOption {
+       type = types.bool;
+       default = false;
+       description = ''
+@@ -66,8 +66,8 @@ in
+         be the only driver there.
+ 
+         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
+-        specified (<option>hardware.nvidia.optimus_prime.nvidiaBusId</option> and
+-        <option>hardware.nvidia.optimus_prime.intelBusId</option>).
++        specified (<option>hardware.nvidia.prime.sync.nvidiaBusId</option> and
++        <option>hardware.nvidia.prime.sync.intelBusId</option>).
+ 
+         If you enable this, you may want to also enable kernel modesetting for the
+         NVIDIA driver (<option>hardware.nvidia.modesetting.enable</option>) in order
+@@ -79,7 +79,7 @@ in
+       '';
+     };
+ 
+-    hardware.nvidia.optimus_prime.allowExternalGpu = mkOption {
++    hardware.nvidia.prime.sync.allowExternalGpu = mkOption {
+       type = types.bool;
+       default = false;
+       description = ''
+@@ -87,7 +87,7 @@ in
+       '';
+     };
+ 
+-    hardware.nvidia.optimus_prime.nvidiaBusId = mkOption {
++    hardware.nvidia.prime.sync.nvidiaBusId = mkOption {
+       type = types.str;
+       default = "";
+       example = "PCI:1:0:0";
+@@ -97,7 +97,7 @@ in
+       '';
+     };
+ 
+-    hardware.nvidia.optimus_prime.intelBusId = mkOption {
++    hardware.nvidia.prime.sync.intelBusId = mkOption {
+       type = types.str;
+       default = "";
+       example = "PCI:0:2:0";
+@@ -115,8 +115,8 @@ in
+         message = "NVIDIA drivers don't support wayland, set services.xserver.displayManager.gdm.wayland=false";
+       }
+       {
+-        assertion = !optimusCfg.enable ||
+-          (optimusCfg.nvidiaBusId != "" && optimusCfg.intelBusId != "");
++        assertion = !syncCfg.enable ||
++          (syncCfg.nvidiaBusId != "" && syncCfg.intelBusId != "");
+         message = ''
+           When NVIDIA Optimus via PRIME is enabled, the GPU bus IDs must configured.
+         '';
+@@ -138,33 +138,33 @@ in
+     services.xserver.drivers = singleton {
+       name = "nvidia";
+       modules = [ nvidia_x11.bin ];
+-      deviceSection = optionalString optimusCfg.enable
++      deviceSection = optionalString syncCfg.enable
+         ''
+-          BusID "${optimusCfg.nvidiaBusId}"
+-          ${optionalString optimusCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
++          BusID "${syncCfg.nvidiaBusId}"
++          ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
+         '';
+       screenSection =
+         ''
+           Option "RandRRotation" "on"
+-          ${optionalString optimusCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
++          ${optionalString syncCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
+         '';
+     };
+ 
+-    services.xserver.extraConfig = optionalString optimusCfg.enable
++    services.xserver.extraConfig = optionalString syncCfg.enable
+       ''
+         Section "Device"
+           Identifier "nvidia-optimus-intel"
+           Driver "modesetting"
+-          BusID  "${optimusCfg.intelBusId}"
++          BusID  "${syncCfg.intelBusId}"
+           Option "AccelMethod" "none"
+         EndSection
+       '';
+-    services.xserver.serverLayoutSection = optionalString optimusCfg.enable
++    services.xserver.serverLayoutSection = optionalString syncCfg.enable
+       ''
+         Inactive "nvidia-optimus-intel"
+       '';
+ 
+-    services.xserver.displayManager.setupCommands = optionalString optimusCfg.enable ''
++    services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
+       # Added by nvidia configuration module for Optimus/PRIME.
+       ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource modesetting NVIDIA-0
+       ${pkgs.xorg.xrandr}/bin/xrandr --auto
+diff --git a/nixos/modules/rename.nix b/nixos/modules/rename.nix
+index d4bce3b49d3..1313f175aa6 100644
+--- a/nixos/modules/rename.nix
++++ b/nixos/modules/rename.nix
+@@ -295,6 +295,12 @@ with lib;
+     (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
+     (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
+ 
++    # Nvidia
++    (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "enable" ] [ "hardware" "nvidia" "prime" "sync" "enable" ])
++    (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "allowExternalGpu" ] [ "hardware" "nvidia" "prime" "sync" "allowExternalGpu" ])
++    (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "nvidiaBusId" ] [ "hardware" "nvidia" "prime" "sync" "nvidiaBusId" ])
++    (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "intelBusId" ] [ "hardware" "nvidia" "prime" "sync" "intelBusId" ])
++
+   ] ++ (forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
+                    "snmpExporter" "unifiExporter" "varnishExporter" ]
+-- 
+2.24.0
+

@@ -6,7 +6,7 @@
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = /home/matt/src/dotfiles/services/system/btrfs-backup.sh;
+      ExecStart = /home/matt/src/dotfiles/nixos/services/system/btrfs-backup.sh;
       User = "root";
     };
     path = with pkgs; [

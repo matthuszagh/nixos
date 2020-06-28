@@ -2,14 +2,12 @@
 
 let
   useStartx = true;
-  modules-path = /etc/nixos/modules;
-  services-path = /etc/nixos/services;
 in
 {
   imports =[
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    (services-path + "/system/btrfs-backup.nix")
-    (import (modules-path + "/xorg.nix") ({
+    ../services/system/btrfs-backup.nix
+    (import ../modules/xorg.nix ({
       useStartx = useStartx;
       useNvidia = false;
       inherit pkgs;
@@ -54,7 +52,7 @@ in
     hostName = "ryzen3950";
     wireless = {
       enable = true;
-      networks = import ./security/wifi.nix;
+      networks = import ../security/wifi.nix;
     };
 
     useDHCP = true;

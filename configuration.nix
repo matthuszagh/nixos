@@ -18,10 +18,12 @@ let
   ]));
 
   # import paths
-  config-path = /etc/nixos/config;
-  modules-path = /etc/nixos/modules;
-  services-path = /etc/nixos/services;
-  src-path = /home/matt/src;
+  src-path = "/home/matt/src";
+  config-path = "/home/matt/src/dotfiles/nixos/config";
+  modules-path = "/home/matt/src/dotfiles/nixos/modules";
+  services-path = "/home/matt/src/dotfiles/nixos/services";
+  nixos-path = "/home/matt/src/dotfiles/nixos";
+  emacs-path = "/home/matt/src/dotfiles/emacs";
 in
 {
   imports = [
@@ -49,7 +51,7 @@ in
 
     # =========================== userspace ==========================
     (services-path + "/user/offlineimap.nix")
-    (src-path + "/dotfiles/custompkgs/pkgs/pia")
+    (src-path + "/dotfiles/nixos/custompkgs/pkgs/pia")
     (modules-path + "/fish.nix")
     (modules-path + "/bash.nix")
     (modules-path + "/emacs.nix")
@@ -71,12 +73,11 @@ in
     #   # ]);
     # });
     nixPath = [
-      "custompkgs=/home/matt/src/dotfiles/custompkgs" # private pkgs repo
-      "nur=/home/matt/src/NUR" # Nix User Repositories
-      "nixpkgs=/home/matt/src/nixpkgs" # use local mirror of nixpkgs collection
-      "nixpkgs-overlays=/etc/nixos/overlays"
-      "nixos-config=/etc/nixos/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
+      "custompkgs=${nixos-path}/custompkgs" # private pkgs repo
+      "nur=${src-path}/NUR" # Nix User Repositories
+      "nixpkgs=${src-path}/nixpkgs" # use local mirror of nixpkgs collection
+      "nixpkgs-overlays=${nixos-path}/overlays"
+      "nixos-config=${nixos-path}/configuration.nix"
     ];
 
     # keep-outputs preserves source files and other non-requisit parts
@@ -247,7 +248,7 @@ in
       '';
       initialScript = pkgs.writeText
         "backend-initScript"
-        builtins.readFile ./security/postgresql;
+        (builtins.readFile ./security/postgresql);
     };
   };
 
@@ -398,7 +399,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/emacs.nix")
       (config-path + "/git.nix")
       (config-path + "/keychain.nix")
       (config-path + "/gpg.nix")

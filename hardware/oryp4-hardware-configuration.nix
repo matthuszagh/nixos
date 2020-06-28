@@ -3,12 +3,11 @@
 let
   useNvidia = false;
   useStartx = true;
-  modules-path = /etc/nixos/modules;
 in
 {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    (import (modules-path + "/xorg.nix") ({
+    (import ../modules/xorg.nix ({
       useStartx = useStartx;
       useNvidia = useNvidia;
       inherit pkgs;

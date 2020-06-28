@@ -2,6 +2,8 @@
 let
   custompkgs = import <custompkgs> { };
 
+  emacsSrcDir = "/home/matt/src/dotfiles/emacs";
+
   emacsEnv = (pkgs.emacsPackagesGen ((pkgs.emacsGcc.override {
     withGTK3 = true;
     withXwidgets = true;
@@ -207,14 +209,23 @@ let
   ]));
 in
 {
-  # TODO fix (subdirs issue)
-  # home-manager.users.matt = { ... }: {
-  #   programs.emacs = {
-  #     enable = true;
-  #     package = emacsEnv;
-  #   };
-  #   services.emacs.enable = true;
-  # };
+  home-manager.users.matt = { ... }: {
+    home.file = {
+      ".config/emacs/init.el".source = "${emacsSrcDir}/init.el";
+      ".config/emacs/layers".source = "${emacsSrcDir}/layers";
+      ".config/emacs/layers".recursive = true;
+      ".config/emacs/snippets".source = "${emacsSrcDir}/snippets";
+      ".config/emacs/snippets".recursive = true;
+      ".config/emacs/scripts".source = "${emacsSrcDir}/scripts";
+      ".config/emacs/scripts".recursive = true;
+    };
+    # TODO fix (subdirs issue)
+    # programs.emacs = {
+    #   enable = true;
+    #   package = emacsEnv;
+    # };
+    # services.emacs.enable = true;
+  };
 
   environment.systemPackages = with pkgs; [
     emacsEnv

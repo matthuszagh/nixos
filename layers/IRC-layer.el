@@ -1,4 +1,6 @@
-;;; irc-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; irc-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -11,7 +13,7 @@
     (setq erc-prompt-for-password nil)
     (setq erc-nick "matthuszagh")
     ;; allow notifications
-    ;;(erc-notifications-enable)
+    (add-to-list 'erc-modules 'notifications)
     (defun mh/erc-freenode-connect ()
       (interactive)
       (erc :server "irc.freenode.net" :port 6667 :nick "matthuszagh"))

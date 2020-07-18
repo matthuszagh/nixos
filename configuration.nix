@@ -50,12 +50,12 @@ in
     (modules-path + "/wireshark.nix")
 
     # =========================== userspace ==========================
-    (services-path + "/user/offlineimap.nix")
     (src-path + "/dotfiles/nixos/custompkgs/pkgs/pia")
     (modules-path + "/fish.nix")
     (modules-path + "/bash.nix")
     (modules-path + "/emacs.nix")
     (modules-path + "/bash.nix")
+    (modules-path + "/offlineimap")
   ];
 
   # options configuring nix's behavior
@@ -412,7 +412,6 @@ in
       (config-path + "/chktex.nix")
       (config-path + "/octave.nix")
       (config-path + "/sage.nix")
-      (config-path + "/offlineimap.nix")
       (config-path + "/notmuch.nix")
       (config-path + "/clang-format.nix")
       (config-path + "/recoll.nix")

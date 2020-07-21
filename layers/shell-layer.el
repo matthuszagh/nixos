@@ -70,6 +70,12 @@ it is not appropriate in some cases like terminals."
      (setq-local evil-move-cursor-back nil))
    (add-hook 'vterm-mode-hook #'evil-collection-vterm-escape-stay)
 
+   (general-define-key
+    :states '(normal insert)
+    :keymaps 'vterm-mode-map
+     "C-k" 'vterm-send-up
+     "C-j" 'vterm-send-down)
+
    (general-def mh/prefix-shell-map
      "c" 'async-shell-command
      "e" 'eshell

@@ -89,7 +89,8 @@
     :prefix "z"
     :prefix-command 'mh/command-format-prefix
     :prefix-map 'mh/prefix-format-map
-    "i" 'mh/indent-buffer)
+    "i" 'mh/indent-buffer
+    "u" 'ucs-insert)
 
    (general-define-key
     :keymaps 'mh/prefix-map

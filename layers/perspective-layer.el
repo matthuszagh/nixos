@@ -22,6 +22,7 @@
    (general-define-key
     :keymaps 'mh/prefix-desktop-map
     "s" 'persp-switch
-    "b" 'persp-set-buffer)))
+    "b" 'persp-set-buffer
+    "k" 'persp-kill)))
 
 ;;; perspective-layer.el ends here

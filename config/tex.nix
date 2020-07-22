@@ -9,8 +9,13 @@ in
       inherit (tpkgs)
         collection-fontsrecommended
         scheme-small
-        collection-latexextra
         collection-luatex
+
+        # latex
+        collection-latex
+        standalone
+        pgfplots
+        pgfopts
 
         tex4ht
         hf-tikz

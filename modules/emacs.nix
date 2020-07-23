@@ -219,12 +219,13 @@ in
       ".config/emacs/scripts".source = "${emacsSrcDir}/scripts";
       ".config/emacs/scripts".recursive = true;
     };
-    # TODO fix (subdirs issue)
-    # programs.emacs = {
-    #   enable = true;
-    #   package = emacsEnv;
-    # };
-    # services.emacs.enable = true;
+    programs.emacs = {
+      enable = true;
+      package = emacsEnv;
+    };
+    services.emacs = {
+      enable = true;
+    };
   };
 
   nixpkgs.overlays = [

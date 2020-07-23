@@ -2,6 +2,11 @@
 let
   custompkgs = import <custompkgs> { };
   nur = import <nur> { inherit pkgs; };
+  home-manager = (builtins.fetchTarball {
+    name = "home-manager-unstable-2020-07-20";
+    url = "https://github.com/rycee/home-manager/archive/8ad55800216760291e253150a7ecc831c2956229.tar.gz";
+    sha256 = "0nif0a2pv5wgyjhfqd8jmlc055y0604xmqfnnr2hfrzz0blpl4ww";
+  });
 
   python-with-packages = pkgs.python3Full.withPackages (p: with p; [
     # TODO fix
@@ -30,7 +35,7 @@ in
     ./hardware-configuration.nix
 
     # add home-manager, which is used to manager user configurations
-    (src-path + "/home-manager/nixos")
+    "${home-manager}/nixos"
 
     # disable linux security features to increase performance
     #../config/make-linux-fast-again.nix

@@ -16,7 +16,7 @@
     programs.fish = {
       enable = true;
       shellAliases = {
-        ll = "${pkgs.coreutils}/bin/ls -Alh";
+        ll = "${pkgs.coreutils}/bin/ls -Alh --color";
         rm = "${pkgs.trash-cli}/bin/trash";
       };
       interactiveShellInit = ''

@@ -227,6 +227,12 @@ in
     # services.emacs.enable = true;
   };
 
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/f0df033ca5751dfb8abd100a6c5d8f6a363b6a88.tar.gz;
+    }))
+  ];
+
   environment.systemPackages = with pkgs; [
     emacsEnv
 

@@ -252,24 +252,12 @@ in
     };
   };
 
-  # TODO move emacs overlay to emacs module
-  nixpkgs.overlays =
-    (
-      let path = ./overlays;
-      in
-      with builtins;
-      map
-        (n: import (path + ("/" + n)))
-        (
-          filter
-            (n: match ".*\\.nix" n != null ||
-            pathExists (path + ("/" + n + "/default.nix")))
-            (attrNames (readDir path))
-        )) ++ [
-      (import (builtins.fetchTarball {
-        url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-      }))
-    ];
+  nixpkgs.overlays = (
+    let path = ./overlays;
+    in with builtins; map (n: import (path + ("/" + n)))
+    (filter (n: match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix")))
+    (attrNames (readDir path)))
+  );
 
   nixpkgs.config = {
     allowUnfree = true;

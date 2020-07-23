@@ -1,7 +1,8 @@
 { useStartx ? true
 , useNvidia ? false
 , pkgs
-, ... }:
+, ...
+}:
 
 {
   services.xserver = {

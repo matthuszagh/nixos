@@ -4,20 +4,13 @@ let
 
   emacsSrcDir = "/home/matt/src/dotfiles/emacs";
 
-  emacsEnv = (pkgs.emacsPackagesGen ((pkgs.emacsGcc.override {
-    withGTK3 = true;
-    withXwidgets = true;
-    withX = true;
-    srcRepo = true;
-    withCsrc = true;
-  }).overrideAttrs (old: {
-    CFLAGS = "-O3 -march=native -momit-leaf-frame-pointer";
-  }))).emacsWithPackages (epkgs: (with epkgs.elpaPackages; [
+  emacsEnv = (pkgs.emacsPackagesFor (pkgs.my-emacs)).emacsWithPackages
+  (epkgs: (with epkgs.elpaPackages; [
     aggressive-indent
     auctex
     exwm
     debbugs
-    org-edna
+    # org-edna
     undo-tree
   ]) ++ (with epkgs.melpaPackages; [
     alert
@@ -195,6 +188,7 @@ let
     # yasnippet
     # yasnippet-snippets
   ]) ++ (with epkgs.orgPackages; [
+    org
   ]) ++ (with epkgs; [
     pdf-tools
   ]) ++ (with custompkgs; [
@@ -212,6 +206,7 @@ in
   home-manager.users.matt = { ... }: {
     home.file = {
       ".config/emacs/init.el".source = "${emacsSrcDir}/init.el";
+      ".config/emacs/.gnus.el".source = "${emacsSrcDir}/.gnus.el";
       ".config/emacs/layers".source = "${emacsSrcDir}/layers";
       ".config/emacs/layers".recursive = true;
       ".config/emacs/snippets".source = "${emacsSrcDir}/snippets";
@@ -223,44 +218,44 @@ in
       enable = true;
       package = emacsEnv;
     };
-    services.emacs = {
-      enable = true;
-    };
+    # services.emacs = {
+    #   enable = true;
+    # };
   };
 
   nixpkgs.overlays = [
     (import (builtins.fetchTarball {
       url = https://github.com/nix-community/emacs-overlay/archive/f0df033ca5751dfb8abd100a6c5d8f6a363b6a88.tar.gz;
     }))
+    (import ./overlay.nix)
   ];
 
   environment.systemPackages = with pkgs; [
-    emacsEnv
-
-    # C / C++
+    # ============================ C / C++ ===========================
     gdb
     lldb
     clang-tools
     clang-analyzer
     bear
     cppcheck
-    # Python
+    # ============================ Python ============================
     # python3Packages.python-language-server
     python3Packages.black
+    python3Packages.debugpy  # needed for dap
+    nodejs  # needed for dap
     python3
-    # hdl
+    # ============================== hdl =============================
     verilator
-    # bash
-    # tex/latex
-    # fortran
-    # rust
-    rustc
-    rls
+    # ============================= bash =============================
+    # =========================== tex/latex ==========================
+    # ============================ fortran ===========================
+    # ============================= rust =============================
+    # TODO
+    # rustc
+    # rls
     rustfmt
     cargo
-    # tex
-    # needed for debug adapter protocol
-    nodejs
+    # ============================== nix =============================
     nixpkgs-fmt
 
     ## language servers
@@ -274,7 +269,8 @@ in
 
     # search
     ripgrep
-    recoll
+    # TODO fix
+    # recoll
 
     # math / science
     # circuit simulation
@@ -286,6 +282,7 @@ in
     ghostscript
     languagetool
     gimp
+    inkscape  # convert PDF to SVG
 
     # needed for edbi
     # perl-with-packages

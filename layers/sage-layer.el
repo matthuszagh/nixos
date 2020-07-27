@@ -1,4 +1,6 @@
-;;; sage-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; sage-layer.el --- Sage Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

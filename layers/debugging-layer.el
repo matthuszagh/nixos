@@ -5,6 +5,11 @@
 ;;; Code:
 
 (layer-def debugging
+  :presetup
+  (:layer straight
+   (straight-use-package 'realgud)
+   (straight-use-package 'debbugs))
+
   :setup
   (use-package realgud)
 

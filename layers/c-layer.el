@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def c
+  :presetup
+  (:layer straight
+   (straight-use-package 'clang-format))
+
   :setup
   (use-package clang-format
     :after (s)

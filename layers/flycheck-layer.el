@@ -1,4 +1,6 @@
-;;; flycheck-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; flycheck-layer.el --- Flycheck Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

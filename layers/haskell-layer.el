@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def haskell
+  :presetup
+  (:layer straight
+   (straight-use-package 'haskell-mode))
+
   :setup
   (use-package haskell-mode))
 

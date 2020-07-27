@@ -8,6 +8,9 @@
   :presetup
   (:layer straight
    (straight-use-package 'helm)
+   (straight-use-package 'helm-xref)
+   (straight-use-package 'helm-org)
+   (straight-use-package 'helm-ls-git)
    (straight-use-package 'helm-rg))
 
   :setup

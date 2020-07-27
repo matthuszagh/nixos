@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def hydra
+  :presetup
+  (:layer straight
+   (straight-use-package 'hydra))
+
   :setup
   (use-package hydra))
 

@@ -5,6 +5,11 @@
 ;;; Code:
 
 (layer-def clisp
+  :presetup
+  (:layer straight
+   (straight-use-package 'slime)
+   (straight-use-package 'slime-company))
+
   :setup
   (use-package slime
     :init

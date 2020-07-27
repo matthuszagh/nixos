@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def perspective
+  :presetup
+  (:layer straight
+   (straight-use-package 'perspective))
+
   :setup
   (use-package perspective
     :config

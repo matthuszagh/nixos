@@ -5,10 +5,6 @@
 ;;; Code:
 
 (layer-def pdf
-  :presetup
-  (:layer straight
-   (straight-use-package 'pdf-tools))
-
   :setup
   ;; TODO setup mouseless link clicking. Apparently, pdf-tools can
   ;; find links and present them as key sequences in the same way

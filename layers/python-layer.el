@@ -5,6 +5,11 @@
 ;;; Code:
 
 (layer-def python
+  :presetup
+  (:layer straight
+   (straight-use-package 'cython-mode)
+   (straight-use-package 'flycheck-cython))
+
   :setup
   (use-package python
     :mode (("\\.py\\'" . python-mode))

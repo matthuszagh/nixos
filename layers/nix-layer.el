@@ -10,6 +10,7 @@
   :presetup
   (:layer straight
    (straight-use-package 'nix-mode)
+   (straight-use-package 'direnv)
    (straight-use-package 'nix-update))
 
   :setup

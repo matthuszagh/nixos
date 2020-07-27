@@ -7,6 +7,10 @@
 (layer-def naysayer-theme
   :depends (base no-littering)
 
+  :presetup
+  (:layer straight
+   (straight-use-package 'naysayer-theme))
+
   :setup
   (use-package naysayer-theme
     :config

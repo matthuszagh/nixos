@@ -7,7 +7,8 @@
 (layer-def exwm
   :presetup
   (:layer straight
-   (straight-use-package 'exwm))
+   (straight-use-package 'exwm)
+   (straight-use-package 'pulseaudio-control))
 
   :setup
   (use-package exwm

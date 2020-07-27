@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def async
+  :presetup
+  (:layer straight
+   (straight-use-package 'ob-async))
+
   :setup
   (use-package async
     :config

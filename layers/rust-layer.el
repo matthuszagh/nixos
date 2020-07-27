@@ -3,6 +3,10 @@
 ;;; Code:
 
 (layer-def rust
+  :presetup
+  (:layer straight
+   (straight-use-package 'rust-mode))
+
   :setup
   (use-package rust-mode))
 

@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def documentation
+  :presetup
+  (:layer straight
+   (straight-use-package 'info-colors))
+
   :setup
   (use-package man
     :config

@@ -1,4 +1,6 @@
-;;; rmsbolt-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; rmsbolt-layer.el --- RMSbolt Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

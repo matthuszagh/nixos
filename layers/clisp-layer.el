@@ -1,4 +1,6 @@
-;;; clisp-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; clisp-layer.el --- Summary -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

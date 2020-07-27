@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def dap
+  :presetup
+  (:layer straight
+   (straight-use-package 'dap-mode))
+
   :setup
   (use-package dap-mode
     :config

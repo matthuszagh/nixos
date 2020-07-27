@@ -7,6 +7,11 @@
 (layer-def elisp
   :depends (programming)
 
+  :presetup
+  (:layer straight
+   (straight-use-package 'elsa)
+   (straight-use-package 'flycheck-elsa))
+
   :setup
   (use-package elsa)
 

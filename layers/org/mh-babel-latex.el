@@ -18,7 +18,7 @@
                              (sha1 (org-element-property :value (org-element-at-point)))
                              (by-backend '((html . "-html") (t . "-org")))
                              ".svg")))
-          (:post . "attr_wrap(htmlwidth=\"100%\", orgwidth=\"1000\", data=*this*)")))
+          (:post . "attr_wrap(htmlwidth=\"100%\", orgwidth=\"1000\", name=\"\", data=*this*)")))
 
   (setq org-html-with-latex 'html)
   (setq org-latex-to-html-convert-command

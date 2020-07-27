@@ -7,6 +7,10 @@
 (layer-def rmsbolt
   :depends (programming)
 
+  :presetup
+  (:layer straight
+   (straight-use-package 'rmsbolt))
+
   :setup
   (use-package rmsbolt
     :config

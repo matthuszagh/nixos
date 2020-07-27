@@ -5,6 +5,12 @@
 ;;; Code:
 
 (layer-def lsp
+  :presetup
+  (:layer straight
+   (straight-use-package 'lsp-mode)
+   (straight-use-package 'lsp-ui)
+   (straight-use-package 'company-lsp))
+
   :setup
   (use-package lsp-mode
     :hook (prog-mode . lsp)

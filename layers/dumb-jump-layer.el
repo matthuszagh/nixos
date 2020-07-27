@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def dumb-jump
+  :presetup
+  (:layer straight
+   (straight-use-package 'dumb-jump))
+
   :setup
   (use-package dumb-jump
     :config

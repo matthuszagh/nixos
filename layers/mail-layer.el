@@ -5,6 +5,11 @@
 ;;; Code:
 
 (layer-def mail
+  :presetup
+  (:layer straight
+   (straight-use-package 'notmuch)
+   (straight-use-package 'helm-notmuch))
+
   :setup
   (use-package notmuch
     :config

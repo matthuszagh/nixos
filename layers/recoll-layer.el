@@ -1,4 +1,6 @@
-;;; recoll-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; recoll-layer.el --- Recoll Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

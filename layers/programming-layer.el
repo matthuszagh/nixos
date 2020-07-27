@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def programming
+  :presetup
+  (:layer straight
+   (straight-use-package 'banner-comment))
+
   :setup
   (use-package prog-mode
     :hook

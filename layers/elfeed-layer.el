@@ -3,6 +3,10 @@
 ;;; Code:
 
 (layer-def elfeed
+  :presetup
+  (:layer straight
+   (straight-use-package 'elfeed))
+
   :setup
   (use-package elfeed
     :config

@@ -7,6 +7,10 @@
 (layer-def flycheck
   :depends (programming)
 
+  :presetup
+  (:layer straight
+   (straight-use-package 'flycheck))
+
   :setup
   (use-package flycheck
     :functions global-flycheck-mode

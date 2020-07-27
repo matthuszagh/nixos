@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def recoll
+  :presetup
+  (:layer straight
+   (straight-use-package 'helm-recoll))
+
   :setup
   ;; TODO I can't think of a setup stage for this. Does this mean
   ;; setup should not be necessary?

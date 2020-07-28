@@ -7,7 +7,9 @@
 (layer-def writing
   :presetup
   (:layer straight
-   (straight-use-package 'writegood-mode))
+   (straight-use-package 'writegood-mode)
+   (straight-use-package 'langtool))
+
   :setup
   (use-package writegood-mode
     :functions writegood-mode)

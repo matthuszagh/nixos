@@ -1,4 +1,6 @@
-;;; sql-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; sql-layer.el --- SQL Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

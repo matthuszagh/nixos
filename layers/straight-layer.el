@@ -5,8 +5,8 @@
 ;;; Code:
 
 (layer-def straight
-  :depends (base)
   :setup
+  ;; TODO
   (message "straight dummy loaded."))
 
 ;;; straight-layer.el ends here

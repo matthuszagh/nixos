@@ -21,9 +21,7 @@
     :hook
     ((org-mode . (lambda ()
                    (setq-local fill-column 70)))
-     (org-babel-after-execute . org-display-inline-images)
-     (org-mode . (lambda ()
-                   (company-mode -1))))
+     (org-babel-after-execute . org-display-inline-images))
     :config
     ;; TODO remove when I can get the upstream version of org, since
     ;; this has been incorporated.
@@ -888,6 +886,10 @@ org-capture instead."
 
   (:layer documentation
    (use-package ol-man))
+
+  (:layer completions
+   (add-hook 'org-mode-hook (lambda ()
+                              (company-mode -1))))
 
   ;; (:layer windows
   ;; (add-to-list 'display-buffer-alist

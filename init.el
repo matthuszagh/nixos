@@ -9,44 +9,50 @@
 ;; (setq package-enable-at-startup nil)
 ;; (package-initialize)
 
-;; ;; We use a straight-maintained mirror, which fixes an issue that makes tex-sites.el unavailable to
-;; ;; AUCTeX.
-;; (setq straight-recipes-gnu-elpa-use-mirror t)
+;; We use a straight-maintained mirror, which fixes an issue that makes tex-sites.el unavailable to
+;; AUCTeX.
+(setq straight-recipes-gnu-elpa-use-mirror t)
 
-;; ;; Retreive straight if we don't have it.
-;; (defvar bootstrap-version)
-;; (let ((bootstrap-file
-;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-;;       (bootstrap-version 5))
-;;   (unless (file-exists-p bootstrap-file)
-;;     (with-current-buffer
-;;         (url-retrieve-synchronously
-;;          "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-;;          'silent 'inhibit-cookies)
-;;       (goto-char (point-max))
-;;       (eval-print-last-sexp)))
-;;   (load bootstrap-file nil 'nomessage))
+;; Retreive straight if we don't have it.
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; (straight-use-package 'use-package)
-;; ;; TODO move this to :presetup when that's working and nixpkgs is setup.
-;; (straight-use-package '(layers :local-repo "layers"))
+;; (setq straight-disable-native-compilation t)
 
-;; (load "~/src/layers/layers.el")
-
-(let ((default-directory
-        (concat user-emacs-directory "layers")))
-  (add-to-list 'load-path default-directory)
-  (normal-top-level-add-subdirs-to-load-path))
+(straight-use-package 'use-package)
 
 (require 'use-package)
 
 ;; Prefer `.el' files over outdated `.elc' files. Use this with `auto-compile' to automatically
 ;; byte-compile outdated files.
+(straight-use-package 'auto-compile)
 (setq load-prefer-newer t)
 (use-package auto-compile
   :config
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode))
+
+;; TODO move this to :presetup when that's working and nixpkgs is setup.
+;; (straight-use-package
+;;  '(layers :type git :host github :repo "matthuszagh/layers"))
+(straight-use-package 'ht)
+(straight-use-package 'dash)
+(straight-use-package '(layers :local-repo "~/src/layers"))
+
+(let ((default-directory
+        (concat user-emacs-directory "layers")))
+  (add-to-list 'load-path default-directory)
+  (normal-top-level-add-subdirs-to-load-path))
 
 (use-package layers
   :init
@@ -57,6 +63,7 @@
   :config
   (declare-layers '(base
                     keybinding-management
+                    straight
                     modal
                     multiple-cursors
                     no-littering
@@ -114,9 +121,11 @@
                     spice
                     hydra
                     perspective
+                    json
 
                     ;; formatting
-                    indenting
+		    ;; TODO
+                    ;; indenting
                     formatting
                     documentation
                     undoing
@@ -126,7 +135,8 @@
                     helm
                     help
                     org
-                    org-ql
+                    ;; TODO
+                    ;; org-ql
                     markdown
                     writing
                     exwm
@@ -135,16 +145,14 @@
                     internet
                     irc))
   (declare-global-depends '(base
-                            ;; straight
+                            straight
                             keybinding-management
-                            no-littering
-                            default-theme
-                            default-mode-line))
+                            no-littering))
 
   (defun mh/load-all-elisp-in-dir (dir)
     (let ((libraries-loaded (mapcar #'file-name-sans-extension
                                     (delq nil (mapcar #'car load-history)))))
-      (dolist (file (directory-files-recursively dir ".+\\.elc?$"))
+      (dolist (file (directory-files-recursively dir ".+-layer\\.elc?$"))
         (let ((library (file-name-sans-extension file)))
           (unless (member library libraries-loaded)
             (load library nil t)

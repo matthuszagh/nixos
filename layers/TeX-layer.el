@@ -7,7 +7,8 @@
 (layer-def tex
   :presetup
   (:layer straight
-   (straight-use-package 'auctex))
+   (straight-use-package 'auctex)
+   (straight-use-package 'auctex-latexmk))
 
   :setup
   (use-package tex-site

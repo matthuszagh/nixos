@@ -504,7 +504,7 @@ a HTML file."
     (setq org-preview-latex-default-process 'luasvgm)
     ;; (setq org-preview-latex-default-process 'luamagick)
 
-    (require 'mh-babel)
+    (load "org/mh-babel.el")
 
     ;; export macros
     (setq org-export-global-macros

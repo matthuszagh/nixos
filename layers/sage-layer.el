@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def sage
+  :presetup
+  (:layer straight
+   (straight-use-package 'sage-shell-mode))
+
   :setup
   (use-package sage-shell-mode
     :hook (sage-shell-mode . (lambda ()

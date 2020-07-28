@@ -1,4 +1,6 @@
-;;; straight-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; straight-layer.el --- Straight Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

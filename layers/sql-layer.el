@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def sql
+  :presetup
+  (:layer straight
+   (straight-use-package 'edbi))
+
   :setup
   (use-package sql
     ;; Prevent auto newlines after a certain number of characters.

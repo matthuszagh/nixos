@@ -10,6 +10,7 @@
    (straight-use-package
     '(transient :type git :host github :repo "magit/transient"))
    (straight-use-package 'magit)
+   (straight-use-package 'forge)
    (straight-use-package 'git-gutter)
    (straight-use-package 'git-timemachine)
    (straight-use-package 'projectile))

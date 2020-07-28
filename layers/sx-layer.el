@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def sx
+  :presetup
+  (:layer straight
+   (straight-use-package 'sx))
+
   :setup
   (use-package sx)
 

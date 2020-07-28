@@ -5,8 +5,6 @@
 ;;; Code:
 
 (layer-def verilog
-  :depends (programming)
-
   :setup
   (use-package verilog-mode
     :mode "\\.[st]*v[hp]*\\'"

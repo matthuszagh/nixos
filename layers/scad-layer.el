@@ -1,4 +1,6 @@
-;;; scad-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; scad-layer.el --- SCAD Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

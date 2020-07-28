@@ -1,4 +1,4 @@
-;;; org-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; org-layer.el --- Org Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

@@ -1,4 +1,4 @@
-;;; tex-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; tex-layer.el --- TeX Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

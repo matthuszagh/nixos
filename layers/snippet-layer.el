@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def snippet
+  :presetup
+  (:layer straight
+   (straight-use-package 'yasnippet))
+
   :setup
   (use-package yasnippet
     :config

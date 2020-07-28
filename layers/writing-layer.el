@@ -8,7 +8,8 @@
   :presetup
   (:layer straight
    (straight-use-package 'writegood-mode)
-   (straight-use-package 'langtool))
+   (straight-use-package 'langtool)
+   (straight-use-package 'define-word))
 
   :setup
   (use-package writegood-mode
@@ -22,6 +23,10 @@
   (:layer org
    (add-hook 'org-mode 'writegood-turn-on))
   (:layer vcs
-   (add-hook 'git-commit-setup 'writegood-mode)))
+   (add-hook 'git-commit-setup 'writegood-mode))
+  (:layer modal
+   (general-define-key
+    :keymaps 'mh/prefix-help-map
+     "w" 'define-word-at-point)))
 
 ;;; writing-layer.el ends here

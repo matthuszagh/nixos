@@ -847,8 +847,7 @@ org-capture instead."
      "P" 'org-priority
      "L" 'org-latex-preview
      "z" 'mh/command-org-tex-insert-prefix
-     "o" 'org-open-at-point
-     "d" 'define-word-at-point)
+     "o" 'org-open-at-point)
 
    (general-define-key
     :keymaps 'org-mode-map

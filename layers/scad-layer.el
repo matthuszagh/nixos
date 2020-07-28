@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def scad
+  :presetup
+  (:layer straight
+   (straight-use-package 'scad-mode))
+
   :setup
   (use-package scad-mode))
 

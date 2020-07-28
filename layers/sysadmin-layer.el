@@ -5,6 +5,12 @@
 ;;; Code:
 
 (layer-def sysadmin
+  :presetup
+  (:layer straight
+   (straight-use-package 'symon)
+   (straight-use-package 'paradox)
+   (straight-use-package 'helm-systemd))
+
   :setup
   (use-package proced
     :config

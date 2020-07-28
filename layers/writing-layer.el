@@ -1,4 +1,4 @@
-;;; writing-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; writing-layer.el --- Writing Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

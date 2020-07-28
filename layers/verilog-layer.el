@@ -1,4 +1,4 @@
-;;; verilog-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; verilog-layer.el --- Verilog Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

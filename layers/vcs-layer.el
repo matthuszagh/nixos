@@ -1,4 +1,4 @@
-;;; vcs-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; vcs-layer.el --- Version Control System Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

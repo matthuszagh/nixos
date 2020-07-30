@@ -7,6 +7,11 @@ let
     url = "https://github.com/rycee/home-manager/archive/8ad55800216760291e253150a7ecc831c2956229.tar.gz";
     sha256 = "0nif0a2pv5wgyjhfqd8jmlc055y0604xmqfnnr2hfrzz0blpl4ww";
   });
+  sagemath-pkgs = (import (builtins.fetchTarball {
+    name = "nixpkgs-unstable-2020-05-01";
+    url = "https://github.com/nixos/nixpkgs/archive/7866440f1223dc447f38cb23c00e10b44b4c98fe.tar.gz";
+    sha256 = "1fh5yglh8l1r1flvfayk61vpsmq2q21g5pqmjjqqhp2bz7c3psbr";
+  }) {});
 
   python-with-packages = pkgs.python3Full.withPackages (p: with p; [
     # TODO fix
@@ -175,7 +180,7 @@ in
     libftdi1
     gdb
     # TODO fix
-    sageWithDoc
+    sagemath-pkgs.sageWithDoc
     # python3Packages.hdl_checker
     # must be root available for proper permissions
     nix-generate-from-cpan

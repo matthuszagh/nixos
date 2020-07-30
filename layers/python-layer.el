@@ -8,7 +8,9 @@
   :presetup
   (:layer straight
    (straight-use-package 'cython-mode)
-   (straight-use-package 'flycheck-cython))
+   (straight-use-package 'flycheck-cython)
+   (straight-use-package 'blacken)
+   (straight-use-package 'python-docstring))
 
   :setup
   (use-package python

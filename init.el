@@ -4,11 +4,6 @@
 
 ;;; Code:
 
-;; Use the straight package manager instead of package.el.
-;; (require 'package)
-;; (setq package-enable-at-startup nil)
-;; (package-initialize)
-
 ;; We use a straight-maintained mirror, which fixes an issue that makes tex-sites.el unavailable to
 ;; AUCTeX.
 (setq straight-recipes-gnu-elpa-use-mirror t)

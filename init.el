@@ -1,4 +1,4 @@
-;;; init.el --- Emacs Initialization File -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; init.el --- Emacs Initialization File -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

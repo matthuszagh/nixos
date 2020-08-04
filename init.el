@@ -22,8 +22,6 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; (setq straight-disable-native-compilation t)
-
 (straight-use-package 'use-package)
 
 (require 'use-package)

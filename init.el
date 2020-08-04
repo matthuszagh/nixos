@@ -49,11 +49,6 @@
 (straight-use-package 'dash)
 (straight-use-package '(layers :local-repo "~/src/layers"))
 
-(let ((default-directory
-        (concat user-emacs-directory "layers")))
-  (add-to-list 'load-path default-directory)
-  (normal-top-level-add-subdirs-to-load-path))
-
 (use-package layers
   :init
   (if (featurep 'straight)

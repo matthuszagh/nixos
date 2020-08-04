@@ -68,23 +68,7 @@
     ;; Make git-timemachine work with evil.
     (evil-make-overriding-map git-timemachine-mode-map 'normal))
 
-  (use-package projectile
-    :config
-    (projectile-global-mode))
-
   :postsetup
-  (:layer helm
-   (use-package helm-projectile
-     :config
-     (helm-projectile-on)
-     (setq helm-projectile-truncate-lines t)
-     (setq projectile-completion-system 'helm)))
-
-  (:layer (helm modal)
-   (general-def mh/prefix-search-map
-     "p" 'helm-projectile
-     "P" 'helm-projectile-rg))
-
   (:layer modal
    (use-package evil-magit
      :after (magit transient))

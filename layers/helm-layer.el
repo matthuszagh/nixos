@@ -1,4 +1,4 @@
-;;; helm-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; helm-layer.el --- Helm Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -11,7 +11,8 @@
    (straight-use-package 'helm-xref)
    (straight-use-package 'helm-org)
    (straight-use-package 'helm-ls-git)
-   (straight-use-package 'helm-rg))
+   (straight-use-package 'helm-rg)
+   (straight-use-package 'helm-projectile))
 
   :setup
   (use-package helm
@@ -62,6 +63,12 @@
 
   (use-package helm-xref)
 
+  (use-package helm-projectile
+     :config
+     (helm-projectile-on)
+     (setq helm-projectile-truncate-lines t)
+     (setq projectile-completion-system 'helm))
+
   :postsetup
   (:layer modal
    (general-def mh/prefix-map
@@ -99,6 +106,11 @@
     "C-p" 'helm-ff-run-browse-project
     ;; display file properties
     "C-n" 'helm-ff-properties-persistent)
+
+   ;; keybindings for helm-projectile
+   (general-def mh/prefix-search-map
+     "p" 'helm-projectile
+     "P" 'helm-projectile-rg)
 
    ;; keybindings for candidates in `helm-buffers-list'
    (general-def helm-buffer-map

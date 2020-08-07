@@ -23,6 +23,37 @@
     (pdf-tools-install)
     ;; fixes an issue in emacs 27 where pdf is blurry and too large otherwise.
     (setq image-scaling-factor 1)
+
+    ;; TODO remove if this pr accepted: https://github.com/politza/pdf-tools/pull/602
+    (defun mh/pdf-outline-noselect (&optional buffer)
+      "Create an PDF outline of BUFFER, but don't display it."
+      (save-current-buffer
+        (and buffer (set-buffer buffer))
+        (pdf-util-assert-pdf-buffer)
+        (let* ((pdf-buffer (current-buffer))
+               (pdf-file (pdf-view-buffer-file-name))
+               (pdf-window (and (eq pdf-buffer (window-buffer))
+                                (selected-window)))
+               (bname (pdf-outline-buffer-name))
+               (buffer-exists-p (get-buffer bname))
+               (buffer (get-buffer-create bname)))
+          (with-current-buffer buffer
+            (setq-local fill-column nil)
+            (unless buffer-exists-p
+              (when (= 0 (save-excursion
+                           (pdf-outline-insert-outline pdf-buffer)))
+                (kill-buffer buffer)
+                (error "PDF has no outline"))
+              (pdf-outline-buffer-mode))
+            (set (make-local-variable 'other-window-scroll-buffer)
+                 pdf-buffer)
+            (setq pdf-outline-pdf-window pdf-window
+                  pdf-outline-pdf-document (or pdf-file pdf-buffer))
+            (current-buffer)))))
+
+    (advice-add 'pdf-outline-noselect :override #'mh/pdf-outline-noselect)
+    ;; end TODO
+
     (setq-default pdf-view-display-size 'fit-page))
 
   :postsetup

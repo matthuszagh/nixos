@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, emacs, pkgs }:
+{ stdenv
+, fetchFromGitHub
+, emacs
+, pkgs
+}:
 
 let
   emacs-with-packages = (pkgs.emacsPackagesGen emacs).emacsWithPackages (epkgs:(with epkgs.melpaPackages; [

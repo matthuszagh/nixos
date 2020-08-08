@@ -46,7 +46,7 @@ in
     hostName = "mbp";
     wireless = {
       enable = true;
-      networks = import ./security/wifi.nix;
+      networks = import ../security/wifi.nix;
     };
 
     useDHCP = true;

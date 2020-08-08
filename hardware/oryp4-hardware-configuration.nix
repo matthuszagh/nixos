@@ -66,7 +66,7 @@ in
     hostName = "oryp4";
     wireless = {
       enable = true;
-      networks = import ./security/wifi.nix;
+      networks = import ../security/wifi.nix;
       # specifying wifi networks follows the following syntax:
       # the available network with the highest priority is connected to.
       # networks = {

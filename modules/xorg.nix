@@ -65,7 +65,7 @@
       # numlockx &
 
       # Finally start Emacs
-      exec emacsclient -c
+      exec emacs
     '';
     home.file.".Xresources".text = ''
       Xcursor.size: 32

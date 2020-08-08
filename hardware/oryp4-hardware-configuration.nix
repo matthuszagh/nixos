@@ -3,6 +3,7 @@
 let
   useNvidia = false;
   useStartx = true;
+  hostName = "oryp4";
 in
 {
   imports = [
@@ -12,7 +13,12 @@ in
       useNvidia = useNvidia;
       inherit pkgs;
     }))
-    ];
+    (import ../modules/binary-cache.nix ({
+      hostName = hostName;
+      inherit config;
+      inherit pkgs;
+    }))
+  ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
@@ -63,7 +69,7 @@ in
   };
 
   networking = {
-    hostName = "oryp4";
+    hostName = hostName;
     wireless = {
       enable = true;
       networks = import ../security/wifi.nix;

@@ -2,6 +2,7 @@
 
 let
   useStartx = true;
+  hostName = "ryzen3950";
 in
 {
   imports =[
@@ -10,6 +11,11 @@ in
     (import ../modules/xorg.nix ({
       useStartx = useStartx;
       useNvidia = false;
+      inherit pkgs;
+    }))
+    (import ../modules/binary-cache.nix ({
+      hostName = hostName;
+      inherit config;
       inherit pkgs;
     }))
   ];
@@ -49,7 +55,7 @@ in
   nix.maxJobs = lib.mkDefault 32;
 
   networking = {
-    hostName = "ryzen3950";
+    hostName = hostName;
     wireless = {
       enable = true;
       networks = import ../security/wifi.nix;

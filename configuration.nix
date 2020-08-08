@@ -98,6 +98,11 @@ in
       keep-derivations = true
       experimental-features = nix-command flakes
     '';
+
+    binaryCaches = [
+      "https://cache.nixos.org"
+      # "http://ryzen3950:80"
+    ];
   };
 
   # Use the systemd-boot EFI boot loader.

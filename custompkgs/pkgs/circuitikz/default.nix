@@ -1,15 +1,18 @@
-{ stdenv, fetchFromGitHub, texlive }:
+{ stdenv
+, fetchFromGitHub
+, texlive
+}:
 
 stdenv.mkDerivation rec {
-  version = "circuitikz-unstable-2020-05-30";
+  version = "v1.2.2";
   pname = "circuitikz";
   tlType = "run";
 
   src = fetchFromGitHub {
     owner = "circuitikz";
     repo = "circuitikz";
-    rev = "b908eb8ecc62967d2a48228a670e893e1a06302e";
-    sha256 = "0x5vmzjk58sa8arczwrp3b1ln65s0904xsp6vdy1pfzkmz95fqhf";
+    rev = version;
+    sha256 = "1sbp2pj5qi6i7x8zj2x8ibh6fybjqx7mxm974m1gs3np8agn11fx";
   };
 
   dontBuild = true;

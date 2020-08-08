@@ -144,7 +144,7 @@ let
     circlib = pkgs.callPackage ./pkgs/circlib {
       skidl = skidl;
     };
-    pyems = pkgs.callPackage ./pkgs/pyems {
+    python3.pkgs.pyems = pkgs.callPackage ./pkgs/pyems {
       python-csxcad = python-csxcad;
       python-openems = python-openems;
     };

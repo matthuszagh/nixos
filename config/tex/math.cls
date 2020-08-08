@@ -23,6 +23,8 @@
 
 %% Declared math operators
 \DeclareMathOperator{\rank}{rank}
+\newcommand{\parallelsum}{\mathbin{\|}}
+\newcommand{\parallelsumAngle}{\mathbin{\!/\mkern-5mu/\!}}
 
 %% Circuitikz style options
 \ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}

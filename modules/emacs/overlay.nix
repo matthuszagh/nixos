@@ -1,7 +1,7 @@
 self: super:
 
 {
-  my-emacs = (super.pkgs.emacsGcc.override {
+  my-emacs = (super.pkgs.emacsUnstable.override {
     withGTK3 = true;
     withXwidgets = true;
     withX = true;

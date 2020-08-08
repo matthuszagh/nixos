@@ -16,6 +16,7 @@ in
         standalone
         pgfplots
         pgfopts
+        preview
 
         tex4ht
         hf-tikz

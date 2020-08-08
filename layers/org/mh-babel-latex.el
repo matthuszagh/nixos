@@ -8,16 +8,31 @@
 
 (use-package ox-latex
   :config
+  (defun mh//concat-list (list)
+    (let ((res ""))
+      (dolist (elem list)
+        (setq res (concat res elem)))
+      res))
+
+  (defun mh//org-src-block-contents ()
+    (let ((elem (org-element-at-point)))
+      (concat (org-element-property :value elem)
+              (mh//concat-list (org-element-property :header elem)))))
+
+  (defun mh/org-src-block-res-fname ()
+    (let ((elem (org-element-at-point)))
+      (concat "tmp/"
+              (sha1 (mh//org-src-block-contents))
+              (by-backend '((html . "-html") (t . "-org")))
+              ".svg")))
+
   (setq org-babel-default-header-args:latex
         `((:exports . "results")
           (:results . "file link replace")
           (:wrap . "results")
           (:cache . "yes")
           (:file . (lambda ()
-                     (concat "tmp/"
-                             (sha1 (org-element-property :value (org-element-at-point)))
-                             (by-backend '((html . "-html") (t . "-org")))
-                             ".svg")))
+                     (mh/org-src-block-res-fname)))
           (:post . "attr_wrap(htmlwidth=\"100%\", orgwidth=\"1000\", name=\"\", data=*this*)")))
 
   (setq org-html-with-latex 'html)

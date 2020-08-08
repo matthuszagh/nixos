@@ -51,7 +51,7 @@
       (eval ret)))
 
   (setq org-latex-img-process
-        '(("svg" . ("dvisvgm --pdf %f -n -b min -c 10 -o %O"))))
+        '(("svg" . ("inkscape --pdf-poppler %f -T -l -o %O"))))
 
   (defun mh//org-babel-execute:latex (body params)
     "Execute a block of Latex code with Babel.

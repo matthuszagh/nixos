@@ -1,4 +1,6 @@
-{ stdenv, python3Packages
+{ stdenv
+, fetchFromGitHub
+, python3Packages
 , python-csxcad
 , python-openems
 }:

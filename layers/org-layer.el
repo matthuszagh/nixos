@@ -509,7 +509,7 @@ a HTML file."
     (setq org-preview-latex-default-process 'luasvgm)
     ;; (setq org-preview-latex-default-process 'luamagick)
 
-    (load "org/mh-babel.el")
+    (load (concat user-emacs-directory "layers/org/mh-babel.el"))
 
     ;; export macros
     (setq org-export-global-macros

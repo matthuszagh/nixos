@@ -340,6 +340,6 @@ INFO may provide the values of these header arguments (in the
 
 (org-babel-lob-ingest (concat user-emacs-directory "layers/org/lob.org"))
 
-(require 'mh-babel-latex)
+(load (concat user-emacs-directory "layers/org/mh-babel-latex.el"))
 
 (provide 'mh-babel)

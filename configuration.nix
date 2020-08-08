@@ -37,7 +37,7 @@ let
 in
 {
   imports = [
-    ./hardware-configuration.nix
+    /etc/nixos/hardware-configuration.nix
 
     # add home-manager, which is used to manager user configurations
     "${home-manager}/nixos"

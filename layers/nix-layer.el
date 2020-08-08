@@ -11,7 +11,8 @@
   (:layer straight
    (straight-use-package 'nix-mode)
    (straight-use-package 'direnv)
-   (straight-use-package 'nix-update))
+   (straight-use-package 'nix-update)
+   (straight-use-package 'nixpkgs-fmt))
 
   :setup
   (use-package nix-mode
@@ -36,6 +37,9 @@
     ;; made. The summary is annoying because it shifts the buffer
     ;; contents. This does not stop direnv updating the environment.
     (setq direnv-always-show-summary nil))
+
+  (use-package nixpkgs-fmt
+    :hook (nix-mode . nixpkgs-fmt-on-save))
 
   (defun mh/nix-rebuild ()
     (interactive)

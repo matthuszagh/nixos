@@ -1,4 +1,4 @@
-;;; mh-babel-latex.el --- Summary -*- lexical-binding: t; -*-
+;;; babel-latex.el --- Summary -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -135,5 +135,4 @@ This function is called by `org-babel-execute-src-block'."
         (replace-match (format "%d" count) nil nil nil 1)
         (setq count (1+ count))))))
 
-(provide 'mh-babel-latex)
-;;; mh-babel-latex.el ends here
+;;; babel-latex.el ends here

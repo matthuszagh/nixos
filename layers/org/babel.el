@@ -1,6 +1,8 @@
-;;; mh-babel.el --- Summary
+;;; babel.el --- Org Babel -*- lexical-binding: t; -*-
 
 ;;; Commentary:
+
+;; Customize org behavior regarding source code.
 
 ;;; Code:
 
@@ -340,6 +342,6 @@ INFO may provide the values of these header arguments (in the
 
 (org-babel-lob-ingest (concat user-emacs-directory "layers/org/lob.org"))
 
-(load (concat user-emacs-directory "layers/org/mh-babel-latex.el"))
+(load (concat user-emacs-directory "layers/org/babel-latex.el"))
 
-(provide 'mh-babel)
+;;; babel.el ends here

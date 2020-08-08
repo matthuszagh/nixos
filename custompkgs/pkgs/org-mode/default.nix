@@ -1,4 +1,7 @@
-{ stdenv, pkgs }:
+{ stdenv
+, pkgs
+, emacs
+}:
 
 # See https://orgmode.org/worg/dev/org-build-system.html for how to
 # build

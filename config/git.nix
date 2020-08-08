@@ -6,7 +6,6 @@
     userName = "Matt Huszagh";
     userEmail = "huszaghmatt@gmail.com";
 
-    # TODO how do I set github user?
     extraConfig = {
       core = {
         editor = "vim";

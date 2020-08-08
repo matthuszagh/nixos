@@ -7,8 +7,13 @@
 (layer-def org
   :presetup
   (:layer straight
-   (straight-use-package 'polymode)
-   (straight-use-package 'poly-org))
+   (straight-use-package '(org-plus-contrib :local-repo "~/src/org-mode"))
+   (straight-use-package 'org-drill)
+   (straight-use-package 'org-edna)
+   (straight-use-package 'ob-sagemath)
+   (straight-use-package 'org-board)
+   (straight-use-package 'htmlize)
+   (straight-use-package 's))
   (:layer (straight helm)
    (straight-use-package 'helm-org-rifle))
   (:layer modal
@@ -593,7 +598,7 @@ a HTML file."
 
     ;; make contrib files visible
     ;; TODO modify this for nixpkgs
-    (add-to-list 'load-path "~/.emacs.d/straight/repos/org/contrib/lisp" t))
+    (add-to-list 'load-path (concat user-emacs-directory "straight/repos/org/contrib/lisp") t))
 
   (use-package org-eldoc)
 

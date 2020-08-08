@@ -624,64 +624,7 @@ a HTML file."
     (setq org-babel-default-header-args:sage '((:session . t)
                                                (:results . "output"))))
 
-  (use-package ox-publish
-    :config
-    ;; (defun org-custom-link-img-follow (path)
-    ;;   (org-open-file-with-emacs
-    ;;    (format "img/%s" path)))
-
-    ;; (defun org-custom-link-img-export (path desc format)
-    ;;   (cond
-    ;;    ((eq 'html org-export-current-backend)
-    ;;     (format "<img src=\"/%s\" alt=\"%s\"/>" path desc))))
-
-    ;; (org-link-set-parameters "file" :follow 'org-custom-link-img-follow :export 'org-custom-link-img-export)
-
-    ;; only wrap code elements in spans and use a CSS file to fontify elements.
-    (setq org-html-htmlize-output-type 'css)
-
-    (setq blog-dir "~/src/blog/")
-    (setq org-publish-project-alist
-          `(("blog" :components ("posts" "static"))
-            ("posts"
-             :base-directory ,(concat blog-dir "org")
-             :publishing-directory ,blog-dir
-             :publishing-function org-html-publish-to-html
-             :htmlize-source t
-             :recursive t
-             :body-only t
-             :with-toc nil
-             :exclude "\\(old\\|purgatory\\)")
-            ("static"
-             :base-directory ,(concat blog-dir "org")
-             :base-extension "svg\\|css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|mathml"
-             :publishing-directory ,blog-dir
-             :publishing-function org-publish-attachment
-             :exclude "\\(old\\|purgatory\\)"
-             :recursive t)))
-
-    ;; (setq org-publish-project-alist
-    ;;       '(("blog" :components ("notes" "static"))
-    ;;         ("notes"
-    ;;          :base-directory "~/src/blog/org"
-    ;;          :base-extension "org"
-    ;;          :publishing-directory "~/src/blog/jekyll/_posts"
-    ;;          :publishing-function org-html-publish-to-html
-    ;;          :html-extension "html"
-    ;;          :section-numbers nil
-    ;;          :with-toc nil
-    ;;          :auto-index nil
-    ;;          :auto-preamble nil
-    ;;          :body-only t
-    ;;          :auto-postamble nil
-    ;;          :recursive t)
-    ;;         ("static"
-    ;;          :base-directory "~/src/blog/org"
-    ;;          :base-extension "svg\\|css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-    ;;          :publishing-directory "~/src/blog/jekyll"
-    ;;          :publishing-function org-publish-attachment
-    ;;          :recursive t)))
-    )
+  (load (concat user-emacs-directory "layers/org/export.el"))
 
   ;; use org-board for web archival
   (use-package org-board

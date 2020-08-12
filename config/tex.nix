@@ -23,6 +23,7 @@ in
         siunitx
         pythontex
         asymptote
+        animate
         # dvisvgm
         # luatex
         luatex85

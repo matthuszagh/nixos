@@ -1,6 +1,5 @@
 { stdenv
 , python3Packages
-, skidl
 }:
 
 python3Packages.buildPythonPackage rec {

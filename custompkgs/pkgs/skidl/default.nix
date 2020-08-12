@@ -4,7 +4,6 @@
 , kicad
 , kinparse
 , pyspice
-, pykicad
 , python
 }:
 
@@ -21,14 +20,13 @@ python3Packages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = (with python3Packages; [
-    setuptools
+    requests
     future
     kinparse
     enum34
     pyspice
     graphviz
     wxPython_4_0
-    pykicad
     pillow
     pytest
     setuptools
@@ -40,6 +38,7 @@ python3Packages.buildPythonPackage rec {
   # TODO
   # KICAD_SYMBOL_DIR = "${kicad.out}/share/kicad/library";
   doCheck = false;
+  pythonImportsCheck = [ "skidl" ];
 
   # checkPhase = ''
   #   runHook preCheck;

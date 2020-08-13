@@ -125,15 +125,6 @@ in
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
-  console = {
-    # set fonts in initramfs
-    earlySetup = true;
-    # use the same caps-lock / ctrl switch
-    useXkbConfig = true;
-    # make the console font legible on the HiDPI display.
-    font = "latarcyrheb-sun32";
-  };
-
   system.autoUpgrade.enable = true;
 
   # system-wide packages

@@ -70,43 +70,6 @@ in
     # (modules-path + "/nix-tree.nix")
   ];
 
-  # options configuring nix's behavior
-  nix = {
-    useSandbox = true;
-    nrBuildUsers = 100;
-
-    package = pkgs.nixFlakes;
-    # use a local repo for nix to test out experimental changes
-    # package = pkgs.nixUnstable.overrideAttrs (old: {
-    #   src = (src-path + "/nix");
-    #   # buildInputs = old.buildInputs ++ (with pkgs; [
-    #   #   bison
-    #   #   flex
-    #   # ]);
-    # });
-    nixPath = [
-      "custompkgs=${nixos-path}/custompkgs" # private pkgs repo
-      "nur=${src-path}/NUR" # Nix User Repositories
-      "nixpkgs=${src-path}/nixpkgs" # use local mirror of nixpkgs collection
-      "nixpkgs-overlays=${nixos-path}/overlays"
-      "nixos-config=${nixos-path}/configuration.nix"
-    ];
-
-    # keep-outputs preserves source files and other non-requisit parts
-    # of the build process.  keep-derivations preserves derivation
-    # files, which can be useful to query build dependencies, etc.
-    extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
-      experimental-features = nix-command flakes
-    '';
-
-    binaryCaches = [
-      "https://cache.nixos.org"
-      # "http://ryzen3950:80"
-    ];
-  };
-
   # Use the systemd-boot EFI boot loader.
   boot = {
     loader = {

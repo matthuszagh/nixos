@@ -1,0 +1,6 @@
+{ ... }:
+
+{
+  allowUnfree = true;
+  # sandbox = true;
+}

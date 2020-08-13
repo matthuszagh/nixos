@@ -1,0 +1,23 @@
+--- crap/primerun/primerun.sh	2019-07-18 09:23:11.935477360 -0700
++++ crap/primerun/primerun.sh	2019-07-18 11:37:26.775884564 -0700
+@@ -37,8 +37,8 @@
+   MatchIsTouchpad "on"
+   MatchDevicePath "/dev/input/event*"
+   Driver "libinput"
+-  Option "Tapping" "on"
+-  Option "DisableWhileTyping" "off"
++  Option "Tapping" "off"
++  Option "DisableWhileTyping" "on"
+   Option "MiddleEmulation" "on"
+ EndSection
+
+@@ -83,6 +83,8 @@
+ cat > $tmpdir/session << EOF
+ #!/bin/sh
+ $(nix-build --no-out-link '<nixpkgs>' -A xorg.xrandr)/bin/xrandr --setprovideroutputsource modesetting NVIDIA-0
+-$(nix-build --no-out-link '<nixpkgs>' -A xorg.xrandr)/bin/xrandr --auto
++$(nix-build --no-out-link '<nixpkgs>' -A xorg.xrandr)/bin/xrandr --dpi 192 --auto
++export INFOPATH=/home/matt/.nix-profile/share/info:/var/run/current-system/sw/share/info
++export MANPATH=/home/matt/.nix-profile/share/man:/var/run/current-system/sw/share/man
+ export LD_LIBRARY_PATH="$(nix-build --no-out-link -E '
+   with import <nixpkgs> {};

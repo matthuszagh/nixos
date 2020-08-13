@@ -300,12 +300,6 @@ in
     };
   };
 
-  fonts = {
-    fonts = with pkgs; [
-      source-code-pro
-    ];
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.groups = { plugdev = { }; };
 

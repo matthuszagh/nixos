@@ -309,23 +309,6 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.groups = { plugdev = { }; };
 
-  users.users.matt = {
-    isNormalUser = true;
-    description = "Matt Huszagh";
-    extraGroups = [
-      "wheel"
-      "video"
-      "audio"
-      "disk"
-      "networkmanager"
-      "plugdev"
-      "dialout"
-      "libvirtd"
-      "scanner" # scanners
-      "lp" # printers
-    ];
-  };
-
   home-manager.users.matt = { pkgs, ... }: {
     # programs = {
     #   firefox.enable = true;

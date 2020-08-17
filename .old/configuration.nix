@@ -23,11 +23,6 @@ let
 in
 {
   imports = [
-    /etc/nixos/hardware-configuration.nix
-
-    # add home-manager, which is used to manager user configurations
-    "${home-manager}/nixos"
-
     # ============================ system ============================
     (modules-path + "/udev.nix")
     (modules-path + "/locate.nix")

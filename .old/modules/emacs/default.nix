@@ -2,10 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # search
-    # TODO fix
-    # recoll
-
     # math / science
     # circuit simulation
     ngspice

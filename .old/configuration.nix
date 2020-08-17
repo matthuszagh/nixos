@@ -23,9 +23,6 @@ let
 in
 {
   imports = [
-    # ============================ system ============================
-    (modules-path + "/wireshark.nix")
-
     # =========================== userspace ==========================
     (src-path + "/dotfiles/nixos/custompkgs/pkgs/pia")
     (modules-path + "/fish.nix")

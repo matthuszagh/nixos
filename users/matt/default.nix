@@ -25,6 +25,7 @@
       ../profiles/emacs
       ../profiles/git.nix
       ../profiles/keychain.nix
+      ../profiles/gpg.nix
     ];
   };
 }

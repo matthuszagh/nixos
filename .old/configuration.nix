@@ -281,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/gpg.nix")
       (config-path + "/ngspice.nix")
       (config-path + "/direnv.nix")
       (config-path + "/pylint.nix")

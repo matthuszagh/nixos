@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ pkgs
+, ...
+}:
 
 {
   programs.git = {
@@ -26,4 +28,8 @@
     #   key = "9CBF84633C7DDB10";
     # };
   };
+
+  home.packages = with pkgs; [
+    git-crypt
+  ];
 }

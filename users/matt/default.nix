@@ -23,6 +23,7 @@
   home-manager.users.matt = {
     imports = [
       ../profiles/emacs
+      ../profiles/git.nix
     ];
   };
 }

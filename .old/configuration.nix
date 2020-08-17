@@ -70,8 +70,6 @@ in
     coreutils
     binutils
     usbutils
-    git
-    git-lfs
     wget
     curl
     zip
@@ -91,19 +89,9 @@ in
     sloccount
     scc
 
-    # editing
-    vim
-
     # dev
     gnumake
     # TODO should be bundled with Emacs
-    glibcInfo
-    clang-manpages
-    llvm-manpages
-    stdman # cppreference manpages
-    stdmanpages
-    man-pages # linux manpages
-    posix_man_pages
     openocd
     libftdi1
     gdb
@@ -149,15 +137,6 @@ in
     breeze-icons
   ];
   # ] ++ builtins.filter stdenv.lib.isDerivation (builtins.attrValues kdeApplications);
-
-  documentation = {
-    enable = true;
-    dev.enable = true;
-    doc.enable = true;
-    info.enable = true;
-    man.enable = true;
-    # nixos.includeAllModules = true;
-  };
 
   services = {
     gnome3.gnome-settings-daemon.enable = true;
@@ -302,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/git.nix")
       (config-path + "/keychain.nix")
       (config-path + "/gpg.nix")
       (config-path + "/ngspice.nix")

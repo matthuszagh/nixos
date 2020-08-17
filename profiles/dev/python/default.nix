@@ -13,6 +13,7 @@ in
           scipy
           ipython
           debugpy  # needed for DAP
+          python-language-server
         ];
 
       python = pkgs.python3.withPackages packages;

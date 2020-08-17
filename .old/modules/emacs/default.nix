@@ -7,8 +7,6 @@
     shellcheck
     nodePackages.typescript-language-server
     nodePackages.typescript
-    python-language-server
-    # TODO add fortran-language-server (github: hansec/fortran-language-server) to nixpkgs
 
     # search
     ripgrep

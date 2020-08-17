@@ -11,6 +11,7 @@
     ./nix
     ./python
     ./rust
+    ./tex
     ./verilog
   ];
 

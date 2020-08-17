@@ -42,12 +42,6 @@ in
     # add home-manager, which is used to manager user configurations
     "${home-manager}/nixos"
 
-    # disable linux security features to increase performance
-    #../config/make-linux-fast-again.nix
-    # TODO get working
-    # enable numlock always
-    # ../../config/services/numlock.nix
-
     # ============================ system ============================
     (modules-path + "/udev.nix")
     (modules-path + "/locate.nix")
@@ -69,26 +63,6 @@ in
     # TODO fix
     # (modules-path + "/nix-tree.nix")
   ];
-
-  # Use the systemd-boot EFI boot loader.
-  boot = {
-    loader = {
-      systemd-boot = {
-        enable = true;
-        consoleMode = "max";
-        editor = true;
-      };
-
-      efi.canTouchEfiVariables = true;
-    };
-
-    cleanTmpDir = true;
-
-    # use the latest stable linux kernel.
-    kernelPackages = pkgs.linuxPackages_latest;
-  };
-
-  system.autoUpgrade.enable = true;
 
   # system-wide packages
   environment.systemPackages = with pkgs; [

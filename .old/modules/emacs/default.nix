@@ -2,10 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    ## language servers
-    nodePackages.typescript-language-server
-    nodePackages.typescript
-
     # search
     ripgrep
     # TODO fix

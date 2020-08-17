@@ -12,6 +12,7 @@
     ./python
     ./rust
     ./tex
+    ./typescript
     ./verilog
   ];
 

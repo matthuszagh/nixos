@@ -1,54 +1,10 @@
 { config, pkgs, ... }:
-let
-  custompkgs = import <custompkgs> { };
 
-  emacsSrcDir = "/home/matt/src/dotfiles/emacs";
-
-  emacsEnv = (pkgs.emacsPackagesFor (pkgs.my-emacs)).emacsWithPackages
-  (epkgs: (with epkgs.elpaPackages; [
-  ]) ++ (with epkgs.melpaPackages; [
-    vterm
-    lsp-python-ms # microsoft python language server
-  ]) ++ (with epkgs.orgPackages; [
-  ]) ++ (with epkgs; [
-    pdf-tools
-  ]) ++ (with custompkgs; [
-    org-recoll
-  ]));
-in
 {
-  home-manager.users.matt = { ... }: {
-    home.file = {
-      ".config/emacs/init.el".source = "${emacsSrcDir}/init.el";
-      ".config/emacs/.gnus.el".source = "${emacsSrcDir}/.gnus.el";
-      ".config/emacs/layers".source = "${emacsSrcDir}/layers";
-      ".config/emacs/layers".recursive = true;
-      ".config/emacs/snippets".source = "${emacsSrcDir}/snippets";
-      ".config/emacs/snippets".recursive = true;
-      ".config/emacs/scripts".source = "${emacsSrcDir}/scripts";
-      ".config/emacs/scripts".recursive = true;
-    };
-    programs.emacs = {
-      enable = true;
-      package = emacsEnv;
-    };
-    # services.emacs = {
-    #   enable = true;
-    # };
-  };
-
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/emacs-overlay/archive/ec96633b92c01d3ba78c5c5320222c75455bce17.tar.gz;
-    }))
-    (import ./overlay.nix)
-  ];
-
   environment.systemPackages = with pkgs; [
     ## language servers
     lua53Packages.digestif
     shellcheck
-    nodePackages.bash-language-server
     nodePackages.typescript-language-server
     nodePackages.typescript
     python-language-server

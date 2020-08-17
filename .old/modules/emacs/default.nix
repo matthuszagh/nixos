@@ -2,13 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # needed for edbi
-    # perl-with-packages
-    perlPackages.RPCEPCService
-    perlPackages.DBI
-    perlPackages.DBDPg
-    perlPackages.LaTeXML
-
     # GUI
     #
     # Graphical applications are bundled with Emacs because I use

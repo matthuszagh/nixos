@@ -153,20 +153,6 @@ in
 
     # spice support for virtual machines.
     # spice-vdagentd.enable = true;
-
-    # PostgreSQL server
-    postgresql = {
-      enable = true;
-      package = pkgs.postgresql_10;
-      enableTCPIP = true;
-      authentication = pkgs.lib.mkOverride 10 ''
-        local all all trust
-        host all all ::1/128 trust
-      '';
-      initialScript = pkgs.writeText
-        "backend-initScript"
-        (builtins.readFile ./security/postgresql);
-    };
   };
 
   hardware = {

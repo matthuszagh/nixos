@@ -281,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/notmuch.nix")
       (config-path + "/clang-format.nix")
       (config-path + "/recoll.nix")
     ];

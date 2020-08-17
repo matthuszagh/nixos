@@ -41,6 +41,7 @@
         useNvidia = useNvidia;
       }))
       ../profiles/sage
+      ../profiles/notmuch
     ];
   };
 }

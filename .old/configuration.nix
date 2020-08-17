@@ -24,7 +24,6 @@ in
 {
   imports = [
     # ============================ system ============================
-    (modules-path + "/udev.nix")
     (modules-path + "/locate.nix")
     (modules-path + "/sound.nix")
     (modules-path + "/power.nix")

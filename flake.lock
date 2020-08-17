@@ -63,11 +63,28 @@
         "type": "indirect"
       }
     },
+    "openems": {
+      "locked": {
+        "lastModified": 1597090402,
+        "narHash": "sha256-YPQpewXo3fjqrN5s9JvUq3Is+7IIBLFUVHxIo6sOcZw=",
+        "owner": "matthuszagh",
+        "repo": "nixpkgs",
+        "rev": "6b8a978a80e863c6f164fe199b8cd7c616da1639",
+        "type": "github"
+      },
+      "original": {
+        "owner": "matthuszagh",
+        "ref": "openems",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home": "home",
         "master": "master",
-        "nixos": "nixos"
+        "nixos": "nixos",
+        "openems": "openems"
       }
     }
   },

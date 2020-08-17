@@ -11,7 +11,7 @@
 let
   inherit (utils) recImport;
   inherit (builtins) attrValues removeAttrs;
-  inherit (pkgset) osPkgs pkgs;
+  inherit (pkgset) osPkgs openemsPkgs pkgs;
 
   config = hostName:
     lib.nixosSystem {

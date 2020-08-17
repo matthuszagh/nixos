@@ -3,10 +3,11 @@
     {
       master.url = "nixpkgs/master";
       nixos.url = "nixpkgs/release-20.03";
+      openems.url = "github:matthuszagh/nixpkgs/openems";
       home.url = "github:rycee/home-manager/bqv-flakes";
     };
 
-  outputs = inputs@{ self, home, nixos, master }:
+  outputs = inputs@{ self, home, nixos, openems, master }:
     let
       inherit (builtins) attrNames attrValues readDir;
       inherit (nixos) lib;
@@ -27,6 +28,7 @@
       pkgset = {
         osPkgs = pkgImport nixos;
         pkgs = pkgImport master;
+        openemsPkgs = pkgImport openems;
       };
 
     in

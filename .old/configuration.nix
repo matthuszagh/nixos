@@ -281,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/octave.nix")
       (config-path + "/sage.nix")
       (config-path + "/notmuch.nix")
       (config-path + "/clang-format.nix")

@@ -35,6 +35,7 @@
       ../profiles/pylint
       ../profiles/tex
       ../profiles/chktex
+      ../profiles/octave.nix
       (import ../profiles/xorg.nix ({
         useStartx = useStartx;
         useNvidia = useNvidia;

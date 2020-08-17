@@ -281,9 +281,6 @@ in
     ]);
 
     imports = [
-      # (config-path + "/next.nix")
-      # TODO this interferes with kicad-written files
-      # ../config/kicad.nix
       (config-path + "/tex.nix")
       (config-path + "/chktex.nix")
       (config-path + "/octave.nix")

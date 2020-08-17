@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
-let custompkgs = import <custompkgs> { };
-in
 {
   programs.texlive = {
     enable = true;
@@ -32,11 +30,12 @@ in
         latexindent
         tikz-timing;
 
-      inherit (custompkgs)
+      # TODO can these be used directly in tpkgs?
+      inherit (pkgs)
         circuitikz
-        dvisvgm
+        latexmk
         grffile
-        latexmk;
+        dvisvgm;
     };
   };
 

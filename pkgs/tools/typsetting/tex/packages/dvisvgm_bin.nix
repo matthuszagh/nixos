@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
 , autoreconfHook
 , texlive-bin
 , ghostscript

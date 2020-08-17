@@ -96,15 +96,6 @@ let
     # clang 9 multilib
     clang_multi_9 = pkgs.wrapClangMulti pkgs.clang_9;
 
-    # texlive overrides
-    latexmk.pkgs = [(callPackage ./pkgs/latexmk { })];
-    dvisvgm.pkgs = [(callPackage ./pkgs/dvisvgm {
-      texlive-bin = pkgs.texlive.bin.core;
-    })];
-    circuitikz.pkgs = [(callPackage ./pkgs/circuitikz { })];
-    grffile.pkgs = [(callPackage ./pkgs/grffile { })];
-    # luatex.pkgs = [(callPackage ./pkgs/luatex { })];
-
     # emacs packages
     org-recoll = callPackage ./pkgs/org-recoll { };
     layers = callPackage ./pkgs/layers { };

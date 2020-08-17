@@ -281,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/tex.nix")
       (config-path + "/chktex.nix")
       (config-path + "/octave.nix")
       (config-path + "/sage.nix")

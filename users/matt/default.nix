@@ -29,6 +29,7 @@
       ../profiles/ngspice
       ../profiles/direnv
       ../profiles/pylint
+      ../profiles/tex
     ];
   };
 }

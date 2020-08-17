@@ -3,9 +3,7 @@
 {
   environment.systemPackages = with pkgs; [
     # utilities
-    ispell
     ghostscript
-    languagetool
 
     # needed for edbi
     # perl-with-packages

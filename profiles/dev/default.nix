@@ -4,10 +4,14 @@
 
 {
   imports = [
-    ./emacs
+    ./bash
     ./c
-    ./python
     ./console
+    ./emacs
+    ./nix
+    ./python
+    ./rust
+    ./verilog
   ];
 
   environment.systemPackages = with pkgs; [

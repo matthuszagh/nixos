@@ -28,6 +28,7 @@
       ../profiles/gpg.nix
       ../profiles/ngspice
       ../profiles/direnv
+      ../profiles/pylint
     ];
   };
 }

@@ -27,6 +27,7 @@
       ../profiles/keychain.nix
       ../profiles/gpg.nix
       ../profiles/ngspice
+      ../profiles/direnv
     ];
   };
 }

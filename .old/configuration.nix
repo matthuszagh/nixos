@@ -281,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/direnv.nix")
       (config-path + "/pylint.nix")
       # (config-path + "/next.nix")
       # TODO this interferes with kicad-written files

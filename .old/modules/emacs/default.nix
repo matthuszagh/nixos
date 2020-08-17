@@ -45,9 +45,6 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    # ============================== nix =============================
-    nixpkgs-fmt
-
     ## language servers
     lua53Packages.digestif
     shellcheck

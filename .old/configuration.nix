@@ -281,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/clang-format.nix")
       (config-path + "/recoll.nix")
     ];
   };

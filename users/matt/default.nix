@@ -42,6 +42,7 @@
       }))
       ../profiles/sage
       ../profiles/notmuch
+      ../profiles/clang-format
     ];
   };
 }

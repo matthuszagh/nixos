@@ -24,6 +24,7 @@
     imports = [
       ../profiles/emacs
       ../profiles/git.nix
+      ../profiles/keychain.nix
     ];
   };
 }

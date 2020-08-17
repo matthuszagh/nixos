@@ -281,7 +281,6 @@ in
     ]);
 
     imports = [
-      (config-path + "/keychain.nix")
       (config-path + "/gpg.nix")
       (config-path + "/ngspice.nix")
       (config-path + "/direnv.nix")

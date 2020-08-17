@@ -1,21 +1,20 @@
-{ config, lib, pkgs, ... }:
+{ lib
+, pkgs
+, ...
+}:
 
 let
   useNvidia = false;
   useStartx = true;
-  hostName = "oryp4";
 in
 {
   imports = [
-    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    (import ../modules/xorg.nix ({
+    ../users/matt
+    ../users/root
+    ./modules/btrfs-backup
+    (import ../profiles/graphics/xorg.nix ({
       useStartx = useStartx;
       useNvidia = useNvidia;
-      inherit pkgs;
-    }))
-    (import ../modules/binary-cache.nix ({
-      hostName = hostName;
-      inherit config;
       inherit pkgs;
     }))
   ];
@@ -69,23 +68,9 @@ in
   };
 
   networking = {
-    hostName = hostName;
     wireless = {
       enable = true;
-      networks = import ../security/wifi.nix;
-      # specifying wifi networks follows the following syntax:
-      # the available network with the highest priority is connected to.
-      # networks = {
-      #   "network name 1" = {
-      #     psk = "password1";
-      #     priority = 100;
-      #   };
-      #   "network name 2" = {
-      #     psk = "password2";
-      #     priority = 50;
-      #   };
-      #   ...
-      # };
+      networks = import ../secrets/wifi.nix;
     };
 
     useDHCP = true;

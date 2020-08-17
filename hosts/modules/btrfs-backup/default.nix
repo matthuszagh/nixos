@@ -1,12 +1,16 @@
-{ pkgs, ... }:
+{ pkgs
+, ...
+}:
 
 {
+  environment.etc."btrbk.conf".source = ./btrbk.conf;
+
   systemd.services.btrfs-backup = {
     description = "Backup home directory.";
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = /home/matt/src/dotfiles/nixos/services/system/btrfs-backup.sh;
+      ExecStart = readFile ./btrfs-backup.sh;
       User = "root";
     };
     path = with pkgs; [

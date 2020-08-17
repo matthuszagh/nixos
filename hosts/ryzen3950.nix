@@ -1,21 +1,19 @@
-{ config, lib, pkgs, ... }:
+{ lib
+, pkgs
+, ...
+}:
 
 let
   useStartx = true;
-  hostName = "ryzen3950";
 in
 {
   imports =[
-    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ../services/system/btrfs-backup.nix
-    (import ../modules/xorg.nix ({
+    ../users/matt
+    ../users/root
+    ./modules/btrfs-backup
+    (import ../profiles/graphics/xorg.nix ({
       useStartx = useStartx;
       useNvidia = false;
-      inherit pkgs;
-    }))
-    (import ../modules/binary-cache.nix ({
-      hostName = hostName;
-      inherit config;
       inherit pkgs;
     }))
   ];
@@ -55,21 +53,12 @@ in
   nix.maxJobs = lib.mkDefault 32;
 
   networking = {
-    hostName = hostName;
     wireless = {
       enable = true;
-      networks = import ../security/wifi.nix;
+      networks = import ../secrets/wifi.nix;
     };
 
     useDHCP = true;
-    # useDHCP = false;
-    # interfaces = {
-    #   enp4s0.useDHCP = true;
-    #   enp5s0.useDHCP = true;
-    #   virbr0.useDHCP = true;
-    #   virbr0-nic.useDHCP = true;
-    #   wlp6s0.useDHCP = true;
-    # };
     dhcpcd.persistent = true;
   };
 

@@ -12,4 +12,10 @@
       source-code-pro
     ];
   };
+
+  environment.systemPackages = with pkgs; [
+    imagemagick
+    gimp
+    inkscape
+  ];
 }

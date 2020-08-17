@@ -3,12 +3,9 @@
 {
   environment.systemPackages = with pkgs; [
     # utilities
-    imagemagick
     ispell
     ghostscript
     languagetool
-    gimp
-    inkscape  # convert PDF to SVG
 
     # needed for edbi
     # perl-with-packages

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: superscript
+# key: ^
+# condition: 'texmathp
+# --
+^{$1}$0

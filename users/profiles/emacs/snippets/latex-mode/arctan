@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: arc (inverse) tangent
+# key: arctan
+# --
+\arctan{\left($1\right)}$0

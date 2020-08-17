@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: axes
+# key: asyaxes
+# --
+// axes
+draw(-X -- X, arrow=Arrow3(TeXHead2), L=Label("$x$", position=EndPoint, align=W));
+draw(-Y -- Y, arrow=Arrow3(TeXHead2), L=Label("$y$", position=EndPoint));
+draw(-Z -- Z, arrow=Arrow3(TeXHead2), L=Label("$z$", position=EndPoint));

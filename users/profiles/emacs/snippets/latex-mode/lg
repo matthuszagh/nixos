@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: base-2 logarithm
+# key: lg
+# --
+\text{lg}{\left($1\right)}$0

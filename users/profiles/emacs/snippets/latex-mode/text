@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: text
+# key: text
+# condition: 'texmathp
+# --
+\text{$1}$0

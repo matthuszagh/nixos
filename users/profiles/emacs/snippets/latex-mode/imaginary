@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: imaginary
+# key: Im
+# --
+\Im{\left($1\right)}$0

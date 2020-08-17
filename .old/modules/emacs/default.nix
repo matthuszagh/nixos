@@ -4,7 +4,6 @@
   environment.systemPackages = with pkgs; [
     ## language servers
     lua53Packages.digestif
-    shellcheck
     nodePackages.typescript-language-server
     nodePackages.typescript
 

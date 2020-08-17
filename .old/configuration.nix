@@ -24,7 +24,6 @@ in
 {
   imports = [
     # ============================ system ============================
-    (modules-path + "/ssh.nix")
     (modules-path + "/gnupg.nix")
     (modules-path + "/lorri.nix")
     (modules-path + "/syncthing.nix")

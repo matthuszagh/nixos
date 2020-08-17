@@ -13,20 +13,6 @@ let
     sha256 = "1fh5yglh8l1r1flvfayk61vpsmq2q21g5pqmjjqqhp2bz7c3psbr";
   }) {});
 
-  python-with-packages = pkgs.python3Full.withPackages (p: with p; [
-    # TODO fix
-    # custompkgs.skidl
-    # custompkgs.libcircuit
-    sympy
-    ipython
-    numpy
-    mypy
-    # ptvsd
-    # pylibgen
-  ] ++ (with custompkgs; [
-    # pylibgen
-  ]));
-
   # import paths
   src-path = "/home/matt/src";
   config-path = "/home/matt/src/dotfiles/nixos/config";

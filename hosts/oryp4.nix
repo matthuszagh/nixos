@@ -9,7 +9,10 @@ let
 in
 {
   imports = [
-    ../users/matt
+    (import ../users/matt ({
+      useStartx = useStartx;
+      useNvidia = useNvidia;
+    }))
     ../users/root
     ./modules/btrfs-backup
     (import ../profiles/graphics/xorg.nix ({

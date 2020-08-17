@@ -1,3 +1,7 @@
+{ useStartx
+, useNvidia
+}:
+
 {
   imports = [ ];
 
@@ -31,6 +35,10 @@
       ../profiles/pylint
       ../profiles/tex
       ../profiles/chktex
+      (import ../profiles/xorg.nix ({
+        useStartx = useStartx;
+        useNvidia = useNvidia;
+      }))
     ];
   };
 }

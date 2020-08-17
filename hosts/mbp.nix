@@ -9,7 +9,10 @@ let
 in
 {
   imports =[
-    ../users/matt
+    (import ../users/matt ({
+      useStartx = useStartx;
+      useNvidia = false;
+    }))
     ../users/root
     (import ../profiles/graphics/xorg.nix ({
       useStartx = useStartx;

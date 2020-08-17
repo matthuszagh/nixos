@@ -3,7 +3,11 @@
 }:
 
 {
-  imports = [ ];
+  imports = [
+    (import ../../profiles/mail/offlineimap.nix ({
+      user = "matt";
+    }))
+  ];
 
   users.users.matt = {
     isNormalUser = true;

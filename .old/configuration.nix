@@ -169,21 +169,6 @@ in
     };
   };
 
-  nixpkgs.overlays = (
-    let path = ./overlays;
-    in with builtins; map (n: import (path + ("/" + n)))
-    (filter (n: match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix")))
-    (attrNames (readDir path)))
-  );
-
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-
-  virtualisation = {
-    libvirtd.enable = true;
-  };
-
   hardware = {
     # TODO opengl should probably get its own module. There is opengl
     # config elsewhere too, such as oryp4.

@@ -45,11 +45,6 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    # TODO
-    # rustc
-    # rls
-    rustfmt
-    cargo
     # ============================== nix =============================
     nixpkgs-fmt
 

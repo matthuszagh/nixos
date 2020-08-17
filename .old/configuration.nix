@@ -24,7 +24,6 @@ in
 {
   imports = [
     # ============================ system ============================
-    (modules-path + "/power.nix")
     (modules-path + "/ssh.nix")
     (modules-path + "/gnupg.nix")
     (modules-path + "/lorri.nix")

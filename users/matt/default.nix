@@ -48,6 +48,7 @@
       ../profiles/notmuch
       ../profiles/clang-format
       ../profiles/recoll
+      ../profiles/fish.nix
     ];
   };
 }

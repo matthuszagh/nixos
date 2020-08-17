@@ -2,9 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # utilities
-    ghostscript
-
     # needed for edbi
     # perl-with-packages
     perlPackages.RPCEPCService

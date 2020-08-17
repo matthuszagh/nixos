@@ -17,5 +17,6 @@
     imagemagick
     gimp
     inkscape
+    ghostscript
   ];
 }

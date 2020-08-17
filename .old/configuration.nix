@@ -170,14 +170,6 @@ in
   };
 
   hardware = {
-    # TODO opengl should probably get its own module. There is opengl
-    # config elsewhere too, such as oryp4.
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-
     # enable access to scanners
     sane = {
       enable = true;

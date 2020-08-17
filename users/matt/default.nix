@@ -30,6 +30,7 @@
       ../profiles/direnv
       ../profiles/pylint
       ../profiles/tex
+      ../profiles/chktex
     ];
   };
 }

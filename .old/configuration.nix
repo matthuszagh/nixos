@@ -24,7 +24,6 @@ in
 {
   imports = [
     # ============================ system ============================
-    (modules-path + "/lorri.nix")
     (modules-path + "/syncthing.nix")
     (modules-path + "/wireshark.nix")
 

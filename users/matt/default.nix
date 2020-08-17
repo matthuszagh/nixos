@@ -40,6 +40,7 @@
         useStartx = useStartx;
         useNvidia = useNvidia;
       }))
+      ../profiles/sage
     ];
   };
 }

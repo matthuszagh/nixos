@@ -3,7 +3,6 @@
 {
   environment.systemPackages = with pkgs; [
     # search
-    ripgrep
     # TODO fix
     # recoll
 

@@ -17,13 +17,17 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    # ========================= documentation ========================
     glibcInfo
     clang-manpages
     llvm-manpages
-    stdman # cppreference manpages
+    stdman  # cppreference manpages
     stdmanpages
-    man-pages # linux manpages
+    man-pages  # linux manpages
     posix_man_pages
+
+    # ============================ search ============================
+    ripgrep
   ];
 
   documentation = {

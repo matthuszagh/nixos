@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs
+, ...
+}:
+
 let inherit (pkgs) python3Packages;
 in
 {
@@ -9,10 +12,15 @@ in
           numpy
           scipy
           ipython
+          debugpy  # needed for DAP
         ];
 
       python = pkgs.python3.withPackages packages;
 
-    in
-    [ python ];
+    in [
+      python
+    ] ++ (with pkgs; [
+      black
+      nodejs  # needed for DAP
+    ]);
 }

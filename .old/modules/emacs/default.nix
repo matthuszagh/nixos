@@ -45,12 +45,6 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    # ============================ Python ============================
-    # python3Packages.python-language-server
-    python3Packages.black
-    python3Packages.debugpy  # needed for dap
-    nodejs  # needed for dap
-    python3
     # ============================== hdl =============================
     verilator
     # ============================= bash =============================

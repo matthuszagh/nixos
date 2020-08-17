@@ -2,10 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # math / science
-    # circuit simulation
-    ngspice
-
     # utilities
     imagemagick
     ispell

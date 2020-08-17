@@ -45,13 +45,6 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    # ============================ C / C++ ===========================
-    gdb
-    lldb
-    clang-tools
-    clang-analyzer
-    bear
-    cppcheck
     # ============================ Python ============================
     # python3Packages.python-language-server
     python3Packages.black

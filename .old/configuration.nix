@@ -279,10 +279,6 @@ in
     ] ++ (with custompkgs; [
       # kicad
     ]);
-
-    imports = [
-      (config-path + "/recoll.nix")
-    ];
   };
 
   system.stateVersion = "19.03";

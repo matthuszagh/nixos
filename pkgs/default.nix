@@ -14,4 +14,6 @@ super: self: {
   latexmk = { pkgs = [
     (self.callPackage ./tools/typsetting/tex/packages/latexmk_bin.nix { })
   ]; };
+
+  pia-config = self.callPackage ./networking/vpn/pia { };
 }

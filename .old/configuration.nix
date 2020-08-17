@@ -24,7 +24,6 @@ in
 {
   imports = [
     # =========================== userspace ==========================
-    (src-path + "/dotfiles/nixos/custompkgs/pkgs/pia")
     (modules-path + "/fish.nix")
     (modules-path + "/bash.nix")
     (modules-path + "/emacs/")

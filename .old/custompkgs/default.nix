@@ -84,8 +84,6 @@ let
       inherit (pkgs.xlibs) libSM libICE libX11 libXrender libxcb libXext libXtst libXi;
     };
 
-    pia-config = callPackage ./pkgs/pia { };
-
     nixSrc = callPackage <nixpkgs>/pkgs/tools/package-management/nixops/generic.nix (rec {
       version = "git";
       src = /home/matt/src/nix;

@@ -32,4 +32,6 @@
     # symbol means all users in that group.
     trustedUsers = [ "root" "@wheel" ];
   };
+
+  nixpkgs.config.allowUnfree = true;
 }

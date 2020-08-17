@@ -24,7 +24,6 @@ in
 {
   imports = [
     # =========================== userspace ==========================
-    (modules-path + "/bash.nix")
     (modules-path + "/emacs/")
     (modules-path + "/bash.nix")
     (modules-path + "/offlineimap")

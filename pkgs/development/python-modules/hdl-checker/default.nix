@@ -1,4 +1,6 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv
+, fetchPypi
+, buildPythonPackage
 , prettytable
 , argcomplete
 , python-language-server

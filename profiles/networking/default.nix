@@ -4,7 +4,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-    texlab
-    perlPackages.LaTeXML
+    wpa_supplicant
   ];
 }

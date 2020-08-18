@@ -5,6 +5,8 @@
 {
   environment.systemPackages = (with pkgs; [
     lm_sensors
+    tlp
+    powertop
   ]);
   services = {
     upower.enable = true;

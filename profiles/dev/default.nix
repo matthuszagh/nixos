@@ -28,6 +28,21 @@
 
     # ============================ search ============================
     ripgrep
+
+    # ============================= core =============================
+    coreutils
+    binutils
+    usbutils
+    wget
+    curl
+    zip
+    unzip
+    acpi
+    pciutils
+    gnumake
+    parted
+    dmidecode  # displays hardware information
+    phoronix-test-suite  # benchmarking hardware
   ];
 
   documentation = {

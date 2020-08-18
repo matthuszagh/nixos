@@ -20,5 +20,12 @@
     ghostscript
     vlc
     mpv
+    mesa
+    xlibs.xwininfo
+    xlibs.xhost
+    xlibs.xdpyinfo
+    glxinfo
+    gnome3.gnome-settings-daemon
+    breeze-icons
   ];
 }

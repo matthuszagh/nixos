@@ -16,4 +16,12 @@ super: self: {
   ]; };
 
   pia-config = self.callPackage ./networking/vpn/pia { };
+
+  # python
+  python3 = super.python3.override {
+    packageOverrides = self: super: {
+      hdl-checker = self.callPackage ./development/python-modules/hdl-checker { };
+    };
+  };
+  python3Packages = self.python3.pkgs;
 }

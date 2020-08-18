@@ -24,41 +24,12 @@ in
 {
   # system-wide packages
   environment.systemPackages = with pkgs; [
-    # core
-    coreutils
-    binutils
-    usbutils
-    wget
-    curl
-    zip
-    unzip
-    acpi # TODO separate from pciutils?
-    pciutils
-    tlp
-    wpa_supplicant
-    powertop
-    pinentry
-    # disk partition
-    parted
-    # displays hardware information
-    dmidecode
     # benchmarking
-    phoronix-test-suite
-    sloccount
     scc
 
-    # dev
-    gnumake
-    # TODO should be bundled with Emacs
-    openocd
-    libftdi1
-    gdb
-    # TODO fix
-    sagemath-pkgs.sageWithDoc
     # python3Packages.hdl_checker
     # must be root available for proper permissions
     nix-generate-from-cpan
-    perlPackages.LaTeXML
     compsize
 
     # keyboard
@@ -83,16 +54,6 @@ in
 
     # mail
     notmuch
-
-    # graphics
-    # TODO should this be available to root?
-    mesa
-    xlibs.xwininfo
-    xlibs.xhost
-    xlibs.xdpyinfo
-    glxinfo
-    gnome3.gnome-settings-daemon
-    breeze-icons
   ];
   # ] ++ builtins.filter stdenv.lib.isDerivation (builtins.attrValues kdeApplications);
 

@@ -123,7 +123,6 @@ let
     # pykicad = callPackage ./pkgs/pykicad { };
     pyspice = pyspice-pkgs.python3Packages.pyspice;
     # pyspice = callPackage ./pkgs/pyspice { };
-    # hdl_checker = callPackage ./pkgs/hdl_checker { };
     pylibgen = callPackage ./pkgs/pylibgen { };
     pylibftdi = callPackage ./pkgs/pylibftdi {
       inherit (pkgs) libusb1;

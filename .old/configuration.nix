@@ -22,13 +22,6 @@ let
   emacs-path = "/home/matt/src/dotfiles/emacs";
 in
 {
-  imports = [
-    # =========================== userspace ==========================
-    (modules-path + "/offlineimap")
-    # TODO fix
-    # (modules-path + "/nix-tree.nix")
-  ];
-
   # system-wide packages
   environment.systemPackages = with pkgs; [
     # core

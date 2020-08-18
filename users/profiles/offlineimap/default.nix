@@ -1,4 +1,7 @@
-{ config, pkgs, ... }:
+{ config
+, pkgs
+, ...
+}:
 
 {
   services.offlineimap = {
@@ -11,7 +14,7 @@
     timeoutStartSec = "1h";
   };
 
-  home-manager.users.matt = { config, ... }: rec {
+  home-manager.users.matt = { config, ... }: {
     xdg.configFile."offlineimap/config".text = ''
       [general]
       accounts = gmail

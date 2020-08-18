@@ -4,9 +4,7 @@
 
 {
   imports = [
-    (import ../../profiles/mail/offlineimap.nix ({
-      user = "matt";
-    }))
+    ../profiles/offlineimap
   ];
 
   users.users.matt = {

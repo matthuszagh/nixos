@@ -1,20 +1,15 @@
 { pkgs
-, user
 , ...
 }:
 
 {
-  systemd.user.services.offlineimap = {
-    description = "Offlineimap: a software to dispose your mailbox(es) as a local Maildir(s)";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "offlineimap -u syslog -o -1";
-      User = user;
-      TimeoutStartSec = "3600sec";
-    };
+  services.offlineimap = {
+    enable = true;
+    install = true;
     path = with pkgs; [
-      offlineimap
+      bash
       notmuch
     ];
+    timeoutStartSec = "1h";
   };
 }

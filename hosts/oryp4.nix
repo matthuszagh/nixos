@@ -15,6 +15,7 @@ in
     }))
     ../users/root
     ./modules/btrfs-backup
+    ./modules/btrfs.nix
     (import ../profiles/graphics/xorg.nix ({
       useStartx = useStartx;
       useNvidia = useNvidia;

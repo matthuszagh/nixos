@@ -43,6 +43,14 @@
     parted
     dmidecode  # displays hardware information
     phoronix-test-suite  # benchmarking hardware
+    dos2unix
+    clang_multi_9
+    gcc
+
+    # ============================= misc =============================
+    scc
+    tree
+    unrar
   ];
 
   documentation = {

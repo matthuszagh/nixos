@@ -27,5 +27,6 @@
     glxinfo
     gnome3.gnome-settings-daemon
     breeze-icons
+    asymptote
   ];
 }

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: equiv
-# key: equiv
-# --
-\equiv{$1}$0

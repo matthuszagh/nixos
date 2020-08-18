@@ -6,19 +6,8 @@
 {
   imports = [
     ./profiles/systemd-boot.nix
-    # (import ../users/matt ({
-    #   useStartx = useStartx;
-    #   useNvidia = false;
-    #   inherit pkgs;
-    # }))
-    # ../users/root
-    # ./modules/btrfs-backup
-    # ./modules/btrfs.nix
-    # (import ../profiles/graphics/xorg.nix ({
-    #   useStartx = useStartx;
-    #   useNvidia = false;
-    #   inherit pkgs;
-    # }))
+    ./profiles/btrfs-backup
+    ./profiles/btrfs.nix
   ];
 
   boot = {
@@ -37,8 +26,6 @@
 
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
-    cleanTmpDir = true;
-    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   hardware.cpu.amd.updateMicrocode = true;

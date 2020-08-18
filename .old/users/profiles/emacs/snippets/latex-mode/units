@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: units
-# key: si
-# condition: 'texmathp
-# --
-\\SI{$1}{$2}$0

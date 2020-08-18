@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: def macro
-# key: def
-# --
-\def\\$1{$2}$0

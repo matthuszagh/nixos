@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: sympy
-# key: sympy
-# condition: 'texmathp
-# --
-sympy $1 sympy$0

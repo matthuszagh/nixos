@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: source block output wrap
-# key: wrap
-# --
-#+header: :post attr_wrap(orgwidth="${1:1000}", htmlwidth="${2:100}%", name="${3:}", data=*this*)$0

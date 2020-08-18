@@ -1,8 +1,6 @@
 { home
 , lib
-, nixos
-, master
-, pkgset
+, pkgs
 , self
 , system
 , utils
@@ -11,7 +9,6 @@
 let
   inherit (utils) recImport;
   inherit (builtins) attrValues removeAttrs;
-  inherit (pkgset) osPkgs openemsPkgs pkgs;
 
   config = hostName:
     lib.nixosSystem {
@@ -22,25 +19,27 @@ let
           inherit (home.nixosModules) home-manager;
 
           global = {
-            imports = [ ../local/locale.nix ];
+            imports = [
+              ../local/locale.nix
+              ../profiles/linux.nix
+              ../profiles/nix.nix
+            ];
 
             hardware.enableRedistributableFirmware = lib.mkDefault true;
 
             networking.hostName = hostName;
             nix.nixPath = let path = toString ../.; in
               [
-                "nixpkgs=${master}"
-                "nixos=${nixos}"
+                "nixpkgs=${pkgs}"
+                "nixos=${pkgs}"
                 "nixos-config=${path}/configuration.nix"
                 "nixpkgs-overlays=${path}/overlays"
               ];
 
-            nixpkgs = { pkgs = osPkgs; };
+            nixpkgs = { pkgs = pkgs; };
 
             nix.registry = {
-              nixos.flake = nixos;
-              nixflk.flake = self;
-              nixpkgs.flake = master;
+              nixpkgs.flake = pkgs;
             };
 
             system.configurationRevision = lib.mkIf (self ? rev) self.rev;
@@ -49,20 +48,20 @@ let
             users.mutableUsers = false;
           };
 
-          overrides = {
-            # use latest systemd
-            systemd.package = pkgs.systemd;
+          # overrides = {
+          #   # use latest systemd
+          #   systemd.package = pkgs.systemd;
 
-            nixpkgs.overlays =
-              let
-                override = import ../pkgs/override.nix pkgs;
+          #   nixpkgs.overlays =
+          #     let
+          #       override = import ../pkgs/override.nix pkgs;
 
-                overlay = pkg: final: prev: {
-                  "${pkg.pname}" = pkg;
-                };
-              in
-              map overlay override;
-          };
+          #       overlay = pkg: final: prev: {
+          #         "${pkg.pname}" = pkg;
+          #       };
+          #     in
+          #     map overlay override;
+          # };
 
           local = import "${toString ./.}/${hostName}.nix";
 
@@ -71,7 +70,7 @@ let
             attrValues (removeAttrs self.nixosModules [ "profiles" ]);
 
         in
-        flakeModules ++ [ global local home-manager overrides ];
+        flakeModules ++ [ global local home-manager ];
 
     };
 

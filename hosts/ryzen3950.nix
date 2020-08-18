@@ -12,6 +12,7 @@ in
     (import ../users/matt ({
       useStartx = useStartx;
       useNvidia = false;
+      inherit pkgs;
     }))
     ../users/root
     ./modules/btrfs-backup

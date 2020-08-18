@@ -1,24 +1,8 @@
 [
   ./nix.nix
+  ./linux.nix
   ./develop
   ./develop/emacs
   ./develop/c
   ./develop/python
-
-  ./graphical
-  ./graphical/games
-  ./graphical/im
-  ./graphical/plex.nix
-  ./graphical/qutebrowser
-  ./graphical/sway
-  ./graphical/xmonad
-  ./laptop
-  ./misc/disable-mitigations.nix
-  ./network
-  ./network/adblocking.nix
-  ./network/networkmanager
-  ./network/stubby.nix
-  ./network/torrent.nix
-  ./ssh
-  ./virt
 ]

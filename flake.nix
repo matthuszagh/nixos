@@ -1,16 +1,14 @@
 {
   inputs =
     {
-      master.url = "nixpkgs/master";
-      nixos.url = "nixpkgs/release-20.03";
-      openems.url = "github:matthuszagh/nixpkgs/openems";
+      nixpkgs.url = "nixpkgs/master";
       home.url = "github:rycee/home-manager/bqv-flakes";
     };
 
-  outputs = inputs@{ self, home, nixos, openems, master }:
+  outputs = inputs@{ self, home, nixpkgs }:
     let
       inherit (builtins) attrNames attrValues readDir;
-      inherit (nixos) lib;
+      inherit (nixpkgs) lib;
       inherit (lib) removeSuffix recursiveUpdate genAttrs filterAttrs;
       inherit (utils) pathsToImportedAttrs;
 
@@ -25,18 +23,14 @@
           config = { allowUnfree = true; };
         };
 
-      pkgset = {
-        osPkgs = pkgImport nixos;
-        pkgs = pkgImport master;
-        openemsPkgs = pkgImport openems;
-      };
+      pkgs = pkgImport nixpkgs;
 
     in
-    with pkgset;
+    with pkgs;
     {
       nixosConfigurations =
         import ./hosts (recursiveUpdate inputs {
-          inherit lib pkgset system utils;
+          inherit lib pkgs system utils;
         }
         );
 
@@ -56,21 +50,17 @@
 
       packages."${system}" =
         let
-          packages = self.overlay osPkgs osPkgs;
+          packages = self.overlay pkgs pkgs;
           overlays = lib.filterAttrs (n: v: n != "pkgs") self.overlays;
           overlayPkgs =
             genAttrs
               (attrNames overlays)
-              (name: (overlays."${name}" osPkgs osPkgs)."${name}");
+              (name: (overlays."${name}" pkgs pkgs)."${name}");
         in
         recursiveUpdate packages overlayPkgs;
 
       nixosModules =
         let
-          # binary cache
-          cachix = import ./cachix.nix;
-          cachixAttrs = { inherit cachix; };
-
           # modules
           moduleList = import ./modules/list.nix;
           modulesAttrs = pathsToImportedAttrs moduleList;
@@ -80,8 +70,7 @@
           profilesAttrs = { profiles = pathsToImportedAttrs profilesList; };
 
         in
-        recursiveUpdate
-          (recursiveUpdate cachixAttrs modulesAttrs)
-          profilesAttrs;
+        # recursiveUpdate modulesAttrs profilesAttrs;
+        profilesAttrs;
     };
 }

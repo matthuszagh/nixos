@@ -10,7 +10,7 @@
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = readFile ./btrfs-backup.sh;
+      ExecStart = builtins.readFile ./btrfs-backup.sh;
       User = "root";
     };
     path = with pkgs; [

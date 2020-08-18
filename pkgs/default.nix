@@ -1,8 +1,10 @@
-super: self: {
+self: super:
+
+{
   pia-config = self.callPackage ./networking/vpn/pia { };
   clang_multi_9 = self.wrapClangMulti self.clang_9;
   gnucap = self.callPackage ./applications/science/electronics/gnucap { };
-  pt1230 = self.callPackage ./tools/printers/pt1230 { };
+  # pt1230 = self.callPackage ./tools/printers/pt1230 { };
   kibom = self.callPackage ./applications/science/electronics/kibom {
     inherit (self.python3Packages)
       buildPythonApplication XlsxWriter;

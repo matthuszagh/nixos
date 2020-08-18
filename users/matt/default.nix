@@ -1,4 +1,5 @@
-{ useStartx
+{ pkgs
+, useStartx
 , useNvidia
 }:
 
@@ -9,7 +10,7 @@
 
   users.users.matt = {
     isNormalUser = true;
-    passwordFile = ../../secrets/matt-password;
+    passwordFile = builtins.readFile ../../secrets/matt-password;
     description = "Matt Huszagh";
     # TODO document why each of these are needed
     extraGroups = [

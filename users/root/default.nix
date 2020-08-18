@@ -1,3 +1,3 @@
 {
-  users.users.root.passwordFile = ../../secrets/root-password;
+  users.users.root.passwordFile = builtins.readFile ../../secrets/root-password;
 }

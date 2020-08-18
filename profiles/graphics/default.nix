@@ -18,5 +18,7 @@
     gimp
     inkscape
     ghostscript
+    vlc
+    mpv
   ];
 }

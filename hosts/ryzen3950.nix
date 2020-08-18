@@ -1,33 +1,45 @@
 { lib
 , pkgs
-, openemsPkgs
 , ...
 }:
 
-let
-  useStartx = true;
-in
 {
-  imports =[
-    (import ../users/matt ({
-      useStartx = useStartx;
-      useNvidia = false;
-      inherit pkgs;
-    }))
-    ../users/root
-    ./modules/btrfs-backup
-    ./modules/btrfs.nix
-    (import ../profiles/graphics/xorg.nix ({
-      useStartx = useStartx;
-      useNvidia = false;
-      inherit pkgs;
-    }))
+  imports = [
+    ./profiles/systemd-boot.nix
+    # (import ../users/matt ({
+    #   useStartx = useStartx;
+    #   useNvidia = false;
+    #   inherit pkgs;
+    # }))
+    # ../users/root
+    # ./modules/btrfs-backup
+    # ./modules/btrfs.nix
+    # (import ../profiles/graphics/xorg.nix ({
+    #   useStartx = useStartx;
+    #   useNvidia = false;
+    #   inherit pkgs;
+    # }))
   ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    initrd = {
+      availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+      kernelModules = [ ];
+      luks = {
+        devices = {
+          "cryptnvme".device = "/dev/disk/by-uuid/f1dc12d5-9a75-4e28-a747-a098333614ac";
+          "cryptnvme1".device = "/dev/disk/by-uuid/2f7640e7-532f-4404-90fd-b3c065530d42";
+          "cryptsda1".device = "/dev/disk/by-uuid/5592422a-b0f9-4569-af33-2f47bf2d8079";
+          "cryptsdb1".device = "/dev/disk/by-uuid/49e28c9b-506e-4f56-b9ef-3e22c6e06683";
+        };
+      };
+    };
+
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
+    cleanTmpDir = true;
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
 
   hardware.cpu.amd.updateMicrocode = true;
 
@@ -36,9 +48,6 @@ in
       fsType = "btrfs";
       options = [ "subvol=nixos" "compress=lzo" "ssd" "noatime" ];
     };
-
-  boot.initrd.luks.devices."cryptnvme".device = "/dev/disk/by-uuid/f1dc12d5-9a75-4e28-a747-a098333614ac";
-  boot.initrd.luks.devices."cryptnvme1".device = "/dev/disk/by-uuid/2f7640e7-532f-4404-90fd-b3c065530d42";
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/9C5A-6D6F";
@@ -50,9 +59,6 @@ in
       fsType = "btrfs";
       options = [ "compress=lzo" ];
     };
-
-  boot.initrd.luks.devices."cryptsda1".device = "/dev/disk/by-uuid/5592422a-b0f9-4569-af33-2f47bf2d8079";
-  boot.initrd.luks.devices."cryptsdb1".device = "/dev/disk/by-uuid/49e28c9b-506e-4f56-b9ef-3e22c6e06683";
 
   swapDevices = [ ];
 

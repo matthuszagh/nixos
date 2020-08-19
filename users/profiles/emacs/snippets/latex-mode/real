@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: real
+# key: Re
+# --
+\Re{\left($1\right)}$0

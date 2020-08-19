@@ -17,4 +17,10 @@
       "lp" # printers
     ];
   };
+
+  home-manager.users.matt = { pkgs, ... }: {
+    imports = [
+      ./profiles/emacs
+    ];
+  };
 }

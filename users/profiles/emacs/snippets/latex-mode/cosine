@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cosine
+# key: cos
+# --
+\cos{\left($1\right)}$0

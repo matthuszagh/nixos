@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: base-10 logarithm
+# key: log
+# --
+\log{\left($1\right)}$0

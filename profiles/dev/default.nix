@@ -7,6 +7,7 @@
     ./c
     ./console
     ./emacs
+    ./git.nix
     ./lorri.nix
     ./nix
     ./python

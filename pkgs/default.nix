@@ -41,6 +41,8 @@ final: prev:
       };
       circlib = pprev.callPackage ./development/python-modules/circlib { };
       pyems = pprev.callPackage ./development/python-modules/pyems { };
+      python-openems = prev.callPackage ./development/python-modules/python-openems { };
+      python-csxcad = prev.callPackage ./development/python-modules/python-csxcad { };
     };
   };
   python3Packages = final.python3.pkgs;

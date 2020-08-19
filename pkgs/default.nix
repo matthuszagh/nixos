@@ -31,6 +31,8 @@ final: prev:
       waitress;
   };
 
+  openems = prev.callPackage ./applications/science/electronics/openems { };
+
   # python
   python3 = prev.python3.override {
     packageOverrides = pfinal: pprev: {

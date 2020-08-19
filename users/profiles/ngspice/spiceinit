@@ -1,0 +1,4 @@
+* enable pspice models
+set ngbehavior=ps
+* use 8 threads
+set numthreads=8

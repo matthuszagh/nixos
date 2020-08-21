@@ -4,7 +4,6 @@
 , system
 , home
 , self
-, ...
 }:
 
 let
@@ -13,6 +12,7 @@ let
   config = hostName:
   lib.nixosSystem {
     inherit system;
+    inherit pkgs;
 
     modules = let
       inherit (home.nixosModules) home-manager;

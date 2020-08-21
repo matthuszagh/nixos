@@ -1,15 +1,24 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/master";
     home.url = "github:rycee/home-manager/bqv-flakes";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacsOverlay.url = "github:nix-community/emacs-overlay";
+    # package overrides
+    sageNixpkgs.url = "github:nixos/nixpkgs/7866440f1223dc447f38cb23c00e10b44b4c98fe";
+    paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
   };
 
-  outputs = { self, nixpkgs, home, emacs-overlay }:
+  outputs = { self
+  , nixpkgs
+  , home
+  , emacsOverlay
+  , sageNixpkgs
+  , paraviewNixpkgs
+  }:
   let
     inherit (builtins) attrNames attrValues readDir;
     inherit (nixpkgs) lib;
-    inherit (lib) recursiveUpdate genAttrs;
+    inherit (lib) recursiveUpdate genAttrs mapAttrs' nameValuePair;
     inherit (utils) pathsToImportedAttrs;
 
     utils = import ./lib/utils.nix { inherit lib; };
@@ -17,7 +26,7 @@
     system = "x86_64-linux";
 
     externalOverlays = [
-      emacs-overlay.overlay
+      emacsOverlay.overlay
     ];
 
     pkgImport = pkgs: import pkgs {
@@ -32,12 +41,17 @@
       config = { allowUnfree = true; };
     };
 
-    pkgs = pkgImport nixpkgs;
+    overridePkgs = {
+      sageWithDoc = (pkgImport sageNixpkgs).sageWithDoc;
+      paraview = (pkgImport paraviewNixpkgs).paraview;
+    };
+
+    pkgs = (pkgImport nixpkgs) // overridePkgs;
   in {
     # Set of machine/build outputs, where key is the machine name and
     # the value defines the configuration of the machine.
     nixosConfigurations = import ./hosts {
-      inherit lib pkgs system utils self home;
+      inherit utils lib pkgs system home self;
     };
 
     overlay = import ./pkgs;
@@ -54,15 +68,7 @@
       inherit pkgs;
     };
 
-    # packages."${system}" =
-    #   let
-    #     packages = self.overlay pkgs pkgs;
-    #     overlayPkgs =
-    #       genAttrs
-    #         (attrNames self.overlays)
-    #         (name: (self.overlays."${name}" pkgs pkgs)."${name}");
-    #   in
-    #   recursiveUpdate packages overlayPkgs;
+    packages."${system}" = pkgs;
 
     # nixosModules = pathsToImportedAttrs (import ./modules/list.nix);
   };

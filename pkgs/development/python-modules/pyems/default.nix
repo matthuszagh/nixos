@@ -1,9 +1,6 @@
 { stdenv
-# , fetchFromGitHub
-, fetchgit
+, fetchFromGitHub
 , buildPythonPackage
-# , python-csxcad
-# , python-openems
 , numpy
 , scipy
 , python-openems
@@ -12,19 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyems";
-  version = "unstable-2020-08-10";
-  src = /home/matt/src/pyems;
-  # src = fetchgit {
-  #   url = "file:///home/matt/src/pyems";
-  #   rev = "02a601fe8d27367b427042d5eded517731d0d22c";
-  #   # sha256 = "0000000000000000000000000000000000000000000000000000";
-  # };
-  # src = fetchFromGitHub {
-  #   owner = "matthuszagh";
-  #   repo = "pyems";
-  #   rev = "c64cdb02378ba0c00cac654b5a77b3b7cd6c63b5";
-  #   sha256 = "0hdq6wafkzh1cwj6hiqlklnf86v2m452f7rws8b4z8j44hnx5xw6";
-  # };
+  version = "unstable-2020-08-18";
+
+  src = fetchFromGitHub {
+    owner = "matthuszagh";
+    repo = "pyems";
+    rev = "556f049d38aa69b111b13bcf6cd637abe69e2b40";
+    sha256 = "0rcwcs2nm5sr1q3x3c8zffd093iay18lpqbfmmvqy2dnw8rkmg7v";
+  };
 
   propagatedBuildInputs = [
     numpy

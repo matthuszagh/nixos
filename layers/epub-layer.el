@@ -10,10 +10,7 @@
    (straight-use-package 'nov))
 
   :setup
-  (use-package justify-kp)
-
   (use-package nov
-    :after (justify-kp)
     :mode ("\\.epub\\'" . nov-mode)
     :init
     (defun mh/nov-font-setup ()

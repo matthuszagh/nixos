@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: latex source block
+# key: latex
+# --
+#+begin_src latex :hidden
+\documentclass{${1:tikz}}
+\begin{document}
+{\color{fg}
+$2
+}
+\end{document}
+#+end_src$0

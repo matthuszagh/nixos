@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: beta
+# regexp-key: \([^\\]\|^\)beta
+# condition: (and (texmathp) 'auto)
+# --
+`(nth 1 yas-matched-regexp-key-groups)`\beta

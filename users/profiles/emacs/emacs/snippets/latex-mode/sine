@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sine
+# key: sin
+# --
+\sin{\left($1\right)}$0

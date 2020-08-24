@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: int
+# regexp-key: \([^\\]\|^\)sum
+# condition: 'texmathp
+# --
+`(nth 1 yas-matched-regexp-key-groups)`\sum_{${1:sub}}^{${2:sup}}$0

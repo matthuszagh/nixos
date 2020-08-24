@@ -1,0 +1,385 @@
+\documentclass{default}
+
+\begin{document}
+
+\tableofcontents
+\hypersetup{linkcolor=red}
+
+\chapter{Installation}\label{cha:installation}
+
+I've fetched Emacs from the \href{https://github.com/emacs-mirror/emacs}{GitHub mirror
+  repository}. The source code resides in \textasciitilde/developer/software/emacs. Installation
+instructions reside in the source directory in the file named ``INSTALL''. I've chosen to use a
+build directory named ``build''. From the build directory run configure with:
+
+\begin{minted}{bash}
+$ ./../configure --with-x-toolkit=gtk3 --with-mailutils \
+                 --with-imagemagick --with-xwidgets
+\end{minted}
+
+I'm currently using version 26.1, by running:
+
+\begin{minted}{bash}
+$ git checkout emacs-26.1
+\end{minted}
+
+There is some issue with highlighting in version 27.050 (potentially font-lock?) that makes it very
+annoying to write code. In general I should only use stable releases, which are specified on the
+\href{https://www.gnu.org/software/emacs/}{Emacs website}.
+
+\chapter{Package Setup}\label{cha:package-setup}
+
+\section{Gnus}
+\label{sec:gnus}
+
+Gnus was a huge pain to setup. I finally got it working with the information at this
+\href{https://eschulte.github.io/emacs-starter-kit/starter-kit-gnus-imap.html}{link}.
+
+\section{Term}\label{sec:term}
+
+Ansi term uses 8 colors for the terminal GUI. We can redefine these colors in an Emacs terminal by
+customizing their values with \mintinline{text}{M-x customize-group RET term RET}. The colors must
+also be configured in \mintinline{text}{~/.bashrc}.
+
+\chapter{Functionality}
+\label{cha:functionality}
+
+\section{Code Tagging and Navigation}
+\label{sec:code-tagging}
+
+
+\chapter{Structure}\label{cha:structure}
+
+
+\chapter{Best Practices}
+\label{cha:best-practices}
+
+\href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Conventions.html}{This
+  Emacs manual page} contains principles to follow when customizing key bindings. Basically,
+\mintinline{text}{C-c <letter>} (but not \mintinline{text}{C-c} followed by another control
+character) as well as \mintinline{text}{<f5>} through \mintinline{text}{<f9>} are free for users to
+define how they wish.
+
+
+\chapter{To-Do}\label{cha:to-do}
+
+\section{Customize Mode Line}
+\label{sec:customize-mode-line}
+
+I can customize mode-line-format on a per-mode basis (see
+\href{https://emacs.stackexchange.com/questions/13652/how-to-customize-mode-line-format}{this
+  StackExchange question}). Also, see the
+\href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Mode-Line-Variables.html#Mode-Line-Variables}{Emacs
+  documentation} on the subject.
+
+\section{Disable cursor in pdf-view-mode}
+
+I'd like to disable the cursor when viewing a PDF. It's distracting and provides no value. I've
+tried these two additions to \mintinline{text}{init.el} to no avail:
+
+\begin{minted}{elisp}
+(add-hook 'pdf-view-mode-hook
+          (lambda ()
+            (make-variable-buffer-local 'cursor-type)
+            (setq cursor-type nil)))
+(add-hook 'post-command-hook
+          (lambda ()
+            (setq cursor-type (if pdf-view-mode t 'nil))))
+\end{minted}
+
+These are the links I've found that address related issues:
+
+\href{https://emacs.stackexchange.com/questions/392/how-to-change-the-cursor-type-and-color}{How to
+  change the cursor type and color?}
+
+\href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Cursor-Parameters.html}{Cursor
+  parameters}
+
+\href{https://emacs.stackexchange.com/questions/44650/how-can-i-make-the-cursor-change-to-block-in-overwrite-mode?rq=1}{How
+  can I make the cursor change to block in overwrite mode?}
+
+\href{https://www.emacswiki.org/emacs/ChangingCursorDynamically}{Changing Cursor Dynamically}
+
+\href{https://www.gnu.org/software/emacs/manual/html_node/emacs/Cursor-Display.html}{Cursor Display}
+
+Instead of trying to get rid of the cursor, maybe just make its color the same as the
+background. Check out these links:
+\href{https://emacs.stackexchange.com/questions/7281/how-to-modify-face-for-a-specific-buffer}{se}
+and \href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Face-Remapping.html}{manual}.
+
+\section{Get much better at Gnus}
+
+\section{Flycheck doesn't work with C}
+
+I'm getting an error that the flag -std=c++17 doesn't work with
+C\@. \href{https://github.com/alexmurray/flycheck-clang-analyzer/issues/6}{This error seems somewhat
+similar}.
+
+\section{load-file from Emacs}
+
+This causes cursor color to change and potentially other behavior as well.
+
+\section{align-current AUCTeX}
+
+align-current works well for tables with limited text. However, it propagates line breaks and so
+takes up a needless number of lines for long text sections that have to be manually adjusted. Also,
+I'd like to be able to run this globally for a whole buffer. The most similar action is align-entire
+but this aligns all tables to one another; I'd like aligning to be done on a per-table basis.
+
+\section{Consider switching to sane-term from multi-term}
+
+\href{https://github.com/adamrt/sane-term}{sane-term} seems like it might be a better alternative to multi-term.
+
+\section{Single quote delimeter not working}
+
+Pressing \' twice causes three single quotes to be inserted.
+
+\section{Command that closes all buffers for which underlying file was deleted}
+
+Probably better, just do this automatically. One worry is if file was accidentally deleted and
+buffer allows you to keep the file alive. Still, existing buffers shouldn't be used as a sort of
+backup.
+
+\section{Magit bug missing headers}
+
+I'm getting the error: ``BUG: missing headers nil'' when using magit with ghub. This is a known
+issue and is tracked \href{https://github.com/magit/ghub/issues/81}{here}. I guess the solution is
+to just wait for someone to fix it there.
+
+\section{Verilog mode escape}
+
+When in evil insert mode and the cursor position is after a reg or wire, pressing escape tries to
+vectorize the reg/wire instead of entering evil normal state.
+
+\section{Verilog code tagging}
+
+Verilog mode should have code tagging and navigation. See
+\href{https://scripter.co/ctags-systemverilog-and-emacs/}{this link} for ideas on code tagging.
+
+\section{Better Code Tagging}
+
+The problem with RTags is that it only works for C-based languages. gtags should work for many
+others. See \href{https://tuhdo.github.io/c-ide.html}{this link}. It probably makes sense to use the
+\href{https://github.com/leoliu/ggtags}{ggtags} interface. Also use the
+\href{https://github.com/syohex/emacs-helm-gtags/}{helm interface}. This may also be the wrong
+question, but maybe it's also possible to use rtags as a backend for a common gtags frontend?
+
+\section{Create Add-On that allows you to edit Anki HTML in Emacs}
+
+Adapt \href{https://github.com/louietan/anki-editor}{this} for your needs. That add-on should
+contain nearly all of the required functionality.
+
+\section{Get XWidget Webkit working}
+
+See \href{https://emacsnotes.wordpress.com/2018/08/18/why-a-minimal-browser-when-there-is-a-full-featured-one-introducingxwidget-webkit-a-state-of-the-art-browser-for-your-modern-emacs/}{this}.
+
+\section{Get LaTeX SVGs working in EWW}
+
+EWW is unable to render latex/mathjax directly and so renders the resulting svg instead. This
+appears as dark text on a dark background. See
+\href{https://emacs.stackexchange.com/questions/3622/use-a-different-color-theme-for-eww-buffers}{this
+  post}.
+
+\section{Improve org-books}
+
+\begin{enumerate}
+\item Query user for file when running org-capture and base title on that.
+\item Make table of contents entries links to the corresponding page in the pdf.
+\item Write a program to extract a table of contents from pdf. Run this automatically when running
+  org-capture.
+\item Bind org-capture to a keybinding.
+\item Write scripts to get info from Goodreads and Amazon (Goodreads API
+  \href{https://www.goodreads.com/api}{here}).
+\item Add description property so that you can make comments on the quality (e.g. ``Definitive book
+  on GR'').
+\item Potentially use Wikipedia categories to categorize books in list and in directories.
+\end{enumerate}
+
+\section{Org Capture Extension}
+
+Consider using \href{https://github.com/sprig/org-capture-extension}{org-capture-extension} which
+allows you to run org-capture from a browser.
+
+\section{Git Bug}
+
+Consider using \href{https://github.com/MichaelMure/git-bug}{git-bug} instead of this file to track
+issues and improvements.
+
+\section{Eyebrowse}
+
+Use \href{https://github.com/wasamasa/eyebrowse}{eyebrowse} to easily navigate between Emacs workstations.
+
+\section{Setup BBDB or other contact list for GNUs}
+
+bbdb keeps a contact list that can be used in gnus. Set this up, or look for an alternative
+(potentially one that does not require manual additions). Note that there is also a company backend
+for this, company-bbdb.
+
+\section{Company specifies backend for each completion}
+
+It would be nice to be able to show backend used for each completion with company. This could be a
+configurable setting in company, for instance. Maybe look at company-box for a possible way to
+implement this.
+
+\section{Implement method to see what is causing lag in Emacs}
+
+It would be really nice to be able to see what is causing Emacs to lag in certain contexts. This
+could be enabled by calling a sort of record function and then disabling it when done. When the
+record function is toggled off, display a list of functions called and how much collective time they
+took, ordered by that time.
+
+\section{Create a new gdb many windows mode that spans 2 screens}
+
+This should also have a function to restore windows. It should delegate most responsibility to GDB\@.
+
+\section{Change company completion face}
+
+The red text face used for company completion is ugly. Find a thematic alternative.
+
+\section{Fix YCMD no flags error}
+
+YCMD sometimes complains and repeatedly throws a flags missing error. Figure out what causes this
+(look at the YCMD code), then figure out how to solve it. This probably involves reconfiguration the
+ycm extra conf file.
+
+\section{Keep company-box?}
+
+Consider the functionality of company-box and potentially get rid of it.
+
+\section{Completion drop-down vs fill-in}
+
+Sometimes completions provide a drop-down and sometimes it doesn't and instead presents a sole
+completion as a differently colored rest of the word. What logic regulates this? Is it when only a
+single completion is available? Is this disadvantageous for a sole completion when the dropdown
+could also provide documentation for the completion?
+
+\section{Improve GDB behavior for opening windows}
+
+The current GDB split window behavior isn't great. It splits up existing windows into overly small
+sizes. I'm not exactly sure what I want here, but I'd like a strong priority given to the gdb buffer
+and the source buffer. In any event these two links should be helpful:
+\href{https://emacs.stackexchange.com/questions/38945/m-x-gdb-dont-create-new-frames}{this} and
+\href{https://www.gnu.org/software/emacs/manual/html_node/elisp/Display-Action-Functions.html}{this}.
+
+\section{Enable ability in term mode when at command line to insert at point instead of going to
+  end}
+
+This would allow me to navigate in normal mode and then insert like normal.
+
+\begin{minted}{lisp}
+  (evil-collection-define-key 'normal 'term-mode-map (kbd "i")
+    (lambda ()
+      (interactive)
+      (if (eq (line-number-at-pos)
+              (+ (evil-count-lines (point-min) (point-max)) 1))
+          (let* ((col-str (what-cursor-position))
+                 (col (string-to-number
+                       (when (string-match ".*column=" col-str)
+                         (replace-match "" nil nil col-str)))))
+            (progn (evil-insert-state)
+                   (term-send-end)
+                   (term-show-maximum-output)
+                   (let* ((col-new-str (what-cursor-position))
+                          (col-new (string-to-number
+                                    (when (string-match ".*column=" col-new-str)
+                                      (replace-match "" nil nil col-new-str)))))
+                     (while (> col-new col)
+                       (progn (execute-kbd-macro (kbd "C-b"))
+                              (message (format "%d %d" col col-new))
+                              (setq col-new (1- col-new)))))))
+        (progn (evil-insert-state)
+               (term-show-maximum-output)))))
+\end{minted}
+
+This doesn't work because edits made to the buffer line in term line mode are not affected in
+term-char mode. This would take a lot more work.
+
+\section{Prevent sudo directories from staying in recentf list}
+
+We can probably configure this with tramp, see \href{https://www.gnu.org/software/tramp/tramp-emacs.html}{manual}.
+
+\section{Store source URL of book and write function to detect if changes have occurred}
+
+Use a hash function for this. Hopefully there's a way to do this without redownloading all files
+each time.
+
+\section{Get helm-make working}
+
+See \href{https://github.com/abo-abo/helm-make}{here}.
+
+\section{Code completion should ignore case}
+
+Setup company in code completion modes to ignore entered case and fill in the correct case
+regardless.
+
+\section{Setup rr debugger with gdb interface}
+
+See this
+\href{https://emacs.stackexchange.com/questions/20056/is-it-possible-to-use-mozillas-rr-with-gdb-multi-window?rq=1}{link}
+on setting it up. See this other
+\href{http://fitzgeraldnick.com/2015/11/02/back-to-the-futurre.html}{link} on what it can do.
+
+\section{Function to determine an installed packages dependencies}
+
+Some package is using magit-popup which is causing a warning each time magit is used. Figure out
+which package. More generally, write a function to figure out which packages use a given
+dependency. Additionally, have another function to list all dependencies for a given input.
+
+\section{Fix info manual building with straight}
+
+Most info manuals aren't built.
+
+\section{Make c-style-alist style options buffer local from clang-format}
+
+c-style-alist specifies a number of style options that should be set in the same way as the other
+style options from clang-format.
+
+\section{Setup smartparens}
+
+Use smartparens instead of other packages.
+
+\section{flycheck clang tidy automatically find compile commands}
+
+Find compile\_commands.json recursively in current project directory, rather than needing to specify
+it.
+
+\section{Init file unit testing}
+
+I'd like to have some sort of testing for the init file to ensure that all configurations are
+actually implemented and other changes do not affect them. The builtin ERT framework might be able
+to achieve this. Also use auto-compile, which ensures byte-compiled files are up-to-date with the
+source versions.
+
+\section{PDFs open in both buffers sometimes}
+
+This seems to happen when a PDF file is first opened. Investigate what happens when I disable the
+bookmarking functionality. I may no longer need bookmarking anyway with org tracking.
+
+\section{Ensure evil collection bindings are working}
+
+Evil collection defines a framework for vim-like bindings that make a lot of sense. Become familiar
+with these and make sure they're working. Finally, it would be great to set up testing for them.
+
+\section{pdf tools fails to define function}
+
+I get this error at startup. File mode specification error: (error Autoloading file /home/matt/.emacs.d/straight/build/pdf-tools/pdf-tools.elc failed to define function pdf-tools)
+
+\section{jedi core installs each startup}
+
+I get this message at each startup. Is this right? Running: pip install --upgrade /home/matt/.emacs.d/straight/build/jedi-core/...Done
+
+\section{show links in pdf}
+
+Implement a feature similar to Vimium's f key, which shows keys associated with each link on a
+page. The links can be followed by typing the corresponding key. This would be useful in PDF mode so
+the cursor does not need to be used.
+
+\section{Org align contents of lists}
+
+Org does not currently left-align the content of a list item.
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

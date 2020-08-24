@@ -1,0 +1,67 @@
+* TODO In rtags bind (kbd "C-M-.") to go to symbol in other window, as is done with elpy/python
+* TODO Clear python output before each time python buffer is run elpy-shell-send-region-or-buffer (C-c C-c) appends output to the end of the inferior python buffer. I'd like it to erase prior output before sending new output.
+* TODO Bring python buffer to front at each run
+
+Each time a python buffer is run with elpy-shell-send-region-or-buffer, the inferior python
+buffer should appear in the other window, instead of sending the output to the minibuffer if the
+inferior python buffer is not at the front.
+
+* TODO Create macro for certain consistent bindings
+
+Some bindings are reimplemented in more than one major mode to call different backend functions but
+perform the same conceptual function. These should be replaced with a single definition at the
+beginning of the init file so that it can be changed once. For instance, jump-to-definition is
+implemented with "M-." currently. If I decide to change that in the future, I'd like to change it
+once and have the change propagate to all jump-to-def keybindings (the same keybinding should
+perform the same function in all modes).
+
+* TODO Enable plotting in python buffer output
+
+Currently, running C-c C-c in a python buffer does not allow plotting. ein supports this
+functionality by default. Therefore, it may be best to change the default python shell to an ein
+console. Is this `ein:console-connect'?
+
+* TODO Get mediawiki working
+* TODO Prevent "$" from acting as a pair in any mode except tex modes.
+* TODO Use eww by default and command to open in another browser if necessary
+
+The other browser would probably be firefox at the moment, but at some point the internal xwidget
+browser. Also bind eww and open other browser to keybindings.
+
+* TODO Setup eudc/ldap to complete/store email addresses etc.
+
+This configuration will go in ~/.emacs.d/.gnus.el. See the [[info:eudc#Top][eudc info manual]] and the [[info:eudc#LDAP%20Configuration][LDAP
+configuration section]] within it. Also check the [[https://wiki.archlinux.org/index.php/OpenLDAP][ArchWiki OpenLDAP page]] for information about
+openldap, including how to install and configure it. It's also worth checking git revisions to see
+the old gnus configuration for further ideas.
+
+* TODO Better completions in Eshell.
+
+I can maybe use [[https://github.com/szermatt/emacs-bash-completion][Bash completions]] or even [[https://gitlab.com/ambrevar/emacs-fish-completion][Fish completions]] but I'm worried this might generate
+misleading scenarios where eshell doesn't actually behave like Bash.
+
+* TODO Org init file
+
+Look at [[https://github.com/dakra/dmacs/blob/master/init.org][this setup]] for an example of an org init file. Additionally, this provides a lot of
+solid-looking setup configurations. Look through these for inspiration.
+
+* TODO Consider changing helm mini-buffer appearance
+
+Now that I'm using Eshell instead of term, it probably makes sense to have the helm-minibuffer only
+appear as a small part of the current buffer.
+
+* TODO Change fill-column to 70 for all text modes (prog modes should probably stay at 100)
+* TODO Prevent fill-column word wrapping when building a table in org-mode.
+* TODO Create org shortcut for filing issues
+
+This should be a global minor mode with an associated key sequence. It should prompt you to specify
+which of a collection of projects has an issue, and then file an issue in the appropriate section of
+that project.
+
+* TODO Reuse buffers for dired-mode
+
+This is allegedly answered [[https://emacs.stackexchange.com/a/1041/20317][here]], but it isn't working for me.
+* TODO Bind org-store-link to a kbd (maybe C-c l?)
+* TODO Use lexical binding in init file
+* TODO Async shell mode should default to normal mode, not insert mode
+* TODO Bind kbd (maybe C-r) in eshell mode to helm-eshell-history

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: argument
+# key: arg
+# --
+\arg{\left($1\right)}$0

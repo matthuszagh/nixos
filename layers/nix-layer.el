@@ -44,12 +44,12 @@
   (defun mh/nix-rebuild ()
     (interactive)
     (command-execute
-     (async-shell-command "cd ~/src/dotfiles/ && make" "*nix*")))
+     (async-shell-command "cd ~/src/nixos/ && make" "*nix*")))
 
   (defun mh/nix-rebuild-show-trace ()
     (interactive)
     (command-execute
-     (async-shell-command "cd ~/src/dotfiles/ && make rebuild_trace" "*nix*")))
+     (async-shell-command "cd ~/src/nixos/ && make trace" "*nix*")))
 
   :postsetup
   (:layer modal

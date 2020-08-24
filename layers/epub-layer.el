@@ -1,4 +1,6 @@
-;;; epub-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; epub-layer.el --- EPUB Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

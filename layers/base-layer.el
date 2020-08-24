@@ -42,7 +42,7 @@
 
   ;; Increase splitting threshold so that new buffers don't split existing ones.
   ;; TODO improve documentation of this setting.
-  (setq split-height-threshold 160)
+  (setq split-height-threshold 100)
 
   ;; Disable startup screen.
   (setq inhibit-startup-screen t)

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: natural logarithm
-# key: ln
-# --
-\ln{\left($1\right)}$0

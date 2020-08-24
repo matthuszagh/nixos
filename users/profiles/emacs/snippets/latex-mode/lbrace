@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: left brace for use in math environments
-# key: lbrace
-# --
-\left\\{\begin{alignedat}{2}
-  $1 &, && \quad $2 \\\\
-\end{alignedat}\right.$0

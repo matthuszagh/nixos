@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: omega
-# regexp-key: \([^\\]\|^\)omega
-# condition: (and (texmathp) 'auto)
-# --
-`(nth 1 yas-matched-regexp-key-groups)`\omega

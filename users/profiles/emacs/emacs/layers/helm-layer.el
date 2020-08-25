@@ -10,9 +10,7 @@
    (straight-use-package 'helm)
    (straight-use-package 'helm-xref)
    (straight-use-package 'helm-org)
-   (straight-use-package 'helm-ls-git)
-   (straight-use-package 'helm-rg)
-   (straight-use-package 'helm-projectile))
+   (straight-use-package 'helm-ls-git))
 
   :setup
   (use-package helm
@@ -57,7 +55,12 @@
       ;;         :follow 1))
       )
 
-    (use-package helm-rg))
+    ;; use ripgrep instead of ag
+    (setq helm-grep-ag-command (concat "rg"
+                                       " --color=never"
+                                       " --smart-case"
+                                       " --no-heading"
+                                       " --line-number %s %s %s")))
 
   (use-package helm-man)
 
@@ -105,12 +108,13 @@
     "C-t" 'helm-ff-run-ediff-file
     "C-p" 'helm-ff-run-browse-project
     ;; display file properties
-    "C-n" 'helm-ff-properties-persistent)
+    "C-n" 'helm-ff-properties-persistent
+    "M-SPC" 'mh/command-prefix)
 
-   ;; keybindings for helm-projectile
    (general-def mh/prefix-search-map
-     "p" 'helm-projectile
-     "P" 'helm-projectile-rg)
+     "g" 'helm-do-grep-ag
+     "p" 'helm-browse-project
+     "P" 'helm-projects-history)
 
    ;; keybindings for candidates in `helm-buffers-list'
    (general-def helm-buffer-map
@@ -124,13 +128,14 @@
    (use-package helm-ls-git
      :config
      (setq helm-locate-project-list '("~/src"))
-     (setq helm-ls-git-status-command 'magit-status-internal)))
+     (setq helm-ls-git-status-command 'magit-status-setup-buffer)))
 
   (:layer (vcs modal)
    (general-def helm-ls-git-map
-     ;; TODO what's the right command for this?
-     "C-s" 'helm-ls-git-status
-     "C-s" (lambda ()
-             (call-interactively 'helm-ff-run-eshell-command-on-file "magit")))))
+     "M-SPC" 'mh/command-prefix
+     "C-v" (lambda ()
+             (interactive)
+             (funcall helm-ls-git-status-command
+                      (helm-default-directory))))))
 
 ;;; helm-layer.el ends here

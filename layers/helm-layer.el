@@ -10,8 +10,7 @@
    (straight-use-package 'helm)
    (straight-use-package 'helm-xref)
    (straight-use-package 'helm-org)
-   (straight-use-package 'helm-ls-git)
-   (straight-use-package 'helm-projectile))
+   (straight-use-package 'helm-ls-git))
 
   :setup
   (use-package helm
@@ -111,10 +110,10 @@
     ;; display file properties
     "C-n" 'helm-ff-properties-persistent)
 
-   ;; keybindings for helm-projectile
    (general-def mh/prefix-search-map
-     "p" 'helm-projectile
-     "P" 'helm-projectile-rg)
+     "g" 'helm-do-grep-ag
+     "p" 'helm-browse-project
+     "P" 'helm-projects-history)
 
    ;; keybindings for candidates in `helm-buffers-list'
    (general-def helm-buffer-map

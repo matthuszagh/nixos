@@ -108,7 +108,8 @@
     "C-t" 'helm-ff-run-ediff-file
     "C-p" 'helm-ff-run-browse-project
     ;; display file properties
-    "C-n" 'helm-ff-properties-persistent)
+    "C-n" 'helm-ff-properties-persistent
+    "M-SPC" 'mh/command-prefix)
 
    (general-def mh/prefix-search-map
      "g" 'helm-do-grep-ag
@@ -131,6 +132,7 @@
 
   (:layer (vcs modal)
    (general-def helm-ls-git-map
+     "M-SPC" 'mh/command-prefix
      "C-v" (lambda ()
              (interactive)
              (funcall helm-ls-git-status-command

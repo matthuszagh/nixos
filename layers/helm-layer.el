@@ -127,13 +127,13 @@
    (use-package helm-ls-git
      :config
      (setq helm-locate-project-list '("~/src"))
-     (setq helm-ls-git-status-command 'magit-status-internal)))
+     (setq helm-ls-git-status-command 'magit-status-setup-buffer)))
 
   (:layer (vcs modal)
    (general-def helm-ls-git-map
-     ;; TODO what's the right command for this?
-     "C-s" 'helm-ls-git-status
-     "C-s" (lambda ()
-             (call-interactively 'helm-ff-run-eshell-command-on-file "magit")))))
+     "C-v" (lambda ()
+             (interactive)
+             (funcall helm-ls-git-status-command
+                      (helm-default-directory))))))
 
 ;;; helm-layer.el ends here

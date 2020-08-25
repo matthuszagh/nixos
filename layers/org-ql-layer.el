@@ -5,6 +5,10 @@
 ;;; Code:
 
 (layer-def org-ql
+  :presetup
+  (:layer straight
+   (straight-use-package 'org-ql))
+
   :setup
   (use-package org-ql)
   (use-package helm-org-ql

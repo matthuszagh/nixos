@@ -66,12 +66,6 @@
 
   (use-package helm-xref)
 
-  (use-package helm-projectile
-     :config
-     (helm-projectile-on)
-     (setq helm-projectile-truncate-lines t)
-     (setq projectile-completion-system 'helm))
-
   :postsetup
   (:layer modal
    (general-def mh/prefix-map

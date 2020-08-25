@@ -11,7 +11,6 @@
    (straight-use-package 'helm-xref)
    (straight-use-package 'helm-org)
    (straight-use-package 'helm-ls-git)
-   (straight-use-package 'helm-rg)
    (straight-use-package 'helm-projectile))
 
   :setup
@@ -57,7 +56,12 @@
       ;;         :follow 1))
       )
 
-    (use-package helm-rg))
+    ;; use ripgrep instead of ag
+    (setq helm-grep-ag-command (concat "rg"
+                                       " --color=never"
+                                       " --smart-case"
+                                       " --no-heading"
+                                       " --line-number %s %s %s")))
 
   (use-package helm-man)
 

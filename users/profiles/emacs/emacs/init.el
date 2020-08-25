@@ -124,6 +124,7 @@
                     help
                     org
                     org-roam
+                    org-ref
                     markdown
                     writing
                     exwm

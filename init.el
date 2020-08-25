@@ -123,8 +123,7 @@
                     helm
                     help
                     org
-                    ;; TODO
-                    ;; org-ql
+                    org-roam
                     markdown
                     writing
                     exwm

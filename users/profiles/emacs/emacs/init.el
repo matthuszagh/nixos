@@ -124,6 +124,7 @@
                     help
                     org
                     org-roam
+                    org-roam-bibtex
                     org-ref
                     markdown
                     writing

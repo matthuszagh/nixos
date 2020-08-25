@@ -1,4 +1,4 @@
-;;; modal-layer.el --- Modal Editing Layer -*-lexical-binding: t; -*-
+;;; modal-layer.el --- Modal Editing Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

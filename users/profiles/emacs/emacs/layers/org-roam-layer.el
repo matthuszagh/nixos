@@ -14,14 +14,19 @@
     :config
     (org-roam-mode)
     (setq org-roam-directory "~/doc/notes/wiki")
+    (defun mh/time-str ()
+      (format-time-string "[%Y-%m-%d %a %H:%M]"))
     (setq org-roam-capture-templates
           `(("d" "default" plain #'org-roam-capture--get-point
              "%?"
-             :file-name "${title}"
+             ;; slug is a suitable converted filename (e.g. spaces
+             ;; converted to underscores)
+             :file-name "${slug}"
              :head ,(concat "#+TITLE: ${title}\n"
                             "#+ROAM_ALIAS: \n"
-                            "#+CREATED: %(format-time-string \"[%Y-%m-%d %a %H:%M]\")\n"
-                            "#+MODIFIED: %(format-time-string \"[%Y-%m-%d %a %H:%M]\")\n")
+                            "#+ROAM_TAGS: \n"
+                            "#+CREATED: %(mh/time-str)\n"
+                            "#+MODIFIED: %(mh/time-str)\n")
              :unnarrowed t)))
     (defun mh//org-update-last-modified ()
       (save-excursion

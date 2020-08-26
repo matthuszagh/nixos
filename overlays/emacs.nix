@@ -1,7 +1,7 @@
 final: prev:
 
 {
-  emacsNative = (prev.pkgs.emacsUnstable.override {
+  emacsNative = (prev.pkgs.emacsGit.override {
     withGTK3 = true;
     withXwidgets = true;
     withX = true;

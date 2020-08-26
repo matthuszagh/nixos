@@ -215,6 +215,9 @@ hasn't changed. This clears the image cache to prevent this."
     (interactive)
     (insert (shell-command-to-string "echo -n $(date +%d/%m/%Y)")))
 
+  (defun mh/time-stamp ()
+    (format-time-string "[%Y-%m-%d %a %H:%M]"))
+
   (defun mh/screenshot-svg ()
     "Save a screenshot of the current frame as an SVG image.
 Saves to a temp file and puts the filename in the kill ring."

@@ -9,7 +9,8 @@
   (:layer straight
    (straight-use-package 'lsp-mode)
    (straight-use-package 'lsp-ui)
-   (straight-use-package 'company-lsp))
+   (straight-use-package 'company-lsp)
+   (straight-use-package '(lsp-pyright :host github :repo "emacs-lsp/lsp-pyright")))
 
   :setup
   (use-package lsp-mode
@@ -65,6 +66,12 @@
    (general-define-key
     :keymaps 'lsp-ui-peek-mode-map
     "j" 'lsp-ui-peek--select-next
-    "k" 'lsp-ui-peek--select-prev)))
+    "k" 'lsp-ui-peek--select-prev))
+
+  (:layer python
+   (use-package lsp-pyright
+     :hook (python-mode . (lambda ()
+                            (require 'lsp-pyright)
+                            (lsp))))))
 
 ;;; lsp-layer.el ends here

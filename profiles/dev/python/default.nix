@@ -13,7 +13,6 @@ in
           scipy
           ipython
           debugpy  # needed for DAP
-          python-language-server
         ];
 
       python = pkgs.python3.withPackages packages;
@@ -23,5 +22,6 @@ in
     ] ++ (with pkgs; [
       black
       nodejs  # needed for DAP
+      nodePackages.pyright  # needed for lsp-pyright
     ]);
 }

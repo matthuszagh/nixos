@@ -6,7 +6,17 @@
 
 (layer-def windows
   :depends (base)
+
+  :presetup
+  (:layer straight
+   (straight-use-package 'framemove))
+
   :setup
+  (use-package framemove
+    :config
+    (windmove-default-keybindings)
+    (setq framemove-hook-into-windmove t))
+
   ;; tame Emacs's crazy window defaults.
   (add-to-list 'display-buffer-alist
                '("\\*compilation\\*"

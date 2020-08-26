@@ -9,70 +9,72 @@
     anystyleNixpkgs.url = "github:SCOTT-HAMILTON/nixpkgs/4cf6c95cb021b62e78e769af7ba64280b340b666";
   };
 
-  outputs = { self
-  , nixpkgs
-  , home
-  , emacsOverlay
-  , sageNixpkgs
-  , paraviewNixpkgs
-  , anystyleNixpkgs
-  }:
-  let
-    inherit (builtins) attrNames attrValues readDir;
-    inherit (nixpkgs) lib;
-    inherit (lib) recursiveUpdate genAttrs mapAttrs' nameValuePair;
-    inherit (utils) pathsToImportedAttrs;
+  outputs =
+    { self
+    , nixpkgs
+    , home
+    , emacsOverlay
+    , sageNixpkgs
+    , paraviewNixpkgs
+    , anystyleNixpkgs
+    }:
+    let
+      inherit (builtins) attrNames attrValues readDir;
+      inherit (nixpkgs) lib;
+      inherit (lib) recursiveUpdate genAttrs mapAttrs' nameValuePair;
+      inherit (utils) pathsToImportedAttrs;
 
-    utils = import ./lib/utils.nix { inherit lib; };
+      utils = import ./lib/utils.nix { inherit lib; };
 
-    system = "x86_64-linux";
+      system = "x86_64-linux";
 
-    externalOverlays = [
-      emacsOverlay.overlay
-    ];
+      externalOverlays = [
+        emacsOverlay.overlay
+      ];
 
-    pkgImport = pkgs: import pkgs {
-      inherit system;
-      # Order is significant. First incorporate external overlays. We
-      # can then use and override these in custom packages (defined
-      # in `self.overlay`). Finally overlays in ./overlays can
-      # override everything else.
-      overlays = externalOverlays
-        ++ [ self.overlay ]
-        ++ (attrValues self.overlays);
-      config = { allowUnfree = true; };
+      pkgImport = pkgs: import pkgs {
+        inherit system;
+        # Order is significant. First incorporate external overlays. We
+        # can then use and override these in custom packages (defined
+        # in `self.overlay`). Finally overlays in ./overlays can
+        # override everything else.
+        overlays = externalOverlays
+          ++ [ self.overlay ]
+          ++ (attrValues self.overlays);
+        config = { allowUnfree = true; };
+      };
+
+      overridePkgs = {
+        sageWithDoc = (pkgImport sageNixpkgs).sageWithDoc;
+        paraview = (pkgImport paraviewNixpkgs).paraview;
+        anystyle-cli = (pkgImport anystyleNixpkgs).anystyle-cli;
+      };
+
+      pkgs = (pkgImport nixpkgs) // overridePkgs;
+    in
+    {
+      # Set of machine/build outputs, where key is the machine name and
+      # the value defines the configuration of the machine.
+      nixosConfigurations = import ./hosts {
+        inherit utils lib pkgs system home self;
+      };
+
+      overlay = import ./pkgs;
+
+      overlays =
+        let
+          overlayDir = ./overlays;
+          fullPath = name: overlayDir + "/${name}";
+          overlayPaths = map fullPath (attrNames (readDir overlayDir));
+        in
+        pathsToImportedAttrs overlayPaths;
+
+      devShell."${system}" = import ./shell.nix {
+        inherit pkgs;
+      };
+
+      packages."${system}" = pkgs;
+
+      # nixosModules = pathsToImportedAttrs (import ./modules/list.nix);
     };
-
-    overridePkgs = {
-      sageWithDoc = (pkgImport sageNixpkgs).sageWithDoc;
-      paraview = (pkgImport paraviewNixpkgs).paraview;
-      anystyle-cli = (pkgImport anystyleNixpkgs).anystyle-cli;
-    };
-
-    pkgs = (pkgImport nixpkgs) // overridePkgs;
-  in {
-    # Set of machine/build outputs, where key is the machine name and
-    # the value defines the configuration of the machine.
-    nixosConfigurations = import ./hosts {
-      inherit utils lib pkgs system home self;
-    };
-
-    overlay = import ./pkgs;
-
-    overlays =
-      let
-        overlayDir = ./overlays;
-        fullPath = name: overlayDir + "/${name}";
-        overlayPaths = map fullPath (attrNames (readDir overlayDir));
-      in
-      pathsToImportedAttrs overlayPaths;
-
-    devShell."${system}" = import ./shell.nix {
-      inherit pkgs;
-    };
-
-    packages."${system}" = pkgs;
-
-    # nixosModules = pathsToImportedAttrs (import ./modules/list.nix);
-  };
 }

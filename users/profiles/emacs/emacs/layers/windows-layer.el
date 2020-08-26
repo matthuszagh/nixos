@@ -82,8 +82,7 @@
   (:layer (hydra modal)
    (defhydra window-nav-hydra (:pre (set-cursor-color "slate blue")
                                :post (set-cursor-color mh-cursor-color)
-                               ;; :timeout 1)
-                               )
+                               :timeout 1)
      "window navigation"
      ("h" evil-window-left "left")
      ("j" evil-window-down "down")

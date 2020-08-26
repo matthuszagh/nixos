@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "anystyleNixpkgs": {
+      "locked": {
+        "lastModified": 1598284025,
+        "narHash": "sha256-nDlClDKs5dy62AqYAFnwFJMqBn+9P/iCKdy4hPgiJ8w=",
+        "owner": "SCOTT-HAMILTON",
+        "repo": "nixpkgs",
+        "rev": "4cf6c95cb021b62e78e769af7ba64280b340b666",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SCOTT-HAMILTON",
+        "repo": "nixpkgs",
+        "rev": "4cf6c95cb021b62e78e769af7ba64280b340b666",
+        "type": "github"
+      }
+    },
     "emacsOverlay": {
       "locked": {
         "lastModified": 1597868559,
@@ -82,6 +98,7 @@
     },
     "root": {
       "inputs": {
+        "anystyleNixpkgs": "anystyleNixpkgs",
         "emacsOverlay": "emacsOverlay",
         "home": "home",
         "nixpkgs": "nixpkgs_2",

@@ -39,7 +39,8 @@
     (setq direnv-always-show-summary nil))
 
   (use-package nixpkgs-fmt
-    :hook (nix-mode . nixpkgs-fmt-on-save))
+    :config
+    (add-hook 'nix-mode-hook 'nixpkgs-fmt-on-save-mode))
 
   (defun mh/nix-rebuild ()
     (interactive)

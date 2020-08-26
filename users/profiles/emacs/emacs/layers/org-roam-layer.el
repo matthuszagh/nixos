@@ -20,8 +20,8 @@
              :file-name "${title}"
              :head ,(concat "#+TITLE: ${title}\n"
                             "#+ROAM_ALIAS: \n"
-                            "#+CREATED: %(format-time-string \"[%Y-%m-%d %a %H:%M]\")"
-                            "#+MODIFIED: %(format-time-string \"[%Y-%m-%d %a %H:%M]\")")
+                            "#+CREATED: %(format-time-string \"[%Y-%m-%d %a %H:%M]\")\n"
+                            "#+MODIFIED: %(format-time-string \"[%Y-%m-%d %a %H:%M]\")\n")
              :unnarrowed t)))
     (defun mh//org-update-last-modified ()
       (save-excursion

@@ -31,6 +31,6 @@
         (let ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
           (insert now))))
     (add-hook 'org-mode-hook (lambda ()
-                               (add-hook 'before-save-hook 'mh//org-update-last-modified nil t)))))
+                               (add-hook 'before-save-hook 'mh//org-update-last-modified 0 t)))))
 
 ;;; org-roam-layer.el ends here

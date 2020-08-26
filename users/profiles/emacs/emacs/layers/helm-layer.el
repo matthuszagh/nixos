@@ -10,7 +10,8 @@
    (straight-use-package 'helm)
    (straight-use-package 'helm-xref)
    (straight-use-package 'helm-org)
-   (straight-use-package 'helm-ls-git))
+   (straight-use-package 'helm-ls-git)
+   (straight-use-package 'helm-bibtex))
 
   :setup
   (use-package helm
@@ -65,6 +66,13 @@
   (use-package helm-man)
 
   (use-package helm-xref)
+
+  (use-package helm-bibtex
+    :config
+    (setq bibtex-completion-bibliography "~/doc/notes/wiki/library.bib")
+    (setq bibtex-completion-library-path "~/doc/library")
+    (setq bibtex-completion-pdf-field "file")
+    (setq bibtex-completion-notes-path "~/doc/notes/wiki/refs"))
 
   :postsetup
   (:layer modal

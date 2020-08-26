@@ -13,6 +13,13 @@
   (use-package org-roam
     :config
     (org-roam-mode)
-    (setq org-roam-directory "~/doc/notes/wiki")))
+    (setq org-roam-directory "~/doc/notes/wiki")
+    (setq org-roam-capture-templates
+          `(("d" "default" plain #'org-roam-capture--get-point
+             "%?"
+             :file-name "${title}"
+             :head ,(concat "#+title: ${title}\n"
+                           "#+roam_alias: ")
+             :unnarrowed t)))))
 
 ;;; org-roam-layer.el ends here

@@ -6,12 +6,14 @@
 
 (layer-def files
   :setup
-  (setq wiki-file "/home/matt/doc/notes/wiki.org")
-  (setq system-file "/home/matt/src/dotfiles/configuration.nix")
-  (setq config-file "/home/matt/src/dotfiles/config/emacs/init.el")
-  (setq productivity-file "/home/matt/doc/notes/projects/productivity.org")
-  (setq todo-file "/home/matt/doc/notes/todo.org")
-  (setq work-file "/home/matt/doc/notes/projects/work.org")
+  (let ((nixos-dir "/home/matt/src/nixos")
+        (notes-dir "/home/matt/doc/notes"))
+    (setq wiki-file (concat notes-dir "/wiki/index.org"))
+    (setq system-file (concat nixos-dir "/flake.nix"))
+    (setq config-file (concat nixos-dir "/users/profiles/emacs/emacs/init.el"))
+    (setq productivity-file (concat notes-dir "/projects/productivity.org"))
+    (setq todo-file (concat notes-dir "/todo.org"))
+    (setq work-file (concat notes-dir "/projects/work.org")))
 
   :postsetup
   (:layer keybinding-management

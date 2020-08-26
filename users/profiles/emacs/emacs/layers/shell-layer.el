@@ -7,6 +7,12 @@
 (layer-def shell
   :depends (programming)
 
+  :presetup
+  (:layer straight
+   (straight-use-package 'vterm-toggle)
+   (straight-use-package 'bash-completion)
+   (straight-use-package 'fish-completion))
+
   :setup
   (use-package shell
     :hook

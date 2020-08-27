@@ -113,8 +113,7 @@
                     json
 
                     ;; formatting
-		    ;; TODO
-                    ;; indenting
+                    indenting
                     formatting
                     documentation
                     undoing

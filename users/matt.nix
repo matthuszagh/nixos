@@ -37,6 +37,8 @@
       ./profiles/recoll
       ./profiles/sage
       ./profiles/tex
+      ./profiles/fish
+      ./profiles/bash
     ];
   };
 }

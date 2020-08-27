@@ -787,7 +787,6 @@ org-capture instead."
      "s" 'org-insert-structure-template
      "p" 'org-set-property
      "t" 'org-todo
-     "r" 'org-refile
      "e" 'org-edit-special
      "c" 'org-ctrl-c-ctrl-c
      "P" 'org-priority

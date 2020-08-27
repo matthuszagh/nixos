@@ -7,7 +7,8 @@
 (layer-def org-roam
   :presetup
   (:layer straight
-   (straight-use-package 'org-roam))
+   (straight-use-package 'org-roam)
+   (straight-use-package 'org-roam-bibtex))
 
   :setup
   (use-package org-roam
@@ -36,6 +37,29 @@
     (add-hook 'org-mode-hook (lambda ()
                                (add-hook 'before-save-hook
                                          'mh//org-update-last-modified 0 t))))
+
+  (use-package org-roam-bibtex
+    :config
+    (add-hook 'org-roam-mode-hook 'org-roam-bibtex-mode)
+    (setq orb-templates
+          '(("r" "ref" plain #'org-roam-capture--get-point
+             ""
+             :file-name "refs/${citekey}"
+             :head "#+TITLE: ${title}
+#+ROAM_KEY: ${ref}
+#+CREATED: %(mh/time-stamp)
+#+MODIFIED: %(mh/time-stamp)
+
+* outline
+:PROPERTIES:
+:NOTER_DOCUMENT: %(orb-process-file-field \"${citekey}\")
+:END:
+%(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1 nil)
+
+* references
+<<bibliography link>>
+bibliography:library.bib"
+             :unnarrowed t))))
 
   :postsetup
   (:layer modal

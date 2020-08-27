@@ -12,6 +12,11 @@
   :setup
   (use-package org-noter
     :config
-    (setq org-noter-notes-search-path "~/doc/notes/wiki/refs")))
+    (setq org-noter-notes-search-path "~/doc/notes/wiki/refs"))
+
+  :postsetup
+  (:layer modal
+   (localleader :keymaps 'org-mode-map
+     "n" 'org-noter)))
 
 ;;; org-noter-layer.el ends here

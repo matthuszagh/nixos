@@ -20,17 +20,20 @@
           '(("r" "ref" plain #'org-roam-capture--get-point
              ""
              :file-name "refs/${citekey}"
-             :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}
-
-- tags ::
+             :head "#+TITLE: ${title}
+#+ROAM_KEY: ${ref}
+#+CREATED: %(mh/time-stamp)
+#+MODIFIED: %(mh/time-stamp)
 
 * outline
 :PROPERTIES:
-:Custom_ID: ${citekey}
-:URL: ${url}
-:AUTHOR: ${author-or-editor}
 :NOTER_DOCUMENT: %(orb-process-file-field \"${citekey}\")
-:END:"
+:END:
+%(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1 nil)
+
+* references
+<<bibliography link>>
+bibliography:library.bib"
              :unnarrowed t)))))
 
 ;;; org-roam-bibtex-layer.el ends here

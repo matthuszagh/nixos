@@ -30,10 +30,11 @@
     (defun mh//org-update-last-modified ()
       (save-excursion
         (goto-char 0)
-        (search-forward "MODIFIED: ")
-        (delete-region (point) (line-end-position))
-        (let ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
-          (insert now))))
+        (if (search-forward "MODIFIED: " 1000 t)
+            (progn
+              (delete-region (point) (line-end-position))
+              (let ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
+                (insert now))))))
     (add-hook 'org-mode-hook (lambda ()
                                (add-hook 'before-save-hook
                                          'mh//org-update-last-modified 0 t))))

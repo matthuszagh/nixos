@@ -14,8 +14,6 @@
     :config
     (org-roam-mode)
     (setq org-roam-directory "~/doc/notes/wiki")
-    (defun mh/time-str ()
-      (format-time-string "[%Y-%m-%d %a %H:%M]"))
     (setq org-roam-capture-templates
           `(("d" "default" plain #'org-roam-capture--get-point
              "%?"
@@ -25,8 +23,8 @@
              :head ,(concat "#+TITLE: ${title}\n"
                             "#+ROAM_ALIAS: \n"
                             "#+ROAM_TAGS: \n"
-                            "#+CREATED: %(mh/time-str)\n"
-                            "#+MODIFIED: %(mh/time-str)\n")
+                            "#+CREATED: %(mh/time-stamp)\n"
+                            "#+MODIFIED: %(mh/time-stamp)\n")
              :unnarrowed t)))
     (defun mh//org-update-last-modified ()
       (save-excursion

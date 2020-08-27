@@ -34,6 +34,20 @@
         (let ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
           (insert now))))
     (add-hook 'org-mode-hook (lambda ()
-                               (add-hook 'before-save-hook 'mh//org-update-last-modified 0 t)))))
+                               (add-hook 'before-save-hook
+                                         'mh//org-update-last-modified 0 t))))
+
+  :postsetup
+  (:layer modal
+   (general-define-key
+    :keymaps 'mh/prefix-map
+    :prefix "i"
+    :prefix-command 'mh/command-info-prefix
+    :prefix-map 'mh/prefix-info-map
+    "f" 'org-roam-find-file
+    "i" 'org-roam-insert)
+
+   (localleader :keymaps 'org-mode-map
+     "r" 'org-roam)))
 
 ;;; org-roam-layer.el ends here

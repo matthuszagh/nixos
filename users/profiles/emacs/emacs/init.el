@@ -85,6 +85,7 @@
                     octave
                     clisp
                     elisp
+                    lisp
                     flycheck
                     refactor
                     dumb-jump

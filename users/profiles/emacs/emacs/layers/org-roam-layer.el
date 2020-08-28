@@ -30,6 +30,10 @@
     (defun mh//org-update-last-modified ()
       (save-excursion
         (goto-char 0)
+        ;; MODIFIED must be present at buffer position 1000 or less,
+        ;; to prevent accidentally changing a non-header property
+        ;; value. Additionally, this avoids the computational cost of
+        ;; traversing the full buffer.
         (if (search-forward "MODIFIED: " 1000 t)
             (progn
               (delete-region (point) (line-end-position))

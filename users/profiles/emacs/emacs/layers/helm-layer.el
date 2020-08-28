@@ -48,6 +48,9 @@
     (helm-mode 1)
     (setq helm-buffer-max-length 30)
     (setq-default helm-follow-mode-persistent t)
+    ;; configure files cache
+    (setq helm-ff-refresh-cache-delay 0.3)
+    (setq helm-ff-cache-mode-post-delay 0.3)
 
     (use-package helm-regexp
       ;; :config

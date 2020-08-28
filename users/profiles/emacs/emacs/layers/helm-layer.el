@@ -72,7 +72,7 @@
 
   (use-package helm-bibtex
     :config
-    (setq bibtex-completion-bibliography "~/doc/notes/wiki/library.bib")
+    (setq bibtex-completion-bibliography "~/doc/notes/wiki/refs/library.bib")
     (setq bibtex-completion-library-path "~/doc/library")
     (setq bibtex-completion-pdf-field "file")
     (setq bibtex-completion-notes-path "~/doc/notes/wiki/refs"))

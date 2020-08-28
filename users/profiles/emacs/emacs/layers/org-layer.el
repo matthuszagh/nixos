@@ -28,107 +28,7 @@
                    (setq-local fill-column 70)))
      (org-babel-after-execute . org-display-inline-images))
     :config
-    ;; TODO remove when I can get the upstream version of org, since
-    ;; this has been incorporated.
-    (defun mh//override-org-create-formula-image
-        (string tofile options buffer &optional processing-type)
-      "Create an image from LaTeX source using external processes.
-
-The LaTeX STRING is saved to a temporary LaTeX file, then
-converted to an image file by process PROCESSING-TYPE defined in
-`org-preview-latex-process-alist'.  A nil value defaults to
-`org-preview-latex-default-process'.
-
-The generated image file is eventually moved to TOFILE.
-
-The OPTIONS argument controls the size, foreground color and
-background color of the generated image.
-
-When BUFFER non-nil, this function is used for LaTeX previewing.
-Otherwise, it is used to deal with LaTeX snippets showed in
-a HTML file."
-      (let* ((processing-type (or processing-type
-			          org-preview-latex-default-process))
-	     (processing-info
-	      (cdr (assq processing-type org-preview-latex-process-alist)))
-	     (programs (plist-get processing-info :programs))
-	     (error-message (or (plist-get processing-info :message) ""))
-	     (image-input-type (plist-get processing-info :image-input-type))
-	     (image-output-type (plist-get processing-info :image-output-type))
-	     (post-clean (or (plist-get processing-info :post-clean)
-			     '(".dvi" ".xdv" ".pdf" ".tex" ".aux" ".log"
-			       ".svg" ".png" ".jpg" ".jpeg" ".out")))
-	     (latex-header
-	      (or (plist-get processing-info :latex-header)
-	          (org-latex-make-preamble
-	           (org-export-get-environment (org-export-get-backend 'latex))
-	           org-format-latex-header
-	           'snippet)))
-	     (latex-compiler (plist-get processing-info :latex-compiler))
-	     (image-converter (plist-get processing-info :image-converter))
-	     (tmpdir temporary-file-directory)
-	     (texfilebase (make-temp-name
-		           (expand-file-name "orgtex" tmpdir)))
-	     (texfile (concat texfilebase ".tex"))
-	     (image-size-adjust (or (plist-get processing-info :image-size-adjust)
-				    '(1.0 . 1.0)))
-	     (scale (* (if buffer (car image-size-adjust) (cdr image-size-adjust))
-		       (or (plist-get options (if buffer :scale :html-scale)) 1.0)))
-	     (dpi (* scale (if buffer (org--get-display-dpi) 140.0)))
-	     (fg (or (plist-get options (if buffer :foreground :html-foreground))
-		     "Black"))
-	     (bg (or (plist-get options (if buffer :background :html-background))
-		     "Transparent"))
-	     (log-buf (get-buffer-create "*Org Preview LaTeX Output*"))
-	     (resize-mini-windows nil)) ;Fix Emacs flicker when creating image.
-        (dolist (program programs)
-          (org-check-external-command program error-message))
-        (if (eq fg 'default)
-	    (setq fg (org-latex-color :foreground))
-          (setq fg (org-latex-color-format fg)))
-        (if (eq bg 'default)
-	    (setq bg (org-latex-color :background))
-          (setq bg (org-latex-color-format
-		    (if (string= bg "Transparent") "white" bg))))
-        ;; remove tex \par at end of snippet to avoid trailing
-        ;; whitespace
-        (if (string= (substring string -1 nil) "\n")
-            (aset string (- (length string) 1) ?%)
-          (setq string (concat string "%")))
-        (with-temp-file texfile
-          (insert latex-header)
-          (insert "\n\\begin{document}\n"
-	          "\\definecolor{fg}{rgb}{" fg "}%\n"
-	          "\\definecolor{bg}{rgb}{" bg "}%\n"
-	          "\n\\nopagecolor%\n"
-	          "\n{\\color{fg}\n"
-	          string
-	          "\n}\n"
-	          "\n\\end{document}\n"))
-        (let* ((err-msg (format "Please adjust `%s' part of \
-`org-preview-latex-process-alist'."
-			        processing-type))
-	       (image-input-file
-	        (org-compile-file
-	         texfile latex-compiler image-input-type err-msg log-buf))
-	       (image-output-file
-	        (org-compile-file
-	         image-input-file image-converter image-output-type err-msg log-buf
-	         `((?D . ,(shell-quote-argument (format "%s" dpi)))
-	           (?S . ,(shell-quote-argument (format "%s" (/ dpi 140.0))))))))
-          (copy-file image-output-file tofile 'replace)
-          (dolist (e post-clean)
-	    (when (file-exists-p (concat texfilebase e))
-	      (delete-file (concat texfilebase e))))
-          image-output-file)))
-
-    (advice-add 'org-create-formula-image :override #'mh//override-org-create-formula-image)
-
-    (use-package org-element
-      :config
-      ;; permit the use of latex environments in inline math delimiters
-      (setq org-element--latex-begin-environment "^[ \t]*\\(?:\\\\(\\|\\$\\)?\\\\begin{\\([A-Za-z0-9*]+\\)}")
-      (setq org-element--latex-end-environment "\\\\end{%s}[ \t]*\\(?:\\\\)\\|\\$\\)?$"))
+    (use-package org-element)
 
     (setq org-startup-with-latex-preview t)
     (setq org-startup-with-inline-images t)
@@ -146,9 +46,6 @@ a HTML file."
           (cons '(:noweb . "yes")
                 (assq-delete-all :noweb org-babel-default-header-args)))
 
-
-    (setq org-latex-pdf-process
-          '("latexmk -f -interaction=nonstopmode -output-directory=%o %f"))
 
     ;; allow the use of :hidden to hide certain source blocks when a
     ;; buffer is opened. All others will be visible by default.
@@ -340,78 +237,12 @@ a HTML file."
     ;; children.
     (setq org-checkbox-hierarchical-statistics nil)
 
-    ;; this uses crop instead of preview for standalone. In this mode
-    ;; math must be inlined, which is annoying, but it does produce
-    ;; correctly sized image outputs. Preview crops the images for
-    ;; some reason.
     (setq org-format-latex-header "% Needed for proper rendering with some corner cases in luatex
 \\RequirePackage{luatex85}
 \\PassOptionsToPackage{usenames}{xcolor}
 \\documentclass[border={0pt 1pt}]{standalone}
 \[PACKAGES]
-\[DEFAULT-PACKAGES]
-
-%% color definitions
-\\definecolor{bgcolor}{rgb}{0.133333333333, 0.133333333333, 0.133333333333}
-\\definecolor{fgcolor}{rgb}{0.764705882353, 0.764705882353, 0.690196078431}
-
-%% Circuitikz style options
-\\ctikzset{-o/.style = {bipole nodes={none}{ocirc, fill=bgcolor}}}
-\\ctikzset{o-/.style = {bipole nodes={ocirc, fill=bgcolor}{none}}}
-\\ctikzset{o-o/.style = {bipole nodes={ocirc, fill=bgcolor}{ocirc, fill=bgcolor}}}
-\\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bgcolor}}}
-\\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bgcolor}{circ}}}
-\\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
-\\ctikzset{tripoles/mos style/arrows}
-\\ctikzset{amplifiers/scale=0.75}
-\\ctikzset{tripoles/op amp/font=\\footnotesize}
-\\ctikzset{tripoles/fd op amp/font=\\footnotesize}
-
-%% tikz libraries
-\\usetikzlibrary{intersections}
-\\usetikzlibrary{3d}
-\\usetikzlibrary{perspective}
-\\usetikzlibrary{shapes.geometric}
-\\usetikzlibrary{decorations.markings}
-\\usetikzlibrary{positioning}
-\\usetikzlibrary{automata}
-\\usetikzlibrary{patterns}
-
-%% tikz settings
-\\tikzset{>=latex}
-% Important equation emphasis box
-\\def\\eqnBoxCol{gray!30!bgcolor}
-\\tikzset{emphBox/.style={draw=\\eqnBoxCol, fill=\\eqnBoxCol, thick, rectangle, inner sep=5pt, inner ysep=10pt}}
-% extract x and y coordinates of tikz point
-\\makeatletter
-\\newcommand{\\gettikzxy}[3]{%
-  \\tikz@scan@one@point\\pgfutil@firstofone#1\\relax
-  \\edef#2{\\the\\pgf@x}%
-  \\edef#3{\\the\\pgf@y}%
-}
-\\makeatother
-
-%% pgfplots
-\\pgfplotsset{compat=newest}
-\\pgfplotsset{
-  every non boxed x axis/.style={
-    xtick align=center,
-    enlarge x limits=upper,
-    x axis line style={-latex},
-  },
-  every boxed x axis/.style={},
-  every non boxed y axis/.style={
-    ytick align=center,
-    enlarge y limits=upper,
-    y axis line style={-latex},
-  },
-  every boxed y axis/.style={},
-}
-\\pgfplotsset{grid style={help lines}}
-\\usepgfplotslibrary{groupplots}
-
-%% tikztiminglibraries
-\\usetikztiminglibrary{counters}")
+\[DEFAULT-PACKAGES] ")
 
     ;; change default latex packages. grffile prevents asymptote from
     ;; working correctly. inputenc and fontenc aren't needed with
@@ -428,15 +259,6 @@ a HTML file."
             ("" "capt-of" nil)
             ("" "hyperref" nil)))
 
-    ;; (setq org-latex-default-class "standalone")
-    (add-to-list 'org-latex-packages-alist
-                 '("" "tikz" t))
-    (add-to-list 'org-latex-packages-alist
-                 '("" "pgfplots" t))
-    (add-to-list 'org-latex-packages-alist
-                 '("american" "circuitikz" t))
-    (add-to-list 'org-latex-packages-alist
-                 '("" "tikz-timing" t))
     (add-to-list 'org-latex-packages-alist
                  '("" "mathtools" t))
     (add-to-list 'org-latex-packages-alist
@@ -449,12 +271,7 @@ a HTML file."
     (add-to-list 'org-latex-packages-alist
                  '("" "booktabs" t))
     (add-to-list 'org-latex-packages-alist
-                 '("inline" "asymptote" t))
-    ;; (setq org-latex-create-formula-image-program 'imagemagick)
-    ;; necessary for drawing electronics circuits with tikz using the `circuits' library.
-    ;; (setq org-format-latex-header
-    ;;       (concat org-format-latex-header
-    ;;               "\\usetikzlibrary{circuits.logic.US,circuits.logic.IEC,circuits.ee.IEC}"))
+                 '("" "xcolor" t))
 
     ;; make clocking efforts persistant across emacs sessions.
     ;; see [[info:org#Clocking%20Work%20Time][info:org#Clocking Work Time]]
@@ -479,17 +296,6 @@ a HTML file."
     (setq org-latex-pdf-process
           '("latexmk -f -interaction=nonstopmode -output-directory=%o %f"))
 
-    (setq luamagick
-          '(luamagick :programs ("latexmk" "lualatex" "convert")
-                      :description "pdf > png"
-                      :message "you need to install latexmk, lualatex and imagemagick."
-                      :use-xcolor t
-                      :image-input-type "pdf"
-                      :image-output-type "png"
-                      :image-size-adjust (1.0 . 1.0)
-                      :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
-                      :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
-
     (setq luasvgm
           '(luasvgm :programs ("latexmk" "lualatex" "dvisvgm")
                     :description "pdf > svg"
@@ -498,16 +304,11 @@ a HTML file."
                     :image-input-type "pdf"
                     :image-output-type "svg"
                     :image-size-adjust (1.5 . 1.5)
-                    :latex-compiler ("latexmk -f -interaction=nonstopmode -output-directory=%o %f")
+		    :latex-compiler ("pdflatex -interaction nonstopmode -output-directory %o %f")
                     :image-converter ("dvisvgm --pdf -n -b min -c %S -o %O %f")))
 
-    (add-to-list 'org-preview-latex-process-alist luamagick)
     (add-to-list 'org-preview-latex-process-alist luasvgm)
-
-    ;; TODO this requires dvisvgm >= 2.7.2, which requires overriding
-    ;; the version texlive uses.
     (setq org-preview-latex-default-process 'luasvgm)
-    ;; (setq org-preview-latex-default-process 'luamagick)
 
     (load (concat user-emacs-directory "layers/org/babel.el"))
 

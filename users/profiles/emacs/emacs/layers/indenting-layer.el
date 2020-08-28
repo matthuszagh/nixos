@@ -1,4 +1,6 @@
-;;; indenting-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; indenting-layer.el --- Indenting Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 

@@ -27,6 +27,7 @@
   (:layer modal
    (general-define-key
     :keymaps 'mh/prefix-help-map
-     "w" 'define-word-at-point)))
+     "w" 'define-word-at-point
+     "W" 'define-word)))
 
 ;;; writing-layer.el ends here

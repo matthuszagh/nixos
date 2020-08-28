@@ -13,8 +13,8 @@
   (use-package company
     :config
     ;; show completions immediately
-    (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 1)
+    (setq company-idle-delay 0.1)
+    (setq company-minimum-prefix-length 2)
     (setq company-show-numbers t)
     (global-company-mode)
     ;; Maintain case information for completions.
@@ -32,11 +32,6 @@
    ;; (general-def company-active-map
    ;;   "<tab>" 'company-complete-selection)
    (general-def company-active-map
-     "<tab>" 'company-complete-common)
-   )
-  (:layer lsp
-   (use-package company-lsp
-     :config
-     (add-to-list 'company-backends 'company-lsp))))
+     "<tab>" 'company-complete-common)))
 
 ;;; completions-layer.el ends here

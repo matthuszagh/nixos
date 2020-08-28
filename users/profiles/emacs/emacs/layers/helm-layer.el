@@ -137,7 +137,8 @@
      "M-SPC" 'mh/command-prefix
      "C-v" (lambda ()
              (interactive)
-             (funcall helm-ls-git-status-command
-                      (helm-default-directory))))))
+             ;; this isn't ideal and there should be a better way to
+             ;; do this, but it works
+             (helm-select-nth-action 1)))))
 
 ;;; helm-layer.el ends here

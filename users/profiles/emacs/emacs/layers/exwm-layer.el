@@ -15,6 +15,16 @@
     :init
     (setq exwm-workspace-number 3)
     ;; s-N switches to workspace N and s-w interactively switches.
+    (setq mh--exwm-window-pixel-delta 100)
+    (defun mh/exwm-enlarge ()
+      (interactive)
+      (call-interactively 'exwm-layout-enlarge-window t (vector mh--exwm-window-pixel-delta))
+      (call-interactively 'exwm-layout-enlarge-window-horizontally t (vector mh--exwm-window-pixel-delta)))
+
+    (defun mh/exwm-shrink ()
+      (interactive)
+      (call-interactively 'exwm-layout-enlarge-window t (vector (math-neg mh--exwm-window-pixel-delta)))
+      (call-interactively 'exwm-layout-enlarge-window-horizontally t (math-neg mh--exwm-window-pixel-delta)))
     (setq exwm-input-global-keys
           `(([?\s-r] . exwm-reset)
             ([?\s-i] . exwm-input-release-keyboard)

@@ -7,6 +7,7 @@
     sageNixpkgs.url = "github:nixos/nixpkgs/7866440f1223dc447f38cb23c00e10b44b4c98fe";
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
     anystyleNixpkgs.url = "github:SCOTT-HAMILTON/nixpkgs/4cf6c95cb021b62e78e769af7ba64280b340b666";
+    vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
   };
 
   outputs =
@@ -17,6 +18,7 @@
     , sageNixpkgs
     , paraviewNixpkgs
     , anystyleNixpkgs
+    , vivadoNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -48,6 +50,7 @@
         sageWithDoc = (pkgImport sageNixpkgs).sageWithDoc;
         paraview = (pkgImport paraviewNixpkgs).paraview;
         anystyle-cli = (pkgImport anystyleNixpkgs).anystyle-cli;
+        vivado = (pkgImport vivadoNixpkgs).vivado;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

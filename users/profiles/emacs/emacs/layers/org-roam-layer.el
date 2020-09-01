@@ -52,6 +52,7 @@
              :file-name "refs/${citekey}"
              :head "#+TITLE: ${title}
 #+ROAM_KEY: ${ref}
+#+ROAM_TAGS:
 #+CREATED: %(mh/time-stamp)
 #+MODIFIED: %(mh/time-stamp)
 

@@ -241,7 +241,10 @@
 \\PassOptionsToPackage{usenames}{xcolor}
 \\documentclass[border={0pt 1pt}]{standalone}
 \[PACKAGES]
-\[DEFAULT-PACKAGES] ")
+\[DEFAULT-PACKAGES]
+%% Declared math operators
+\\usepackage{math_local}")
+
 
     ;; change default latex packages. grffile prevents asymptote from
     ;; working correctly. inputenc and fontenc aren't needed with

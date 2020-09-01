@@ -24,6 +24,10 @@
 \DeclareMathOperator{\rank}{rank}
 \newcommand{\parallelsum}{\mathbin{\|}}
 \newcommand{\parallelsumAngle}{\mathbin{\!/\mkern-5mu/\!}}
+% bras and kets
+\DeclarePairedDelimiter\bra{\langle}{\rvert}
+\DeclarePairedDelimiter\ket{\lvert}{\rangle}
+\DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1 \delimsize\vert #2}
 
 %% Circuitikz style options
 \ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}

@@ -24,8 +24,7 @@
         pythontex
         asymptote
         animate
-        # dvisvgm
-        # luatex
+        quantikz
         luatex85
         pygmentex
         pdftex

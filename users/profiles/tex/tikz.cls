@@ -47,6 +47,7 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{automata}
 \usetikzlibrary{patterns}
+\usetikzlibrary{quantikz}
 
 %% tikz settings
 \tikzset{>=latex}

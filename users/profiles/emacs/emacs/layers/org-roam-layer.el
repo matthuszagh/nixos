@@ -60,8 +60,7 @@
 :PROPERTIES:
 :NOTER_DOCUMENT: %(orb-process-file-field \"${citekey}\")
 :END:
-%(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1 nil)
-
+%(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1)
 * references
 <<bibliography link>>
 bibliography:library.bib"

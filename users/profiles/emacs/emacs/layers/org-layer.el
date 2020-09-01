@@ -203,11 +203,10 @@
           '(("b" "pdf" entry (file "/home/matt/doc/notes/wiki.org")
              "* %f
 :PROPERTIES:
-:Filepath: %a
+:NOTER_DOCUMENT: %F
 :END:
-** description
-** outline [/]
-%(mh/pdf-outline-to-org-headline \"%F\" 2 nil)")
+* outline
+%(mh/pdf-outline-to-org-headline \"%F\" 1)")
             ("p" "productivity" entry (file+headline "/home/matt/doc/notes/projects/productivity.org" "refile")
              "* TODO %^{PROMPT}")
             ("w" "work" entry (file+headline "/home/matt/doc/notes/projects/work.org" "refile")
@@ -477,7 +476,7 @@ rid of the headline, which takes too much space."
      (find-file-other-window file)
      (pdf-view-goto-page page))
 
-   (defun mh/pdf-outline-to-org-headline (file base-depth todop)
+   (defun mh/pdf-outline-to-org-headline (file base-depth)
      "Return a set of org headings from a pdf in FILE.
 BASE-DEPTH is the depth (i.e. number of '*') of the destination
 org file headline, and TODOP asks whether we should turn the
@@ -486,59 +485,20 @@ outline into a set of todo entries. Set 1 for yes and 0 for no.
 Do not call this directly! It will simply discard the result. Use
 org-capture instead."
      (interactive
-      "fPDF file: \nnHeadline Depth: \nSTODO Headline? (t / nil): ")
-     (if todop
-         (let ((outline (pdf-info-outline file))
-               (org-outline "")
-               (first-headline t)
-               (last-item '()))
-           (dolist (item outline)
-             (if last-item
-                 (let-alist last-item
-                   (setq i (+ .depth base-depth))
-                   (while (> i 0)
-                     (setq org-outline (concat org-outline "*"))
-                     (setq i (- i 1)))
-                   (if first-headline
-                       (setq org-outline (concat org-outline " TODO"))
-                     (setq org-outline (concat org-outline " HOLD")))
-                   (setq org-outline (concat org-outline " " .title))
-                   (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))
-                   (if (not (> (alist-get 'depth item) .depth))
-                       (setq org-outline (concat org-outline ":PROPERTIES:\n\
-:TRIGGER: next-sibling todo!(TODO)\n\
-:BLOCKER: previous-sibling\n\
-:END:\n")))
-                   (if (and first-headline
-                            (not (> (alist-get 'depth item) .depth)))
-                       (setq first-headline nil))))
-             (setq last-item item))
-           (let-alist (car (-take-last 1 outline))
-             (setq i (+ .depth base-depth))
-             (while (> i 0)
-               (setq org-outline (concat org-outline "*"))
-               (setq i (- i 1)))
-             (if first-headline
-                 (setq org-outline (concat org-outline " TODO"))
-               (setq org-outline (concat org-outline " HOLD")))
-             (setq org-outline (concat org-outline " " .title))
-             (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))
-             (setq org-outline (concat org-outline ":PROPERTIES:\n\
-:TRIGGER: next-sibling todo!(TODO)\n\
-:BLOCKER: previous-sibling\n\
-:END:\n")))
-           org-outline)
-       (let ((outline (pdf-info-outline file))
-             (org-outline ""))
-         (dolist (item outline)
-           (let-alist item
-             (setq i (+ .depth base-depth))
-             (while (> i 0)
-               (setq org-outline (concat org-outline "*"))
-               (setq i (- i 1)))
-             (setq org-outline (concat org-outline " " .title))
-             (setq org-outline (concat org-outline " (" (number-to-string .page) ")\n"))))
-         org-outline))))
+      "fPDF file: \nnHeadline Depth: \n")
+     (let ((outline (pdf-info-outline file))
+           (org-outline ""))
+       (dolist (item outline)
+         (let-alist item
+           (setq i (+ .depth base-depth))
+           (while (> i 0)
+             (setq org-outline (concat org-outline "*"))
+             (setq i (- i 1)))
+           (setq org-outline (concat org-outline " " .title "\n"))
+           (setq org-outline (concat org-outline ":PROPERTIES:\n"
+                                     ":NOTER_PAGE: " (number-to-string .page) "\n"
+                                     ":END:\n"))))
+       org-outline)))
 
   (:layer (pdf modal)
    (localleader :keymaps 'org-mode-map

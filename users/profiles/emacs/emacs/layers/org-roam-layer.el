@@ -25,7 +25,9 @@
                             "#+ROAM_ALIAS: \n"
                             "#+ROAM_TAGS: \n"
                             "#+CREATED: %(mh/time-stamp)\n"
-                            "#+MODIFIED: %(mh/time-stamp)\n")
+                            "#+MODIFIED: %(mh/time-stamp)\n\n"
+                            "* resources\n"
+                            "<<bibliography link>>\nbibliography:refs/library.bib")
              :unnarrowed t)))
     (defun mh//org-update-last-modified ()
       (save-excursion

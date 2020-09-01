@@ -45,7 +45,7 @@
 
   (use-package org-roam-bibtex
     :config
-    (add-hook 'org-roam-mode-hook 'org-roam-bibtex-mode)
+    (org-roam-bibtex-mode)
     (setq orb-templates
           '(("r" "ref" plain #'org-roam-capture--get-point
              ""

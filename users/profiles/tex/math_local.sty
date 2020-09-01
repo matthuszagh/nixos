@@ -1,0 +1,19 @@
+\ProvidesPackage{math_local}
+
+\RequirePackage{mathtools}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{breqn}
+
+%% Declared math operators
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\parallelsum}{\mathbin{\|}}
+\newcommand{\parallelsumAngle}{\mathbin{\!/\mkern-5mu/\!}}
+% bras and kets
+\DeclarePairedDelimiter\bra{\langle}{\rvert}
+\DeclarePairedDelimiter\ket{\lvert}{\rangle}
+\DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1 \delimsize\vert #2}
+% norm
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\endinput

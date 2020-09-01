@@ -29,6 +29,8 @@
 \DeclarePairedDelimiter\bra{\langle}{\rvert}
 \DeclarePairedDelimiter\ket{\lvert}{\rangle}
 \DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1 \delimsize\vert #2}
+% norm
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
 %% Circuitikz style options
 \ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}

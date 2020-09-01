@@ -1,4 +1,4 @@
-;;; asy-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; asy-layer.el --- Asymptote Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

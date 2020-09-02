@@ -50,6 +50,22 @@
         "type": "github"
       }
     },
+    "kicadNixpkgs": {
+      "locked": {
+        "lastModified": 1599051729,
+        "narHash": "sha256-dCB/pkGSY0onfj9gFDmJYl35+TF7TVDUZ4cjDtB3c3A=",
+        "owner": "matthuszagh",
+        "repo": "nixpkgs",
+        "rev": "1dd7c6b494ab4142dbf1427a30e0da3c1efbca40",
+        "type": "github"
+      },
+      "original": {
+        "owner": "matthuszagh",
+        "ref": "kicad-libraries",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1591748508,
@@ -101,6 +117,7 @@
         "anystyleNixpkgs": "anystyleNixpkgs",
         "emacsOverlay": "emacsOverlay",
         "home": "home",
+        "kicadNixpkgs": "kicadNixpkgs",
         "nixpkgs": "nixpkgs_2",
         "paraviewNixpkgs": "paraviewNixpkgs",
         "sageNixpkgs": "sageNixpkgs",

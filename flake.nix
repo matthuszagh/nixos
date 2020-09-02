@@ -8,6 +8,7 @@
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
     anystyleNixpkgs.url = "github:SCOTT-HAMILTON/nixpkgs/4cf6c95cb021b62e78e769af7ba64280b340b666";
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
+    kicadNixpkgs.url = "github:matthuszagh/nixpkgs/kicad-libraries";
   };
 
   outputs =
@@ -19,6 +20,7 @@
     , paraviewNixpkgs
     , anystyleNixpkgs
     , vivadoNixpkgs
+    , kicadNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -51,6 +53,7 @@
         paraview = (pkgImport paraviewNixpkgs).paraview;
         anystyle-cli = (pkgImport anystyleNixpkgs).anystyle-cli;
         vivado = (pkgImport vivadoNixpkgs).vivado;
+        kicad = (pkgImport kicadNixpkgs).kicad;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

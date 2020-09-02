@@ -1,5 +1,10 @@
+{ pkgs
+, ...
+}:
+
 {
-  imports = [
-    ./ngspice.nix
+  environment.systemPackages = with pkgs; [
+    ngspice
+    kicad
   ];
 }

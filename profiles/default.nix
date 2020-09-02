@@ -22,5 +22,6 @@
     epson-es400-scanner.enable = true;
     glasgow.enable = true;
     fmcw-radar.enable = true;
+    ni-gpib-usb-hs.enable = true;
   };
 }

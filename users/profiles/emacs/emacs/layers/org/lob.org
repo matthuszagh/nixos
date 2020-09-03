@@ -9,3 +9,15 @@
   echo "#+NAME: $name"
   echo "$data"
 #+END_SRC
+
+#+NAME: latexml_proc
+#+header: :exports none
+#+BEGIN_SRC sh :var data="" :results output
+  echo "#+begin_export html"
+  latexmlc "literal:$data" --profile=fragment \
+    --preload=siunitx.sty \
+    --preload=mathtools.sty \
+    --preload=math_op_local.tex\
+    2>/dev/null
+  echo "#+end_export"
+#+END_SRC

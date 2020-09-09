@@ -44,7 +44,7 @@
 
   (:layer modal
    (localleader :keymaps 'notmuch-show-mode-map
-     "r" 'notmuch-show-reply-sender)
+     "r" 'notmuch-show-reply)
    (localleader :keymaps 'notmuch-message-mode-map
      "a" 'mml-attach-file)))
 

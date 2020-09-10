@@ -25,24 +25,28 @@
     };
 
     kernelModules = [ "kvm-amd" ];
+    kernelParams = [ "fbcon=rotate:3" ];
     extraModulePackages = [ ];
   };
 
   hardware.cpu.amd.updateMicrocode = true;
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/d31878d6-3a77-4f0f-9fdd-bb9a2c4e578b";
+    {
+      device = "/dev/disk/by-uuid/d31878d6-3a77-4f0f-9fdd-bb9a2c4e578b";
       fsType = "btrfs";
       options = [ "subvol=nixos" "compress=lzo" "ssd" "noatime" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/9C5A-6D6F";
+    {
+      device = "/dev/disk/by-uuid/9C5A-6D6F";
       fsType = "vfat";
     };
 
   fileSystems."/.backup" =
-    { device = "/dev/disk/by-uuid/0bd10808-0330-4736-9425-059d4a0a300e";
+    {
+      device = "/dev/disk/by-uuid/0bd10808-0330-4736-9425-059d4a0a300e";
       fsType = "btrfs";
       options = [ "compress=lzo" ];
     };
@@ -71,7 +75,7 @@
   services = {
     xserver = {
       videoDrivers = [ "amdgpu" ];
-      resolutions = [ { x = 3840; y = 2160; } ];
+      resolutions = [{ x = 3840; y = 2160; }];
       dpi = 192;
       defaultDepth = 24;
     };

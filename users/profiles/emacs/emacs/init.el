@@ -111,6 +111,7 @@
                     hydra
                     perspective
                     json
+                    web-dev
 
                     ;; formatting
                     indenting

@@ -1,4 +1,4 @@
-;;; internet-layer.el --- Summary -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; internet-layer.el --- Internet Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 

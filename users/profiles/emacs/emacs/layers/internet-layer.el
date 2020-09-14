@@ -40,6 +40,11 @@
      "i" 'eww)
    (localleader :keymaps 'eww-mode-map
      "h" 'eww-back-url
-     "l" 'eww-forward-url)))
+     "l" 'eww-forward-url)
+   (general-define-key
+    :states 'normal
+    :keymaps 'eww-mode-map
+    "L" 'evil-window-bottom
+    "H" 'evil-window-top)))
 
 ;;; internet-layer.el ends here

@@ -64,7 +64,15 @@
     "j" 'pdf-view-next-line-or-next-page
     "k" 'pdf-view-previous-line-or-previous-page
     "SPC" 'mh/command-prefix
-    "g l" 'pdf-view-goto-page)
+    "g l" 'pdf-view-goto-page
+    "l" 'image-forward-hscroll
+    "L" (lambda ()
+          (interactive)
+          (funcall-interactively 'image-forward-hscroll 10))
+    "h" 'image-backward-hscroll
+    "H" (lambda ()
+          (interactive)
+          (funcall-interactively 'image-backward-hscroll 10)))
 
    (general-define-key
     :state 'normal
@@ -74,7 +82,9 @@
    (localleader :keymaps 'pdf-view-mode-map
      "s" 'pdf-occur
      "g" 'pdf-view-goto-page
-     "l" 'pdf-links-isearch-link))
+     "l" 'pdf-links-isearch-link
+     "h" 'pdf-view-fit-height-to-window
+     "w" 'pdf-view-fit-width-to-window))
 
   :func
   (defun mh//pdf-view--rotate (&optional counterclockwise-p page-p)

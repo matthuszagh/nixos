@@ -7,5 +7,6 @@
     nixpkgs-fmt
     nox
     nix-review
+    rnix-lsp
   ];
 }

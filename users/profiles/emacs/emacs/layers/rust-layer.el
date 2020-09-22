@@ -1,13 +1,17 @@
-;;; rust-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; rust-layer.el --- Rust Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
 (layer-def rust
   :presetup
   (:layer straight
-   (straight-use-package 'rust-mode))
+   (straight-use-package 'rustic))
 
   :setup
-  (use-package rust-mode))
+  (use-package rustic
+    :config
+    (setq rustic-lsp-server 'rls)))
 
 ;;; rust-layer.el ends here

@@ -8,7 +8,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    # TODO fix
-    # recoll
+    recoll
   ];
 }

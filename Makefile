@@ -1,6 +1,6 @@
 .PHONY: switch
 switch:
-	sudo nixos-rebuild switch --flake .
+	sudo nixos-rebuild switch --flake . --keep-going
 
 .PHONY: trace
 trace:

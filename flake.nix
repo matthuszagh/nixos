@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/master";
-    home.url = "github:rycee/home-manager/bqv-flakes";
+    home.url = "github:rycee/home-manager";
     emacsOverlay.url = "github:nix-community/emacs-overlay";
     # package overrides
     sageNixpkgs.url = "github:nixos/nixpkgs/7866440f1223dc447f38cb23c00e10b44b4c98fe";
@@ -10,6 +10,7 @@
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
     kicadNixpkgs.url = "github:matthuszagh/nixpkgs/kicad-libraries";
     verilatorNixpkgs.url = "github:nixos/nixpkgs/1e451da3860c1c562fdccefb7f0380f765251399";
+    latexmlNixpkgs.url = "github:xworld21/nixpkgs/d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f";
   };
 
   outputs =
@@ -23,6 +24,7 @@
     , vivadoNixpkgs
     , kicadNixpkgs
     , verilatorNixpkgs
+    , latexmlNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -57,6 +59,7 @@
         vivado = (pkgImport vivadoNixpkgs).vivado;
         kicad = (pkgImport kicadNixpkgs).kicad;
         verilator = (pkgImport verilatorNixpkgs).verilator;
+        LaTeXML = (pkgImport latexmlNixpkgs).perlPackages.LaTeXML;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

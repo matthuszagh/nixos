@@ -469,13 +469,12 @@ rid of the headline, which takes too much space."
   (:layer pdf
    (defun mh/heading-filepath ()
      (file-truename
-      (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "Filepath" t))))))))
+      (car (s-split "]" (car (last (s-split "file:" (org-entry-get (point) "NOTER_DOCUMENT" t))))))))
 
    (defun mh/open-book-from-outline ()
      (interactive)
      (setq file (mh/heading-filepath))
-     (setq page (string-to-number (car (s-match "[0-9]+"
-                                                (car (s-match "([0-9]+)" (org-entry-get nil "ITEM")))))))
+     (setq page (string-to-number (org-entry-get (point) "NOTER_PAGE" t)))
      (find-file-other-window file)
      (pdf-view-goto-page page))
 

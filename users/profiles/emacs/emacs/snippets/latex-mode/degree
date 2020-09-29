@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: degree
-# key: deg
-# condition: 'texmathp
-# --
-^{\\circ}

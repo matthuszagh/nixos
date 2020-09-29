@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: pm
-# regexp-key: \([^\\]\|^\)pm
-# condition: (and (texmathp) 'auto)
-# --
-`(nth 1 yas-matched-regexp-key-groups)`\pm

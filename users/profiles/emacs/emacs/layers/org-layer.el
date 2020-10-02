@@ -9,6 +9,7 @@
   (:layer straight
    (straight-use-package '(org-plus-contrib :local-repo "~/src/org-mode"))
    (straight-use-package 'org-drill)
+   (straight-use-package 'org-fragtog)
    (straight-use-package 'org-edna)
    (straight-use-package 'ob-sagemath)
    (straight-use-package 'org-board)
@@ -402,6 +403,10 @@
     ;; make contrib files visible
     ;; TODO modify this for nixpkgs
     (add-to-list 'load-path (concat user-emacs-directory "straight/repos/org/contrib/lisp") t))
+
+  (use-package org-fragtog
+    :config
+    (add-hook 'org-mode-hook 'org-fragtog-mode))
 
   (use-package org-eldoc)
 

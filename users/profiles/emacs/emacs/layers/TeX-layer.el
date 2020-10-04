@@ -53,6 +53,11 @@
            (LaTeX-mode . (lambda ()
                            (local-set-key (kbd "C-c C-f") 'latex-indent))))
     :config
+    ;; Set custom math environments for `texmathp'. The default list
+    ;; is set in `texmathp-tex-commands-default'.
+    (setq texmathp-tex-commands '(("equation*" env-on)
+                                  ("align" env-on)
+                                  ("align*" env-on)))
     ;; Use latex-mode by default when it is unclear whether plain-tex-mode or latex-mode should be
     ;; used.
     (setq-default TeX-auto-save t

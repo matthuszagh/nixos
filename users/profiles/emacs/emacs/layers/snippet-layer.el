@@ -37,21 +37,63 @@
   (use-package latex-auto-activating-snippets
     :after latex
     :config
+    ;; apply default snippets
     (apply #'aas-set-snippets 'org-mode laas-basic-snippets)
     (apply #'aas-set-snippets 'org-mode laas-subscript-snippets)
-    (apply #'aas-set-snippets 'org-mode laas-frac-snippet)
-    (apply #'aas-set-snippets 'org-mode laas-accent-snippets))
+    (apply #'aas-set-snippets 'org-mode laas-accent-snippets)
 
-  ;; (use-package yasnippet-snippets
-  ;;   :config
-  ;;   (yas-reload-all))
+    ;; expand "//" into frac
+    ;; TODO doesn't work since '/' is not a prefix key.
+    ;; (let ((frac-snippet
+    ;;        (list
+    ;;         :cond #'aas-object-on-left-condition
+    ;;         :expansion-desc "Wrap object on the left with \\frac{}{}, leave `point' in the denuminator."
+    ;;         "//" #'laas-smart-fraction)))
+    ;;   (dolist (mode '(latex-mode org-mode))
+    ;;     (apply #'aas-set-snippets mode frac-snippet)))
+
+    ;; custom math snippets
+    (let ((math-snippets
+           (list
+            :cond #'texmathp
+            "cas" (lambda ()
+                    (interactive)
+                    (yas-expand-snippet (concat "\\begin{cases}\n"
+                                                "    $1\n"
+                                                "  \\end{cases}$0")))
+            "mat" (lambda ()
+                    (interactive)
+                    (yas-expand-snippet (concat "\\begin{bmatrix}\n"
+                                                "    $1\n"
+                                                "  \\end{bmatrix}$0")))
+            "det" (lambda ()
+                    (interactive)
+                    (yas-expand-snippet (concat "\\begin{vmatrix}\n"
+                                                "    $1\n"
+                                                "  \\end{vmatrix}$0"))))))
+      (dolist (mode '(latex-mode org-mode))
+        (apply #'aas-set-snippets mode math-snippets))))
 
   :postsetup
   (:layer TeX
    (add-hook 'latex-mode-hook #'yas-minor-mode))
 
   (:layer org
-   (add-hook 'org-mode-hook #'yas-minor-mode))
+   (add-hook 'org-mode-hook #'yas-minor-mode)
+   (let ((latex-block-snippets
+          (list
+           :cond #'mh/org-in-latex-blockp
+           "eqn" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\begin{equation}\\tag{0}\n"
+                                               "  $0\n"
+                                               "\\end{equation}")))
+           "aln" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\begin{align}\n"
+                                               "  $0\n"
+                                               "\\end{align}"))))))
+     (apply #'aas-set-snippets 'org-mode latex-block-snippets)))
 
   (:layer verilog
    (add-hook 'verilog-mode-hook #'yas-minor-mode))

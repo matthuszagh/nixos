@@ -11,6 +11,8 @@
     kicadNixpkgs.url = "github:matthuszagh/nixpkgs/kicad-libraries";
     verilatorNixpkgs.url = "github:nixos/nixpkgs/1e451da3860c1c562fdccefb7f0380f765251399";
     latexmlNixpkgs.url = "github:xworld21/nixpkgs/d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f";
+    koreaderNixpkgs.url = "github:contrun/nixpkgs/0e6666382d9dd81acaa7a10389a312b4aba5b5cd";
+    ventoyNixpkgs.url = "github:Br1ght0ne/nixpkgs/f09655337b699bcc323e3b92a670d910e77035ae";
   };
 
   outputs =
@@ -25,6 +27,8 @@
     , kicadNixpkgs
     , verilatorNixpkgs
     , latexmlNixpkgs
+    , koreaderNixpkgs
+    , ventoyNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -60,6 +64,8 @@
         kicad = (pkgImport kicadNixpkgs).kicad;
         verilator = (pkgImport verilatorNixpkgs).verilator;
         LaTeXML = (pkgImport latexmlNixpkgs).perlPackages.LaTeXML;
+        koreader = (pkgImport koreaderNixpkgs).koreader;
+        ventoy = (pkgImport ventoyNixpkgs).ventoy;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

@@ -65,6 +65,22 @@
         "type": "github"
       }
     },
+    "koreaderNixpkgs": {
+      "locked": {
+        "lastModified": 1588663250,
+        "narHash": "sha256-QkJF6iN7XqCEvghvQi4g/094XE4kwlS5fJtJLMeAflo=",
+        "owner": "contrun",
+        "repo": "nixpkgs",
+        "rev": "0e6666382d9dd81acaa7a10389a312b4aba5b5cd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "contrun",
+        "repo": "nixpkgs",
+        "rev": "0e6666382d9dd81acaa7a10389a312b4aba5b5cd",
+        "type": "github"
+      }
+    },
     "latexmlNixpkgs": {
       "locked": {
         "lastModified": 1599254524,
@@ -133,10 +149,12 @@
         "emacsOverlay": "emacsOverlay",
         "home": "home",
         "kicadNixpkgs": "kicadNixpkgs",
+        "koreaderNixpkgs": "koreaderNixpkgs",
         "latexmlNixpkgs": "latexmlNixpkgs",
         "nixpkgs": "nixpkgs_2",
         "paraviewNixpkgs": "paraviewNixpkgs",
         "sageNixpkgs": "sageNixpkgs",
+        "ventoyNixpkgs": "ventoyNixpkgs",
         "verilatorNixpkgs": "verilatorNixpkgs",
         "vivadoNixpkgs": "vivadoNixpkgs"
       }
@@ -154,6 +172,22 @@
         "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "7866440f1223dc447f38cb23c00e10b44b4c98fe",
+        "type": "github"
+      }
+    },
+    "ventoyNixpkgs": {
+      "locked": {
+        "lastModified": 1588239189,
+        "narHash": "sha256-iDMCKwcj2tw4t1QStbo8ep33MjRrVdHB/STtmByZ9Xs=",
+        "owner": "Br1ght0ne",
+        "repo": "nixpkgs",
+        "rev": "f09655337b699bcc323e3b92a670d910e77035ae",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Br1ght0ne",
+        "repo": "nixpkgs",
+        "rev": "f09655337b699bcc323e3b92a670d910e77035ae",
         "type": "github"
       }
     },

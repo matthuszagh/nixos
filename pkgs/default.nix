@@ -36,9 +36,7 @@ final: prev:
   # python
   python3 = prev.python3.override {
     packageOverrides = pfinal: pprev: {
-      skidl = pprev.callPackage ./development/python-modules/skidl {
-        inherit (prev) kicad;
-      };
+      skidl = pprev.callPackage ./development/python-modules/skidl { };
       circlib = pprev.callPackage ./development/python-modules/circlib { };
       pyems = pprev.callPackage ./development/python-modules/pyems { };
       python-openems = pprev.callPackage ./development/python-modules/python-openems { };
@@ -48,18 +46,31 @@ final: prev:
   python3Packages = final.python3.pkgs;
 
   # texlive
-  circuitikz = { pkgs = [
-    (prev.callPackage ./tools/typsetting/tex/packages/circuitikz_run.nix { })
-  ]; };
-  dvisvgm = { pkgs = [
-    (prev.callPackage ./tools/typsetting/tex/packages/dvisvgm_bin.nix {
-      texlive-bin = prev.texlive.bin.core;
-    })
-  ]; };
-  grffile = { pkgs = [
-    (prev.callPackage ./tools/typsetting/tex/packages/grffile_run.nix { })
-  ]; };
-  latexmk = { pkgs = [
-    (prev.callPackage ./tools/typsetting/tex/packages/latexmk_bin.nix { })
-  ]; };
+  circuitikz = {
+    pkgs = [
+      (prev.callPackage ./tools/typsetting/tex/packages/circuitikz_run.nix { })
+    ];
+  };
+  qcircuit-tikz = {
+    pkgs = [
+      (prev.callPackage ./tools/typsetting/tex/packages/qcircuitz_run.nix { })
+    ];
+  };
+  dvisvgm = {
+    pkgs = [
+      (prev.callPackage ./tools/typsetting/tex/packages/dvisvgm_bin.nix {
+        texlive-bin = prev.texlive.bin.core;
+      })
+    ];
+  };
+  grffile = {
+    pkgs = [
+      (prev.callPackage ./tools/typsetting/tex/packages/grffile_run.nix { })
+    ];
+  };
+  latexmk = {
+    pkgs = [
+      (prev.callPackage ./tools/typsetting/tex/packages/latexmk_bin.nix { })
+    ];
+  };
 }

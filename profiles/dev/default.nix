@@ -24,9 +24,9 @@
     glibcInfo
     clang-manpages
     llvm-manpages
-    stdman  # cppreference manpages
+    stdman # cppreference manpages
     stdmanpages
-    man-pages  # linux manpages
+    man-pages # linux manpages
     posix_man_pages
 
     # ============================ search ============================
@@ -44,11 +44,13 @@
     pciutils
     gnumake
     parted
-    dmidecode  # displays hardware information
-    phoronix-test-suite  # benchmarking hardware
+    dmidecode # displays hardware information
+    phoronix-test-suite # benchmarking hardware
     dos2unix
     clang_multi_9
     gcc
+    openssl
+    pkg-config
 
     # ============================= misc =============================
     scc
@@ -62,5 +64,6 @@
     doc.enable = true;
     info.enable = true;
     man.enable = true;
+    nixos.enable = true;
   };
 }

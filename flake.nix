@@ -11,7 +11,7 @@
     kicadNixpkgs.url = "github:matthuszagh/nixpkgs/kicad-libraries";
     verilatorNixpkgs.url = "github:nixos/nixpkgs/1e451da3860c1c562fdccefb7f0380f765251399";
     latexmlNixpkgs.url = "github:xworld21/nixpkgs/d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f";
-    koreaderNixpkgs.url = "github:contrun/nixpkgs/0e6666382d9dd81acaa7a10389a312b4aba5b5cd";
+    koreaderNixpkgs.url = "github:contrun/nixpkgs/f899b94e7072d8c217aedcbf047d174a4530d4a1";
     ventoyNixpkgs.url = "github:Br1ght0ne/nixpkgs/f09655337b699bcc323e3b92a670d910e77035ae";
   };
 

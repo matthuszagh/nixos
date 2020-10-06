@@ -36,7 +36,6 @@ final: prev:
   # python
   python3 = prev.python3.override {
     packageOverrides = pfinal: pprev: {
-      skidl = pprev.callPackage ./development/python-modules/skidl { };
       circlib = pprev.callPackage ./development/python-modules/circlib { };
       pyems = pprev.callPackage ./development/python-modules/pyems { };
       python-openems = pprev.callPackage ./development/python-modules/python-openems { };

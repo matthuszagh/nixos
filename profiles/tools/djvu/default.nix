@@ -4,6 +4,8 @@
 
 {
   environment.systemPackages = with pkgs; [
-    djvu-libre
+    djvulibre
+    djvu2pdf
+    djview
   ];
 }

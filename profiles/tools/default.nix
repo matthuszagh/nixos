@@ -3,5 +3,6 @@
     ./electronics
     ./math
     ./pdf
+    ./djvu
   ];
 }

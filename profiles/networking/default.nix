@@ -14,5 +14,7 @@
     wpa_supplicant
     speedtest-cli
     firefox
+    google-chrome
+    next
   ];
 }

@@ -8,7 +8,7 @@
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
     anystyleNixpkgs.url = "github:SCOTT-HAMILTON/nixpkgs/4cf6c95cb021b62e78e769af7ba64280b340b666";
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
-    kicadNixpkgs.url = "github:matthuszagh/nixpkgs/kicad-libraries";
+    kicadNixpkgs.url = "github:matthuszagh/nixpkgs/kicad-beta";
     verilatorNixpkgs.url = "github:nixos/nixpkgs/1e451da3860c1c562fdccefb7f0380f765251399";
     latexmlNixpkgs.url = "github:xworld21/nixpkgs/d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f";
     koreaderNixpkgs.url = "github:contrun/nixpkgs/f899b94e7072d8c217aedcbf047d174a4530d4a1";
@@ -62,6 +62,7 @@
         anystyle-cli = (pkgImport anystyleNixpkgs).anystyle-cli;
         vivado = (pkgImport vivadoNixpkgs).vivado;
         kicad = (pkgImport kicadNixpkgs).kicad;
+        kicad-unstable = (pkgImport kicadNixpkgs).kicad-unstable;
         verilator = (pkgImport verilatorNixpkgs).verilator;
         LaTeXML = (pkgImport latexmlNixpkgs).perlPackages.LaTeXML;
         koreader = (pkgImport koreaderNixpkgs).koreader;

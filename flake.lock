@@ -51,16 +51,16 @@
     },
     "kicadNixpkgs": {
       "locked": {
-        "lastModified": 1599051729,
-        "narHash": "sha256-dCB/pkGSY0onfj9gFDmJYl35+TF7TVDUZ4cjDtB3c3A=",
+        "lastModified": 1602254650,
+        "narHash": "sha256-qdSzvqhQDENy+MEhHx8fp7Tuji2VtsCAl4SyQznlObs=",
         "owner": "matthuszagh",
         "repo": "nixpkgs",
-        "rev": "1dd7c6b494ab4142dbf1427a30e0da3c1efbca40",
+        "rev": "094c9c5ce42978c261629bccdfd5513599c478ab",
         "type": "github"
       },
       "original": {
         "owner": "matthuszagh",
-        "ref": "kicad-libraries",
+        "ref": "kicad-beta",
         "repo": "nixpkgs",
         "type": "github"
       }

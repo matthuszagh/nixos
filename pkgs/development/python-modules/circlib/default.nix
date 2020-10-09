@@ -2,14 +2,14 @@
 , fetchFromGitHub
 , buildPythonPackage
 , numpy
+, scipy
 , matplotlib
 , skidl
-, pathos
 }:
 
 buildPythonPackage rec {
   pname = "circlib";
-  version = "0.1.0";
+  version = "unstable-2020-05-30";
 
   src = fetchFromGitHub {
     owner = "matthuszagh";
@@ -20,8 +20,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+    scipy
     matplotlib
     skidl
-    pathos
   ];
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/matthuszagh/circlib;
+    description = "Part-aware circuit design using skidl and kicad";
+    maintainers = with maintainers; [ matthuszagh ];
+  };
 }

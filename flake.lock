@@ -49,22 +49,6 @@
         "type": "github"
       }
     },
-    "kicadNixpkgs": {
-      "locked": {
-        "lastModified": 1602254650,
-        "narHash": "sha256-qdSzvqhQDENy+MEhHx8fp7Tuji2VtsCAl4SyQznlObs=",
-        "owner": "matthuszagh",
-        "repo": "nixpkgs",
-        "rev": "094c9c5ce42978c261629bccdfd5513599c478ab",
-        "type": "github"
-      },
-      "original": {
-        "owner": "matthuszagh",
-        "ref": "kicad-beta",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "koreaderNixpkgs": {
       "locked": {
         "lastModified": 1601708259,
@@ -113,11 +97,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1601961544,
-        "narHash": "sha256-uuh9CkDWkXlXse8IcergqoIM5JffqfQDKsl1uHB7XJI=",
+        "lastModified": 1602959505,
+        "narHash": "sha256-7xuXQTfBrqdIJ7zld6FraNhpweZWaMeolvnYNSRd1Pg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "89281dd1dfed6839610f0ccad0c0e493606168fe",
+        "rev": "347cb204cae5258d28ff8789f40110ffae265780",
         "type": "github"
       },
       "original": {
@@ -148,7 +132,6 @@
         "anystyleNixpkgs": "anystyleNixpkgs",
         "emacsOverlay": "emacsOverlay",
         "home": "home",
-        "kicadNixpkgs": "kicadNixpkgs",
         "koreaderNixpkgs": "koreaderNixpkgs",
         "latexmlNixpkgs": "latexmlNixpkgs",
         "nixpkgs": "nixpkgs_2",

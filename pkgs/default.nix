@@ -38,8 +38,6 @@ final: prev:
     packageOverrides = pfinal: pprev: {
       circlib = pprev.callPackage ./development/python-modules/circlib { };
       pyems = pprev.callPackage ./development/python-modules/pyems { };
-      python-openems = pprev.callPackage ./development/python-modules/python-openems { };
-      python-csxcad = pprev.callPackage ./development/python-modules/python-csxcad { };
     };
   };
   python3Packages = final.python3.pkgs;

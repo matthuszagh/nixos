@@ -9,5 +9,6 @@
     ./fmcw-radar.nix
     ./ni-gpib-usb-hs.nix
     ./mayflash-gc-adapter.nix
+    ./stlink-v3.nix
   ];
 }

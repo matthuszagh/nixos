@@ -27,6 +27,7 @@
                             "#+CREATED: %(mh/time-stamp)\n"
                             "#+MODIFIED: %(mh/time-stamp)\n\n"
                             "* resources\n"
+                            "** bibliography\n"
                             "<<bibliography link>>\nbibliography:refs/library.bib")
              :unnarrowed t)))
     (defun mh//org-update-last-modified ()
@@ -64,6 +65,7 @@
 :END:
 %(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1)
 * references
+** bibliography
 <<bibliography link>>
 bibliography:library.bib"
              :unnarrowed t))))

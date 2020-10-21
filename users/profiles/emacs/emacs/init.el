@@ -133,7 +133,8 @@
                     pdf
                     epub
                     internet
-                    irc))
+                    irc
+                    icon-font))
   (declare-global-depends '(base
                             straight
                             keybinding-management

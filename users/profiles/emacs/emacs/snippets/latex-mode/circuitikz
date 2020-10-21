@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: full template of circuitkz enivornment
+# key: circ
+# --
+\begin{circuitikz}[color=fg]
+$0
+\end{circuitikz}

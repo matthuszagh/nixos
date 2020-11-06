@@ -119,6 +119,7 @@
                     documentation
                     undoing
                     buffers
+                    reflow
                     windows
                     files
                     helm

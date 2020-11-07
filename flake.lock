@@ -81,6 +81,22 @@
         "type": "github"
       }
     },
+    "mesaNixpkgs": {
+      "locked": {
+        "lastModified": 1593760204,
+        "narHash": "sha256-M/c2DTP6EUnSgnBYyVScApeHv5I+NbN57nn+px4bEaI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "bdac777becdbb8780c35be4f552c9d4518fe0bdb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "bdac777becdbb8780c35be4f552c9d4518fe0bdb",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1599945705,
@@ -134,6 +150,7 @@
         "home": "home",
         "koreaderNixpkgs": "koreaderNixpkgs",
         "latexmlNixpkgs": "latexmlNixpkgs",
+        "mesaNixpkgs": "mesaNixpkgs",
         "nixpkgs": "nixpkgs_2",
         "paraviewNixpkgs": "paraviewNixpkgs",
         "sageNixpkgs": "sageNixpkgs",

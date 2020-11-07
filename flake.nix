@@ -12,6 +12,8 @@
     latexmlNixpkgs.url = "github:xworld21/nixpkgs/d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f";
     koreaderNixpkgs.url = "github:contrun/nixpkgs/f899b94e7072d8c217aedcbf047d174a4530d4a1";
     ventoyNixpkgs.url = "github:Br1ght0ne/nixpkgs/f09655337b699bcc323e3b92a670d910e77035ae";
+    # https://github.com/NixOS/nixpkgs/issues/94315#issuecomment-719892849
+    mesaNixpkgs.url = "github:nixos/nixpkgs/bdac777becdbb8780c35be4f552c9d4518fe0bdb";
   };
 
   outputs =
@@ -27,6 +29,7 @@
     , latexmlNixpkgs
     , koreaderNixpkgs
     , ventoyNixpkgs
+    , mesaNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -63,6 +66,7 @@
         LaTeXML = (pkgImport latexmlNixpkgs).perlPackages.LaTeXML;
         koreader = (pkgImport koreaderNixpkgs).koreader;
         ventoy = (pkgImport ventoyNixpkgs).ventoy;
+        mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

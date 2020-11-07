@@ -14,6 +14,7 @@
     ventoyNixpkgs.url = "github:Br1ght0ne/nixpkgs/f09655337b699bcc323e3b92a670d910e77035ae";
     # https://github.com/NixOS/nixpkgs/issues/94315#issuecomment-719892849
     mesaNixpkgs.url = "github:nixos/nixpkgs/bdac777becdbb8780c35be4f552c9d4518fe0bdb";
+    asymptoteNixpkgs.url = "github:nixos/nixpkgs/6eeb612a9b6160df2e110021d93bef3e6e538b9a";
   };
 
   outputs =
@@ -30,6 +31,7 @@
     , koreaderNixpkgs
     , ventoyNixpkgs
     , mesaNixpkgs
+    , asymptoteNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -67,6 +69,7 @@
         koreader = (pkgImport koreaderNixpkgs).koreader;
         ventoy = (pkgImport ventoyNixpkgs).ventoy;
         mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
+        asymptote = (pkgImport asymptoteNixpkgs).asymptote;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "asymptoteNixpkgs": {
+      "locked": {
+        "lastModified": 1593899772,
+        "narHash": "sha256-3ROVxtJ+U59MNWKXEUpXiz2VAnuwVqUeGuEMEfQJkgY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6eeb612a9b6160df2e110021d93bef3e6e538b9a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6eeb612a9b6160df2e110021d93bef3e6e538b9a",
+        "type": "github"
+      }
+    },
     "emacsOverlay": {
       "locked": {
         "lastModified": 1599755053,
@@ -113,11 +129,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1603827239,
-        "narHash": "sha256-6GsMO0HVIkgjsYseiOHVxuoSxQPphf46cGXowRFirXA=",
+        "lastModified": 1604548006,
+        "narHash": "sha256-9AsIHSeiathaJ1B8EcjdNN+RBrF9LQ9BV8amdPWPPPU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "55669a901b98e420653ddaf3931700c8e0ce69e9",
+        "rev": "43f23f5c1974e1459b4493472825115639dbbb9f",
         "type": "github"
       },
       "original": {
@@ -146,6 +162,7 @@
     "root": {
       "inputs": {
         "anystyleNixpkgs": "anystyleNixpkgs",
+        "asymptoteNixpkgs": "asymptoteNixpkgs",
         "emacsOverlay": "emacsOverlay",
         "home": "home",
         "koreaderNixpkgs": "koreaderNixpkgs",

@@ -60,6 +60,7 @@
                     ;; ledger
                     pinentry
                     image
+                    time
 
                     ;; appearance
                     ;; sourcerer-theme

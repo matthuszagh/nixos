@@ -6,6 +6,7 @@
     ./graphics
     ./networking
     ./mail
+    ./messaging
     ./search
     ./security
     ./system

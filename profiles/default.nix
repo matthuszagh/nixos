@@ -25,5 +25,6 @@
     fmcw-radar.enable = true;
     ni-gpib-usb-hs.enable = true;
     stlink-v3.enable = true;
+    ti866ii-plus.enable = true;
   };
 }

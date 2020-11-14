@@ -10,5 +10,6 @@
     ./ni-gpib-usb-hs.nix
     ./mayflash-gc-adapter.nix
     ./stlink-v3.nix
+    ./ti866ii-plus.nix
   ];
 }

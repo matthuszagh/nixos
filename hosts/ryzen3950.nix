@@ -35,7 +35,7 @@
     {
       device = "/dev/disk/by-uuid/d31878d6-3a77-4f0f-9fdd-bb9a2c4e578b";
       fsType = "btrfs";
-      options = [ "subvol=nixos" "compress=lzo" "ssd" "noatime" ];
+      options = [ "subvol=nixos" "compress=zstd:2" "ssd" "noatime" ];
     };
 
   fileSystems."/boot" =
@@ -48,7 +48,7 @@
     {
       device = "/dev/disk/by-uuid/0bd10808-0330-4736-9425-059d4a0a300e";
       fsType = "btrfs";
-      options = [ "compress=lzo" ];
+      options = [ "compress=zstd:2" ];
     };
 
   swapDevices = [ ];

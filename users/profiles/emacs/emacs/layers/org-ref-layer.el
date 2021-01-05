@@ -10,6 +10,8 @@
    (straight-use-package 'org-ref))
 
   :setup
-  (use-package org-ref))
+  (use-package org-ref
+    :config
+    (setq org-ref-bibliography-files '("~/doc/notes/wiki/library.bib"))))
 
 ;;; org-ref-layer.el ends here

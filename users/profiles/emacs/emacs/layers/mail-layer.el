@@ -12,6 +12,9 @@
 
   :setup
   (use-package notmuch
+    :hook
+    (notmuch-show-mode . (lambda ()
+                           (setq-local visual-line-mode nil)))
     :config
     ;; setup the mail address and use name
     (setq mail-user-agent 'message-user-agent)

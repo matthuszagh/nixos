@@ -79,8 +79,19 @@ it is not appropriate in some cases like terminals."
    (general-define-key
     :states '(normal insert)
     :keymaps 'vterm-mode-map
-     "C-k" 'vterm-send-up
-     "C-j" 'vterm-send-down)
+    "C-k" 'vterm-send-up
+    "C-j" 'vterm-send-down
+    ;; unbind clear since I'm too used to using C-l for centering the
+    ;; page
+    "C-l" 'recenter-top-bottom)
+
+   (localleader :keymaps 'vterm-mode-map
+     "t" 'vterm-copy-mode
+     "c" 'vterm-clear-scrollback)
+
+   ;; TODO evil interferes with this
+   (localleader :keymaps 'vterm-copy-mode-map
+     "t" 'vterm-copy-mode-done)
 
    (general-def mh/prefix-shell-map
      "c" 'async-shell-command
@@ -121,8 +132,9 @@ it is not appropriate in some cases like terminals."
 
   (:layer flycheck
    (add-hook 'sh-mode-hook 'flycheck-mode)
-   (setq flycheck-checker 'lsp-ui)
-   (flycheck-add-next-checker 'lsp-ui 'sh-posix-bash))
+   ;; (setq flycheck-checker 'lsp-ui)
+   ;; (flycheck-add-next-checker 'lsp-ui 'sh-posix-bash)
+   )
 
   (:layer lsp
    (add-hook 'sh-mode-hook 'lsp)))

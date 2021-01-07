@@ -1,17 +1,16 @@
-;;; pdf-layer.el --- Summary -*- lexical-binding: t; -*-
+;;; pdf-layer.el --- PDF Layer -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
 ;;; Code:
 
 (layer-def pdf
-  :setup
-  ;; TODO setup mouseless link clicking. Apparently, pdf-tools can
-  ;; find links and present them as key sequences in the same way
-  ;; vimium does. See pdf-links-action-perform. Currently imagemagick
-  ;; is spitting out errors related to fonts. Fix this and set it up.
+  :presetup
+  (:layer straight
+   ;; use nix provided pdf-tools
+   (straight-use-package '(pdf-tools :type built-in)))
 
-  ;; TODO change search keybinding.
+  :setup
   (use-package pdf-tools
     :demand t
     :mode "\\.pdf\\'"

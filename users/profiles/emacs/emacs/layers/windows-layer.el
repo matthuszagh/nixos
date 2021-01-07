@@ -9,7 +9,9 @@
 
   :presetup
   (:layer straight
-   (straight-use-package 'framemove))
+   (straight-use-package 'framemove)
+   ;; (straight-use-package 'zoom)
+   )
 
   :setup
   (use-package framemove
@@ -28,6 +30,15 @@
     (if (active-minibuffer-window)
         (select-window (active-minibuffer-window))
       (error "Minibuffer is not active")))
+
+  ;; (use-package zoom
+  ;;   :config
+  ;;   (custom-set-variables
+  ;;    '(zoom-mode t)
+  ;;    '(zoom-size '(100 . 60))
+  ;;    '(zoom-ignored-major-modes '(calc-mode helm-mode))
+  ;;    '(zoom-ignored-buffer-name-regexps '("^*calc"))
+  ;;    '(zoom-ignore-predicates '((lambda () (> (count-lines (point-min) (point-max)) 20))))))
 
   ;; (setq display-buffer-alist
   ;;       '(("\\*compilation\\*"
@@ -94,8 +105,8 @@
      ("L" evil-window-move-far-right)
      ("d" delete-window "delete")
      ("f" delete-other-window "delete other")
-     ("S" split-window-below "split vertical")
-     ("s" split-window-right "split horizontal")
+     ("s" split-window-below "split vertical")
+     ("S" split-window-right "split horizontal")
      ("m" mh/switch-to-minibuffer "switch to minibuffer"))
 
    (general-define-key

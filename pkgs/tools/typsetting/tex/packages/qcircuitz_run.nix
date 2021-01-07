@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "CQuIC";
     repo = "qcircuitz";
-    rev = "v${version}";
+    rev = "e9c2609fa8ea7cb66909cdb9c6067955afb321aa";
     sha256 = "02fzsg4nfasglq72crwc4hla9gn2y6lx0pjn05m5lvcd33427fhd";
   };
 

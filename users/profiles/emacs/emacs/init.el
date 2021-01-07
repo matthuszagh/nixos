@@ -42,6 +42,9 @@
 (straight-use-package 'dash)
 (straight-use-package '(layers :local-repo "~/src/layers"))
 
+;; ;; TODO
+;; (straight-use-package '(pdf-tools :type built-in))
+
 (use-package layers
   :init
   (if (featurep 'straight)
@@ -110,9 +113,12 @@
                     dap
                     spice
                     hydra
-                    perspective
+                    ;; TODO timeout errors
+                    ;; perspective
                     json
                     web-dev
+                    diff
+                    jupyter
 
                     ;; formatting
                     indenting

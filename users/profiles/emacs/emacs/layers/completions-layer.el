@@ -5,6 +5,8 @@
 ;;; Code:
 
 (layer-def completions
+  :depends (snippet)
+
   :presetup
   (:layer straight
    (straight-use-package 'company))

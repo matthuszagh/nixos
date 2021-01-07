@@ -10,6 +10,7 @@
     ./ni-gpib-usb-hs.nix
     ./mayflash-gc-adapter.nix
     ./pl2303-usb-rs232-adapter.nix
+    ./rioddas-cd-dvd-drive.nix
     ./stlink-v3.nix
     ./ti866ii-plus.nix
   ];

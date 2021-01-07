@@ -20,6 +20,7 @@
           "cryptnvme1".device = "/dev/disk/by-uuid/2f7640e7-532f-4404-90fd-b3c065530d42";
           "cryptsda1".device = "/dev/disk/by-uuid/5592422a-b0f9-4569-af33-2f47bf2d8079";
           "cryptsdb1".device = "/dev/disk/by-uuid/49e28c9b-506e-4f56-b9ef-3e22c6e06683";
+          "cryptsdc1".device = "/dev/disk/by-uuid/74533b18-c153-4883-bf24-0e033a1f9547";
         };
       };
     };
@@ -57,7 +58,7 @@
 
   networking = {
     wireless = {
-      enable = true;
+      enable = false;
       networks = import ../secrets/wifi.nix;
     };
 

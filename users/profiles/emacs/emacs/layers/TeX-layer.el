@@ -29,9 +29,9 @@
         (shell-command (concat "latexindent " (buffer-file-name) " > " (buffer-file-name) ".tmp && mv "
                                (buffer-file-name) ".tmp " (buffer-file-name)))))
 
-    ;; When we byte-compile we need to have the autoloads loaded in order to
-    ;; properly get auctex working, otherwise auctex is not loaded correctly
-    (load "auctex-autoloads" nil t)
+    ;; ;; When we byte-compile we need to have the autoloads loaded in order to
+    ;; ;; properly get auctex working, otherwise auctex is not loaded correctly
+    ;; (load "auctex-autoloads" nil t)
     :hook ((LaTeX-mode . TeX-source-correlate-mode)
            (LaTeX-mode . auto-fill-mode)
            (LaTeX-mode . flyspell-mode)
@@ -43,7 +43,7 @@
            (LaTeX-mode . turn-on-reftex)
            (LaTeX-mode . add-auctex-keys)
            (LaTeX-mode . LaTeX-math-mode)
-           (TeX-mode . my-add-auctex-file-variables)
+           ;; (TeX-mode . my-add-auctex-file-variables)
            (plain-TeX-mode . (lambda ()
                                (setq flycheck-disabled-checkers '(tex-chktex))))
            (TeX-after-compilation-finished-functions . TeX-revert-document-buffer)

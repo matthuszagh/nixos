@@ -25,7 +25,7 @@
     (nix-indent-function #'nix-indent-line))
 
   (add-to-list 'display-buffer-alist
-               '("\\*nix\\*"
+               '("\\*nixos-rebuild\\*"
                  (display-buffer-reuse-window display-buffer-same-window)))
 
   (use-package nix-update)
@@ -45,12 +45,12 @@
   (defun mh/nix-rebuild ()
     (interactive)
     (command-execute
-     (async-shell-command "cd ~/src/nixos/ && make" "*nix*")))
+     (async-shell-command "cd ~/src/nixos/ && make" "*nixos-rebuild*")))
 
   (defun mh/nix-rebuild-show-trace ()
     (interactive)
     (command-execute
-     (async-shell-command "cd ~/src/nixos/ && make trace" "*nix*")))
+     (async-shell-command "cd ~/src/nixos/ && make trace" "*nixos-rebuild*")))
 
   :postsetup
   (:layer modal

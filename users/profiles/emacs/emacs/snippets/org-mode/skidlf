@@ -12,7 +12,6 @@ from skidl.pyspice import (
     SPICE,
     node,
 )
-from libcircuit.spice import capacitor_equiv, resistor_equiv
 import numpy as np
 
 fname = "data/$1.dat"
@@ -53,6 +52,8 @@ with open(fname, "w") as f:
         )
 #+end_src
 
+#+header: :_class tikz
+#+begin_src latex :hidden
 \begin{tikzpicture}
 \begin{semilogxaxis}[
   title=$7,
@@ -63,3 +64,4 @@ with open(fname, "w") as f:
   \addplot [] table[x=freq, y=vratio] {$1};
 \end{semilogxaxis}
 \end{tikzpicture}$0
+#+end_src

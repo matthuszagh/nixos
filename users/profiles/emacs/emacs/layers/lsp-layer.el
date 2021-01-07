@@ -5,6 +5,8 @@
 ;;; Code:
 
 (layer-def lsp
+  :depends (snippet)
+
   :presetup
   (:layer straight
    (straight-use-package 'lsp-mode)
@@ -16,7 +18,7 @@
     :hook (prog-mode . lsp)
     :commands lsp
     :config
-    (setq lsp-enable-snippet nil)
+    ;; (setq lsp-enable-snippet nil)
     (require 'lsp-clients)
     (setq lsp-completion-provider :capf)
     (add-to-list 'lsp-language-id-configuration '(cython-mode . "cython"))

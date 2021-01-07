@@ -36,9 +36,9 @@
    (set-face-foreground 'org-ref-ref-face "#ffaa00"))
 
   (:layer helm
-   (set-face-attribute 'helm-ff-directory nil :foreground "RoyalBlue3" :background "unspecified")
-   (set-face-attribute 'helm-selection nil :foreground "unspecified" :background "blue")
-   (let ((fcolor "unspecified"))
+   (set-face-attribute 'helm-ff-directory nil :foreground "white" :background (face-background 'default))
+   (set-face-attribute 'helm-selection nil :background "blue")
+   (let ((fcolor (face-foreground 'default)))
      (set-face-attribute 'helm-ff-file-extension nil :foreground fcolor)
      (set-face-attribute 'helm-ff-file nil :foreground fcolor))))
 

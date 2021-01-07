@@ -6,7 +6,7 @@
 
 (layer-def async
   :presetup
-  (:layer straight
+  (:layer (straight org)
    (straight-use-package 'ob-async))
 
   :setup

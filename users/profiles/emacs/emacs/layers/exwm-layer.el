@@ -13,24 +13,37 @@
   :setup
   (use-package exwm
     :init
-    (setq exwm-workspace-number 3)
-    ;; s-N switches to workspace N and s-w interactively switches.
+    (setq exwm-workspace-number 2)
+
     (setq mh--exwm-window-pixel-delta 100)
     (defun mh/exwm-enlarge ()
       (interactive)
-      (call-interactively 'exwm-layout-enlarge-window t (vector mh--exwm-window-pixel-delta))
-      (call-interactively 'exwm-layout-enlarge-window-horizontally t (vector mh--exwm-window-pixel-delta)))
+      (funcall-interactively 'exwm-layout-enlarge-window mh--exwm-window-pixel-delta)
+      (funcall-interactively 'exwm-layout-enlarge-window-horizontally mh--exwm-window-pixel-delta))
 
     (defun mh/exwm-shrink ()
       (interactive)
-      (call-interactively 'exwm-layout-enlarge-window t (vector (math-neg mh--exwm-window-pixel-delta)))
-      (call-interactively 'exwm-layout-enlarge-window-horizontally t (math-neg mh--exwm-window-pixel-delta)))
+      (funcall-interactively 'exwm-layout-enlarge-window (math-neg mh--exwm-window-pixel-delta))
+      (funcall-interactively 'exwm-layout-enlarge-window-horizontally (math-neg mh--exwm-window-pixel-delta)))
+
+    (exwm-input-invoke-factory "i")  ;; exwm-input--invoke--i
+    (exwm-input-invoke-factory "C-[")  ;; exwm-input--invoke--ESC
     (setq exwm-input-global-keys
-          `(([?\s-r] . exwm-reset)
+          `(
+            ;; (,(kbd "i") . (lambda ()
+            ;;                 (interactive)
+            ;;                 (if (and exwm-window-type (eq exwm--input-mode 'line-mode))
+            ;;                     (exwm-input-release-keyboard)
+            ;;                   (exwm-input--invoke--i))))
+            ;; ([escape] . (lambda ()
+            ;;               (interactive)
+            ;;               (if (and exwm-window-type (eq exwm--input-mode 'char-mode))
+            ;;                   (exwm-reset)
+            ;;                 (exwm-input--invoke--ESC))))
+            ([?\s-r] . exwm-reset)
             ([?\s-i] . exwm-input-release-keyboard)
             ;; convenience keybinding, meant to mimic `esc' in Vim bindings
             ([?\s-\[] . exwm-reset)
-            ([?\s-w] . exwm-workspace-switch)
             ([?\s-f] . exwm-floating-toggle-floating)
             ;; move floating window with s+vim-like keys
             ([?\s-j] . (lambda ()
@@ -41,9 +54,11 @@
                          (exwm-floating-move -1 0)))
             ([?\s-l] . (lambda ()
                          (exwm-floating-move 1 0)))
-            ([?\s-\=] . exwm-layout-enlarge-window)
-            ([?\s-\+] . exwm-layout-enlarge-window)
-            ([?\s-\-] . exwm-layout-shrink-window)
+            ([?\s-\=] . mh/exwm-enlarge)
+            ([?\s-\-] . mh/exwm-shrink)
+            ;; interactively switch workspace
+            ([?\s-w] . exwm-workspace-switch)
+            ;; s-N switches to workspace N
             ,@(mapcar (lambda (i)
                         `(,(kbd (format "s-%d" i)) .
                           (lambda ()
@@ -54,22 +69,23 @@
             ([?\s-&] . (lambda (command)
 		         (interactive (list (read-shell-command "$ ")))
 		         (start-process-shell-command command nil command)))))
-    ;; Simulation keys allow you to send one key to EXWM and have EXWM
-    ;; send another key to the application. They are only active in
-    ;; line mode. This allows you to, e.g., use Vim normal mode-like
-    ;; navigation keybindings globally.
-    (setq exwm-input-simulation-keys
-          `(
-            ;; motion
-            (,(kbd "h") . [left])
-            ([j] . [down])
-            ([?\C-j] . [C-down])
-            ([k] . [up])
-            ([?\C-k] . [C-up])
-            ([l] . [right])
-            ;; cut/copy/paste
-            ([y] . [?\C-c])
-            ([p] . [?\C-v])))
+
+    ;; ;; Simulation keys allow you to send one key to EXWM and have EXWM
+    ;; ;; send another key to the application. They are only active in
+    ;; ;; line mode. This allows you to, e.g., use Vim normal mode-like
+    ;; ;; navigation keybindings globally.
+    ;; (setq exwm-input-simulation-keys
+    ;;       `(
+    ;;         ;; motion
+    ;;         (,(kbd "h") . [left])
+    ;;         ([j] . [down])
+    ;;         ([?\C-j] . [C-down])
+    ;;         ([k] . [up])
+    ;;         ([?\C-k] . [C-up])
+    ;;         ([l] . [right])
+    ;;         ;; cut/copy/paste
+    ;;         ([y] . [?\C-c])
+    ;;         ([p] . [?\C-v])))
 
     :config
     (require 'exwm-config)
@@ -78,40 +94,46 @@
     (define-key exwm-mode-map (kbd "C-g") 'keyboard-quit)
 
     (require 'exwm-randr)
-    (exwm-randr-enable)
-    ;; set monitor layout
-    (if (string= "oryp4\n" (shell-command-to-string "hostname"))
-        (progn
-          (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"DP-0 connected\"")))
-              (start-process-shell-command
-               "xrandr" nil (concat "xrandr --output eDP-1-1 --auto"
-                                    " --output DP-0 --above eDP-1-1"
-                                    " --output DP-2 --right-of DP-0"
-                                    " && xrandr --setmonitor external auto DP-0,DP-2")))
-          ;; "--set \"PRIME Synchronization\" 1"))))
-          (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0")))
-      (if (string= "mbp\n" (shell-command-to-string "hostname"))
-          (progn
-            (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"HDMI2 connected\"")))
-                (start-process-shell-command
-                 "xrandr" nil (concat "xrandr --output eDP1 --auto"
-                                      " --output HDMI2 --above eDP1 --mode 3840x2160")))
-            (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "HDMI2")))
-        (if (string= "ryzen3950\n" (shell-command-to-string "hostname"))
-            (progn
-              (start-process-shell-command
-               "xrandr" nil (concat "xrandr --output DisplayPort-0 --auto"
-                                    " --output DisplayPort-1 --right-of DisplayPort-0"
-                                    " && xrandr --setmonitor main auto DisplayPort-0,DisplayPort-1"))
-              (setq exwm-randr-workspace-monitor-plist '(0 "DisplayPort-0"))))))
 
-    ;; Increase screen scaling for main computer monitor
-    (if (not (string= "ryzen3950\n" (shell-command-to-string "hostname")))
-        (add-hook 'exwm-init-hook
-                  (lambda ()
-                    (exwm-workspace-switch 0)
-                    (mh/zoom-in-selected-frame)
-                    (mh/zoom-in-selected-frame)))))
+    (defun exwm-change-screen-hook ()
+      "Set monitor layout."
+      (if (string= "oryp4\n" (shell-command-to-string "hostname"))
+          (progn
+            (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"DP-0 connected\"")))
+                (start-process-shell-command
+                 "xrandr" nil (concat "xrandr --output eDP-1-1 --auto"
+                                      " --output DP-0 --above eDP-1-1"
+                                      " --output DP-2 --right-of DP-0"
+                                      " && xrandr --setmonitor external auto DP-0,DP-2")))
+            (setq exwm-randr-workspace-monitor-plist '(0 "eDP-1-1" 1 "DP-0")))
+        (if (string= "mbp\n" (shell-command-to-string "hostname"))
+            (progn
+              (if (not (string-empty-p (shell-command-to-string "xrandr | grep \"HDMI2 connected\"")))
+                  (start-process-shell-command
+                   "xrandr" nil (concat "xrandr --output eDP1 --auto"
+                                        " --output HDMI2 --above eDP1 --mode 3840x2160")))
+              (setq exwm-randr-workspace-monitor-plist '(0 "eDP1" 1 "HDMI2")))
+          (if (string= "ryzen3950\n" (shell-command-to-string "hostname"))
+              (progn
+                (setq exwm-randr-workspace-monitor-plist '(0 "DisplayPort-0" 1 "DisplayPort-1"))
+                (start-process-shell-command
+                 "xrandr" nil (concat "xrandr --output DisplayPort-0 --rotate left"
+                                      " --output DisplayPort-1 --right-of DisplayPort-0 --rotate left"))))))
+      ;; Increase screen scaling for main computer monitor
+      (if (not (string= "ryzen3950\n" (shell-command-to-string "hostname")))
+          (add-hook 'exwm-init-hook
+                    (lambda ()
+                      (exwm-workspace-switch 0)
+                      (mh/zoom-in-selected-frame)
+                      (mh/zoom-in-selected-frame)))))
+
+    (exwm-change-screen-hook)
+    (add-hook 'exwm-init-hook 'exwm-change-screen-hook)
+    ;; ;; TODO breaks during screen saver
+    ;; (add-hook 'exwm-randr-screen-change-hook 'exwm-change-screen-hook)
+    (add-hook 'exwm-randr-screen-change-hook 'exwm-randr-refresh)
+
+    (exwm-randr-enable))
 
   (use-package pulseaudio-control)
 
@@ -137,9 +159,8 @@
                (concat (substring exwm-title 0 49) "...")))))
   (defun mh/launch-next ()
     (interactive)
-    (let ((cmd (concat "export WEBKIT_DISABLE_COMPOSITING_MODE=1"
-                       " && export $(dbus-launch)"
-                       " && next")))
+    (let ((cmd (concat "GDK_SCALE=2"
+                       " next")))
       (start-process-shell-command cmd nil cmd)))
 
   (defun mh/display-hdmi ()

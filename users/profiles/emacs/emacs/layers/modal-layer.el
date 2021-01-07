@@ -7,6 +7,7 @@
 (layer-def modal
   :presetup
   (:layer straight
+   (setq evil-want-keybinding nil)
    (straight-use-package 'evil)
    (straight-use-package 'evil-collection)
    (straight-use-package 'evil-surround)
@@ -143,18 +144,19 @@
     "C-k" 'previous-history-element))
 
   :setup
+  (setq evil-want-keybinding nil)
+
   (use-package evil
-    :demand t
     :init
     ;; this prevents annoying abbrev expands in verilog mode.
     (setq evil-want-abbrev-expand-on-insert-exit nil)
     (setq evil-want-integration t) ; This is optional since it's already set to t by default.
-    (setq evil-want-keybinding nil)
     :config
     (evil-mode 1))
 
   (use-package evil-collection
     :after (evil)
+    :init
     :config
     (evil-collection-init)
 

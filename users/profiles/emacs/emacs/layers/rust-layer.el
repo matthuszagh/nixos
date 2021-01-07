@@ -12,6 +12,8 @@
   :setup
   (use-package rustic
     :config
-    (setq rustic-lsp-server 'rls)))
+    (setq rustic-lsp-server 'rls)
+    (add-hook 'rustic-mode-hook (lambda ()
+                                  (remove-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p t)))))
 
 ;;; rust-layer.el ends here

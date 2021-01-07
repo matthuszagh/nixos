@@ -63,8 +63,15 @@
                                (horizontal-scroll-bars . nil))))
   (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
-  ;; Delete trailing whitespace when saving.
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  ;;; Delete trailing whitespace when saving.
+  ;; Configure this as a customizable variable. This allows disabling
+  ;; trailing whitespace deletion when the variable is set to
+  ;; nil. This is useful when working on someone else's project which
+  ;; has trailing whitespace.
+  (defvar mh-delete-trailing-whitespace t)
+  (add-hook 'before-save-hook (lambda ()
+                                (if mh-delete-trailing-whitespace
+                                    (delete-trailing-whitespace))))
 
   ;; enable y/n answers
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -72,8 +79,9 @@
   ;; ignore undo discard info warnings
   (setq warning-suppress-types '((undo discard-info)))
 
-  ;; automatically make relevant files executable
-  (add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
+  ;; TODO this makes many rust files executable which shouldn't be.
+  ;; ;; automatically make relevant files executable
+  ;; (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
   ;; Emacs modes typically provide a standard means to change the
   ;; indentation width -- eg. c-basic-offset: use that to adjust your
@@ -92,6 +100,9 @@
   ;; This permits folding throughout Emacs. For instance, Evil's fold capabilities rely on this being
   ;; set.
   (setq outline-minor-mode t)
+
+  ;; don't truncate message log buffer
+  (setq message-log-max t)
 
   ;; Newline at end of file.
   (setq require-final-newline t)
@@ -227,6 +238,16 @@ Saves to a temp file and puts the filename in the kill ring."
       (with-temp-file filename
         (insert data))
       (kill-new filename)
-      (message filename))))
+      (message filename)))
+
+  (defun mh//inc-char (char)
+    "Increment CHAR.
+For instance this will perform 'a' -> 'b'"
+    (string (1+ (string-to-char char))))
+
+  (defun mh/point-at-line-begp ()
+    "Indicate whether point is at the beginning of a line."
+    (let ((beg-pos (line-beginning-position)))
+      (eq (point) beg-pos))))
 
 ;;; base-layer.el ends here

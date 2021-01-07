@@ -4,5 +4,5 @@
 # --
 #+header: :_class ${1:math}
 #+begin_src latex :hidden
-$2
-#+end_src$0
+$0
+#+end_src

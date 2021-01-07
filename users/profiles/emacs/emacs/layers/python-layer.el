@@ -5,18 +5,21 @@
 ;;; Code:
 
 (layer-def python
+  :depends (snippet)
+
   :presetup
   (:layer straight
    (straight-use-package 'cython-mode)
    (straight-use-package 'flycheck-cython)
    (straight-use-package 'blacken)
-   (straight-use-package 'python-docstring))
+   (straight-use-package 'python-docstring)
+   (straight-use-package 'elpy))
 
   :setup
   (use-package python
     :mode (("\\.py\\'" . python-mode))
     :hook ((python-mode . (lambda ()
-                            (setq tab-width 4)
+                            (setq-local tab-width 4)
                             (highlight-indentation-mode 0))))
     :config
     (setq-default python-indent 4)
@@ -62,10 +65,12 @@
   (use-package blacken
     :hook (python-mode . blacken-mode)
     :config
-    (setq blacken-line-length 79))
+    (setq blacken-line-length 79)
+    (setq blacken-only-if-project-is-blackened nil))
 
   (use-package python-docstring
-    :hook (python-mode . python-docstring-mode))
+    :hook (python-mode . (lambda ()
+                           (python-docstring-mode))))
 
   (use-package cython-mode)
   (use-package flycheck-cython)

@@ -5,6 +5,7 @@
 {
   environment.systemPackages = with pkgs; [
     texlab
-    perlPackages.LaTeXML
+    # TODO fix latexml
+    LaTeXML
   ];
 }

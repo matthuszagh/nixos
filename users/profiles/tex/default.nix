@@ -18,6 +18,21 @@
         pgfopts
         preview
 
+        # customizable lists
+        enumitem
+
+        # needed to build circuitikz manual
+        a4wide
+        titling
+        titlesec
+        xstring
+        microtype
+        showexpl
+        framed
+        xtab
+        imakeidx
+        varwidth
+
         tex4ht
         hf-tikz
         siunitx
@@ -29,13 +44,14 @@
         pygmentex
         pdftex
         latexindent
-        tikz-timing;
+        tikz-timing
+        latexmk;
 
       inherit (pkgs)
         circuitikz
+        # qcircuit-tikz
         dvisvgm
-        grffile
-        latexmk;
+        grffile;
     };
   };
 

@@ -11,8 +11,8 @@
    (straight-use-package 'general)
    (straight-use-package 'which-key))
 
-  (:layer (straight helm)
-   (straight-use-package 'helm-descbinds))
+  ;; (:layer (straight helm)
+  ;;  (straight-use-package 'helm-descbinds))
 
   :setup
   (use-package general
@@ -26,6 +26,8 @@
 
   :postsetup
   (:layer helm
+   ;; TODO shouldn't be here
+   (straight-use-package 'helm-descbinds)
    (use-package helm-descbinds
      :after helm
      :config

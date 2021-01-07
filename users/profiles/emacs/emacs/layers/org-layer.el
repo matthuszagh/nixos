@@ -7,8 +7,20 @@
 (layer-def org
   :presetup
   (:layer straight
-   (straight-use-package '(org-plus-contrib :local-repo "~/src/org-mode"))
-   (straight-use-package 'org-drill)
+   (straight-use-package '(org-plus-contrib
+                           :host github
+                           :repo "matthuszagh/org-mode"
+                           :branch "beta"
+                           :files ("lisp/*.el" "contrib/lisp/*.el")
+        		   :includes (org)
+                           :local-repo "org"))
+   ;; (straight-use-package 'org-drill)
+   (straight-use-package '(org-ml
+                           :host github
+                           :repo "ndwarshuis/org-ml"))
+   (straight-use-package '(org-texnum
+                           :host github
+                           :repo "matthuszagh/org-texnum"))
    (straight-use-package 'org-fragtog)
    (straight-use-package 'org-edna)
    (straight-use-package 'ob-sagemath)
@@ -33,6 +45,12 @@
 
     (setq org-startup-with-latex-preview t)
     (setq org-startup-with-inline-images t)
+
+    ;; show invisible text when editing it
+    (setq org-catch-invisible-edits 'show)
+
+    ;; hide emphasis markers
+    (setq org-hide-emphasis-markers t)
 
     (defun org-summary-todo (n-done n-not-done)
       "Switch entry to DONE when all subentries are done, to TODO otherwise."
@@ -130,9 +148,6 @@
     ;; this works better with aggressive-indent-mode
     (setq org-edit-src-content-indentation 0)
     (setq org-src-preserve-indentation t)
-
-    ;; don't display emphasis characters
-    (setq org-hide-emphasis-markers nil)
 
     ;; Don't pretty display things like pi. This makes it harder to
     ;; edit latex code.
@@ -350,6 +365,7 @@
        (css . t)
        (ditaa . t)
        (dot . t)
+       ;; (ein . t)
        (emacs-lisp . t)
        (fortran . t)
        (gnuplot . t)
@@ -415,9 +431,9 @@
   ;;   :config
   ;;   (add-hook 'org-mode-hook 'org-edit-latex-mode))
 
-  (use-package org-drill
-    :config
-    (setq org-drill-hide-item-headings-p t))
+  ;; (use-package org-drill
+  ;;   :config
+  ;;   (setq org-drill-hide-item-headings-p t))
 
   ;; links
   (use-package ol
@@ -644,7 +660,14 @@ files from an org buffer."
       (mkdir dir t)
       (if fname
           (concat dir "/" fname)
-        dir))))
+        dir)))
+
+  (defun mh/org-toggle-hide-emphasis-markers ()
+    (interactive)
+    "Toggle `org-hide-emphasis-markers'."
+    (if (eq t org-hide-emphasis-markers)
+        (setq org-hide-emphasis-markers nil)
+      (setq org-hide-emphasis-markers t))))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

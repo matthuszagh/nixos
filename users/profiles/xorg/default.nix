@@ -1,7 +1,6 @@
 { config
 , ...
 }:
-
 let
   # TODO
   # useNvidia = builtins.any (v: v == true) (builtins.attrValues config.hardware.nvidia);
@@ -34,6 +33,7 @@ in
     # numlockx &
 
     # Finally start Emacs
+    # exec emacsclient -c
     exec emacs
   '';
   home.file.".Xresources".text = ''

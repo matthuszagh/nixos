@@ -15,6 +15,6 @@
     speedtest-cli
     firefox
     google-chrome
-    next
+    nyxt
   ];
 }

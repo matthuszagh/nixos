@@ -15,6 +15,7 @@
       "libvirtd"
       "scanner" # scanners
       "lp" # printers
+      "cdrom" # cd drive
     ];
   };
 
@@ -39,6 +40,10 @@
       ./profiles/tex
       ./profiles/fish
       ./profiles/bash
+      ./profiles/next
     ];
+
+    # TODO fix (see https://github.com/nix-community/home-manager/issues/1479)
+    manual.manpages.enable = false;
   };
 }

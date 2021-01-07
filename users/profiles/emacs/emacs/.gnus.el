@@ -20,12 +20,14 @@
 
 (setq nnmail-split-methods 'nnmail-split-fancy)
 
-(setq gnus-select-method
-      '(nnimap "imap.gmail.com"
-               (nnimap-inbox "INBOX")
-               (nnimap-split-methods "default")
-               (nnimap-stream ssl)
-               (nnimap-server-port 993)))
+(setq gnus-select-method '(nntp "news.gmane.io"))
+
+;; (setq gnus-select-method
+;;       '(nnimap "imap.gmail.com"
+;;                (nnimap-inbox "INBOX")
+;;                (nnimap-split-methods "default")
+;;                (nnimap-stream ssl)
+;;                (nnimap-server-port 993)))
 
 (setq gnus-secondary-select-methods '((nnml "")))
 

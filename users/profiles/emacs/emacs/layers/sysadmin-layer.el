@@ -7,7 +7,8 @@
 (layer-def sysadmin
   :presetup
   (:layer straight
-   (straight-use-package 'symon)
+   ;; TODO fix
+   ;; (straight-use-package 'symon)
    (straight-use-package 'paradox)
    (straight-use-package 'helm-systemd))
 
@@ -27,12 +28,13 @@
              (concat "strace -p" pid " -s9999")
            (concat "strace -p" pid " -s9999 -e " expr))))))
 
-  ;; Display CPU/mem/etc usage.
-  (use-package symon
-    :init
-    ;; No delay when updating usage.
-    (setq symon-delay 0)
-    (setq symon-refresh-rate 1))
+  ;; TODO fix
+  ;; ;; Display CPU/mem/etc usage.
+  ;; (use-package symon
+  ;;   :init
+  ;;   ;; No delay when updating usage.
+  ;;   (setq symon-delay 0)
+  ;;   (setq symon-refresh-rate 1))
 
   ;; query available packages for emacs
   (use-package paradox

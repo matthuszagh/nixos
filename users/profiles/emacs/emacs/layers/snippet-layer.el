@@ -43,34 +43,53 @@
     (apply #'aas-set-snippets 'org-mode laas-accent-snippets)
 
     ;; expand "//" into frac
-    ;; TODO doesn't work since '/' is not a prefix key.
-    ;; (let ((frac-snippet
-    ;;        (list
-    ;;         :cond #'aas-object-on-left-condition
-    ;;         :expansion-desc "Wrap object on the left with \\frac{}{}, leave `point' in the denuminator."
-    ;;         "//" #'laas-smart-fraction)))
-    ;;   (dolist (mode '(latex-mode org-mode))
-    ;;     (apply #'aas-set-snippets mode frac-snippet)))
+    ;; TODO doesn't work in latex-mode since '/' already defined there.
+    (let ((frac-snippet
+           (list
+            :cond #'(lambda ()
+                      (and (texmathp)
+                           (aas-object-on-left-condition)))
+            :expansion-desc "Wrap object on the left with \\frac{}{}, leave `point' in the denuminator."
+            "//" #'laas-smart-fraction)))
+      (dolist (mode '(org-mode))
+        (apply #'aas-set-snippets mode frac-snippet)))
 
     ;; custom math snippets
     (let ((math-snippets
            (list
             :cond #'texmathp
-            "cas" (lambda ()
-                    (interactive)
-                    (yas-expand-snippet (concat "\\begin{cases}\n"
-                                                "    $1\n"
-                                                "  \\end{cases}$0")))
-            "mat" (lambda ()
-                    (interactive)
-                    (yas-expand-snippet (concat "\\begin{bmatrix}\n"
-                                                "    $1\n"
-                                                "  \\end{bmatrix}$0")))
-            "det" (lambda ()
-                    (interactive)
-                    (yas-expand-snippet (concat "\\begin{vmatrix}\n"
-                                                "    $1\n"
-                                                "  \\end{vmatrix}$0"))))))
+            "cs" (lambda ()
+              	   (interactive)
+                   (yas-expand-snippet (concat "\\begin{cases}\n"
+                                               "    $1\n"
+                                               "  \\end{cases}$0")))
+            "mt" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\begin{bmatrix}\n"
+                                               "    $1\n"
+                                               "  \\end{bmatrix}$0")))
+            "dt" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\begin{vmatrix}\n"
+                                               "    $1\n"
+                                               "  \\end{vmatrix}$0")))
+            "bf" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\mathbf{$1}$0")))
+            "bb" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\mathbb{$1}$0")))
+            "tx" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\text{$1}$0")))
+            "rm" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\mathrm{$1}$0")))
+            "proof" (lambda ()
+                      (interactive)
+                      (yas-expand-snippet (concat "\\begin{proof}\n"
+                                                  "    $1\n"
+                                                  "  \\end{proof}$0"))))))
       (dolist (mode '(latex-mode org-mode))
         (apply #'aas-set-snippets mode math-snippets))))
 
@@ -82,7 +101,9 @@
    (add-hook 'org-mode-hook #'yas-minor-mode)
    (let ((latex-block-snippets
           (list
-           :cond #'mh/org-in-latex-blockp
+           :cond (lambda ()
+                   (and (mh/org-in-latex-blockp)
+                        (mh/point-at-line-begp)))
            "eqn" (lambda ()
                    (interactive)
                    (yas-expand-snippet (concat "\\begin{equation}\\tag{0}\n"

@@ -47,7 +47,9 @@
     (setq magit-restore-window-configuration t))
 
   (use-package forge
-    :after magit)
+    :after magit
+    :hook ((forge-post-mode . (lambda ()
+                                (setq-local fill-column nil)))))
 
   ;; (use-package github-notifier
   ;;   :config
@@ -57,9 +59,7 @@
   (use-package git-gutter
     :functions global-git-gutter-mode
     :config
-    ;; If you enable global minor mode
     (global-git-gutter-mode t)
-    ;; Set the foreground color of modified lines to something obvious
     (set-face-foreground 'git-gutter:modified "purple"))
 
   (use-package git-timemachine
@@ -77,7 +77,7 @@
      "S" 'magit-list-repositories
      "t" 'git-timemachine
      "e" (lambda ()
-           (helm-browse-project-find-files "/home/matt/src/dotfiles/config/emacs"))))
+           (helm-browse-project-find-files "/home/matt/src/dotfiles/emacs"))))
 
   :func
   (defun mh/magit-fetch-all-repositories ()

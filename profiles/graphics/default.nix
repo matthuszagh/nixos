@@ -19,6 +19,7 @@
     gimp
     inkscape
     ghostscript
+    gnuplot
     vlc
     mpv
     mesa
@@ -29,5 +30,7 @@
     gnome3.gnome-settings-daemon
     breeze-icons
     asymptote
+    obs-studio
+    ffmpeg
   ];
 }

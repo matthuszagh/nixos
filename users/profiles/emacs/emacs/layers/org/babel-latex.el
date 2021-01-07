@@ -118,7 +118,7 @@ file rather than being provided as a default header argument."
            (backend org-export-current-backend))
       (if (and clickablep (string= backend "html"))
           (concat "file:" (mh//org-src-block-res-fname))
-        nil)))
+        [])))
 
   (defun mh//org-src-block-latex-wrap ()
     (let* ((elem (org-element-at-point))
@@ -248,5 +248,15 @@ file rather than being provided as a default header argument."
                   "}") end t)
         (replace-match (format "%d" count) nil nil nil 1)
         (setq count (1+ count))))))
+
+(defun mh/org-in-latex-blockp ()
+  "Indicate if we're inside a latex source block."
+  (let ((elem (org-ml-parse-element-at (point))))
+    (if (and (org-ml-is-type 'src-block elem)
+             (string-equal (org-ml-get-property :language elem) "latex"))
+        t
+      nil)))
+
+(use-package org-texnum)
 
 ;;; babel-latex.el ends here

@@ -8,6 +8,7 @@
     ./console
     ./emacs
     ./git.nix
+    ./jupyter
     ./lorri.nix
     ./nix
     ./python
@@ -38,8 +39,6 @@
     usbutils
     wget
     curl
-    zip
-    unzip
     acpi
     pciutils
     gnumake
@@ -51,11 +50,29 @@
     gcc
     openssl
     pkg-config
+    llvm_11
+
+    # ============================ archive ===========================
+    unrar
+    zip
+    unzip
+    p7zip
 
     # ============================= misc =============================
     scc
     tree
-    unrar
+
+    # =================== performance and debugging ==================
+    linuxPackages.perf
+    gperftools
+    valgrind
+
+    # =========================== embedded ===========================
+    openocd
+    gdb
+
+    # ====================== reverse engineering =====================
+    ghidra-bin
   ];
 
   documentation = {

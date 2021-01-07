@@ -1,4 +1,6 @@
-{ ... }:
+{ pkgs
+, ...
+}:
 
 {
   hardware = {
@@ -9,4 +11,8 @@
   };
 
   sound.enable = true;
+
+  # environment.systemPackages = with pkgs; [
+  #   pulseaudio
+  # ];
 }

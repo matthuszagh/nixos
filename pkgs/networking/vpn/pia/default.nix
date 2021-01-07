@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.privateinternetaccess.com/openvpn/openvpn.zip";
-    sha256 = "02wgssrvyg7j566n62m85f28pj79hvhrb7g8icgfj1yidk3nxb3l";
+    sha256 = "sha256-vDhCd4Ku3JDLZbMizW+ddK9OmIzFs8iE5DI27XpeRJE=";
   };
 
   unpackPhase = ''

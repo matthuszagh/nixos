@@ -1,5 +1,6 @@
 {
   imports = [
+    ./cad
     ./electronics
     ./math
     ./pdf

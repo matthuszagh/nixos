@@ -16,19 +16,18 @@
     :functions global-flycheck-mode
     :config
     ;; Turn flycheck on everywhere
-    (global-flycheck-mode t)
-    ;; TODO none of this should be here.
-    ;; ;; There are issues with company mode and flycheck in terminal mode.
-    ;; ;; This is outlined at:
-    ;; ;; https://github.com/abingham/emacs-ycmd
-    ;; (when (not (display-graphic-p))
-    ;;   (setq flycheck-indication-mode nil))
-    ;; (setq flycheck-clang-language-standard nil)
-    )
+    (global-flycheck-mode t))
 
   :postsetup
   (:layer modal
    (general-def mh/prefix-prog-map
-     "l" 'flycheck-list-errors)))
+     "l" 'flycheck-list-errors))
+
+  ;; (:layer (lsp python)
+  ;;  ;; (flycheck-add-next-checker 'lsp 'python-mypy)
+  ;;  ;; (flycheck-add-next-checker 'python-mypy 'python-flake8)
+  ;;  ;; (flycheck-add-next-checker 'python-flake8 'python-pylint)
+  ;;  )
+  )
 
 ;;; flycheck-layer.el ends here

@@ -8,5 +8,6 @@
     anystyle-cli
     poppler_utils
     koreader
+    pdftk
   ];
 }

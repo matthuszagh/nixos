@@ -12,7 +12,6 @@ from skidl.pyspice import (
     SPICE,
     node,
 )
-from libcircuit.spice import capacitor_equiv, resistor_equiv
 import numpy as np
 
 fname = "data/$1.dat"
@@ -44,16 +43,15 @@ with open(fname, "w") as f:
         f.write("{:<6.5f} {:<6.2f} {:<6.2f}\n".format(t, vin, vout))
 #+end_src
 
+#+header: :_class tikz
+#+begin_src latex :hidden
 \begin{tikzpicture}
 \begin{axis}[
   title=$6,
   ylabel={$V$},
   xlabel={$t$ (ms)},
   legend entries={$V_{in}$, $V_{out}$},
-  legend style={
-    fill=bg,
-    draw=fgcolor
-  }
+  legend style={fill=bg, draw=fg},
 ]
   \addplot [] table[x=t, y=vin] {data/$1.dat};
 
@@ -62,3 +60,4 @@ with open(fname, "w") as f:
   ] table[x=t, y=vout] {data/$1.dat};
 \end{axis}
 \end{tikzpicture}$0
+#+end_src

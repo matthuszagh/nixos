@@ -16,6 +16,7 @@ in
           # TODO it's annoying to have to place pyclipper here,
           # instead of in the electronics/default.nix file
           pyclipper # needed for kicad plugin
+          skidl
         ];
 
       pythonEnv = pkgs.python3.withPackages packages;

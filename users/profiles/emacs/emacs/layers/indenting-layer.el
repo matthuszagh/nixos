@@ -12,7 +12,7 @@
   :setup
   (use-package aggressive-indent
     :config
-    (global-aggressive-indent-mode))
+    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
 
   :postsetup
   (:layer nix

@@ -13,7 +13,7 @@
   :setup
   (use-package visual-fill-column
     :config
-    (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+    (add-hook 'markdown-mode-hook #'visual-fill-column-mode)
     (setq visual-fill-column-width 70)))
 
 ;;; reflow-layer.el ends here

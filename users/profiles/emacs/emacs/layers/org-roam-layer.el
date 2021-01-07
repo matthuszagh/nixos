@@ -28,7 +28,7 @@
                             "#+MODIFIED: %(mh/time-stamp)\n\n"
                             "* resources\n"
                             "** bibliography\n"
-                            "<<bibliography link>>\nbibliography:refs/library.bib")
+                            "<<bibliography link>>\nbibliography:library.bib")
              :unnarrowed t)))
     (defun mh//org-update-last-modified ()
       (save-excursion

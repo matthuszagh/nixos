@@ -18,9 +18,6 @@
   (:layer helm
    (use-package helm-recoll
      :config
-     (helm-recoll-create-source "library" "~/.recoll/library")))
-
-  (:layer org
-   (use-package org-recoll)))
+     (helm-recoll-create-source "library" "~/.recoll/library"))))
 
 ;;; recoll-layer.el ends here

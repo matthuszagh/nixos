@@ -16,5 +16,6 @@
     firefox
     google-chrome
     nyxt
+    nethogs
   ];
 }

@@ -517,7 +517,7 @@ org-capture instead."
            (while (> i 0)
              (setq org-outline (concat org-outline "*"))
              (setq i (- i 1)))
-           (setq org-outline (concat org-outline " " .title "\n"))
+           (setq org-outline (concat org-outline " HOLD " .title "\n"))
            (setq org-outline (concat org-outline ":PROPERTIES:\n"
                                      ":NOTER_PAGE: " (number-to-string .page) "\n"
                                      ":END:\n"))))

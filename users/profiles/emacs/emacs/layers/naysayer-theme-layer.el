@@ -24,8 +24,8 @@
    (set-face-foreground 'org-block (face-foreground 'default))
 
    ;; set inline code appearance
-   (set-face-background 'org-code "unspecified")
-   (set-face-foreground 'org-code "#8686ae")
+   (set-face-background 'org-code "#113e47")
+   (set-face-foreground 'org-code (face-foreground 'default))
    (set-face-foreground 'org-link "#86aed5")
 
    ;; org todo keyword faces

@@ -84,12 +84,7 @@
                    (yas-expand-snippet (concat "\\text{$1}$0")))
             "rm" (lambda ()
                    (interactive)
-                   (yas-expand-snippet (concat "\\mathrm{$1}$0")))
-            "proof" (lambda ()
-                      (interactive)
-                      (yas-expand-snippet (concat "\\begin{proof}\n"
-                                                  "    $1\n"
-                                                  "  \\end{proof}$0"))))))
+                   (yas-expand-snippet (concat "\\mathrm{$1}$0"))))))
       (dolist (mode '(latex-mode org-mode))
         (apply #'aas-set-snippets mode math-snippets))))
 
@@ -113,7 +108,14 @@
                    (interactive)
                    (yas-expand-snippet (concat "\\begin{align}\n"
                                                "  $0\n"
-                                               "\\end{align}"))))))
+                                               "\\end{align}")))
+           "prf" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\begin{proof}\n"
+                                               "  \\begin{align}\n"
+                                               "    $1\n"
+                                               "  \\end{align}\n"
+                                               "\\end{proof}$0"))))))
      (apply #'aas-set-snippets 'org-mode latex-block-snippets)))
 
   (:layer verilog

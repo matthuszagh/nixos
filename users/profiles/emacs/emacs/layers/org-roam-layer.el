@@ -52,7 +52,7 @@
     (setq orb-templates
           '(("r" "ref" plain #'org-roam-capture--get-point
              ""
-             :file-name "refs/${citekey}"
+             :file-name "${citekey}"
              :head "#+TITLE: ${title}
 #+ROAM_KEY: ${ref}
 #+ROAM_TAGS:

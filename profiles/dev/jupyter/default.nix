@@ -20,6 +20,8 @@
           env = (pkgs.python3.withPackages (p: with p;
             [
               numpy
+              matplotlib
+              cython
               scipy
               ipykernel
               pandas

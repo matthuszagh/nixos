@@ -79,6 +79,9 @@
      "e" (lambda ()
            (helm-browse-project-find-files "/home/matt/src/dotfiles/emacs"))))
 
+  (:layer tex
+   (add-hook 'LaTeX-mode 'git-gutter-mode))
+
   :func
   (defun mh/magit-fetch-all-repositories ()
     "Run `magit-fetch-all' in all repositories returned by `magit-list-repos`."

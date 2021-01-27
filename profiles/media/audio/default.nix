@@ -7,12 +7,19 @@
     pulseaudio = {
       enable = true;
       support32Bit = true;
+      extraModules = with pkgs; [
+        pulseaudio-modules-bt
+      ];
+      package = pkgs.pulseaudioFull;
+    };
+
+    bluetooth = {
+      enable = true;
+      hsphfpd.enable = true;
+      powerOnBoot = true;
+      package = pkgs.bluezFull;
     };
   };
 
   sound.enable = true;
-
-  # environment.systemPackages = with pkgs; [
-  #   pulseaudio
-  # ];
 }

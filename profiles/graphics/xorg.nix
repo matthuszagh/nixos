@@ -2,7 +2,6 @@
 , pkgs
 , ...
 }:
-
 let
   useStartx = true;
 in
@@ -10,8 +9,8 @@ in
   services.xserver = {
     # Enable touchpad support.
     libinput.enable = true;
-    libinput.tapping = false;
-    libinput.disableWhileTyping = true;
+    libinput.touchpad.tapping = false;
+    libinput.touchpad.disableWhileTyping = true;
 
     enable = true;
     layout = "us";
@@ -22,17 +21,18 @@ in
     # remote connections
     enableTCP = true;
 
-    displayManager = if useStartx then {
-      startx.enable = true;
-    } else {
-      sddm.enable = true;
-      plasma5.enable = true;
-    };
+    displayManager =
+      if useStartx then {
+        startx.enable = true;
+      } else {
+        sddm.enable = true;
+        plasma5.enable = true;
+      };
   };
 
   environment.systemPackages = with pkgs; [
-    plasma5.breeze-gtk
-    plasma5.breeze-qt5
-    plasma5.kde-gtk-config
+    plasma5Packages.breeze-gtk
+    plasma5Packages.breeze-qt5
+    plasma5Packages.kde-gtk-config
   ];
 }

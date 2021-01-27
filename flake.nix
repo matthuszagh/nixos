@@ -56,7 +56,13 @@
         overlays = externalOverlays
           ++ [ self.overlay ]
           ++ (attrValues self.overlays);
-        config = { allowUnfree = true; };
+        config = {
+          allowUnfree = true;
+          # TODO temporary
+          permittedInsecurePackages = [
+            "mupdf-1.17.0"
+          ];
+        };
       };
 
       overridePkgs = {

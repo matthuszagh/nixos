@@ -159,77 +159,7 @@ file rather than being provided as a default header argument."
                 (setq ret (cdr elem))))
         (let ((elem (assoc t blist)))
           (setq ret (cdr elem))))
-      (eval ret)))
-
-  ;;   (setq org-latex-img-process
-  ;;         '(("svg" . ("inkscape --pdf-poppler %f -T -l -o %O"))))
-
-  ;;   (defun mh//org-babel-execute:latex (body params)
-  ;;     "Execute a block of Latex code with Babel.
-  ;; This function is called by `org-babel-execute-src-block'."
-  ;;     (setq body (org-babel-expand-body:latex body params))
-  ;;     (if (cdr (assq :file params))
-  ;;         (let* ((out-file (cdr (assq :file params)))
-  ;;                (extension (file-name-extension out-file))
-  ;; 	       (tex-file (org-babel-temp-file "latex-" ".tex"))
-  ;; 	       (border (cdr (assq :border params)))
-  ;; 	       (imagemagick (cdr (assq :imagemagick params)))
-  ;; 	       (im-in-options (cdr (assq :iminoptions params)))
-  ;; 	       (im-out-options (cdr (assq :imoutoptions params)))
-  ;; 	       (fit (or (cdr (assq :fit params)) border))
-  ;; 	       (height (and fit (cdr (assq :pdfheight params))))
-  ;; 	       (width (and fit (cdr (assq :pdfwidth params))))
-  ;; 	       (headers (cdr (assq :headers params)))
-  ;; 	       (in-buffer (not (string= "no" (cdr (assq :buffer params)))))
-  ;; 	       (org-latex-packages-alist
-  ;; 	        (append (cdr (assq :packages params)) org-latex-packages-alist)))
-  ;;           (if (not (file-exists-p out-file))
-  ;;               (progn
-  ;;                 (with-temp-file tex-file
-  ;;                   (let* ((split-body (s-split-up-to
-  ;;                                       "\n" body 1))
-  ;;                          (doc-str (car split-body))
-  ;;                          (rest-str (cadr split-body)))
-  ;;                     (insert doc-str)
-  ;;                     (insert (concat
-  ;;                              "\\definecolor{fg}{rgb}{"
-  ;;                              (by-backend '((html . "0,0,0")
-  ;;                                            (t . (org-latex-color :foreground))))
-  ;;                              "}\n"))
-  ;;                     (insert (concat
-  ;;                              "\\definecolor{bg}{rgb}{"
-  ;;                              (by-backend '((html . "1,1,1")
-  ;;                                            (t . (org-latex-color :background))))
-  ;;                              "}\n"))
-  ;;                     (insert (concat
-  ;;                              "\\def\\pc{"
-  ;;                              (by-backend '((html . "100")
-  ;;                                            (t . "20")))
-  ;;                              "}\n"))
-  ;;                     ;; TODO wrap in conditional on class
-  ;;                     ;; (insert (concat
-  ;;                     ;;          "\\def\\eqnBoxCol{gray!30!bg}\n"
-  ;;                     ;;          "\\tikzset{emphBox/.style={draw=\\eqnBoxCol, fill=\\eqnBoxCol, "
-  ;;                     ;;          "thick, rectangle, inner sep=5pt, inner ysep=10pt}}\n"
-  ;;                     ;;          "\\ctikzset{-o/.style = {bipole nodes={none}{ocirc, fill=bg}}}\n"
-  ;;                     ;;          "\\ctikzset{o-/.style = {bipole nodes={ocirc, fill=bg}{none}}}\n"
-  ;;                     ;;          "\\ctikzset{o-o/.style = {bipole nodes={ocirc, fill=bg}{ocirc, fill=bg}}}\n"
-  ;;                     ;;          "\\ctikzset{*-o/.style = {bipole nodes={circ}{ocirc, fill=bg}}}\n"
-  ;;                     ;;          "\\ctikzset{o-*/.style = {bipole nodes={ocirc, fill=bg}{circ}}}\n"))
-  ;;                     (insert rest-str)))
-  ;;                 (let ((tmp-pdf (org-babel-latex-tex-to-pdf tex-file)))
-  ;;                   (let* ((log-buf (get-buffer-create "*Org Babel LaTeX Output*"))
-  ;;                          (err-msg "org babel latex failed")
-  ;;                          (img-out (org-compile-file
-  ;; 	                           tmp-pdf
-  ;;                                    (cdr (assoc "svg" org-latex-img-process))
-  ;;                                    extension err-msg log-buf)))
-  ;;                     (shell-command (format "mv %s %s" img-out out-file))))))
-  ;;           nil)) ;; signal that output has already been written to file
-  ;;     body)
-
-  ;;   (advice-add 'org-babel-execute:latex :override #'mh//org-babel-execute:latex)
-  )
+      (eval ret))))
 
 (defun mh/update-eqn-numbers-in-section ()
   ""

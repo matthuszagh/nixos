@@ -41,7 +41,6 @@
                            (add-hook 'find-file-hook 'TeX-fold-buffer t t)
                            (add-hook 'after-save-hook 'TeX-fold-buffer nil t)))
            (LaTeX-mode . turn-on-reftex)
-           (LaTeX-mode . add-auctex-keys)
            (LaTeX-mode . LaTeX-math-mode)
            (LaTeX-mode . display-line-numbers-mode)
            ;; (TeX-mode . my-add-auctex-file-variables)

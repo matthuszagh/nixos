@@ -111,7 +111,7 @@ file rather than being provided as a default header argument."
               "file link replace"))
         "file link replace")))
 
-  (defun mh//org-src-block-latex-file-desc ()
+  (defun mh//org-src-block-latex-file-description ()
     ""
     (let* ((elem (org-element-at-point))
            (clickablep (mh//header-match elem ":_clickable"))
@@ -142,7 +142,7 @@ file rather than being provided as a default header argument."
           (:file . (lambda ()
                      (mh//org-src-block-result-filename)))
           (:file-desc . (lambda ()
-                          (mh//org-src-block-latex-file-desc)))
+                          (mh//org-src-block-latex-file-description)))
           (:post . (lambda ()
                      (mh//org-src-block-latex-post)))))
 

@@ -71,7 +71,7 @@ file rather than being provided as a default header argument."
       (concat (org-element-property :value elem)
               (mh//concat-list (org-element-property :header elem)))))
 
-  (defun mh//org-src-block-res-fname ()
+  (defun mh//org-src-block-result-filename ()
     (let* ((elem (org-element-at-point))
            (class-mathp (mh//header-match elem ":_class math")))
       (if (and org-export-current-backend class-mathp)
@@ -117,7 +117,7 @@ file rather than being provided as a default header argument."
            (clickablep (mh//header-match elem ":_clickable"))
            (backend org-export-current-backend))
       (if (and clickablep (string= backend "html"))
-          (concat "file:" (mh//org-src-block-res-fname))
+          (concat "file:" (mh//org-src-block-result-filename))
         [])))
 
   (defun mh//org-src-block-latex-wrap ()
@@ -140,7 +140,7 @@ file rather than being provided as a default header argument."
                      (mh//org-src-block-latex-wrap)))
           (:cache . "yes")
           (:file . (lambda ()
-                     (mh//org-src-block-res-fname)))
+                     (mh//org-src-block-result-filename)))
           (:file-desc . (lambda ()
                           (mh//org-src-block-latex-file-desc)))
           (:post . (lambda ()

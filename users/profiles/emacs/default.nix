@@ -14,5 +14,6 @@
       source = ./emacs/scripts;
       recursive = true;
     };
+    ".config/emacs/straight/versions/default.el".source = ./emacs/straight/versions/default.el;
   };
 }

@@ -36,7 +36,6 @@ image-dired/
 /octave-workspace
 /magithub
 /savefile
-/straight
 /%backup%~
 flycheck_init.el
 *.pdf

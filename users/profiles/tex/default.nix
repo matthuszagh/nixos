@@ -38,7 +38,13 @@
         siunitx
         pythontex
         asymptote
+
+        # animate and dependencies
         animate
+        zref
+        media9
+        ocgx2
+
         qcircuit xypic
         luatex85
         pygmentex

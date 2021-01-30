@@ -41,13 +41,19 @@
     xtick align=center,
     enlarge x limits=upper,
     x axis line style={-latex},
+    every axis x label/.style={%
+      at={(ticklabel cs:0.95)}, anchor=near ticklabel,
+    },
   },
-  every boxed x axis/.style={},
   every non boxed y axis/.style={
     ytick align=center,
     enlarge y limits=upper,
     y axis line style={-latex},
+    every axis y label/.style={%
+      at={(ticklabel cs:0.95)}, anchor=near ticklabel,
+    },
   },
+  every boxed x axis/.style={},
   every boxed y axis/.style={},
 }
 \pgfplotsset{grid style={help lines}}

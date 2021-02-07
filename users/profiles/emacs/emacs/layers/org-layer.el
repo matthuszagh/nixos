@@ -21,6 +21,9 @@
    (straight-use-package '(org-texnum
                            :host github
                            :repo "matthuszagh/org-texnum"))
+   (straight-use-package '(org-api
+                           :host github
+                           :repo "matthuszagh/org-api"))
    (straight-use-package 'org-fragtog)
    (straight-use-package 'org-edna)
    (straight-use-package 'ob-sagemath)

@@ -188,70 +188,34 @@ file rather than being provided as a default header argument."
       nil)))
 
 (use-package org-texnum)
+(use-package org-api)
 
-;; TODO these are mostly identical to org-texnum functions. We should
-;; be able to refactor this into a more general API.
+(defun mh//convert-latex-src-block-to-export-block (node)
+  "Convert a LaTeX src block to an export block.
+NODE is the node in the parse tree corresponding to the LaTeX src block."
+  (let ((begin (org-ml-get-property :begin node))
+        (value (org-ml-get-property :value node))
+        (end (org-ml-get-property :end node)))
+    (goto-char begin)
+    (delete-region begin end)
+    (insert (concat "#+BEGIN_EXPORT latex\n"
+                    value
+                    "\n"
+                    "#+END_EXPORT\n\n"))))
 
 (defun mh//convert-latex-blocks-for-latex-export ()
   "Convert LaTeX src blocks in the current buffer to export blocks."
-  (let ((latex-blocks (org-texnum//latex-blocks-in-current-buffer)))
-    (while (not (eq latex-blocks nil))
-      (let* ((latex-block (car latex-blocks))
-             (begin (org-ml-get-property :begin latex-block))
-             (value (org-ml-get-property :value latex-block))
-             (end (org-ml-get-property :end latex-block)))
-        (goto-char begin)
-        (delete-region begin end)
-        (insert (concat "#+BEGIN_EXPORT latex\n"
-                        value
-                        "\n"
-                        "#+END_EXPORT\n\n"))
-        (setq latex-blocks (org-texnum//latex-blocks-in-current-buffer))))))
-
-(defun mh//get-results-blocks-in-section (section)
-  ""
-  (let* ((special-blocks (--filter (org-ml-is-type 'special-block it) section))
-         (results-blocks (--filter (string-equal "results" (org-ml-get-property :type it))
-                                   special-blocks)))
-    results-blocks))
-
-(defun mh//results-blocks-in-headline (headline results-blocks)
-  "Retrieve all RESULTS-BLOCKS in HEADLINE."
-  (let ((section (org-texnum//get-section headline))
-        (headlines (org-texnum//get-headlines headline)))
-    (setq results-blocks
-          (append results-blocks (mh//get-results-blocks-in-section section)))
-    (dolist (headline headlines)
-      (setq results-blocks
-            (mh//results-blocks-in-headline headline results-blocks)))
-    results-blocks))
-
-(defun mh//results-blocks-in-current-buffer ()
-  "Retrieve all results src blocks in the current buffer."
-  (let* ((buffer-tree (org-ml-parse-this-buffer))
-         (top-section (org-texnum//get-section buffer-tree))
-         (results-blocks (mh//get-results-blocks-in-section top-section))
-         (headlines (org-texnum//get-headlines buffer-tree)))
-    (dolist (headline headlines)
-      (setq results-blocks (mh//results-blocks-in-headline headline results-blocks)))
-    results-blocks))
-
-(defun mh//remove-results-blocks-in-current-buffer ()
-  ""
-  (let ((results-blocks (mh//results-blocks-in-current-buffer)))
-    (while (not (eq results-blocks nil))
-      (let* ((results-block (car results-blocks))
-             (begin (org-ml-get-property :begin results-block))
-             (end (org-ml-get-property :end results-block)))
-        (goto-char begin)
-        (delete-region begin end)
-        (setq results-blocks (mh//results-blocks-in-current-buffer))))))
+  (org-api/map-nodes-recursive-in-current-buffer 'mh//convert-latex-src-block-to-export-block
+                                                 '((:and src-block
+                                                    (:language "latex")))))
 
 (defun mh//latex-export-remove-results-blocks (backend)
   "Remove results blocks.
 BACKEND is the export backend."
   (when (org-export-derived-backend-p backend 'latex)
-    (mh//remove-results-blocks-in-current-buffer)))
+    (org-api/map-nodes-recursive-in-current-buffer 'org-api/delete-node
+                                                   '((:and special-block
+                                                      (:type "results"))))))
 
 (defun mh//latex-export-latex-src-block-convert (backend)
   "Replace LaTeX src blocks with LaTeX export blocks.

@@ -128,7 +128,7 @@
  ("org-rifle" . "263f56d70112f5d0496684c89a2aa07959e0a95f")
  ("org-roam" . "b8b180d60d316585b7d0a6860afc1ea4c1219bb1")
  ("org-roam-bibtex" . "a92d9e6f523f449314e72911ba300192a42fc4dc")
- ("org-texnum" . "0fb35d4f8c2473693e178fbf9d519e2d7bd8f2be")
+ ("org-texnum" . "e95b098385585cf99113c9c6834de7dbd8de5bec")
  ("packed" . "c41c3dfda86ae33832ffc146923e2a4675cbacfa")
  ("paradox" . "339fe3518d1d102b2295670340e75caf4f01a29a")
  ("paredit" . "8330a41e8188fe18d3fa805bb9aa529f015318e8")

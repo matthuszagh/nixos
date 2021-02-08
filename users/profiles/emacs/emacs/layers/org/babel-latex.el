@@ -217,6 +217,19 @@ BACKEND is the export backend."
                                                    '((:and special-block
                                                       (:type "results"))))))
 
+(defun mh//remove-file-link-descriptions ()
+  "Remove file link descriptions."
+  (goto-char 0)
+  (while (re-search-forward "\\[\\[file:\\(.*\\)\\]\\[file:.*\\]\\]" nil t)
+    (replace-match (concat "[[file:"
+                           (match-string-no-properties 1)
+                           "]]"))))
+
+(defun mh//latex-export-remove-file-link-descriptions (backend)
+  "Remove file link descriptions during LaTeX export."
+  (when (org-export-derived-backend-p backend 'latex)
+    (mh//remove-file-link-descriptions)))
+
 (defun mh//latex-export-latex-src-block-convert (backend)
   "Replace LaTeX src blocks with LaTeX export blocks.
 BACKEND is the export backend."
@@ -228,5 +241,8 @@ BACKEND is the export backend."
 
 (add-hook 'org-export-before-processing-hook
           'mh//latex-export-latex-src-block-convert)
+
+(add-hook 'org-export-before-processing-hook
+          'mh//latex-export-remove-file-link-descriptions)
 
 ;;; babel-latex.el ends here

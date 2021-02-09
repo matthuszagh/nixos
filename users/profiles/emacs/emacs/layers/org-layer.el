@@ -702,7 +702,18 @@ TODO this works but is slow."
     (interactive)
     (org-api/map-nodes-recursive-in-current-buffer
      'mh//org-pdf-outline-headline-to-noter-format
-     '(headline))))
+     '(headline)))
+
+  (defun mh/org-adapt-line-length-to-visual-line-mode ()
+    "Remove line breaks in org-mode inserted by fill-column."
+    (interactive)
+    (setq-local fill-column 1000000)
+    (org-api/map-nodes-recursive-in-current-buffer
+     (lambda (node)
+       (let ((begin (org-ml-get-property :begin node)))
+         (goto-char begin)
+         (org-fill-paragraph)))
+     '((:or paragraph item)))))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

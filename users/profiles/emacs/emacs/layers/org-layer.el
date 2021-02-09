@@ -540,6 +540,7 @@ org-capture instead."
      "h" 'helm-org-in-buffer-headings))
 
   (:layer modal
+   (setq evil-respect-visual-line-mode t)
    ;; evil appears to override certain org-mode keybindings with the
    ;; outline-mode counterparts. revert them here.
    (general-define-key
@@ -549,7 +550,8 @@ org-capture instead."
     "g p" 'org-mark-ring-goto
     "g d" 'org-open-at-point
     "j" 'evil-next-visual-line
-    "k" 'evil-previous-visual-line)
+    "k" 'evil-previous-visual-line
+    "$" 'evil-end-of-line-or-visual-line)
 
    (general-def 'normal org-mode-map
      "M-j" 'mc/mark-next-like-this

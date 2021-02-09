@@ -40,9 +40,7 @@
   (use-package org
     :demand t
     :hook
-    ((org-mode . (lambda ()
-                   (setq-local fill-column 70)))
-     (org-babel-after-execute . org-display-inline-images))
+    ((org-babel-after-execute . org-display-inline-images))
     :config
     (use-package org-element)
 

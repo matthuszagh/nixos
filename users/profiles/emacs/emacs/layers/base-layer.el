@@ -110,10 +110,8 @@
   ;; Auto-wrap at 70 characters. This is disabled in programming modes.
   (setq-default auto-fill-function 'do-auto-fill)
   (setq-default fill-column 70)
-  (turn-on-auto-fill)
-  ;; disable automatic newlines in minibuffer.
+  ;; Don't insert pairs in the minibuffer.
   (add-hook 'minibuffer-setup-hook (lambda ()
-                                     (setq-local fill-column nil)
                                      (electric-pair-local-mode 'toggle)))
 
   ;; Never ring the bell.

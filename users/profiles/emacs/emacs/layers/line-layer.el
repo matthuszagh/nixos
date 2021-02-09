@@ -20,7 +20,7 @@
 
   (use-package visual-fill-column
     :hook
-    ((text-mode . visual-fill-column-mode))
+    ((visual-line-mode . visual-fill-column-mode))
     :config
     ;; (add-hook 'markdown-mode-hook #'visual-fill-column-mode)
     (setq visual-fill-column-width 70)))

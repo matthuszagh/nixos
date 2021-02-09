@@ -670,7 +670,39 @@ files from an org buffer."
     "Toggle `org-hide-emphasis-markers'."
     (if (eq t org-hide-emphasis-markers)
         (setq org-hide-emphasis-markers nil)
-      (setq org-hide-emphasis-markers t))))
+      (setq org-hide-emphasis-markers t)))
+
+  (defun mh//org-pdf-outline-headline-to-noter-format (node)
+    "Convert the old outline format (with trailing page number in parentheses) to new noter page format.
+NODE is the node representing the headline node."
+    (let* ((headline-text (org-ml-get-property :raw-value node))
+           (begin (org-ml-get-property :begin node))
+           (match-position (string-match "\\(.*\\) (\\([1-9]+\\))" headline-text)))
+      (if match-position
+          (let ((headline-no-number (substring headline-text (match-beginning 1)
+                                               (match-end 1)))
+                (page-number (substring headline-text (match-beginning 2)
+                                        (match-end 2))))
+            (goto-char begin)
+            (org-edit-headline headline-no-number)
+            (org-set-property "NOTER_PAGE" page-number)
+            (message (concat "Converted legacy headline `"
+                             headline-no-number
+                             "' "
+                             "with number `"
+                             page-number
+                             "' to noter format."))))))
+
+  (defun mh/update-all-pdf-outline-headlines-from-legacy-to-noter ()
+    "Convert all headlines from the legacy format in which the
+page number is a trailing number in parentheses to the new org
+noter format.
+
+TODO this works but is slow."
+    (interactive)
+    (org-api/map-nodes-recursive-in-current-buffer
+     'mh//org-pdf-outline-headline-to-noter-format
+     '(headline))))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

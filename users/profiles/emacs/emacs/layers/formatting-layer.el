@@ -23,7 +23,6 @@
   ;;      (add-to-list 'org-mode aggressive-indent-excluded-modes))
   (:layer helm
    (general-def mh/prefix-format-map
-     "p" 'helm-show-kill-ring))
-  )
+     "p" 'helm-show-kill-ring)))
 
 ;;; formatting-layer.el ends here

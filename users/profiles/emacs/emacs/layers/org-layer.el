@@ -547,7 +547,9 @@ org-capture instead."
     :states '(normal motion)
     "<tab>" 'org-cycle
     "g p" 'org-mark-ring-goto
-    "g d" 'org-open-at-point)
+    "g d" 'org-open-at-point
+    "j" 'evil-next-visual-line
+    "k" 'evil-previous-visual-line)
 
    (general-def 'normal org-mode-map
      "M-j" 'mc/mark-next-like-this

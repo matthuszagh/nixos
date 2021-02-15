@@ -551,7 +551,9 @@ org-capture instead."
     "g d" 'org-open-at-point
     "j" 'evil-next-visual-line
     "k" 'evil-previous-visual-line
-    "$" 'evil-end-of-line-or-visual-line)
+    "$" 'evil-end-of-line-or-visual-line
+    "0" 'evil-beginning-of-visual-line
+    "V" 'evil-visual-screen-line)
 
    (general-def 'normal org-mode-map
      "M-j" 'mc/mark-next-like-this

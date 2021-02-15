@@ -246,6 +246,13 @@ For instance this will perform 'a' -> 'b'"
   (defun mh/point-at-line-begp ()
     "Indicate whether point is at the beginning of a line."
     (let ((beg-pos (line-beginning-position)))
-      (eq (point) beg-pos))))
+      (eq (point) beg-pos)))
+
+  (defun mh/replace-all-alist-items-in-current-buffer (alist)
+    "Take an association list ALIST and replace the first item in each alist pair with the second item."
+    (dolist (elt alist)
+      (goto-char 0)
+      (while (re-search-forward (car elt) nil t)
+        (replace-match (cdr elt) t)))))
 
 ;;; base-layer.el ends here

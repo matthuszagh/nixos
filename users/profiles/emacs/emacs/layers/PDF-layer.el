@@ -130,7 +130,59 @@ entire document."
     "Rotate PDF page 90 degrees counterclockwise.  With prefix ARG,
 rotate entire document."
     (interactive "P")
-    (mh//pdf-view--rotate :counterclockwise (not arg))))
+    (mh//pdf-view--rotate :counterclockwise (not arg)))
+
+  (defun mh/pdf-outline-to-k2pdfopt-input ()
+    "Take an existing PDF outline and generate an equivalent input in the format expected by k2pdfopt.
+The outline display uses a line for each outline entry. The page
+number is displayed at the end of the line in parentheses. The
+line has two spaces at the beginning for each sublevel. For example:
+
+RF Digital Troubleshooting (63)
+Removal & Replacement (67)
+  RF Section Fuses (67)
+  Coax Switch & BPF (68)
+
+The k2pdfopt input places the page number at the beginning of the
+line after all + symbols and uses a + for each sublevel (no + for
+top level). For example:
+
+63 RF Digital Troubleshooting
+67 Removal & Replacement
++67 RF Section Fuses
++68 Coax Switch & BPF
+
+Therefore, we should replace every consecutive 2 spaces by a '+'
+and then move the page number to after the pluses.
+"
+    (interactive)
+    (let* ((outline-buffer (buffer-name))
+           (buffer-sha (buffer-hash))
+           (k2pdfopt-buffer (get-buffer-create "*outline k2pdfopt*")))
+      (with-current-buffer k2pdfopt-buffer
+        (delete-region (point-min) (point-max)))
+      (with-current-buffer outline-buffer
+        (copy-to-buffer k2pdfopt-buffer (point-min) (point-max)))
+      (with-current-buffer k2pdfopt-buffer
+        (goto-char (point-min))
+        ;; Replace all double spaces not at the beginning of the current
+        ;; line with single spaces.
+        (while (re-search-forward "\\(.\\)  " nil t)
+          (replace-match (concat (match-string-no-properties 1) " ")))
+        (goto-char (point-min))
+        ;; Replace all remaining 2 spaces with '+' symbol.
+        (while (search-forward "  " nil t)
+          (replace-match "+" nil t))
+        ;; Move page number to after + symbols.
+        (goto-char (point-min))
+        (while (re-search-forward " (\\([0-9]+\\))" nil t)
+          (let ((page-number (match-string-no-properties 1)))
+            (replace-match "")
+            (beginning-of-line)
+            (re-search-forward "\\(\\+*\\)" (line-end-position) t)
+            (replace-match (concat (match-string-no-properties 1)
+                                   page-number
+                                   " "))))))))
 
 
 ;;; pdf-layer.el ends here

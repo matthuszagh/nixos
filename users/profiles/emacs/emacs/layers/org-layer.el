@@ -717,7 +717,32 @@ TODO this works but is slow."
        (let ((begin (org-ml-get-property :begin node)))
          (goto-char begin)
          (org-fill-paragraph)))
-     '((:or paragraph item)))))
+     '((:or paragraph item))))
+
+  (defun mh/org-replace-common-legacy-symbols-in-current-buffer ()
+    ""
+    (interactive)
+    (mh/replace-all-alist-items-in-current-buffer
+     '(("_{in}" . "_{\\\\mathrm{in}}")
+       ("_{out}" . "_{\\\\mathrm{out}}")
+       ("_{\\\\mathit{CC}}" . "_{\\\\mathrm{CC}}")
+       ("_{CC}" . "_{\\\\mathrm{CC}}")
+       ("_{EE}" . "_{\\\\mathrm{EE}}")
+       ("_{CE}" . "_{\\\\mathrm{CE}}")
+       ("_{BE}" . "_{\\\\mathrm{BE}}")
+       ("V_T" . "V_{\\\\mathrm{T}}")
+       ("V_A" . "V_{\\\\mathrm{A}}")
+       ("V_E" . "V_{\\\\mathrm{E}}")
+       ("R_E" . "R_{\\\\mathrm{E}}")
+       ("I_E" . "I_{\\\\mathrm{E}}")
+       ("V_B" . "V_{\\\\mathrm{B}}")
+       ("R_B" . "R_{\\\\mathrm{B}}")
+       ("I_B" . "I_{\\\\mathrm{B}}")
+       ("V_C" . "V_{\\\\mathrm{C}}")
+       ("R_C" . "R_{\\\\mathrm{C}}")
+       ("I_C" . "I_{\\\\mathrm{C}}")
+       ("_{load}" . "_{\\\\mathrm{load}}")
+       ("_{source}" . "_{\\\\mathrm{source}}")))))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

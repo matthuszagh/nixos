@@ -89,8 +89,8 @@
         (apply #'aas-set-snippets mode math-snippets))))
 
   :postsetup
-  (:layer TeX
-   (add-hook 'latex-mode-hook #'yas-minor-mode))
+  (:layer tex
+   (add-hook 'TeX-mode-hook #'yas-minor-mode))
 
   (:layer org
    (add-hook 'org-mode-hook #'yas-minor-mode)

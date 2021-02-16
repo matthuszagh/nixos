@@ -5,5 +5,6 @@
     ./math
     ./pdf
     ./djvu
+    ./word-processing
   ];
 }

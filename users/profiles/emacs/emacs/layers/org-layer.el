@@ -742,7 +742,19 @@ TODO this works but is slow."
        ("R_C" . "R_{\\\\mathrm{C}}")
        ("I_C" . "I_{\\\\mathrm{C}}")
        ("_{load}" . "_{\\\\mathrm{load}}")
-       ("_{source}" . "_{\\\\mathrm{source}}")))))
+       ("_{source}" . "_{\\\\mathrm{source}}"))))
+
+  (defun mh/org-insert-file-image (file)
+    "Insert an inline image at point from FILE into an Org buffer."
+    (interactive "fFile: ")
+    (insert
+     (concat "#+ATTR_ORG: :width 1000\n"
+             "#+ATTR_HTML: :width 100%\n"
+             "#+NAME: fig:\n"
+             "[[file:"
+             (file-relative-name file)
+             "]]"))
+    (org-display-inline-images)))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

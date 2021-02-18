@@ -46,6 +46,7 @@
 
     (setq org-startup-with-latex-preview t)
     (setq org-startup-with-inline-images t)
+    (setq org-startup-folded t)
 
     ;; show invisible text when editing it
     (setq org-catch-invisible-edits 'show)

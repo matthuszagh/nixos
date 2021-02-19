@@ -18,16 +18,18 @@ in
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/7e553741-ca17-43f2-994d-da6d7f8a92ef";
+    {
+      device = "/dev/disk/by-uuid/ff14b70d-390b-4c97-b49e-d7ea8eeee5bf";
       fsType = "btrfs";
-      options = [ "subvol=nixos" "ssd" "noatime" "defaults" "compress=lzo"];
+      options = [ "subvol=nixos" "ssd" "noatime" "defaults" "compress=zstd:2" ];
     };
 
-  boot.initrd.luks.devices."cryptnvme".device = "/dev/disk/by-uuid/de6dd707-da33-4eaa-9a07-6dba6783f044";
-  boot.initrd.luks.devices."cryptsd".device = "/dev/disk/by-uuid/a41ef7e1-ee7f-4eef-9a10-bb05775a5dba";
+  boot.initrd.luks.devices."cryptnvme".device = "/dev/disk/by-uuid/b2d421d4-5431-4887-9270-74d9a95b3b27";
+  boot.initrd.luks.devices."cryptsd".device = "/dev/disk/by-uuid/4c98c733-a031-4a12-bfda-3f364130db00";
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/9CC4-F224";
+    {
+      device = "/dev/disk/by-uuid/7654-76D2";
       fsType = "vfat";
     };
 

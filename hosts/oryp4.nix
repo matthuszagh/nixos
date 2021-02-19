@@ -16,11 +16,11 @@ in
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
       kernelModules = [ ];
-    };
-    luks = {
-      devices = {
-        "cryptnvme".device = "/dev/disk/by-uuid/b2d421d4-5431-4887-9270-74d9a95b3b27";
-        "cryptsd".device = "/dev/disk/by-uuid/4c98c733-a031-4a12-bfda-3f364130db00";
+      luks = {
+        devices = {
+          "cryptnvme".device = "/dev/disk/by-uuid/b2d421d4-5431-4887-9270-74d9a95b3b27";
+          "cryptsd".device = "/dev/disk/by-uuid/4c98c733-a031-4a12-bfda-3f364130db00";
+        };
       };
     };
     kernelModules = [ "kvm-intel" ];

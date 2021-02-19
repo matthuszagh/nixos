@@ -37,30 +37,31 @@ in
 
   services.xserver = {
     videoDrivers = if useNvidia then [ "nvidia" ] else [ "intel" ];
-    resolutions = [ { x = 3840; y = 2160; } ];
+    resolutions = [{ x = 3840; y = 2160; }];
     dpi = 192;
     defaultDepth = 24;
   };
 
-  hardware = if useNvidia then {
-    nvidia = {
-      modesetting.enable = true;
-      prime = {
-        sync.enable = true;
-        # offload.enable = true;
-        nvidiaBusId = "PCI:1:0:0";
-        intelBusId = "PCI:0:2:0";
+  hardware =
+    if useNvidia then {
+      nvidia = {
+        modesetting.enable = true;
+        prime = {
+          sync.enable = true;
+          # offload.enable = true;
+          nvidiaBusId = "PCI:1:0:0";
+          intelBusId = "PCI:0:2:0";
+        };
       };
-    };
-  } else {
-    opengl.extraPackages = with pkgs; [
+    } else {
+      opengl.extraPackages = with pkgs; [
         vaapiIntel
         vaapiVdpau
         libvdpau-va-gl
         intel-media-driver
       ];
-    cpu.intel.updateMicrocode = true;
-  };
+      cpu.intel.updateMicrocode = true;
+    };
 
   networking = {
     wireless = {

@@ -3,14 +3,12 @@
 , pkgs
 , ...
 }:
-
 let
   useNvidia = false;
 in
 {
   imports = [
     ./profiles/systemd-boot.nix
-    ./profiles/btrfs-backup
     ./profiles/btrfs.nix
   ];
 

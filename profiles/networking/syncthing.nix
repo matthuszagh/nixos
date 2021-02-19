@@ -1,4 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config
+, lib
+, pkgs
+, ...
+}:
 
 {
   services.syncthing = {
@@ -29,7 +33,7 @@
           introducer = true;
         };
         oryp4 = {
-          id = "YQIDZ2A-IQO2SYY-ESQWJ5I-WOLAWEM-VCL6ET3-7TTEUQD-CZYF3KO-VGSFRAO";
+          id = "ILYGTMW-SJNZVBQ-2V6QK25-DP4VXMC-EEELHIB-OD4IEJR-4VR36K2-EEH7FQS";
           introducer = false;
         };
       };

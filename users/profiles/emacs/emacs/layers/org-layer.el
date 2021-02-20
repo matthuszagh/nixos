@@ -51,6 +51,9 @@
     ;; show invisible text when editing it
     (setq org-catch-invisible-edits 'show)
 
+    ;; place archives in the current file under the top-level 'archive' headline
+    (setq org-archive-location "::* archive")
+
     ;; hide emphasis markers
     (setq org-hide-emphasis-markers t)
 

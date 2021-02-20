@@ -31,6 +31,7 @@
   };
 
   hardware.cpu.amd.updateMicrocode = true;
+  hardware.video.hidpi.enable = lib.mkDefault true;
 
   fileSystems."/" =
     {

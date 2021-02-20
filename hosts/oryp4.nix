@@ -60,6 +60,7 @@ in
           intelBusId = "PCI:0:2:0";
         };
       };
+      video.hidpi.enable = lib.mkDefault true;
     } else {
       opengl.extraPackages = with pkgs; [
         vaapiIntel
@@ -68,6 +69,7 @@ in
         intel-media-driver
       ];
       cpu.intel.updateMicrocode = true;
+      video.hidpi.enable = lib.mkDefault true;
     };
 
   networking = {

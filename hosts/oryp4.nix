@@ -18,8 +18,8 @@ in
       kernelModules = [ ];
       luks = {
         devices = {
-          "cryptnvme".device = "/dev/disk/by-uuid/b2d421d4-5431-4887-9270-74d9a95b3b27";
-          "cryptsd".device = "/dev/disk/by-uuid/4c98c733-a031-4a12-bfda-3f364130db00";
+          "cryptnvme".device = "/dev/disk/by-uuid/73c0dace-dd87-486e-9b5f-d0f9e60ae353";
+          "cryptsd".device = "/dev/disk/by-uuid/f9bfd4e3-89da-434c-920b-9f646027cecd";
         };
       };
     };
@@ -29,14 +29,14 @@ in
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-uuid/ff14b70d-390b-4c97-b49e-d7ea8eeee5bf";
+      device = "/dev/disk/by-uuid/89519238-a940-4adb-a18e-2b5229ade6fa";
       fsType = "btrfs";
-      options = [ "subvol=nixos" "ssd" "noatime" "defaults" "compress=zstd:2" ];
+      options = [ "subvol=nixos" "ssd" "noatime" "compress=zstd:2" ];
     };
 
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/7654-76D2";
+      device = "/dev/disk/by-uuid/684A-B3D0";
       fsType = "vfat";
     };
 

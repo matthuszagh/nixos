@@ -12,18 +12,22 @@
         "src" = {
           path = "/home/matt/src";
           devices = [ "ryzen3950" "oryp4" ];
+          ignorePerms = false;
         };
         "doc" = {
           path = "/home/matt/doc";
           devices = [ "ryzen3950" "oryp4" ];
+          ignorePerms = false;
         };
         "gnupg" = {
           path = "/home/matt/.gnupg";
           devices = [ "ryzen3950" "oryp4" ];
+          ignorePerms = false;
         };
         "ssh" = {
           path = "/home/matt/.ssh";
           devices = [ "ryzen3950" "oryp4" ];
+          ignorePerms = false;
         };
       };
 
@@ -33,7 +37,7 @@
           introducer = true;
         };
         oryp4 = {
-          id = "ILYGTMW-SJNZVBQ-2V6QK25-DP4VXMC-EEELHIB-OD4IEJR-4VR36K2-EEH7FQS";
+          id = "LB4D4GR-KDB2QRT-5UOX5SW-CLLZNEJ-ARIQUOG-KXTAGHZ-OUTP5YS-F5O35A7";
           introducer = false;
         };
       };

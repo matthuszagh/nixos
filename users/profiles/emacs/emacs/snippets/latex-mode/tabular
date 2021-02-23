@@ -1,11 +1,11 @@
 # -*- mode: snippet -*-
-# name: tabularx
-# key: tabx
+# name: tabular
+# key: tab
 # --
-\begin{tabularx}{${1:20cm}}{${2:c}}
+\begin{tabular}{${1:c}}
   \toprule
   $3 \\\
   \midrule
   $0 \\\
   \bottomrule
-\end{tabularx}
+\end{tabular}

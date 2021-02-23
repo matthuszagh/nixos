@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: full template of tikzpicture enivornment
-# key: tikz
-# --
-\begin{tikzpicture}
-  $0
-\end{tikzpicture}

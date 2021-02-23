@@ -115,7 +115,12 @@
                                                "  \\begin{align}\n"
                                                "    $1\n"
                                                "  \\end{align}\n"
-                                               "\\end{proof}$0"))))))
+                                               "\\end{proof}$0")))
+           "tkz" (lambda ()
+                   (interactive)
+                   (yas-expand-snippet (concat "\\begin{tikzpicture}\n"
+                                               "  $1\n"
+                                               "\\end{tikzpicture}$0"))))))
      (apply #'aas-set-snippets 'org-mode latex-block-snippets)))
 
   (:layer verilog

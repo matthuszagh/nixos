@@ -62,4 +62,9 @@
 %% tikztiminglibraries
 \usetikztiminglibrary{counters}
 
+% Using an equals sign in a tikz node messes up the parser (see
+% https://tex.stackexchange.com/a/110695/168657). We can use this
+% macro instead.
+\newcommand*{\equal}{=}
+
 \endinput

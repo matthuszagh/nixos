@@ -49,13 +49,21 @@ in
     defaultDepth = 24;
   };
 
+  # Nvidia GPU must either be used in sync mode (always on with
+  # proprietary Nvidia drivers), or with the open source Nvidia
+  # drivers (nouveau). The Nvidia GPU cannot be fully turned off
+  # because the GeForce 1070 uses the Pascal microarchitecture
+  # (according to https://nixos.wiki/wiki/Nvidia). Therefore,
+  # `useNvidia=true` fully enables the GPU, whereas `useNvidia=false`
+  # use the nouveau driver for it. Unfortunately, this GPU cannot be
+  # used in "offload" mode, which would enable turning it on and off
+  # at will.
   hardware =
     if useNvidia then {
       nvidia = {
         modesetting.enable = true;
         prime = {
           sync.enable = true;
-          # offload.enable = true;
           nvidiaBusId = "PCI:1:0:0";
           intelBusId = "PCI:0:2:0";
         };

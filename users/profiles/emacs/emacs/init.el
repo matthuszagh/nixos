@@ -64,6 +64,7 @@
                     pinentry
                     image
                     time
+                    calendar
 
                     ;; appearance
                     ;; sourcerer-theme

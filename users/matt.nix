@@ -30,6 +30,7 @@
       ./profiles/chktex
       ./profiles/direnv
       ./profiles/clang-format
+      ./profiles/inkscape
       ./profiles/ngspice
       ./profiles/octave
       ./profiles/notmuch

@@ -17,7 +17,6 @@
   environment.systemPackages = with pkgs; [
     imagemagick
     gimp
-    inkscape
     ghostscript
     gnuplot
     vlc

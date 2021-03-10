@@ -18,6 +18,9 @@
         pgfopts
         preview
 
+        # math
+        unicode-math
+
         # customizable lists
         enumitem
 

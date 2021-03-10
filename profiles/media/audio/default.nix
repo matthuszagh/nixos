@@ -21,5 +21,7 @@
     };
   };
 
+  services.blueman.enable = true;
+
   sound.enable = true;
 }

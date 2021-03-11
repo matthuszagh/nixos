@@ -1,6 +1,7 @@
 {
   imports = [
     ./db
+    ./desktop
     ./dev
     ./games
     ./graphics

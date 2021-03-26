@@ -5,6 +5,7 @@
     ./brother-pt1230-pc-label-printer.nix
     ./epson-es400-scanner.nix
     ./glasgow.nix
+    ./hp-officejet-pro-8600-plus-scanner.nix
     ./superlead-2300-qr-scanner.nix
     ./fmcw-radar.nix
     ./ni-gpib-usb-hs.nix

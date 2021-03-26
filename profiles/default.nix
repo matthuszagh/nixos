@@ -24,6 +24,7 @@
     brother-pt1230-pc-label-printer.enable = true;
     epson-es400-scanner.enable = true;
     glasgow.enable = true;
+    hp-officejet-pro-8600-plus-scanner.enable = true;
     fmcw-radar.enable = true;
     ni-gpib-usb-hs.enable = true;
     pl2303-usb-rs232-adapter.enable = true;

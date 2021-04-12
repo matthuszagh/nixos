@@ -3,8 +3,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/master";
     home.url = "github:rycee/home-manager";
     emacsOverlay.url = "github:nix-community/emacs-overlay";
-    # package overrides
-    sageNixpkgs.url = "github:nixos/nixpkgs/7866440f1223dc447f38cb23c00e10b44b4c98fe";
+    ## package overrides
+    # 2021-04-07
+    sageNixpkgs.url = "github:nixos/nixpkgs/49cfaef0c34007ade99c7a23497bd5993b8152f0";
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
     anystyleNixpkgs.url = "github:SCOTT-HAMILTON/nixpkgs/4cf6c95cb021b62e78e769af7ba64280b340b666";
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";

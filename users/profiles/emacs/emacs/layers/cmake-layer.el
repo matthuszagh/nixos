@@ -1,4 +1,6 @@
-;;; cmake-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; cmake-layer.el --- CMake Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -10,7 +12,7 @@
 
   :setup
   (use-package cmake-mode
-    :mode ("CMakeLists.txt" ".cmake")
+    :mode ("CMakeLists.txt" "\\.cmake\\'")
     :hook (cmake-mode . (lambda ()
                           (set (make-local-variable 'company-backends)
                                (list

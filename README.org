@@ -62,3 +62,10 @@ First, add the repo + branch as an input and then add it to the function argumen
       pkgs = (pkgImport nixpkgs) // overridePkgs;
       [...]
 #+end_src
+
+* emacs subtree
+To push changes up to the Emacs subtree, run
+
+#+begin_src bash :eval no
+git subtree push --prefix=users/profiles/emacs/emacs emacs master
+#+end_src

@@ -746,7 +746,8 @@ TODO this works but is slow."
        ("R_C" . "R_{\\\\mathrm{C}}")
        ("I_C" . "I_{\\\\mathrm{C}}")
        ("_{load}" . "_{\\\\mathrm{load}}")
-       ("_{source}" . "_{\\\\mathrm{source}}"))))
+       ("_{source}" . "_{\\\\mathrm{source}}")
+       (",>=stealth" . ""))))
 
   (defun mh/org-insert-file-image (file)
     "Insert an inline image at point from FILE into an Org buffer."

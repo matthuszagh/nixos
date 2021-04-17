@@ -58,7 +58,7 @@
     (let ((math-snippets
            (list
             :cond #'texmathp
-            "cs" (lambda ()
+            "case" (lambda ()
               	   (interactive)
                    (yas-expand-snippet (concat "\\begin{cases}\n"
                                                "    $1\n"

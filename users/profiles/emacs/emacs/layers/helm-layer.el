@@ -116,11 +116,6 @@
     "C-n" 'helm-ff-properties-persistent
     "M-SPC" 'mh/command-prefix)
 
-   (general-def mh/prefix-search-map
-     "g" 'helm-do-grep-ag
-     "p" 'helm-browse-project
-     "P" 'helm-projects-history)
-
    ;; keybindings for candidates in `helm-buffers-list'
    (general-def helm-buffer-map
      "C-d" 'helm-buffer-run-kill-persistent))
@@ -133,15 +128,27 @@
    (use-package helm-ls-git
      :config
      (setq helm-locate-project-list '("~/src"))
-     (setq helm-ls-git-status-command 'magit-status-setup-buffer)))
+     (setq helm-ls-git-status-command 'magit-status-setup-buffer)
+     ;; search the full project, rather than just under the current directory
+     (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p")))
 
   (:layer (vcs modal)
    (general-def helm-ls-git-map
      "M-SPC" 'mh/command-prefix
+     ;; gets git status
      "C-v" (lambda ()
              (interactive)
              ;; this isn't ideal and there should be a better way to
              ;; do this, but it works
-             (helm-select-nth-action 1)))))
+             (helm-select-nth-action 1)))
+
+   (general-def mh/prefix-search-map
+     "g" (lambda ()
+           (interactive)
+           (if (helm-ls-git-root-dir)
+               (command-execute 'helm-grep-do-git-grep)
+             (command-execute 'helm-do-grep-ag)))
+     "p" 'helm-browse-project
+     "P" 'helm-projects-history)))
 
 ;;; helm-layer.el ends here

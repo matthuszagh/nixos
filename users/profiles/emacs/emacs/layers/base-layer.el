@@ -107,9 +107,6 @@
   ;; Newline at end of file.
   (setq require-final-newline t)
 
-  ;; Auto-wrap at 70 characters. This is disabled in programming modes.
-  (setq-default auto-fill-function 'do-auto-fill)
-  (setq-default fill-column 70)
   ;; Don't insert pairs in the minibuffer.
   (add-hook 'minibuffer-setup-hook (lambda ()
                                      (electric-pair-local-mode 'toggle)))

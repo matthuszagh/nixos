@@ -67,6 +67,16 @@
   (defun mh/start-vpn ()
     (interactive)
     (start-process-shell-command
-     "pia" nil "sudo systemctl start openvpn-us-east")))
+     "pia" nil "sudo systemctl start openvpn-us-east"))
+
+  (defun mh/low-power-mode ()
+    (interactive)
+    (start-process-shell-command
+     "low-power" nil "cd ~/src/tools && ./low-power.sh"))
+
+  (defun mh/high-power-mode ()
+    (interactive)
+    (start-process-shell-command
+     "high-power" nil "cd ~/src/tools && ./high-power.sh")))
 
 ;;; sysadmin-layer.el ends here

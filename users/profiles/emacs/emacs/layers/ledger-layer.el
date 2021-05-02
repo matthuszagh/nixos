@@ -1,8 +1,16 @@
-;;; ledger-layer.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; ledger-layer.el --- Ledger Layer -*- lexical-binding: t; -*-
+
+;;; Commentary:
 
 ;;; Code:
 
 (layer-def ledger
+  :presetup
+  (:layer straight
+   (straight-use-package 'ledger-mode)
+   (straight-use-package 'flycheck-ledger)
+   (straight-use-package 'evil-ledger))
+
   :setup
   (use-package ledger-mode)
 

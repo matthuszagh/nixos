@@ -24,8 +24,9 @@
     ;; use monospaced rather than proportional fonts
     (setq shr-use-fonts nil)
     (setq shr-use-colors nil)
-    ;; wrap text at 70 in eww
-    (setq shr-width 70))
+    ;; don't limit window and character width
+    (setq shr-width nil)
+    (setq shr-max-width nil))
 
   :postsetup
   (:layer helm

@@ -17,6 +17,7 @@ in
           # instead of in the electronics/default.nix file
           pyclipper # needed for kicad plugin
           skidl
+          pip
         ];
 
       pythonEnv = pkgs.python3.withPackages packages;

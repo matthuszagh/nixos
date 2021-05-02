@@ -22,6 +22,7 @@
     gnuplot
     vlc
     mpv
+    kdeApplications.gwenview # TODO this will become plasma5Packages.gwenview in a future nixpkgs version
     mesa
     xlibs.xwininfo
     xlibs.xhost

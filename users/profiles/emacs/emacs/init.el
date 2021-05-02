@@ -60,7 +60,7 @@
                     no-littering
                     mail
                     recoll
-                    ;; ledger
+                    ledger
                     pinentry
                     image
                     time

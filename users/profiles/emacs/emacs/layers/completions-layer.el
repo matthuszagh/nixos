@@ -34,6 +34,13 @@
    ;; (general-def company-active-map
    ;;   "<tab>" 'company-complete-selection)
    (general-def company-active-map
-     "<tab>" 'company-complete-common)))
+     "<tab>" 'company-complete-common))
+
+  (:layer org-roam
+   (setq org-roam-completion-everywhere t)
+   (add-hook 'org-mode-hook 'company-mode)
+   (add-hook 'org-mode-hook
+             (lambda ()
+               (setq-local company-backends '(company-capf))))))
 
 ;;; completions-layer.el ends here

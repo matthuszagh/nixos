@@ -629,10 +629,6 @@ org-capture instead."
   (:layer documentation
    (use-package ol-man))
 
-  (:layer completions
-   (add-hook 'org-mode-hook (lambda ()
-                              (company-mode -1))))
-
   ;; (:layer windows
   ;; (add-to-list 'display-buffer-alist
   ;;              '("\\*Org Src.*" . (mh//display-popup-buffer-respect-monitors . ())))

@@ -1,7 +1,7 @@
 final: prev:
 
 {
-  csxcad = (prev.csxcad.override {}).overrideAttrs (oldAttrs: {
+  csxcad = (prev.csxcad.override { }).overrideAttrs (oldAttrs: {
     src = prev.fetchFromGitHub {
       owner = "matthuszagh";
       repo = "CSXCAD";
@@ -9,4 +9,6 @@ final: prev:
       sha256 = "0dwz34a6m682jv8gx51jlpbql9s0rpj2b58yvlx8m7zy1xr4hcdf";
     };
   });
+
+  csxcad-original = prev.csxcad;
 }

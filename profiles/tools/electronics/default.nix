@@ -6,5 +6,6 @@
     ngspice
     kicad
     lady-heather
+    dsview
   ];
 }

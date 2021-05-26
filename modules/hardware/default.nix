@@ -3,6 +3,7 @@
 {
   imports = [
     ./brother-pt1230-pc-label-printer.nix
+    ./dslogic.nix
     ./epson-es400-scanner.nix
     ./glasgow.nix
     ./hp-officejet-pro-8600-plus-scanner.nix

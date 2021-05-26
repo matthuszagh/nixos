@@ -32,6 +32,22 @@
         "type": "github"
       }
     },
+    "dsviewNixpkgs": {
+      "locked": {
+        "lastModified": 1605710171,
+        "narHash": "sha256-CVdObKQVbg55EosTKwTUaU4DCttiqm7ORcbIM6JOeac=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "00b385c61226a3f3c396581fd7b4851d99e20910",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "00b385c61226a3f3c396581fd7b4851d99e20910",
+        "type": "github"
+      }
+    },
     "emacsOverlay": {
       "locked": {
         "lastModified": 1599755053,
@@ -179,6 +195,7 @@
       "inputs": {
         "anystyleNixpkgs": "anystyleNixpkgs",
         "asymptoteNixpkgs": "asymptoteNixpkgs",
+        "dsviewNixpkgs": "dsviewNixpkgs",
         "emacsOverlay": "emacsOverlay",
         "home": "home",
         "koreaderNixpkgs": "koreaderNixpkgs",

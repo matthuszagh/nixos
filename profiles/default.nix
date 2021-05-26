@@ -22,6 +22,7 @@
   hardware = {
     superlead-2300-qr-scanner.enable = true;
     brother-pt1230-pc-label-printer.enable = true;
+    dslogic.enable = true;
     epson-es400-scanner.enable = true;
     glasgow.enable = true;
     hp-officejet-pro-8600-plus-scanner.enable = true;

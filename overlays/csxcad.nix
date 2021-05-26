@@ -9,6 +9,4 @@ final: prev:
       sha256 = "0dwz34a6m682jv8gx51jlpbql9s0rpj2b58yvlx8m7zy1xr4hcdf";
     };
   });
-
-  csxcad-original = prev.csxcad;
 }

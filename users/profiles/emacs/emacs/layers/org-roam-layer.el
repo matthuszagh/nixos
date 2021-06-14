@@ -27,6 +27,11 @@
                             "#+CREATED: %(mh/time-stamp)\n"
                             "#+MODIFIED: %(mh/time-stamp)\n\n"
                             "* resources\n"
+                            "| link | description | type |\n"
+                            "| <l>  | <l>         | <c>  |\n"
+                            "| <40> | <40>        |      |\n"
+                            "|------+-------------+------|\n"
+                            "|      |             |      |\n\n"
                             "** bibliography\n"
                             "<<bibliography link>>\nbibliography:library.bib")
              :unnarrowed t)))
@@ -65,6 +70,12 @@
 :END:
 %(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1)
 * references
+| link | description | type |
+| <l>  | <l>         | <c>  |
+| <40> | <40>        |      |
+|------+-------------+------|
+|      |             |      |
+
 ** bibliography
 <<bibliography link>>
 bibliography:library.bib"

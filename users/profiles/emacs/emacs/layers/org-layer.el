@@ -570,6 +570,7 @@ org-capture instead."
      "C-k" 'outline-move-subtree-up)
 
    ;; local org mode commands
+   ;; TODO add local keymaps
    (localleader :keymaps 'org-mode-map
      "T" 'org-babel-tangle
      "l" 'org-insert-link
@@ -587,7 +588,8 @@ org-capture instead."
      "P" 'org-priority
      "L" 'org-latex-preview
      "z" 'mh/command-org-tex-insert-prefix
-     "o" 'org-open-at-point)
+     "o" 'org-open-at-point
+     "R" 'org-table-iterate-buffer-tables)
 
    (general-define-key
     :keymaps 'org-mode-map

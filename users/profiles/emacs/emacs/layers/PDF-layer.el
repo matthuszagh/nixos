@@ -22,6 +22,8 @@
     (pdf-tools-install)
     ;; fixes an issue in emacs 27 where pdf is blurry and too large otherwise.
     (setq image-scaling-factor 1)
+    ;; do not limit max page/image size
+    (setq pdf-view-max-image-width 100000)
 
     ;; TODO remove if this pr accepted: https://github.com/politza/pdf-tools/pull/602
     (defun mh/pdf-outline-noselect (&optional buffer)

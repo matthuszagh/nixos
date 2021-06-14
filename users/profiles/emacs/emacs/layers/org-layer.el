@@ -757,7 +757,40 @@ TODO this works but is slow."
              "[[file:"
              (file-relative-name file)
              "]]"))
-    (org-display-inline-images)))
+    (org-display-inline-images))
+
+  (defun mh/org-insert-sections-personal-machine ()
+    "Insert sections for a personal machine wiki page."
+    (interactive)
+    (insert
+     (concat "* specifications\n"
+             "** options\n"
+             "* operating instructions\n"
+             "* theory of operation\n"
+             "** hardware\n"
+             "** software\n"
+             "* construction\n"
+             "* assembly and disassembly\n"
+             "* functional verification\n"
+             "* maintenance\n"
+             "** preliminary maintenance\n"
+             "*** non-volatile storage backup\n"
+             "*** components that require immediate replacement\n"
+             "** general maintenance\n"
+             "*** component aging and failure\n"
+             "*** cleaning\n"
+             "* calibration and adjustment\n"
+             "* machines\n"
+             "** status\n"
+             "** options\n"
+             "** initial instrument state\n"
+             "*** visual inspection\n"
+             "**** exterior\n"
+             "**** interior\n"
+             "** functional verification log\n"
+             "** calibration and adjustment log\n"
+             "** repair log\n"
+             "** modifications\n"))))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

@@ -15,7 +15,6 @@
 
     bluetooth = {
       enable = true;
-      hsphfpd.enable = true;
       powerOnBoot = true;
       package = pkgs.bluezFull;
     };

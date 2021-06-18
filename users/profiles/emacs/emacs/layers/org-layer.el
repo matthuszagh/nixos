@@ -790,7 +790,21 @@ TODO this works but is slow."
              "** functional verification log\n"
              "** calibration and adjustment log\n"
              "** repair log\n"
-             "** modifications\n"))))
+             "** modifications\n")))
+
+  (defun mh/org-insert-sections-circuit ()
+    "Insert sections for a circuit wiki page."
+    (interactive)
+    (insert
+     (concat "** schematic\n"
+             "** operation\n"
+             "** configuration\n"
+             "** simulation\n"
+             "** limitations\n"
+             "** alternatives\n"
+             "** variants\n"
+             "** references\n"
+             "** glossary\n"))))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

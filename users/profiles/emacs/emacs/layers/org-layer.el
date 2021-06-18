@@ -402,6 +402,7 @@
        (screen . t)
        (shell . t)
        (shen . t)
+       (spice . t)
        (sql . t)
        (sqlite . t)))
 

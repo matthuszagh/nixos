@@ -14,6 +14,7 @@
     :config
     (setq dumb-jump-selector 'helm))
 
+  ;; TODO this can probably be removed now (https://github.com/jacktasia/dumb-jump/pull/400)
   (defun mh//override-dumb-jump-prompt-user-for-choice (proj results)
     "Put a PROJ's list of RESULTS in a 'popup-menu' (or helm/ivy)
 for user to select.  Filters PROJ path from files for display."

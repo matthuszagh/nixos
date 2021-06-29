@@ -3,6 +3,7 @@
     ./db
     ./desktop
     ./dev
+    ./finance
     ./games
     ./graphics
     ./networking

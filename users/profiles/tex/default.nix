@@ -18,6 +18,9 @@
         pgfopts
         preview
 
+        # tables
+        multirow
+
         # math
         unicode-math
 

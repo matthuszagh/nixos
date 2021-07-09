@@ -18,6 +18,7 @@
     # https://github.com/NixOS/nixpkgs/issues/94315#issuecomment-719892849
     mesaNixpkgs.url = "github:nixos/nixpkgs/bdac777becdbb8780c35be4f552c9d4518fe0bdb";
     asymptoteNixpkgs.url = "github:nixos/nixpkgs/6eeb612a9b6160df2e110021d93bef3e6e538b9a";
+    curaNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
   };
 
   outputs =
@@ -37,6 +38,7 @@
     , dsviewNixpkgs
     , mesaNixpkgs
     , asymptoteNixpkgs
+    , curaNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -77,6 +79,7 @@
         dsview = (pkgImport dsviewNixpkgs).dsview;
         mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
         asymptote = (pkgImport asymptoteNixpkgs).asymptote;
+        cura = (pkgImport curaNixpkgs).cura;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

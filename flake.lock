@@ -32,6 +32,22 @@
         "type": "github"
       }
     },
+    "curaNixpkgs": {
+      "locked": {
+        "lastModified": 1625692967,
+        "narHash": "sha256-KA2BnWBfLLMSOgn6oz1BIHKIBUlikqRxRbRi05Ue4fI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "797f77ab66f17c0c7e8c10b137a213d56c9ff36d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "797f77ab66f17c0c7e8c10b137a213d56c9ff36d",
+        "type": "github"
+      }
+    },
     "dsviewNixpkgs": {
       "locked": {
         "lastModified": 1605710171,
@@ -195,6 +211,7 @@
       "inputs": {
         "anystyleNixpkgs": "anystyleNixpkgs",
         "asymptoteNixpkgs": "asymptoteNixpkgs",
+        "curaNixpkgs": "curaNixpkgs",
         "dsviewNixpkgs": "dsviewNixpkgs",
         "emacsOverlay": "emacsOverlay",
         "home": "home",

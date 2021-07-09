@@ -13,7 +13,9 @@
   (use-package rustic
     :config
     (setq rustic-lsp-server 'rls)
-    (add-hook 'rustic-mode-hook (lambda ()
-                                  (remove-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p t)))))
+    (add-hook 'rustic-mode-hook
+              (lambda ()
+                (remove-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p t)))
+    (setq rustic-format-on-save t)))
 
 ;;; rust-layer.el ends here

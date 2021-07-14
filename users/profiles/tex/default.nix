@@ -23,6 +23,7 @@
 
         # math
         unicode-math
+        stmaryrd
 
         # customizable lists
         enumitem

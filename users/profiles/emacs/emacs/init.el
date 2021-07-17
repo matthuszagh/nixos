@@ -22,6 +22,14 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; add a new profile pointing to the emacs source tree
+(setq mh-emacs-directory "~/src/nixos/users/profiles/emacs/emacs")
+
+;; Navigate straight to source directory for lockfile. This is under
+;; version control and writable, unlike the read-only copy (nix store
+;; symlink) under ~/.config/emacs.
+(setq straight-profiles `((nil . ,(concat mh-emacs-directory "/straight/versions/default.el"))))
+
 (straight-use-package 'use-package)
 
 (require 'use-package)

@@ -77,7 +77,7 @@
  ("gnu-elpa-mirror" . "dbf94d86c7363be032e127a90db3100876a9f847")
  ("goto-chg" . "85fca9f7d8b04be3fbb37cc5d42416f3c4d32830")
  ("haskell-mode" . "41683c0e634bb3f54eac8747919a82132e1714fe")
- ("helm" . "36fc14039dd8de21c1deca79ceed99539516425e")
+ ("helm" . "76fb819030694174c19e4ebec0ecf7952f15768a")
  ("helm-bibtex" . "32477d940fe31ca727caa61f437e775cd6826f5f")
  ("helm-descbinds" . "b72515982396b6e336ad7beb6767e95a80fca192")
  ("helm-eww" . "76ba59fda8dd6f32a1bc7c6df0b43c6f76169911")

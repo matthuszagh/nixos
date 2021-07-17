@@ -12,6 +12,8 @@
 
   :setup
   (use-package org-roam
+    :init
+    (setq org-roam-v2-ack t)
     :config
     (org-roam-mode)
     (setq org-roam-directory "~/doc/notes/wiki")
@@ -88,8 +90,8 @@ bibliography:library.bib"
     :prefix "i"
     :prefix-command 'mh/command-info-prefix
     :prefix-map 'mh/prefix-info-map
-    "f" 'org-roam-find-file
-    "i" 'org-roam-insert)
+    "f" 'org-roam-node-find
+    "i" 'org-roam-node-insert)
 
    (localleader :keymaps 'org-mode-map
      "r" 'org-roam)))

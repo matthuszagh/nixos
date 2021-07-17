@@ -9,7 +9,7 @@
 
   :presetup
   (:layer straight
-   (straight-use-package 'rmsbolt))
+   (straight-use-package '(rmsbolt :type git :host gitlab :repo "matthuszagh/rmsbolt")))
 
   :setup
   (use-package rmsbolt

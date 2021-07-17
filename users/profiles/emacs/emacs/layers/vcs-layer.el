@@ -15,7 +15,8 @@
    (straight-use-package 'git-timemachine)
    (straight-use-package 'projectile))
   (:layer (straight helm)
-   (straight-use-package 'helm-projectile))
+   (straight-use-package
+    '(helm-projectile :type git :host github :repo "matthuszagh/helm-projectile")))
   (:layer (straight modal)
    (straight-use-package 'evil-magit))
 

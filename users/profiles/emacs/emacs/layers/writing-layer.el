@@ -8,7 +8,7 @@
   :presetup
   (:layer straight
    (straight-use-package 'writegood-mode)
-   (straight-use-package '(langtool :host github :repo "redguardtoo/Emacs-langtool"))
+   (straight-use-package 'langtool)
    (straight-use-package 'define-word))
 
   :setup

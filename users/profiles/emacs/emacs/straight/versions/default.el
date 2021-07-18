@@ -132,7 +132,7 @@
  ("org-ref" . "7ba79c8e69f846be48bea2c60034febfbf1b8d4b")
  ("org-rifle" . "263f56d70112f5d0496684c89a2aa07959e0a95f")
  ("org-roam" . "2168490d5ada18629958788771e547d8c86fba20")
- ("org-roam-bibtex" . "a92d9e6f523f449314e72911ba300192a42fc4dc")
+ ("org-roam-bibtex" . "c9865196efe7cfdfcced0d47ea3e5b39bdddd162")
  ("org-texnum" . "499d9ef4a186746f06ab3395a833564f25a33db3")
  ("packed" . "c41c3dfda86ae33832ffc146923e2a4675cbacfa")
  ("paradox" . "339fe3518d1d102b2295670340e75caf4f01a29a")

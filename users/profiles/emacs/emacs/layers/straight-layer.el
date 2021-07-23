@@ -7,6 +7,6 @@
 (layer-def straight
   :setup
   ;; TODO
-  (message "straight dummy loaded."))
+  (message "straight setup placeholder"))
 
 ;;; straight-layer.el ends here

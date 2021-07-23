@@ -11,7 +11,7 @@
  ("auctex" . "59e251c4c82d878e605a13aec3752e544a99f21a")
  ("auctex-latexmk" . "4d353522650d7685acbf1d38f7dbc504f734bd84")
  ("auto-activating-snippets" . "1ffd5cfb49c4adfc6462b63c3c3d0163a02e261d")
- ("auto-compile" . "3e92c5b1a94b0cf43f2d624180a1cb01df92afd8")
+ ("auto-compile" . "0f3afc6b057f9c9a3b60966f36e34cb46008cf61")
  ("avy" . "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
  ("banner-comment" . "35d3315683d3f97605207691b77e9f447af18fe2")
  ("biblio.el" . "eb9baf1d2bf6a073d24ccb717025baa693e98f3e")

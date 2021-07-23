@@ -1,7 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/master";
-    home.url = "github:rycee/home-manager";
+    nixpkgs.url = "github:nixos/nixpkgs/7e9b0dff974c89e070da1ad85713ff3c20b0ca97";
+    home.url = "github:rycee/home-manager/release-21.05";
     emacsOverlay.url = "github:nix-community/emacs-overlay";
     ## package overrides
     # 2021-04-07

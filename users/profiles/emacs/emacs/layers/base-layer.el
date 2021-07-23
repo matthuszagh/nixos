@@ -121,6 +121,7 @@
   ;; Disable performance-affecting features when lines become very long
   (global-so-long-mode 1)
 
+  ;; TODO these should probably be in func and customize.
   (defun mh/sudo-find-file (file-name)
     "Like find-file, but opens FILE-NAME as root."
     (interactive "FSudo Find File: ")
@@ -168,7 +169,6 @@
     (save-excursion
       (indent-region (point-min) (point-max) nil)))
 
-  ;; TODO these should probably be in func and customize.
   (setq mh-face-attribute-height 80)
   (defun mh/zoom-in ()
     (interactive)

@@ -19,6 +19,7 @@
     mesaNixpkgs.url = "github:nixos/nixpkgs/bdac777becdbb8780c35be4f552c9d4518fe0bdb";
     asymptoteNixpkgs.url = "github:nixos/nixpkgs/6eeb612a9b6160df2e110021d93bef3e6e538b9a";
     curaNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
+    freecadNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
   };
 
   outputs =
@@ -39,6 +40,7 @@
     , mesaNixpkgs
     , asymptoteNixpkgs
     , curaNixpkgs
+    , freecadNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -80,6 +82,7 @@
         mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
         asymptote = (pkgImport asymptoteNixpkgs).asymptote;
         cura = (pkgImport curaNixpkgs).cura;
+        freecad = (pkgImport freecadNixpkgs).freecad;
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

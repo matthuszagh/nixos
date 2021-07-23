@@ -29,6 +29,11 @@
           devices = [ "ryzen3950" "oryp4" ];
           ignorePerms = false;
         };
+        "emacs-src" = {
+          path = "/home/matt/.config/emacs/straight/repos";
+          devices = [ "ryzen3950" "oryp4" ];
+          ignorePerms = false;
+        };
       };
 
       devices = {

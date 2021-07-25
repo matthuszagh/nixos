@@ -13,7 +13,8 @@
    (straight-use-package 'flycheck-cython)
    (straight-use-package 'blacken)
    (straight-use-package 'python-docstring)
-   (straight-use-package 'elpy))
+   (with-eval-after-load 'yasnippet
+     (straight-use-package 'elpy)))
 
   :setup
   (use-package python

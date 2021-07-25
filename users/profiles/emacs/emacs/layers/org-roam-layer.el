@@ -7,13 +7,13 @@
 (layer-def org-roam
   :presetup
   (:layer straight
+   (setq org-roam-v2-ack t)
    (straight-use-package 'org-roam)
    (straight-use-package '(org-roam-bibtex :branch "org-roam-v2")))
 
   :setup
   (use-package org-roam
     :config
-    (setq org-roam-v2-ack t)
     (org-roam-mode)
     (setq org-roam-directory "~/doc/notes/wiki")
     (setq org-roam-capture-templates

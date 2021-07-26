@@ -42,7 +42,6 @@
  ("emacs-flycheck-cython" . "ecc4454d35ab5317ab66a04406f36f0c1dbc0b76")
  ("emacs-htmlize" . "86f22f211e9230857197c42a9823d3f05381deed")
  ("emacs-ipython-notebook" . "a019ee3994585e4ed4700d2591d693fda3232616")
- ("emacs-libvterm" . "f41849c2c9c1899f22d1c3d4f871ec47c82627ce")
  ("emacs-load-relative" . "85b88d6fbf472381dfdaf0a762215b7e35ceee9b")
  ("emacs-loc-changes" . "0a55bcba684f78417e831eef2cc32da24a207f29")
  ("emacs-memoize" . "51b075935ca7070f62fae1d69fe0ff7d8fa56fdd")

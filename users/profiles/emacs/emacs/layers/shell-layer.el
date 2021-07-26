@@ -9,11 +9,11 @@
 
   :presetup
   (:layer straight
-   (straight-use-package 'vterm-toggle)
    (straight-use-package 'bash-completion)
    (straight-use-package 'fish-completion)
    ;; use nixos instead of straight to download/install vterm
-   (straight-use-package '(vterm :type built-in)))
+   (straight-use-package '(vterm :type built-in))
+   (straight-use-package 'vterm-toggle))
 
   :setup
   (use-package shell

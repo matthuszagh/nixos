@@ -5,6 +5,8 @@
 ;;; Code:
 
 (layer-def org
+  :depends (tex)
+
   :presetup
   (:layer straight
    (straight-use-package '(org-plus-contrib

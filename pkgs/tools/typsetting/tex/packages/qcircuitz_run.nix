@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , texlive
 }:
@@ -23,6 +24,6 @@ stdenv.mkDerivation rec {
   ";
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

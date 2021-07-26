@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , pkgconfig
 , autoreconfHook
@@ -11,7 +12,6 @@
 , potrace
 , xxHash
 }:
-
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 in
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

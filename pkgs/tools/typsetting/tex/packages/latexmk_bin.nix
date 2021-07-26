@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , unzip
 , perl
@@ -32,6 +33,6 @@ stdenv.mkDerivation rec {
   ";
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

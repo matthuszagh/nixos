@@ -16,6 +16,13 @@ in
     layout = "us";
     xkbOptions = "ctrl:swapcaps";
 
+    # keypress repeating
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 25;
+
+    # maximum logging information
+    verbose = 7;
+
     enableCtrlAltBackspace = true;
 
     # remote connections

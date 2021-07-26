@@ -13,7 +13,7 @@
   boot = {
     initrd = {
       availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
-      kernelModules = [ ];
+      kernelModules = [ "amdgpu" ];
       luks = {
         devices = {
           "cryptnvme".device = "/dev/disk/by-uuid/f1dc12d5-9a75-4e28-a747-a098333614ac";

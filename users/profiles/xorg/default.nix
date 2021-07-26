@@ -23,12 +23,6 @@ in
     # Make Java applications aware this is a non-reparenting window manager.
     export _JAVA_AWT_WM_NONREPARENTING=1
 
-    # Set keyboard repeat rate.
-    xset r rate 200 25
-
-    # hidpi
-    xrandr --dpi 192
-
     # always keep numlock on
     # numlockx &
 

@@ -162,7 +162,7 @@
  ("spaceline" . "1b26af2c1a701481ac5d90928fe0200e389756c3")
  ("spice-mode" . "e5e0644f03f9696f56dd69e2b6979da7f30ed600")
  ("spinner" . "2daa167bec1c7566d662d48613a94453536b524a")
- ("straight.el" . "5d046ad09413f3aba6198229e392cdd3f07e77ee")
+ ("straight.el" . "1e27b0590df77a5d478970ca58fd6606971692f5")
  ("swiper" . "215bb22523ac55aac8d8af376bde97364c7a91b1")
  ("sx.el" . "e9d1093c97507a6d7b4f4710ef65200dae725e5f")
  ("transient" . "4d44d08e90355a8ef36aaad1f9f79c95de1ce0e9")

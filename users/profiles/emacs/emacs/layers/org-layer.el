@@ -29,6 +29,8 @@
    (straight-use-package 'org-fragtog)
    (straight-use-package 'org-edna)
    (straight-use-package 'ob-sagemath)
+   (straight-use-package '(ob-spice
+                           :repo "https://git.sr.ht/~bzg/org-contrib"))
    (straight-use-package 'org-board)
    (straight-use-package 'htmlize)
    (straight-use-package 's))

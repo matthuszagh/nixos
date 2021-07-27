@@ -250,6 +250,12 @@ For instance this will perform 'a' -> 'b'"
     (dolist (elt alist)
       (goto-char 0)
       (while (re-search-forward (car elt) nil t)
-        (replace-match (cdr elt) t)))))
+        (replace-match (cdr elt) t))))
+
+  (defun mh/create-scratch-buffer ()
+    "Create a scratch buffer."
+    (interactive)
+    (switch-to-buffer (get-buffer-create "*scratch*"))
+    (lisp-interaction-mode)))
 
 ;;; base-layer.el ends here

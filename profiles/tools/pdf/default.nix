@@ -4,7 +4,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    k2pdfopt
+    # k2pdfopt
     anystyle-cli
     poppler_utils
     scantailor-advanced

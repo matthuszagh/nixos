@@ -74,7 +74,8 @@
                     ;; appearance
                     ;; sourcerer-theme
                     naysayer-theme
-                    spaceline
+                    ;; TODO spaceline breaks emacs knowing the correct window. See `frame-selected-window' and `powerline-selected-window'.
+                    ;; spaceline
                     rainbow-delimiters
                     ;; pairs
                     async

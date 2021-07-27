@@ -17,8 +17,6 @@
   (:layer (straight helm)
    (straight-use-package
     '(helm-projectile :type git :host github :repo "matthuszagh/helm-projectile")))
-  (:layer (straight modal)
-   (straight-use-package 'evil-magit))
 
   :setup
   (use-package transient
@@ -71,8 +69,6 @@
 
   :postsetup
   (:layer modal
-   (use-package evil-magit
-     :after (magit transient))
    (general-def mh/prefix-prog-map
      "s" 'magit-status
      "S" 'magit-list-repositories

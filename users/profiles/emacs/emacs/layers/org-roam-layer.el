@@ -9,7 +9,7 @@
   (:layer straight
    (setq org-roam-v2-ack t)
    (straight-use-package 'org-roam)
-   (straight-use-package '(org-roam-bibtex :branch "org-roam-v2")))
+   (straight-use-package 'org-roam-bibtex))
 
   :setup
   (use-package org-roam

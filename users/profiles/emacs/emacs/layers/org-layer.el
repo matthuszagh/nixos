@@ -12,7 +12,7 @@
    (straight-use-package '(org-plus-contrib
                            :host github
                            :repo "matthuszagh/org-mode"
-                           :branch "beta"
+                           :branch "beta-2"
                            :files ("lisp/*.el" "contrib/lisp/*.el")
         		   :includes (org)
                            :local-repo "org"))

@@ -24,7 +24,6 @@
              (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                         ,(concat ":PROPERTIES:\n"
                                  ":ID: %(org-id-new)\n"
-                                 ":ROAM_ALIASES:\n"
                                  ":END:\n"
                                  "#+TITLE: ${title}\n"
                                  "#+filetags: \n"

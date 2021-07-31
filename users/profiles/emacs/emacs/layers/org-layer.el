@@ -324,13 +324,17 @@
           '("latexmk -f -interaction=nonstopmode -output-directory=%o %f"))
 
     (setq luasvgm
-          '(luasvgm :programs ("latexmk" "lualatex" "dvisvgm")
+          `(luasvgm :programs ("latexmk" "lualatex" "dvisvgm")
                     :description "pdf > svg"
                     :message "you need to install latexmk, lualatex and dvisvgm."
                     :use-xcolor t
                     :image-input-type "pdf"
                     :image-output-type "svg"
-                    :image-size-adjust (1.5 . 1.5)
+                    ;; The 72 / 200 corrects for the fact that DVISVGM
+                    ;; uses pt units. It gives us 72 PPI but we want
+                    ;; 200 DPI. Then, we want to upscale the image by
+                    ;; 3x.
+                    :image-size-adjust (,(/ (* 2.0 72.0) 200.0)  . ,(/ (* 2.0 72.0) 200.0))
 		    :latex-compiler ("pdflatex -interaction nonstopmode -output-directory %o %f")
                     :image-converter ("dvisvgm --pdf -n -b min -c %S -o %O %f")))
 

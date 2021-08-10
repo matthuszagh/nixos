@@ -7,5 +7,6 @@
     texlab
     # TODO fix latexml
     LaTeXML
+    texlive.combined.scheme-full
   ];
 }

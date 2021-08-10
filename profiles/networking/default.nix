@@ -11,6 +11,9 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    wget
+    wget2
+    curl
     wpa_supplicant
     speedtest-cli
     firefox

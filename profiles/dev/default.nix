@@ -21,6 +21,8 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    # TODO place this in their own directories
+
     # ========================= documentation ========================
     glibcInfo
     clang-manpages
@@ -37,8 +39,6 @@
     coreutils
     binutils
     usbutils
-    wget
-    curl
     acpi
     pciutils
     gnumake

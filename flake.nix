@@ -15,6 +15,7 @@
     koreaderNixpkgs.url = "github:contrun/nixpkgs/f899b94e7072d8c217aedcbf047d174a4530d4a1";
     ventoyNixpkgs.url = "github:Br1ght0ne/nixpkgs/f09655337b699bcc323e3b92a670d910e77035ae";
     dsviewNixpkgs.url = "github:nixos/nixpkgs/00b385c61226a3f3c396581fd7b4851d99e20910";
+    inkscapeNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
     # https://github.com/NixOS/nixpkgs/issues/94315#issuecomment-719892849
     mesaNixpkgs.url = "github:nixos/nixpkgs/bdac777becdbb8780c35be4f552c9d4518fe0bdb";
     asymptoteNixpkgs.url = "github:nixos/nixpkgs/6eeb612a9b6160df2e110021d93bef3e6e538b9a";
@@ -36,6 +37,7 @@
     , latexmlNixpkgs
     , koreaderNixpkgs
     , ventoyNixpkgs
+    , inkscapeNixpkgs
     , dsviewNixpkgs
     , mesaNixpkgs
     , asymptoteNixpkgs
@@ -79,6 +81,7 @@
         koreader = (pkgImport koreaderNixpkgs).koreader;
         ventoy = (pkgImport ventoyNixpkgs).ventoy;
         dsview = (pkgImport dsviewNixpkgs).dsview;
+        inkscape = (pkgImport inkscapeNixpkgs).inkscape;
         mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
         asymptote = (pkgImport asymptoteNixpkgs).asymptote;
         cura = (pkgImport curaNixpkgs).cura;

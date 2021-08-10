@@ -114,6 +114,22 @@
         "type": "github"
       }
     },
+    "inkscapeNixpkgs": {
+      "locked": {
+        "lastModified": 1625692967,
+        "narHash": "sha256-KA2BnWBfLLMSOgn6oz1BIHKIBUlikqRxRbRi05Ue4fI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "797f77ab66f17c0c7e8c10b137a213d56c9ff36d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "797f77ab66f17c0c7e8c10b137a213d56c9ff36d",
+        "type": "github"
+      }
+    },
     "koreaderNixpkgs": {
       "locked": {
         "lastModified": 1601708259,
@@ -233,6 +249,7 @@
         "emacsOverlay": "emacsOverlay",
         "freecadNixpkgs": "freecadNixpkgs",
         "home": "home",
+        "inkscapeNixpkgs": "inkscapeNixpkgs",
         "koreaderNixpkgs": "koreaderNixpkgs",
         "ladyHeatherNixpkgs": "ladyHeatherNixpkgs",
         "latexmlNixpkgs": "latexmlNixpkgs",

@@ -821,7 +821,24 @@ TODO this works but is slow."
              "** alternatives\n"
              "** variants\n"
              "** references\n"
-             "** glossary\n"))))
+             "** glossary\n")))
+
+  ;; TODO doesn't quite work with org-fragtog yet.
+  (defun mh/org-open-latex-fragment-file-at-point ()
+    "Open the file storing the latex fragment at point."
+    (interactive)
+    (let ((pt (point)))
+      ;; If we're using a package like org-fragtog, we won't know we're
+      ;; at an overlay if we keep the cursor positioned over it.
+      (save-excursion
+        (org-back-to-heading-or-point-min)
+        (org-display-inline-images t t)
+        ;;(goto-char 0)
+        (let ((ov (overlays-at pt)))
+          (if (eq nil ov)
+              (message "There is no overlay at the current position.")
+            (let ((image (get-char-property pt 'display)))
+              (find-file (image-property image :file)))))))))
 
 (provide 'org-layer)
 ;;; org-layer.el ends here

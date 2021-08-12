@@ -5,6 +5,5 @@
     ./nix.nix
     ./locale.nix
     ./power.nix
-    ./trash.nix
   ];
 }

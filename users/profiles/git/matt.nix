@@ -4,7 +4,11 @@
   programs.git = {
     userName = "Matt Huszagh";
     userEmail = "huszaghmatt@gmail.com";
-    extraConfig.github.user = "matthuszagh";
+    extraConfig = {
+      github.user = "matthuszagh";
+      # adds `--prune` to every `git fetch` and `git pull`
+      fetch.prune = true;
+    };
     lfs.enable = true;
 
     # TODO configure signing. this is someone elses, just to get an idea.

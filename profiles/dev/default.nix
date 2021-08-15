@@ -13,6 +13,7 @@
     ./nix
     ./python
     ./rust
+    ./reverse-engineering
     ./shell
     ./tex
     ./typescript
@@ -70,9 +71,6 @@
     # =========================== embedded ===========================
     openocd
     gdb
-
-    # ====================== reverse engineering =====================
-    ghidra-bin
   ];
 
   documentation = {

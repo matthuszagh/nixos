@@ -123,6 +123,7 @@
                     ;; TODO timeout errors
                     ;; perspective
                     json
+                    yaml
                     web-dev
                     diff
                     jupyter

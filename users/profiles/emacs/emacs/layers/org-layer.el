@@ -773,7 +773,7 @@ TODO this works but is slow."
     (interactive)
     (insert
      (concat "* specifications\n"
-             "** options\n"
+             "* options\n"
              "* operating instructions\n"
              "** interface\n"
              "*** front panel\n"

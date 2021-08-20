@@ -19,6 +19,11 @@
           devices = [ "ryzen3950" "oryp4" ];
           ignorePerms = false;
         };
+        "vms" = {
+          path = "/home/matt/vms";
+          devices = [ "ryzen3950" "oryp4" ];
+          ignorePerms = false;
+        };
         "gnupg" = {
           path = "/home/matt/.gnupg";
           devices = [ "ryzen3950" "oryp4" ];

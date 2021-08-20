@@ -15,5 +15,6 @@
     ./rioddas-cd-dvd-drive.nix
     ./stlink-v3.nix
     ./ti866ii-plus.nix
+    ./ti-usb2any.nix
   ];
 }

@@ -33,5 +33,6 @@
     rioddas-cd-dvd-drive.enable = true;
     stlink-v3.enable = true;
     ti866ii-plus.enable = true;
+    ti-usb2any.enable = true;
   };
 }

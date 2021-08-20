@@ -7,5 +7,6 @@
     ntfs3g
     ddrescue
     smartmontools
+    iotop
   ];
 }

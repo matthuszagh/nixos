@@ -20,5 +20,6 @@
     google-chrome
     nyxt
     nethogs
+    tcpdump
   ];
 }

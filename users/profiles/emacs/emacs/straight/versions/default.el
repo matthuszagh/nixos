@@ -130,7 +130,7 @@
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-ref" . "7ba79c8e69f846be48bea2c60034febfbf1b8d4b")
  ("org-rifle" . "263f56d70112f5d0496684c89a2aa07959e0a95f")
- ("org-roam" . "56e66f92d29e64abf46c49d7a3f08c64c8bbbe8a")
+ ("org-roam" . "e9ae19c01cb1fac8256e404b3f9c06f4be5468e6")
  ("org-roam-bibtex" . "13de4262d87debdbc43f8e2bd72b991b7284e705")
  ("org-texnum" . "499d9ef4a186746f06ab3395a833564f25a33db3")
  ("packed" . "c41c3dfda86ae33832ffc146923e2a4675cbacfa")

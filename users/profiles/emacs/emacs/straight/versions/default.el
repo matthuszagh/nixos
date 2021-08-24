@@ -177,6 +177,7 @@
  ("xelb" . "f5880e6628d82b387944ac5f3c284d528e5e21c7")
  ("xref" . "270b9b40dd31f4fc55240920d5a709084646a4a7")
  ("xterm-color" . "1a4012854c69a5cdaeb5a73d2ad705011892fca3")
+ ("yaml-mode" . "63b637f846411806ae47e63adc06fe9427be1131")
  ("yasnippet" . "155ebfa13e1d87582aca79d3c34ce1f1137cb5b0")
  ("zoutline" . "63756846f8540b6faf89d885438186e4fe1c7d8a")
  ("~/src/layers" . "1d5b052be0d9d7edaf4ef39c3fff7cee4df94eaf"))

@@ -3,6 +3,10 @@
 }:
 
 {
+  environment.systemPackages = with pkgs; [
+    libguestfs
+  ];
+
   virtualisation = {
     libvirtd = {
       enable = true;

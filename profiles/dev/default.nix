@@ -38,6 +38,7 @@
 
     # ============================= core =============================
     coreutils
+    moreutils
     binutils
     usbutils
     acpi

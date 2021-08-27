@@ -12,7 +12,24 @@
    (straight-use-package 'org-roam-bibtex))
 
   :setup
+  (defun mh//org-update-last-modified ()
+    (save-excursion
+      (goto-char 0)
+      ;; MODIFIED must be present at buffer position 1000 or less,
+      ;; to prevent accidentally changing a non-header property
+      ;; value. Additionally, this avoids the computational cost of
+      ;; traversing the full buffer.
+      (if (search-forward "MODIFIED: " 1000 t)
+          (progn
+            (delete-region (point) (line-end-position))
+            (let ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
+              (insert now))))))
+
   (use-package org-roam
+    :hook ((org-mode . org-roam-db-autosync-mode)
+           (org-mode . (lambda ()
+                         (add-hook 'before-save-hook
+                                   'mh//org-update-last-modified 0 t))))
     :config
     (org-roam-mode)
     (setq org-roam-directory "~/doc/notes/wiki")
@@ -60,22 +77,7 @@
                                  "** bibliography\n"
                                  "<<bibliography link>>\n"
                                  "bibliography:library.bib"))
-             :unnarrowed t)))
-    (defun mh//org-update-last-modified ()
-      (save-excursion
-        (goto-char 0)
-        ;; MODIFIED must be present at buffer position 1000 or less,
-        ;; to prevent accidentally changing a non-header property
-        ;; value. Additionally, this avoids the computational cost of
-        ;; traversing the full buffer.
-        (if (search-forward "MODIFIED: " 1000 t)
-            (progn
-              (delete-region (point) (line-end-position))
-              (let ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
-                (insert now))))))
-    (add-hook 'org-mode-hook (lambda ()
-                               (add-hook 'before-save-hook
-                                         'mh//org-update-last-modified 0 t))))
+             :unnarrowed t))))
 
   (use-package org-roam-bibtex
     :config

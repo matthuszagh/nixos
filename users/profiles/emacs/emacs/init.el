@@ -127,6 +127,7 @@
                     web-dev
                     diff
                     jupyter
+                    grammar
 
                     ;; formatting
                     indenting

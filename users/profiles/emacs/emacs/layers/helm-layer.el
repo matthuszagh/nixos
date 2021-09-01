@@ -86,7 +86,7 @@
    (general-define-key
     :keymaps 'mh/prefix-file-map
     "f" 'helm-find-files
-    "l" 'helm-locate)
+    "a" 'helm-locate)
    (general-def mh/prefix-buffer-map
      "b" 'helm-buffers-list)
    (general-def helm-map

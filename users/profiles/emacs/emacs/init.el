@@ -132,10 +132,12 @@
                     ;; formatting
                     indenting
                     formatting
+
                     documentation
                     undoing
                     buffers
                     line
+                    librarian
                     windows
                     files
                     helm

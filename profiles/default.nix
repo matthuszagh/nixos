@@ -4,6 +4,7 @@
     ./desktop
     ./dev
     ./finance
+    ./fonts
     ./games
     ./graphics
     ./networking

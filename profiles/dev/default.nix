@@ -5,7 +5,6 @@
 {
   imports = [
     ./c
-    ./console
     ./emacs
     ./git.nix
     ./jupyter

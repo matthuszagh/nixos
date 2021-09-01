@@ -6,6 +6,7 @@
     userEmail = "huszaghmatt@gmail.com";
     extraConfig = {
       github.user = "matthuszagh";
+      gitlab.user = "matthuszagh";
       # adds `--prune` to every `git fetch` and `git pull`
       fetch.prune = true;
     };

@@ -32,7 +32,7 @@
 
    ;; org-level-n are inherited from outline-n.
    (set-face-foreground 'outline-1 "white")
-   (set-face-foreground 'outline-2 "#44b34")
+   (set-face-foreground 'outline-2 "#44b340")
    (set-face-foreground 'outline-3 "light sky blue")
    (set-face-foreground 'outline-4 "khaki")
    (set-face-foreground 'outline-5 "light grey")
@@ -56,7 +56,5 @@
 
   (:layer librarian
    (set-face-foreground 'librarian-face-title "white")))
-
-
 
 ;;; naysayer-theme-layer.el ends here

@@ -68,6 +68,8 @@
     dhcpcd.persistent = true;
   };
 
+  services.openssh.ports = [ 8080 ];
+
   environment.systemPackages = with pkgs; [
     radeontop
     krakenx

@@ -19,6 +19,16 @@
     ];
   };
 
+  # resource limits
+  security.pam.loginLimits = [
+    {
+      domain = "matt";
+      type = "soft";
+      item = "nofile";
+      value = "524288";
+    }
+  ];
+
   home-manager.users.matt = { pkgs, ... }: {
     imports = [
       ./profiles/emacs

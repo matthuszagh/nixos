@@ -28,6 +28,14 @@
    (general-define-key
     :states 'normal
     :keymaps 'Info-mode-map
-    "H" 'Info-history)))
+    "H" 'Info-history
+    "RET" 'Info-follow-nearest-node
+    "g d" 'Info-follow-nearest-node
+    "g p" 'Info-backward-node)
+
+   (localleader :keymaps 'Info-mode-map
+     "h" 'Info-backward-node
+     "l" 'Info-forward-node)))
+
 
 ;;; documentation-layer.el ends here

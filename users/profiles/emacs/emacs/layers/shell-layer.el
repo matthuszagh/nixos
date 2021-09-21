@@ -23,7 +23,7 @@
                      (setq-local scroll-conservatively 101))))
     :config
     (add-to-list 'same-window-buffer-names "*shell*")
-    ;; (setq explicit-shell-file-name "/home/matt/.nix-profile/bin/fish")
+    ;; (setq explicit-shell-file-name "~/.nix-profile/bin/fish")
     (setq explicit-shell-file-name nil)
     )
 

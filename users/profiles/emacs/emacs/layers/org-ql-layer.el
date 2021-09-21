@@ -66,7 +66,7 @@ WINDOW-WIDTH should be the width of the Helm window."
        :keymap helm-org-ql-map
        :action helm-org-ql-actions))
 
-   (setq mh-org-wiki-file "/home/matt/doc/notes/wiki.org")
+   (setq mh-org-wiki-file "~/doc/notes/wiki.org")
    (defun mh/helm-global-search ()
      (interactive)
      (helm :sources `(,(mh//helm-org-ql-olp-source (list mh-org-wiki-file))

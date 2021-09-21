@@ -225,20 +225,18 @@
     (setq org-todo-keywords
           '((sequence "HOLD" "TODO" "|" "DONE" "CANCELLED")))
     (setq org-capture-templates
-          '(("b" "pdf" entry (file "/home/matt/doc/notes/wiki.org")
+          '(("b" "pdf" entry (file "~/doc/notes/wiki.org")
              "* %f
 :PROPERTIES:
 :NOTER_DOCUMENT: %F
 :END:
 * outline
 %(mh/pdf-outline-to-org-headline \"%F\" 1)")
-            ("p" "productivity" entry (file+headline "/home/matt/doc/notes/projects/productivity.org" "refile")
+            ("p" "productivity" entry (file+headline "~/doc/notes/projects/productivity.org" "refile")
              "* TODO %^{PROMPT}")
-            ("w" "work" entry (file+headline "/home/matt/doc/notes/projects/work.org" "refile")
+            ("w" "work" entry (file+headline "~/doc/notes/projects/work.org" "refile")
              "* TODO %^{PROMPT}")))
-    (setq org-agenda-files (append
-                            '("/home/matt/src/dotfiles/README.org")
-                            (directory-files-recursively "/home/matt/doc/notes" "org$")))
+    (setq org-agenda-files '("~/doc/notes/wiki"))
     ;; use the current file for refile
     (setq org-refile-targets '((nil . (:maxlevel . 100))))
     ;; show candidates as slash-delimited (i.e. science/physics)
@@ -255,7 +253,7 @@
     (defun org-set-property-file (file)
       (interactive
        (list
-        (read-file-name "file: " "/home/matt/library/")))
+        (read-file-name "file: " "~/library/")))
       (org-set-property "Filepath" (concat "[[file:" file "]]")))
     ;; Outline percentage completion includes all children of node rather than just the direct
     ;; children.

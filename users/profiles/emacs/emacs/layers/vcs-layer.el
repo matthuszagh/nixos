@@ -39,7 +39,7 @@
                                          (call-interactively 'mh/insert-current-date))))))
     :commands (magit-checkout)
     :config
-    (setq magit-repository-directories '(("/home/matt/src" . 10)))
+    (setq magit-repository-directories '(("~/src" . 10)))
     ;; (add-to-list 'display-buffer-alist
     ;;              '("magit.*"
     ;;                (magit-display-buffer)))
@@ -74,7 +74,7 @@
      "S" 'magit-list-repositories
      "t" 'git-timemachine
      "e" (lambda ()
-           (helm-browse-project-find-files "/home/matt/src/dotfiles/emacs"))))
+           (helm-browse-project-find-files "~/src/dotfiles/emacs"))))
 
   (:layer tex
    (add-hook 'LaTeX-mode 'git-gutter-mode))

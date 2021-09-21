@@ -18,7 +18,7 @@
 
   :postsetup
   (:layer nix
-   (setq inferior-lisp-program "/home/matt/.nix-profile/bin/sbcl"))
+   (setq inferior-lisp-program "~/.nix-profile/bin/sbcl"))
   (:layer completions
    (use-package slime-company
      :after (slime company)

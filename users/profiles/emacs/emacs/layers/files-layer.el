@@ -6,8 +6,8 @@
 
 (layer-def files
   :setup
-  (let ((nixos-dir "/home/matt/src/nixos")
-        (notes-dir "/home/matt/doc/notes"))
+  (let ((nixos-dir "~/src/nixos")
+        (notes-dir "~/doc/notes"))
     (setq wiki-file (concat notes-dir "/wiki/index.org"))
     (setq system-file (concat nixos-dir "/flake.nix"))
     (setq config-file (concat nixos-dir "/users/profiles/emacs/emacs/init.el"))

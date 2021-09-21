@@ -7,6 +7,6 @@
 
 (layer-def calendar
   :setup
-  (setq diary-file "/home/matt/doc/notes/diary"))
+  (setq diary-file "~/doc/notes/diary"))
 
 ;;; calendar-layer.el ends here

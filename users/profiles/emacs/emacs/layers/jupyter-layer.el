@@ -13,7 +13,7 @@
   (use-package ein
     :config
     (setq ein:output-area-inlined-images t)
-    (setq my-jupyter-start-dir "/home/matt/.jupyter")
+    (setq my-jupyter-start-dir "~/.jupyter")
     (setq ein:jupyter-server-notebook-directory "~/.jupyter/")))
 
 ;;; jupyter-layer.el ends here

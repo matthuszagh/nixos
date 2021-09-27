@@ -302,6 +302,12 @@
     ;; see [[info:org#Clocking%20Work%20Time][info:org#Clocking Work Time]]
     (setq org-clock-persist 'history)
     (org-clock-persistence-insinuate)
+    ;; Don't automatically attempt to resolve open clocks when
+    ;; clocking in. Functionally, this is a nice feature, but it
+    ;; creates a significant delay when there are many agenda
+    ;; files. The proper solution seems to be to call
+    ;; `org-resolve-clocks' manually.
+    (setq org-clock-auto-clock-resolution nil)
 
     ;; always leave a newline at the end of a heading section. `auto'
     ;; doesn't seem to be good enough at guessing.

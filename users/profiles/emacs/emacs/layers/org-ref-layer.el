@@ -12,6 +12,7 @@
   :setup
   (use-package org-ref
     :config
+    (setq org-ref-default-bibliography "~/doc/notes/wiki/library.bib")
     (setq org-ref-bibliography-files '("~/doc/notes/wiki/library.bib"))))
 
 ;;; org-ref-layer.el ends here

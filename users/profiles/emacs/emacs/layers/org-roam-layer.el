@@ -45,21 +45,16 @@
                                  "#+TITLE: ${title}\n"
                                  "#+filetags: \n"
                                  "#+CREATED: %(mh/time-stamp)\n"
-                                 "#+MODIFIED: %(mh/time-stamp)\n\n"
-                                 "* resources\n"
-                                 "| link | description | type |\n"
-                                 "| <l>  | <l>         | <c>  |\n"
-                                 "| <40> | <40>        |      |\n"
-                                 "|------+-------------+------|\n"
-                                 "|      |             |      |\n\n"
-                                 "** bibliography\n"
-                                 "<<bibliography link>>\nbibliography:library.bib"))
+                                 "#+MODIFIED: %(mh/time-stamp)\n"))
              :unnarrowed t)
-            ("r" "ref" plain
-             ""
+            ("r" "ref" plain ""
              :if-new
              (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                        ,(concat "#+TITLE: ${title}\n"
+                        ,(concat ":PROPERTIES:\n"
+                                 ":ID: %(org-id-new)\n"
+                                 ":ROAM_REFS: cite:${citekey}\n"
+                                 ":END:\n"
+                                 "#+TITLE: ${title}\n"
                                  "#+filetags:\n"
                                  "#+CREATED: %(mh/time-stamp)\n"
                                  "#+MODIFIED: %(mh/time-stamp)\n\n"
@@ -67,17 +62,9 @@
                                  ":PROPERTIES:\n"
                                  ":NOTER_DOCUMENT: %(orb-process-file-field \"${citekey}\")\n"
                                  ":END:\n"
-                                 "%(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1)\n"
-                                 "* references\n"
-                                 "| link | description | type |\n"
-                                 "| <l>  | <l>         | <c>  |\n"
-                                 "| <40> | <40>        |      |\n"
-                                 "|------+-------------+------|\n"
-                                 "|      |             |      |\n\n"
-                                 "** bibliography\n"
-                                 "<<bibliography link>>\n"
-                                 "bibliography:library.bib"))
+                                 "%(mh/pdf-outline-to-org-headline \"%(orb-process-file-field \"${citekey}\")\" 1)\n"))
              :unnarrowed t)))
+
     ;; TODO also look at `org-format-outline-path'. Probably not
     ;; exactly what I want, but it does something similar.
     (setq mh//org-roam-helm-tags-width 25)

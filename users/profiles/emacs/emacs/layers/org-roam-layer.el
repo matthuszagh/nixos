@@ -145,6 +145,7 @@
 
   (use-package org-roam-bibtex
     :config
+    (setq orb-file-field-extensions nil)
     (org-roam-bibtex-mode))
 
   :postsetup

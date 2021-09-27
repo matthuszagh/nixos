@@ -52,9 +52,6 @@
    (set-face-attribute 'helm-selection nil :background "dark slate blue")
    (let ((fcolor (face-foreground 'default)))
      (set-face-attribute 'helm-ff-file-extension nil :foreground fcolor)
-     (set-face-attribute 'helm-ff-file nil :foreground fcolor)))
-
-  (:layer librarian
-   (set-face-foreground 'librarian-face-title "white")))
+     (set-face-attribute 'helm-ff-file nil :foreground fcolor))))
 
 ;;; naysayer-theme-layer.el ends here

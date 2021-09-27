@@ -48,7 +48,7 @@
 ;;  '(layers :type git :host github :repo "matthuszagh/layers"))
 (straight-use-package 'ht)
 (straight-use-package 'dash)
-(straight-use-package '(layers :local-repo "~/src/layers"))
+(straight-use-package '(layers :local-repo "layers"))
 
 (use-package layers
   :init

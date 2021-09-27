@@ -77,7 +77,7 @@
              (level (org-roam-node-level node))
              (outline-display outline-path)
              (tags-width 15)
-             (path-width (- (window-width) mh//org-roam-helm-tags-width 1)))
+             (path-width (- (window-width) mh//org-roam-helm-tags-width)))
         ;; if the current node is not the file-level node, append the file
         ;; level node to `outline-display', which otherwise isn't part of
         ;; the outline path.
@@ -89,6 +89,11 @@
                                              (= level 0))]
                                 file))))
               (setq outline-display (append title outline-display))))
+        (setq outline-display (-update-at (- (length outline-display) 1)
+                                          (lambda (head)
+                                            (org-add-props head nil 'face
+                                                           (nth (% 0 org-n-level-faces) org-level-faces)))
+                                          outline-display))
         ;; `(length outline-display)' computes the string length of all
         ;; separators. 2 computes the maximum difference between the
         ;; string length of '...' and a headline string, in case on

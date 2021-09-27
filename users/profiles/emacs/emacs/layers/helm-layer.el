@@ -46,7 +46,8 @@
           helm-autoresize-min-height 30)
     (helm-autoresize-mode 1)
     (helm-mode 1)
-    (setq helm-buffer-max-length 30)
+    ;; maximum buffer string length before truncation
+    (setq helm-buffer-max-length 60)
     (setq-default helm-follow-mode-persistent t)
     ;; configure files cache
     (setq helm-ff-refresh-cache-delay 0.3)

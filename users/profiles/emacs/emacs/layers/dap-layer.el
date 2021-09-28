@@ -24,6 +24,16 @@
   (use-package dap-gdb-lldb
     :after dap-mode
     :config
-    (dap-gdb-lldb-setup)))
+    (dap-gdb-lldb-setup))
+
+  :postsetup
+  (:layer rust
+   (dap-register-debug-template "Rust::GDB Run Configuration"
+                                (list :type "gdb"
+                                      :request "launch"
+                                      :name "GDB::Run"
+                                      :gdbpath "rust-gdb"
+                                      :target nil
+                                      :cwd nil))))
 
 ;;; dap-layer.el ends here

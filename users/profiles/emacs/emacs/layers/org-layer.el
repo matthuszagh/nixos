@@ -223,7 +223,7 @@
     (setq org-adapt-indentation nil)
     (setq org-log-done 'time)
     (setq org-todo-keywords
-          '((sequence "HOLD" "TODO" "|" "DONE" "CANCELLED")))
+          '((sequence "HOLD" "TODO" "|" "FILE" "DONE" "CANCELLED")))
     (setq org-capture-templates
           '(("b" "pdf" entry (file "~/doc/notes/wiki.org")
              "* %f

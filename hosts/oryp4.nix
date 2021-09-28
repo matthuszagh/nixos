@@ -90,8 +90,6 @@ in
     dhcpcd.persistent = true;
   };
 
-  programs.light.enable = true;
-
   nix.maxJobs = lib.mkDefault 12;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }

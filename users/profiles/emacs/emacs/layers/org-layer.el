@@ -309,6 +309,9 @@
     ;; `org-resolve-clocks' manually.
     (setq org-clock-auto-clock-resolution nil)
 
+    ;; Use footnotes for references.
+    (setq org-footnote-section "references")
+
     ;; always leave a newline at the end of a heading section. `auto'
     ;; doesn't seem to be good enough at guessing.
     (setq org-blank-before-new-entry

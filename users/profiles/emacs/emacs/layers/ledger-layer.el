@@ -17,7 +17,7 @@
   :postsetup
   (:layer flycheck
    (use-package flycheck-ledger))
-  (:layer modal-interactin
+  (:layer keybinding-management
    (use-package evil-ledger
      :hook (ledger-mode . evil-ledger-mode))))
 ;;; ledger-layer.el ends here

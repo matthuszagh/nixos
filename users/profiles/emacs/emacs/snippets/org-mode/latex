@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: latex source block
-# key: latex
-# --
-#+header: :_class ${1:math}
-#+begin_src latex :hidden
-$0
-#+end_src

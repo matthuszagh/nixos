@@ -31,7 +31,6 @@
 
   home-manager.users.matt = { pkgs, ... }: {
     imports = [
-      ./profiles/emacs
       ./profiles/xorg
       ./profiles/git
       ./profiles/git/matt.nix

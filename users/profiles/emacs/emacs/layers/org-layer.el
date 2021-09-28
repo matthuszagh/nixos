@@ -105,25 +105,20 @@
     ;; agenda view
     (setq org-agenda-custom-commands
           '(("c" "Custom agenda view"
-             ((tags-todo "work"
+             ((tags-todo "hardware|electronics|mechanical_engineering"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Work")))
-              ;; (agenda "" ((org-agenda-span 'day)))
+                          (org-agenda-overriding-header "Hardware")
+                          (org-agenda-prefix-format "  ")
+                          (org-agenda-hide-tags-regexp ".*")))
+              (tags-todo "software"
+                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
+                          (org-agenda-overriding-header "Software")))
               (tags-todo "nix"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Nix")))
               (tags-todo "emacs"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Emacs")))
-              (tags-todo "software"
-                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Software")))
-              (tags-todo "hardware"
-                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Hardware")))
-              (tags-todo "circuits"
-                         ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
-                          (org-agenda-overriding-header "Circuits")))
               (tags-todo "read"
                          ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("HOLD")))
                           (org-agenda-overriding-header "Prioritized Reading Material")))))))

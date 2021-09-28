@@ -1,3 +1,5 @@
+* installation on a new machine
+** virtual machine
 * incorporating packages from different branches of nixpkgs
 There are several simple steps for adding a package from a different version of nixpkgs. This works on new packages (i.e. not available in the main nixpkgs flake) and different versions of existing packages, which override those in the main nixpkgs flake without requiring you to write an overlay.
 
@@ -69,3 +71,16 @@ To push changes up to the Emacs subtree, run
 #+begin_src bash :eval no
 git subtree push --prefix=users/profiles/emacs/emacs emacs master
 #+end_src
+* subvolume hierarchy
+ID	gen	top level	path
+--	---	---------	----
+258	1222851	5		nixos
+259	1222869	258		var
+260	1222869	258		home
+261	1222867	258		tmp
+262	1222765	258		.snapshots
+789	187108	259		var/lib/machines
+829	186803	258		.backup
+1331	191641	258		srv
+1332	191641	259		var/lib/portables
+11616	1222869	260		home/matt/.cache

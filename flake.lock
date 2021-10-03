@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "anystyleNixpkgs": {
-      "locked": {
-        "lastModified": 1598284025,
-        "narHash": "sha256-nDlClDKs5dy62AqYAFnwFJMqBn+9P/iCKdy4hPgiJ8w=",
-        "owner": "SCOTT-HAMILTON",
-        "repo": "nixpkgs",
-        "rev": "4cf6c95cb021b62e78e769af7ba64280b340b666",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SCOTT-HAMILTON",
-        "repo": "nixpkgs",
-        "rev": "4cf6c95cb021b62e78e769af7ba64280b340b666",
-        "type": "github"
-      }
-    },
     "asymptoteNixpkgs": {
       "locked": {
         "lastModified": 1593899772,
@@ -130,22 +114,6 @@
         "type": "github"
       }
     },
-    "koreaderNixpkgs": {
-      "locked": {
-        "lastModified": 1601708259,
-        "narHash": "sha256-j74lcQLGLFmmrd2/Zy9BR8GNU8RcvLFoH1S54Ow6Baw=",
-        "owner": "contrun",
-        "repo": "nixpkgs",
-        "rev": "f899b94e7072d8c217aedcbf047d174a4530d4a1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "contrun",
-        "repo": "nixpkgs",
-        "rev": "f899b94e7072d8c217aedcbf047d174a4530d4a1",
-        "type": "github"
-      }
-    },
     "ladyHeatherNixpkgs": {
       "locked": {
         "lastModified": 1618190145,
@@ -159,22 +127,6 @@
         "owner": "matthuszagh",
         "ref": "lady-heather",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "latexmlNixpkgs": {
-      "locked": {
-        "lastModified": 1599254524,
-        "narHash": "sha256-Eg6v9Qhyc5Ajao5EEhk0YTNHS/Y9FPKWUvXbdIJyVh4=",
-        "owner": "xworld21",
-        "repo": "nixpkgs",
-        "rev": "d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "xworld21",
-        "repo": "nixpkgs",
-        "rev": "d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f",
         "type": "github"
       }
     },
@@ -242,7 +194,6 @@
     },
     "root": {
       "inputs": {
-        "anystyleNixpkgs": "anystyleNixpkgs",
         "asymptoteNixpkgs": "asymptoteNixpkgs",
         "curaNixpkgs": "curaNixpkgs",
         "dsviewNixpkgs": "dsviewNixpkgs",
@@ -250,14 +201,11 @@
         "freecadNixpkgs": "freecadNixpkgs",
         "home": "home",
         "inkscapeNixpkgs": "inkscapeNixpkgs",
-        "koreaderNixpkgs": "koreaderNixpkgs",
         "ladyHeatherNixpkgs": "ladyHeatherNixpkgs",
-        "latexmlNixpkgs": "latexmlNixpkgs",
         "mesaNixpkgs": "mesaNixpkgs",
         "nixpkgs": "nixpkgs_2",
         "paraviewNixpkgs": "paraviewNixpkgs",
         "sageNixpkgs": "sageNixpkgs",
-        "ventoyNixpkgs": "ventoyNixpkgs",
         "verilatorNixpkgs": "verilatorNixpkgs",
         "vivadoNixpkgs": "vivadoNixpkgs"
       }
@@ -275,22 +223,6 @@
         "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "49cfaef0c34007ade99c7a23497bd5993b8152f0",
-        "type": "github"
-      }
-    },
-    "ventoyNixpkgs": {
-      "locked": {
-        "lastModified": 1588239189,
-        "narHash": "sha256-iDMCKwcj2tw4t1QStbo8ep33MjRrVdHB/STtmByZ9Xs=",
-        "owner": "Br1ght0ne",
-        "repo": "nixpkgs",
-        "rev": "f09655337b699bcc323e3b92a670d910e77035ae",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Br1ght0ne",
-        "repo": "nixpkgs",
-        "rev": "f09655337b699bcc323e3b92a670d910e77035ae",
         "type": "github"
       }
     },

@@ -1,6 +1,8 @@
 * installation on a new machine
 ** virtual machine
 * incorporating packages from different branches of nixpkgs
+DOCUMENT WHY YOU OVERRIDE PACKAGES. This makes it easy to know when you can remove them.
+
 There are several simple steps for adding a package from a different version of nixpkgs. This works on new packages (i.e. not available in the main nixpkgs flake) and different versions of existing packages, which override those in the main nixpkgs flake without requiring you to write an overlay.
 
 First, add the repo + branch as an input and then add it to the function argument of outputs. Finally, add the package to the ~overridePkgs~ attribute set. Here's an example:

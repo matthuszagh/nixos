@@ -7,13 +7,9 @@
     # 2021-04-07
     sageNixpkgs.url = "github:nixos/nixpkgs/49cfaef0c34007ade99c7a23497bd5993b8152f0";
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
-    anystyleNixpkgs.url = "github:SCOTT-HAMILTON/nixpkgs/4cf6c95cb021b62e78e769af7ba64280b340b666";
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
     ladyHeatherNixpkgs.url = "github:matthuszagh/nixpkgs/lady-heather";
     verilatorNixpkgs.url = "github:nixos/nixpkgs/1e451da3860c1c562fdccefb7f0380f765251399";
-    latexmlNixpkgs.url = "github:xworld21/nixpkgs/d66ad88b42ce0894d4c05b7f9fdb270d6c39df5f";
-    koreaderNixpkgs.url = "github:contrun/nixpkgs/f899b94e7072d8c217aedcbf047d174a4530d4a1";
-    ventoyNixpkgs.url = "github:Br1ght0ne/nixpkgs/f09655337b699bcc323e3b92a670d910e77035ae";
     dsviewNixpkgs.url = "github:nixos/nixpkgs/00b385c61226a3f3c396581fd7b4851d99e20910";
     inkscapeNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
     # https://github.com/NixOS/nixpkgs/issues/94315#issuecomment-719892849
@@ -30,13 +26,9 @@
     , emacsOverlay
     , sageNixpkgs
     , paraviewNixpkgs
-    , anystyleNixpkgs
     , vivadoNixpkgs
     , ladyHeatherNixpkgs
     , verilatorNixpkgs
-    , latexmlNixpkgs
-    , koreaderNixpkgs
-    , ventoyNixpkgs
     , inkscapeNixpkgs
     , dsviewNixpkgs
     , mesaNixpkgs
@@ -73,13 +65,9 @@
       overridePkgs = {
         sageWithDoc = (pkgImport sageNixpkgs).sageWithDoc;
         paraview = (pkgImport paraviewNixpkgs).paraview;
-        anystyle-cli = (pkgImport anystyleNixpkgs).anystyle-cli;
         vivado = (pkgImport vivadoNixpkgs).vivado;
         lady-heather = (pkgImport ladyHeatherNixpkgs).lady-heather;
         verilator = (pkgImport verilatorNixpkgs).verilator;
-        LaTeXML = (pkgImport latexmlNixpkgs).perlPackages.LaTeXML;
-        koreader = (pkgImport koreaderNixpkgs).koreader;
-        ventoy = (pkgImport ventoyNixpkgs).ventoy;
         dsview = (pkgImport dsviewNixpkgs).dsview;
         inkscape = (pkgImport inkscapeNixpkgs).inkscape;
         mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;

@@ -9,3 +9,7 @@ trace:
 .PHONY: vm
 vm:
 	sudo nixos-rebuild build-vm --flake . --keep-going
+
+.PHONY: iso
+iso:
+	nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix

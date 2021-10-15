@@ -33,6 +33,8 @@ final: prev:
 
   openems = prev.callPackage ./applications/science/electronics/openems { };
 
+  librarian = prev.callPackage ./applications/misc/librarian { };
+
   # python
   python3 = prev.python3.override {
     packageOverrides = pfinal: pprev: {

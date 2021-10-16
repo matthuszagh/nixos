@@ -52,6 +52,7 @@
     openssl
     pkg-config
     llvm_11
+    file # display file type/information
 
     # ============================ archive ===========================
     unrar

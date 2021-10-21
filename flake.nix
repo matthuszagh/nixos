@@ -3,6 +3,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/7e9b0dff974c89e070da1ad85713ff3c20b0ca97";
     home.url = "github:rycee/home-manager/release-21.05";
     emacsOverlay.url = "github:nix-community/emacs-overlay";
+    mach-nix.url = "github:DavHau/mach-nix";
     ## package overrides
     # 2021-04-07
     sageNixpkgs.url = "github:nixos/nixpkgs/49cfaef0c34007ade99c7a23497bd5993b8152f0";
@@ -24,6 +25,7 @@
     , nixpkgs
     , home
     , emacsOverlay
+    , mach-nix
     , sageNixpkgs
     , paraviewNixpkgs
     , vivadoNixpkgs
@@ -49,6 +51,7 @@
       externalOverlays = [
         emacsOverlay.overlay
       ];
+
 
       pkgImport = pkgs: import pkgs {
         inherit system;
@@ -79,6 +82,25 @@
         asymptote = (pkgImport asymptoteNixpkgs).asymptote;
         cura = (pkgImport curaNixpkgs).cura;
         freecad = (pkgImport freecadNixpkgs).freecad;
+        mach-nix = (import mach-nix {
+          pkgs = (import nixpkgs { inherit system; }).pkgs;
+        }).mach-nix;
+        # TODO this should be in profiles/dev/python/default.nix
+        pythonEnv = (import mach-nix {
+          pkgs = (import nixpkgs { inherit system; }).pkgs;
+          python = "python3";
+        }).mkPython {
+          requirements = ''
+            pylatex
+            numpy
+            scipy
+            matplotlib
+            ipython
+            debugpy # needed for DAP
+            pyclipper # needed for kicad plugin
+            skidl
+          '';
+        };
       };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;

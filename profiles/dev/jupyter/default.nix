@@ -3,6 +3,7 @@
 }:
 
 {
+  # To use jupyter, go to localhost:8888 and type in the correct password.
   services.jupyter = {
     enable = true;
     command = "jupyter-notebook";

@@ -91,10 +91,11 @@
           python = "python3";
         }).mkPython {
           requirements = ''
-            pylatex
+            pylatex # latex generation from python
             numpy
             scipy
             matplotlib
+            pint # quantities, units, uncertainties
             ipython
             debugpy # needed for DAP
             pyclipper # needed for kicad plugin

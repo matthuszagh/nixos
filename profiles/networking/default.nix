@@ -21,6 +21,7 @@
     nyxt
     nethogs
     tcpdump
+    lftp # ftp client
   ];
 
   networking.firewall = {

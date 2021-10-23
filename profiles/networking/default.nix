@@ -22,4 +22,8 @@
     nethogs
     tcpdump
   ];
+
+  networking.firewall = {
+    enable = true;
+  };
 }

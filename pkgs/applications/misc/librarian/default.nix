@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0i233fnvzd42na97g6jwkkni2ihp7v5v7vwmgc0d5za0f1frrlzf";
   };
 
-  cargoSha256 = "sha256-0VBryXbT54DhjrMDbs3/l/9Z4i7xHnrLYPLbTvnncCc=";
+  cargoSha256 = "sha256-7lctfEtMkhT7ho/tyl+5oM0yNF+RaSZSQ5gCEwxRf3o=";
 
   meta = with lib; {
     description = "Digital resource management tool";

@@ -5,13 +5,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "librarian";
-  version = "unstable-2021-10-20";
+  version = "unstable-2021-10-27";
 
   src = fetchFromGitHub {
     owner = "matthuszagh";
     repo = "librarian";
-    rev = "395e4a705affbc7a44b2ffbae6b4674af76ed605";
-    sha256 = "1bw6vnw41swq6s7d8aira305bgi3hzifmvs4zfzcj0p5hhhas8m2";
+    rev = "83d9b171547aaee462679e4dc9f95ad1a65f8191";
+    sha256 = "0i233fnvzd42na97g6jwkkni2ihp7v5v7vwmgc0d5za0f1frrlzf";
   };
 
   cargoSha256 = "sha256-0VBryXbT54DhjrMDbs3/l/9Z4i7xHnrLYPLbTvnncCc=";

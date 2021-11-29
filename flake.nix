@@ -95,11 +95,14 @@
             numpy
             scipy
             matplotlib
+            pandas
+            tabulate # pretty print tables of values
             pint # quantities, units, uncertainties
             ipython
             debugpy # needed for DAP
             pyclipper # needed for kicad plugin
             skidl
+            lxml # needed for LaTeXText
           '';
         };
       };

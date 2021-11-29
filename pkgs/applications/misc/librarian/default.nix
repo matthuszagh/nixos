@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "librarian";
-  version = "unstable-2021-10-27";
+  version = "unstable-2021-11-22";
 
   src = fetchFromGitHub {
     owner = "matthuszagh";
     repo = "librarian";
-    rev = "83d9b171547aaee462679e4dc9f95ad1a65f8191";
-    sha256 = "0i233fnvzd42na97g6jwkkni2ihp7v5v7vwmgc0d5za0f1frrlzf";
+    rev = "e9c865140724f63ca05af9722183a33432cdb6c2";
+    sha256 = "sha256-UvHcYnKrPkMHWzXe85Qia55zAUqGLGub5bgfgdxkBEg=";
   };
 
-  cargoSha256 = "sha256-7lctfEtMkhT7ho/tyl+5oM0yNF+RaSZSQ5gCEwxRf3o=";
+  cargoSha256 = "sha256-3oPuIIqH0plA6vDZOpka3ETreEwH6sneQU16XSXM/Ho=";
 
   meta = with lib; {
     description = "Digital resource management tool";
@@ -23,3 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.matthuszagh ];
   };
 }
+

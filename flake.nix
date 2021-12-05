@@ -1,5 +1,8 @@
 {
   inputs = {
+    # TODO there's a bug that prevents xrandr from rotating
+    # screens. This is currently preventing me from upgrading
+    # nixpkgs. See https://github.com/NixOS/nixpkgs/issues/87989.
     nixpkgs.url = "github:nixos/nixpkgs/7e9b0dff974c89e070da1ad85713ff3c20b0ca97";
     home.url = "github:rycee/home-manager/release-21.05";
     emacsOverlay.url = "github:nix-community/emacs-overlay";

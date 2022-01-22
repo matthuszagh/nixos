@@ -1,6 +1,12 @@
 final: prev:
 
 {
+  # kernel
+  linux-gpib-kernel = prev.callPackage ./linux-gpib {
+    kernel = prev.pkgs.linux_latest;
+  };
+
+  # general
   pia-config = prev.callPackage ./networking/vpn/pia { };
   clang_multi_9 = prev.wrapClangMulti prev.clang_9;
   gnucap = prev.callPackage ./applications/science/electronics/gnucap { };

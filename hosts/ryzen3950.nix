@@ -26,9 +26,18 @@
       };
     };
 
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [
+      "kvm-amd"
+      # GPIB driver provided by linux-gpib
+      "tnt4882"
+    ];
     kernelParams = [ "fbcon=rotate:3" ];
-    extraModulePackages = [ ];
+    extraModulePackages = [
+      # Needed to load the tnt4882 driver. TODO eventually, when
+      # linux-gpib is upstream, this will be
+      # 'pkgs.linuxPackages_latest.linux-gpib'.
+      pkgs.linux-gpib-kernel
+    ];
   };
 
   hardware.cpu.amd.updateMicrocode = true;
@@ -81,7 +90,14 @@
     xserver = {
       videoDrivers = [ "amdgpu" ];
       resolutions = [{ x = 3840; y = 2160; }];
-      dpi = 192;
+      # TODO The DPI needs to be set in order for xdpyinfo to have the
+      # correct DPI. This is a bit strange, as xrandr reports the
+      # correct value. It would be better not to have to specify this
+      # at all, or to specify the screen dimensions and have it
+      # calculated from that and the resolution. I should look at the
+      # documentation for this, as there might be a way to improve
+      # this.
+      dpi = 163;
       defaultDepth = 24;
     };
   };

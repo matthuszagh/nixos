@@ -1,0 +1,316 @@
+diff -urp -X patch-exclude linux-gpib-user-4.3.3/include/gpib/gpib_ioctl.h linux-gpib-user-4.3.3-patched/include/gpib/gpib_ioctl.h
+--- linux-gpib-user-4.3.3/include/gpib/gpib_ioctl.h	2020-05-09 10:08:15.000000000 +0200
++++ linux-gpib-user-4.3.3-patched/include/gpib/gpib_ioctl.h	2020-10-19 17:34:28.137563991 +0200
+@@ -134,6 +134,18 @@ typedef struct
+ 	char device_path[0x1000];
+ } select_device_path_ioctl_t;
+ 
++typedef struct
++{
++	unsigned int secondary;
++	int is_minor;
++} get_address_state_ioctl_t;
++
++typedef struct
++{
++	int address_mode;
++	int sad;
++} set_address_mode_ioctl_t;
++
+ typedef short event_ioctl_t;
+ typedef int rsc_ioctl_t;
+ typedef unsigned int t1_delay_ioctl_t;
+@@ -192,7 +204,11 @@ enum gpib_ioctl
+ 	IBPP2_GET = _IOR( GPIB_CODE, 41, local_ppoll_mode_ioctl_t ),
+ 	IBSELECT_DEVICE_PATH = _IOW( GPIB_CODE, 43, select_device_path_ioctl_t),
+ 	// 44 was IBSELECT_SERIAL_NUMBER
+-	IBRSV2 = _IOW( GPIB_CODE, 45, request_service2_t )
++	IBRSV2 = _IOW( GPIB_CODE, 45, request_service2_t ),
++	IBPPC_LOCAL = _IOW( GPIB_CODE, 40, int ),
++ 	IBRELEASE_DAC_HOLDOFF = _IOW( GPIB_CODE, 41, int ),
++ 	IBSET_ADDRESS_MODE = _IOW( GPIB_CODE, 42, set_address_mode_ioctl_t ),
++ 	IBGET_ADDRESS_STATE = _IOR( GPIB_CODE, 43, get_address_state_ioctl_t ),
+ };
+ 
+ #endif	/* _GPIB_IOCTL_H */
+diff -urp -X patch-exclude linux-gpib-user-4.3.3/include/gpib/gpib_user.h linux-gpib-user-4.3.3-patched/include/gpib/gpib_user.h
+--- linux-gpib-user-4.3.3/include/gpib/gpib_user.h	2020-05-09 10:08:15.000000000 +0200
++++ linux-gpib-user-4.3.3-patched/include/gpib/gpib_user.h	2020-10-19 17:56:45.036912586 +0200
+@@ -19,6 +19,10 @@
+ #ifndef _GPIB_USER_H
+ #define _GPIB_USER_H
+ 
++#ifdef BIN				// @@@ avoid conflict of config.h with BIN enum member in eos_flags below
++#undef BIN				// @@@
++#endif					// @@@
++
+ #define GPIB_MAX_NUM_BOARDS 16
+ #define GPIB_MAX_NUM_DESCRIPTORS 0x1000
+ 
+@@ -39,7 +43,8 @@ enum ibsta_bit_numbers
+ 	SRQI_NUM = 12,
+ 	END_NUM = 13,
+ 	TIMO_NUM = 14,
+-	ERR_NUM = 15
++	ERR_NUM = 15,
++ 	APT_NUM = 16
+ };
+ 
+ /* IBSTA status bits (returned by all functions) */
+@@ -60,12 +65,13 @@ enum ibsta_bits
+ 	SRQI = ( 1 << SRQI_NUM ),	/* SRQ is asserted */
+ 	END = ( 1 << END_NUM ),	/* EOI or EOS encountered */
+ 	TIMO = ( 1 << TIMO_NUM ),	/* Time limit on I/O or wait function exceeded */
+-	ERR = ( 1 << ERR_NUM )	/* Function call terminated on error */
++	ERR = ( 1 << ERR_NUM ),	/* Function call terminated on error */
++ 	APT = ( 1 << APT_NUM )		/* secondary GPIB address has been received */
+ };
+ 
+ static const int device_status_mask = ERR | TIMO | END | CMPL | RQS;
+ static const int board_status_mask = ERR | TIMO | END | CMPL | SPOLL |
+-	EVENT | LOK | REM | CIC | ATN | TACS | LACS | DTAS | DCAS | SRQI;
++	APT | EVENT | LOK | REM | CIC | ATN | TACS | LACS | DTAS | DCAS | SRQI;
+ 
+ /* IBERR error codes */
+ enum iberr_code
+diff -urp -X patch-exclude linux-gpib-user-4.3.3/lib/gpib_version_script linux-gpib-user-4.3.3-patched/lib/gpib_version_script
+--- linux-gpib-user-4.3.3/lib/gpib_version_script	2020-05-09 10:08:14.000000000 +0200
++++ linux-gpib-user-4.3.3-patched/lib/gpib_version_script	2020-10-19 17:06:48.378209354 +0200
+@@ -38,7 +38,15 @@ GPIB_DUMMY_VERSION {
+ 		ThreadIbcntl;
+ 		Trigger;
+ 		TriggerList;
+-		WaitSRQ;
++ 		PPollConfigLocal;
++ 		ReleaseDacHoldoff;
++ 		SetAddressMode;
++ 		GetAddressState;
++ 		ReadRegister8;
++ 		WriteRegister8;
++ 		ReadRegister16;
++ 		WriteRegister16;
++ 		WaitSRQ;
+ 		ibask;
+ 		ibbna;
+ 		ibcac;
+diff -urp -X patch-exclude linux-gpib-user-4.3.3/lib/ib_internal.h linux-gpib-user-4.3.3-patched/lib/ib_internal.h
+--- linux-gpib-user-4.3.3/lib/ib_internal.h	2020-05-09 10:08:14.000000000 +0200
++++ linux-gpib-user-4.3.3-patched/lib/ib_internal.h	2020-10-20 12:43:03.196593063 +0200
+@@ -101,6 +101,10 @@ int is_system_controller( const ibBoard_
+ int is_cic( const ibBoard_t *board );
+ int assert_ifc( ibBoard_t *board, unsigned int usec );
+ int request_system_control( ibBoard_t *board, int request_control );
++int local_parallel_poll_mode( ibConf_t *conf, int do_accept );
++int release_dac_holdoff( ibBoard_t *board, int do_accept );
++int set_address_mode( ibBoard_t *board, int address_mode, int sad );
++int get_address_state( ibBoard_t *board, unsigned int *secondary, int *is_minor );
+ 
+ int internal_ibpad( ibConf_t *conf, unsigned int address );
+ int internal_ibsad( ibConf_t *conf, int address );
+diff -urp -X patch-exclude linux-gpib-user-4.3.3/lib/ibSad.c linux-gpib-user-4.3.3-patched/lib/ibSad.c
+--- linux-gpib-user-4.3.3/lib/ibSad.c	2020-05-09 10:08:14.000000000 +0200
++++ linux-gpib-user-4.3.3-patched/lib/ibSad.c	2020-10-19 17:23:24.122810206 +0200
+@@ -57,3 +57,159 @@ int ibsad( int ud, int v )
+ 
+ 	return exit_library( ud, 0 );
+ }
++
++void ReleaseDacHoldoff( int boardID, int do_accept )
++{
++	ibConf_t *conf;
++	ibBoard_t *board;
++	int retval;
++
++	conf = enter_library( boardID );
++	if( conf == NULL )
++	{
++		exit_library( boardID, 1 );
++		return;
++	}
++	if( conf->is_interface == 0 )
++	{
++		setIberr( EDVR );
++		exit_library( boardID, 1 );
++		return;
++	}
++	board = interfaceBoard( conf );
++
++	retval = release_dac_holdoff( board, do_accept );
++	if( retval < 0 )
++	{
++		if( errno == ETIMEDOUT )
++			conf->timed_out = 1;
++		exit_library( boardID, 1 );
++		return;
++	}
++
++	exit_library( boardID, 0 );
++}
++
++void SetAddressMode( int boardID, int address_mode, int sad )
++{
++	ibConf_t *conf;
++	ibBoard_t *board;
++	int retval;
++
++	if( address_mode > 3 )
++	{
++		setIberr( EARG );
++		return ;
++	}
++
++	conf = enter_library( boardID );
++	if( conf == NULL )
++	{
++		exit_library( boardID, 1 );
++		return;
++	}
++	if( conf->is_interface == 0 )
++	{
++		setIberr( EDVR );
++		exit_library( boardID, 1 );
++		return;
++	}
++	board = interfaceBoard( conf );
++
++	retval = set_address_mode( board, address_mode, sad );
++	if( retval < 0 )
++	{
++		if( errno == ETIMEDOUT )
++			conf->timed_out = 1;
++		exit_library( boardID, 1 );
++		return;
++	}
++
++	exit_library( boardID, 0 );
++}
++
++void GetAddressState( int boardID, unsigned int *secondary, int *is_minor )
++{
++	ibConf_t *conf;
++	ibBoard_t *board;
++	int retval;
++
++	conf = enter_library( boardID );
++	if( conf == NULL )
++	{
++		exit_library( boardID, 1 );
++		return;
++	}
++	if( conf->is_interface == 0 )
++	{
++		setIberr( EDVR );
++		exit_library( boardID, 1 );
++		return;
++	}
++	board = interfaceBoard( conf );
++
++	retval = get_address_state( board, secondary, is_minor );
++	if( retval < 0 )
++	{
++		if( errno == ETIMEDOUT )
++			conf->timed_out = 1;
++		exit_library( boardID, 1 );
++		return;
++	}
++
++	exit_library( boardID, 0 );
++}
++
++int release_dac_holdoff( ibBoard_t *board, int do_accept )
++{
++	int retval;
++
++	retval = ioctl( board->fileno, IBRELEASE_DAC_HOLDOFF, &do_accept );
++	if( retval < 0 )
++	{
++		fprintf( stderr, "libgpib: IBRELEASE_DAC_HOLDOFF ioctl failed\n" );
++		setIberr( EDVR );
++		setIbcnt( errno );
++		return retval;
++	}
++	return 0;
++}
++
++int set_address_mode( ibBoard_t *board, int address_mode, int sad )
++{
++	int retval;
++	set_address_mode_ioctl_t cmd;
++
++	cmd.address_mode = address_mode;
++	cmd.sad = sad;
++	retval = ioctl( board->fileno, IBSET_ADDRESS_MODE, &cmd );
++	if( retval < 0 )
++	{
++		fprintf( stderr, "libgpib: IBSET_ADDRESS_MODE ioctl failed\n" );
++		setIberr( EDVR );
++		setIbcnt( errno );
++		return retval;
++	}
++	return 0;
++}
++
++int get_address_state( ibBoard_t *board, unsigned int *secondary, int *is_minor )
++{
++	get_address_state_ioctl_t cmd;
++	int retval;
++
++	retval = ioctl( board->fileno, IBGET_ADDRESS_STATE, &cmd );
++	if( retval < 0 )
++	{
++		fprintf( stderr, "libgpib: IBGET_ADDRESS_STATE ioctl failed (retval=%d)\n", retval);
++		setIberr( EDVR );
++		setIbcnt( errno );
++		return retval;
++	}
++
++	*secondary = cmd.secondary;
++	*is_minor = cmd.is_minor;
++
++	return 0;
++}
++
+diff -urp -X patch-exclude linux-gpib-user-4.3.3/lib/ibutil.c linux-gpib-user-4.3.3-patched/lib/ibutil.c
+--- linux-gpib-user-4.3.3/lib/ibutil.c	2020-05-09 10:08:14.000000000 +0200
++++ linux-gpib-user-4.3.3-patched/lib/ibutil.c	2020-10-19 17:24:48.944499023 +0200
+@@ -379,7 +379,8 @@ int conf_lock_board( ibConf_t *conf )
+ 
+ 	board = interfaceBoard( conf );
+ 
+-	assert( conf->has_lock == 0 );
++	// we don't want core dumps
++	if (conf->has_lock) return 0;
+ 
+ 	retval = lock_board_mutex( board );
+ 	if( retval < 0 ) return retval;
+@@ -396,7 +397,8 @@ void conf_unlock_board( ibConf_t *conf )
+ 
+ 	board = interfaceBoard( conf );
+ 
+-	assert( conf->has_lock );
++	// we don't want core dumps
++	if (conf->has_lock == 0) return;
+ 
+ 	conf->has_lock = 0;
+ 
+diff -urp -X patch-exclude linux-gpib-user-4.3.3/lib/ibWait.c linux-gpib-user-4.3.3-patched/lib/ibWait.c
+--- linux-gpib-user-4.3.3/lib/ibWait.c	2020-05-09 10:08:14.000000000 +0200
++++ linux-gpib-user-4.3.3-patched/lib/ibWait.c	2020-10-19 20:42:07.079905341 +0200
+@@ -19,7 +19,7 @@
+ #include <pthread.h>
+ 
+ static const int device_wait_mask = TIMO | END | CMPL | RQS;
+-static const int board_wait_mask =  TIMO | END | CMPL | SPOLL |
++static const int board_wait_mask =  TIMO | END | CMPL | SPOLL | APT |
+ 	EVENT | LOK | REM | CIC | ATN | TACS | LACS | DTAS | DCAS | SRQI;
+ 
+ void fixup_status_bits( const ibConf_t *conf, int *status )
+@@ -128,7 +128,7 @@ int ibwait( int ud, int mask )
+ 		}
+ 	}
+ 	
+-	clear_mask = mask & ( DTAS | DCAS | SPOLL);
++ 	clear_mask = mask & (APT | DTAS | DCAS | SPOLL);
+ 	retval = my_wait( conf, mask, clear_mask, 0, &status );
+ 	if( retval < 0 )
+ 		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);

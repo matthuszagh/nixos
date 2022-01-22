@@ -1,0 +1,70 @@
+\ProvidesPackage{_tikz}
+
+\usepackage{tikz}
+\usepackage{tikz-timing}
+\usepackage[american]{circuitikz}
+\usepackage{pgfplots}
+\usepackage{qcircuit}
+
+%% Circuitikz style options
+\ctikzset{resistors/scale=0.6, capacitors/scale=0.6, diodes/scale=0.4}
+\ctikzset{tripoles/mos style/arrows}
+\ctikzset{amplifiers/scale=0.75}
+\ctikzset{tripoles/op amp/font=\footnotesize}
+\ctikzset{tripoles/fd op amp/font=\footnotesize}
+
+%% tikz libraries
+\usetikzlibrary{intersections}
+\usetikzlibrary{3d}
+\usetikzlibrary{perspective}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{positioning}
+\usetikzlibrary{automata}
+\usetikzlibrary{patterns}
+
+%% tikz settings
+\tikzset{>=latex}
+% extract x and y coordinates of tikz point
+\makeatletter
+\newcommand{\gettikzxy}[3]{%
+  \tikz@scan@one@point\pgfutil@firstofone#1\relax
+  \edef#2{\the\pgf@x}%
+  \edef#3{\the\pgf@y}%
+}
+\makeatother
+
+%% pgfplots
+\pgfplotsset{compat=newest}
+\pgfplotsset{
+  every non boxed x axis/.style={
+    xtick align=center,
+    enlarge x limits=upper,
+    x axis line style={-latex},
+    every axis x label/.style={%
+      at={(ticklabel cs:0.95)}, anchor=near ticklabel,
+    },
+  },
+  every non boxed y axis/.style={
+    ytick align=center,
+    enlarge y limits=upper,
+    y axis line style={-latex},
+    every axis y label/.style={%
+      at={(ticklabel cs:0.95)}, anchor=near ticklabel,
+    },
+  },
+  every boxed x axis/.style={},
+  every boxed y axis/.style={},
+}
+\pgfplotsset{grid style={help lines}}
+\usepgfplotslibrary{groupplots}
+
+%% tikztiminglibraries
+\usetikztiminglibrary{counters}
+
+% Using an equals sign in a tikz node messes up the parser (see
+% https://tex.stackexchange.com/a/110695/168657). We can use this
+% macro instead.
+\newcommand*{\equal}{=}
+
+\endinput

@@ -1,6 +1,43 @@
+* TODO linux-gpib
+:PROPERTIES:
+:ID:       6b096efa-43f2-4ee9-bffd-2b61f45bf274
+:END:
+I've added linux-gpib support to nixpkgs (not yet upstream) and it appears to work. In order to get this working on my machine before pulling the latest nixpkgs I've added the kernel module under pkgs (included as a kernel module in ryzen3950.nix). I've also added a flake input and set the linux-gpib package. This is then installed under electronics subdirectory. I also use hpdrive patches. These are designed for 4.3.3, but work with 4.3.4. Finally, I've updated the nixpkgs input of mach-nix to allow it to find the python-linux-gpib package.
+
+* languages
+:PROPERTIES:
+:ID:       3c9e7b8b-52cf-49e8-924c-b6fdc4cb1fc3
+:END:
+** Python
+:PROPERTIES:
+:ID:       1b0a692b-22f7-4d5b-822c-8923abbef97a
+:END:
+I use [[https://github.com/DavHau/mach-nix][mach-nix]] for creating declarative and reproducible Python environments. This is used both at the system level (for a system-wide installation of Python and packages) and at the project level.
+
+TODO describe how to use mach-nix at system level and project level.
+
+*** Jupyter
+:PROPERTIES:
+:ID:       bd03fa65-c5b9-451c-939d-e201858218a0
+:END:
+TODO describe how to use Jupyter.
+
+** Rust
+:PROPERTIES:
+:ID:       53d828ea-4f4d-4c95-961f-75bc2c418d8f
+:END:
 * installation on a new machine
+:PROPERTIES:
+:ID:       e31aa05d-157f-447f-9282-988b9bc0ab1a
+:END:
 ** virtual machine
+:PROPERTIES:
+:ID:       a5299af8-a67d-4374-bbde-1164b308bee9
+:END:
 * incorporating packages from different branches of nixpkgs
+:PROPERTIES:
+:ID:       53069d55-9be6-4fb7-a0df-d12b981f7543
+:END:
 DOCUMENT WHY YOU OVERRIDE PACKAGES. This makes it easy to know when you can remove them.
 
 There are several simple steps for adding a package from a different version of nixpkgs. This works on new packages (i.e. not available in the main nixpkgs flake) and different versions of existing packages, which override those in the main nixpkgs flake without requiring you to write an overlay.
@@ -68,12 +105,25 @@ First, add the repo + branch as an input and then add it to the function argumen
 #+end_src
 
 * emacs subtree
+:PROPERTIES:
+:ID:       0acd6c03-79ae-4573-98a8-81b5fbd39954
+:END:
 To push changes up to the Emacs subtree, run
 
 #+begin_src bash :eval no
 git subtree push --prefix=users/profiles/emacs/emacs emacs master
 #+end_src
+
+* host DPI
+:PROPERTIES:
+:ID:       993fec26-7113-407c-98d6-b9abeb1f0432
+:END:
+Normally, it would seem to make sense to set ~services.xserver.dpi~ correctly based on the actual DPI of a screen. Instead, I've decided to set it correctly for the typical viewing distance of a desktop monitor (around 2ft), and then scale it accordingly for laptops that are closer. All applications (emacs, firefox, etc.) seem to use this setting when displaying graphics, so doing this will scale everything down proportionally. This looks nice even if it doesn't keep objects specified to be 1mm as 1mm. I think it is enough to target dimensional accuracy on a desktop and favor nice appearance on laptops and other displays.
+
 * subvolume hierarchy
+:PROPERTIES:
+:ID:       a22f2fe2-994b-4407-9ae5-d8bfd495aaaf
+:END:
 ID	gen	top level	path
 --	---	---------	----
 258	1222851	5		nixos

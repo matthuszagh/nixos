@@ -1,0 +1,2297 @@
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/cb7210/cb7210_cs.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/cb7210/cb7210_cs.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/cb7210/cb7210_cs.c	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/cb7210/cb7210_cs.c	2022-01-22 15:11:39.739509258 -0800
+@@ -330,7 +330,7 @@ gpib_interface_t cb_pcmcia_unaccel_inter
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -359,7 +359,7 @@ gpib_interface_t cb_pcmcia_interface =
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -388,7 +388,7 @@ gpib_interface_t cb_pcmcia_accel_interfa
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/cb7210/cb7210_init.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/cb7210/cb7210_init.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/cb7210/cb7210_init.c	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/cb7210/cb7210_init.c	2022-01-22 15:58:20.536108698 -0800
+@@ -145,6 +145,29 @@ void cb7210_return_to_local( gpib_board_
+ 	udelay(1);
+ 	write_byte(nec_priv, AUX_RTL, AUXMR);
+ }
++#if (GPIB_CONFIG_DEVICE==1)
++void cb7210_local_parallel_poll_mode( gpib_board_t *board, int set_local )
++{
++	cb7210_private_t *priv = board->private_data;
++	nec7210_local_parallel_poll_mode( board, &priv->nec7210_priv, set_local );
++}
++void cb7210_release_dac_holdoff( gpib_board_t *board, int do_accept )
++{
++	cb7210_private_t *priv = board->private_data;
++	nec7210_release_dac_holdoff( board, &priv->nec7210_priv, do_accept );
++}
++void cb7210_set_address_mode( gpib_board_t *board, int address_mode, int sad )
++{
++	cb7210_private_t *priv = board->private_data;
++	nec7210_set_address_mode( board, &priv->nec7210_priv, address_mode, sad );
++}
++void cb7210_get_address_state( gpib_board_t *board, unsigned int *secondary, int *is_minor )
++{
++	cb7210_private_t *priv = board->private_data;
++	nec7210_get_address_state( board, &priv->nec7210_priv, secondary, is_minor );
++}
++#endif
++
+ 
+ gpib_interface_t cb_pci_unaccel_interface =
+ {
+@@ -164,7 +187,11 @@ gpib_interface_t cb_pci_unaccel_interfac
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -173,6 +200,11 @@ gpib_interface_t cb_pci_unaccel_interfac
+ 	serial_poll_status: cb7210_serial_poll_status,
+ 	t1_delay: cb7210_t1_delay,
+ 	return_to_local: cb7210_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: cb7210_release_dac_holdoff,
++	set_address_mode: cb7210_set_address_mode,
++	get_address_state: cb7210_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t cb_pci_accel_interface =
+@@ -193,7 +225,11 @@ gpib_interface_t cb_pci_accel_interface
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -202,6 +238,11 @@ gpib_interface_t cb_pci_accel_interface
+ 	serial_poll_status: cb7210_serial_poll_status,
+ 	t1_delay: cb7210_t1_delay,
+ 	return_to_local: cb7210_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: cb7210_release_dac_holdoff,
++	set_address_mode: cb7210_set_address_mode,
++	get_address_state: cb7210_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t cb_pci_interface =
+@@ -222,6 +263,11 @@ gpib_interface_t cb_pci_interface =
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -230,6 +276,11 @@ gpib_interface_t cb_pci_interface =
+ 	serial_poll_status: cb7210_serial_poll_status,
+ 	t1_delay: cb7210_t1_delay,
+ 	return_to_local: cb7210_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: cb7210_release_dac_holdoff,
++	set_address_mode: cb7210_set_address_mode,
++	get_address_state: cb7210_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t cb_isa_unaccel_interface =
+@@ -250,7 +301,11 @@ gpib_interface_t cb_isa_unaccel_interfac
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -259,6 +314,11 @@ gpib_interface_t cb_isa_unaccel_interfac
+ 	serial_poll_status: cb7210_serial_poll_status,
+ 	t1_delay: cb7210_t1_delay,
+ 	return_to_local: cb7210_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: cb7210_release_dac_holdoff,
++	set_address_mode: cb7210_set_address_mode,
++	get_address_state: cb7210_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t cb_isa_interface =
+@@ -279,6 +339,11 @@ gpib_interface_t cb_isa_interface =
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -287,6 +352,11 @@ gpib_interface_t cb_isa_interface =
+ 	serial_poll_status: cb7210_serial_poll_status,
+ 	t1_delay: cb7210_t1_delay,
+ 	return_to_local: cb7210_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: cb7210_release_dac_holdoff,
++	set_address_mode: cb7210_set_address_mode,
++	get_address_state: cb7210_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t cb_isa_accel_interface =
+@@ -307,7 +377,11 @@ gpib_interface_t cb_isa_accel_interface
+ 	parallel_poll: cb7210_parallel_poll,
+ 	parallel_poll_configure: cb7210_parallel_poll_configure,
+ 	parallel_poll_response: cb7210_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: cb7210_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: cb7210_line_status,
+ 	update_status: cb7210_update_status,
+ 	primary_address: cb7210_primary_address,
+@@ -316,6 +390,11 @@ gpib_interface_t cb_isa_accel_interface
+ 	serial_poll_status: cb7210_serial_poll_status,
+ 	t1_delay: cb7210_t1_delay,
+ 	return_to_local: cb7210_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: cb7210_release_dac_holdoff,
++	set_address_mode: cb7210_set_address_mode,
++	get_address_state: cb7210_get_address_state,
++#endif
+ };
+ 
+ int cb7210_allocate_private(gpib_board_t *board)
+@@ -530,7 +609,7 @@ int cb_isa_attach(gpib_board_t *board, c
+ 	}
+ 	nec_priv->iobase = config->ibbase;
+ 	cb_priv->fifo_iobase = nec7210_iobase(cb_priv);
+-	
++
+ 	bits = irq_bits( config->ibirq );
+ 	if( bits == 0 )
+ 	{
+@@ -570,7 +649,7 @@ void cb_isa_detach(gpib_board_t *board)
+ 	cb7210_generic_detach(board);
+ }
+ 
+-static const struct pci_device_id cb7210_pci_table[] = 
++static const struct pci_device_id cb7210_pci_table[] =
+ {
+ 	{PCI_VENDOR_ID_CBOARDS, PCI_DEVICE_ID_CBOARDS_PCI_GPIB, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 },
+ 	{PCI_VENDOR_ID_CBOARDS, PCI_DEVICE_ID_CBOARDS_CPCI_GPIB, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 },
+@@ -620,10 +699,3 @@ static void __exit cb7210_exit_module( v
+ 
+ module_init( cb7210_init_module );
+ module_exit( cb7210_exit_module );
+-
+-
+-
+-
+-
+-
+-
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/cec/init.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/cec/init.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/cec/init.c	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/cec/init.c	2022-01-22 15:58:11.397975911 -0800
+@@ -134,6 +134,28 @@ void cec_return_to_local( gpib_board_t *
+ 	cec_private_t *priv = board->private_data;
+ 	nec7210_return_to_local( board, &priv->nec7210_priv );
+ }
++#if (GPIB_CONFIG_DEVICE==1)
++void cec_local_parallel_poll_mode( gpib_board_t *board, int set_local )
++{
++ 	cec_private_t *priv = board->private_data;
++ 	nec7210_local_parallel_poll_mode( board, &priv->nec7210_priv, set_local );
++}
++void cec_release_dac_holdoff( gpib_board_t *board, int do_accept )
++{
++ 	cec_private_t *priv = board->private_data;
++ 	nec7210_release_dac_holdoff( board, &priv->nec7210_priv, do_accept );
++}
++void cec_set_address_mode( gpib_board_t *board, int address_mode, int sad )
++{
++ 	cec_private_t *priv = board->private_data;
++ 	nec7210_set_address_mode( board, &priv->nec7210_priv, address_mode, sad );
++}
++void cec_get_address_state( gpib_board_t *board, unsigned int *secondary, int *is_minor )
++{
++ 	cec_private_t *priv = board->private_data;
++ 	nec7210_get_address_state( board, &priv->nec7210_priv, secondary, is_minor );
++}
++#endif
+ 
+ gpib_interface_t cec_pci_interface =
+ {
+@@ -153,7 +175,11 @@ gpib_interface_t cec_pci_interface =
+ 	parallel_poll: cec_parallel_poll,
+ 	parallel_poll_configure: cec_parallel_poll_configure,
+ 	parallel_poll_response: cec_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: cec_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: NULL,	//XXX
+ 	update_status: cec_update_status,
+ 	primary_address: cec_primary_address,
+@@ -162,6 +188,11 @@ gpib_interface_t cec_pci_interface =
+ 	serial_poll_status: cec_serial_poll_status,
+ 	t1_delay: cec_t1_delay,
+ 	return_to_local: cec_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: cec_release_dac_holdoff,
++	set_address_mode: cec_set_address_mode,
++	get_address_state: cec_get_address_state,
++#endif
+ };
+ 
+ int cec_allocate_private(gpib_board_t *board)
+@@ -328,9 +359,3 @@ void cec_exit_module(void)
+ 
+ module_init( cec_init_module );
+ module_exit( cec_exit_module );
+-
+-
+-
+-
+-
+-
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/eastwood/fluke_gpib.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/eastwood/fluke_gpib.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/eastwood/fluke_gpib.c	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/eastwood/fluke_gpib.c	2022-01-22 15:11:39.739509258 -0800
+@@ -157,6 +157,28 @@ void fluke_return_to_local( gpib_board_t
+ 	udelay(1);
+ 	write_byte(nec_priv, AUX_RTL, AUXMR);
+ }
++#if (GPIB_CONFIG_DEVICE==1)
++void fluke_local_parallel_poll_mode( gpib_board_t *board, int set_local )
++{
++	fluke_private_t *priv = board->private_data;
++	nec7210_local_parallel_poll_mode( board, &priv->nec7210_priv, set_local );
++}
++void fluke_release_dac_holdoff( gpib_board_t *board, int do_accept )
++{
++	fluke_private_t *priv = board->private_data;
++	nec7210_release_dac_holdoff( board, &priv->nec7210_priv, do_accept );
++}
++void fluke_set_address_mode( gpib_board_t *board, int address_mode, int sad )
++{
++	fluke_private_t *priv = board->private_data;
++	nec7210_set_address_mode( board, &priv->nec7210_priv, address_mode, sad );
++}
++void fluke_get_address_state( gpib_board_t *board, unsigned int *secondary, int *is_minor )
++{
++	fluke_private_t *priv = board->private_data;
++	nec7210_get_address_state( board, &priv->nec7210_priv, secondary, is_minor );
++}
++#endif
+ int fluke_line_status( const gpib_board_t *board )
+ {
+ 	int status = ValidALL;
+@@ -715,6 +737,7 @@ gpib_interface_t fluke_unaccel_interface
+ 	parallel_poll: fluke_parallel_poll,
+ 	parallel_poll_configure: fluke_parallel_poll_configure,
+ 	parallel_poll_response: fluke_parallel_poll_response,
++	local_parallel_poll_mode: fluke_local_parallel_poll_mode,
+ 	line_status: fluke_line_status,
+ 	update_status: fluke_update_status,
+ 	primary_address: fluke_primary_address,
+@@ -723,6 +746,11 @@ gpib_interface_t fluke_unaccel_interface
+ 	serial_poll_status: fluke_serial_poll_status,
+ 	t1_delay: fluke_t1_delay,
+ 	return_to_local: fluke_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: fluke_release_dac_holdoff,
++	set_address_mode: fluke_set_address_mode,
++	get_address_state: fluke_get_address_state,
++#endif
+ };
+ 
+ /* fluke_hybrid uses dma for writes but not for reads.  Added
+@@ -748,6 +776,7 @@ gpib_interface_t fluke_hybrid_interface
+ 	parallel_poll: fluke_parallel_poll,
+ 	parallel_poll_configure: fluke_parallel_poll_configure,
+ 	parallel_poll_response: fluke_parallel_poll_response,
++	local_parallel_poll_mode: fluke_local_parallel_poll_mode,
+ 	line_status: fluke_line_status,
+ 	update_status: fluke_update_status,
+ 	primary_address: fluke_primary_address,
+@@ -756,6 +785,11 @@ gpib_interface_t fluke_hybrid_interface
+ 	serial_poll_status: fluke_serial_poll_status,
+ 	t1_delay: fluke_t1_delay,
+ 	return_to_local: fluke_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: fluke_release_dac_holdoff,
++	set_address_mode: fluke_set_address_mode,
++	get_address_state: fluke_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t fluke_interface =
+@@ -776,6 +810,7 @@ gpib_interface_t fluke_interface =
+ 	parallel_poll: fluke_parallel_poll,
+ 	parallel_poll_configure: fluke_parallel_poll_configure,
+ 	parallel_poll_response: fluke_parallel_poll_response,
++	local_parallel_poll_mode: fluke_local_parallel_poll_mode,
+ 	line_status: fluke_line_status,
+ 	update_status: fluke_update_status,
+ 	primary_address: fluke_primary_address,
+@@ -784,6 +819,11 @@ gpib_interface_t fluke_interface =
+ 	serial_poll_status: fluke_serial_poll_status,
+ 	t1_delay: fluke_t1_delay,
+ 	return_to_local: fluke_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: fluke_release_dac_holdoff,
++	set_address_mode: fluke_set_address_mode,
++	get_address_state: fluke_get_address_state,
++#endif
+ };
+ 
+ irqreturn_t fluke_gpib_internal_interrupt(gpib_board_t *board)
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/include/gpib_ioctl.h linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/gpib_ioctl.h
+--- linux-gpib-kernel-4.3.4/drivers/gpib/include/gpib_ioctl.h	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/gpib_ioctl.h	2022-01-22 15:11:39.739509258 -0800
+@@ -134,6 +134,20 @@ typedef struct
+ 	char device_path[0x1000];
+ } select_device_path_ioctl_t;
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++typedef struct
++{
++	unsigned int secondary;
++	int is_minor;
++} get_address_state_ioctl_t;
++
++typedef struct
++{
++	int address_mode;
++	int sad;
++} set_address_mode_ioctl_t;
++#endif
++
+ typedef short event_ioctl_t;
+ typedef int rsc_ioctl_t;
+ typedef unsigned int t1_delay_ioctl_t;
+@@ -193,6 +207,13 @@ enum gpib_ioctl
+ 	IBSELECT_DEVICE_PATH = _IOW( GPIB_CODE, 43, select_device_path_ioctl_t),
+ 	// 44 was IBSELECT_SERIAL_NUMBER
+ 	IBRSV2 = _IOW( GPIB_CODE, 45, request_service2_t )
++#if (GPIB_CONFIG_DEVICE==1)
++	,
++	IBPPC_LOCAL = _IOW( GPIB_CODE, 40, int ),
++ 	IBRELEASE_DAC_HOLDOFF = _IOW( GPIB_CODE, 41, int ),
++ 	IBSET_ADDRESS_MODE = _IOW( GPIB_CODE, 42, set_address_mode_ioctl_t ),
++ 	IBGET_ADDRESS_STATE = _IOR( GPIB_CODE, 43, get_address_state_ioctl_t )
++#endif
+ };
+ 
+ #endif	/* _GPIB_IOCTL_H */
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/include/gpib_types.h linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/gpib_types.h
+--- linux-gpib-kernel-4.3.4/drivers/gpib/include/gpib_types.h	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/gpib_types.h	2022-01-22 15:12:40.275366060 -0800
+@@ -143,13 +143,13 @@ struct gpib_interface_struct
+ 	int (*secondary_address)(gpib_board_t *board, unsigned int address,
+ 	int enable);
+ 	/* Sets the byte the board should send in response to a serial poll.
+-	 * This function should also start or stop requests for service via 
+-	 * IEEE 488.2 reqt/reqf, based on MSS (bit 6 of the status_byte).  
+-	 * If the more flexible serial_poll_response2 is implemented by the 
++	 * This function should also start or stop requests for service via
++	 * IEEE 488.2 reqt/reqf, based on MSS (bit 6 of the status_byte).
++	 * If the more flexible serial_poll_response2 is implemented by the
+ 	 * driver, then this method should be left NULL since it will not
+ 	 * be used.  This method can generate spurious service requests
+ 	 * which are allowed by IEEE 488.2, but not ideal.
+-	 * 
++	 *
+ 	 * This method should implement the serial poll response method described
+ 	 * by IEEE 488.2 section 11.3.3.4.3 "Allowed Coupled Control of
+ 	 * STB, reqt, and reqf".
+@@ -160,13 +160,13 @@ struct gpib_interface_struct
+ 	 * based on MSS (bit 6 of the status_byte) and new_reason_for_service.
+ 	 * reqt should be set true if new_reason_for_service is true,
+ 	 * and reqf should be set true if MSS is false.  This function
+-	 * will never be called with MSS false and new_reason_for_service 
++	 * will never be called with MSS false and new_reason_for_service
+ 	 * true simultaneously, so don't worry about that case.
+-	 * 
++	 *
+ 	 * This method implements the serial poll response method described
+ 	 * by IEEE 488.2 section 11.3.3.4.1 "Preferred Implementation".
+-	 * 
+-	 * If this method is left NULL by the driver, then the user library 
++	 *
++	 * If this method is left NULL by the driver, then the user library
+ 	 * function ibrsv2 will not work.
+ 	 */
+ 	void (*serial_poll_response2)(gpib_board_t *board, uint8_t status_byte, int new_reason_for_service);
+@@ -181,6 +181,12 @@ struct gpib_interface_struct
+ 	unsigned no_7_bit_eos : 1;
+ 	/* skip check for listeners before trying to send command bytes */
+ 	unsigned skip_check_for_command_acceptors : 1;
++
++#if (GPIB_CONFIG_DEVICE==1)
++	void ( *release_dac_holdoff )( gpib_board_t *board, int do_accept );
++	void ( *set_address_mode )( gpib_board_t *board, int address_mode, int sad );
++	void ( *get_address_state )( gpib_board_t *board, unsigned int *secondary, int *is_minor );
++#endif
+ };
+ 
+ typedef struct
+@@ -298,7 +304,7 @@ struct gpib_board_struct
+ 	unsigned master : 1;
+ 	/* individual status bit */
+ 	unsigned ist : 1;
+-	/* one means local parallel poll mode ieee 488.1 PP2 (or no parallel poll PP0), 
++	/* one means local parallel poll mode ieee 488.1 PP2 (or no parallel poll PP0),
+ 	 * zero means remote parallel poll configuration mode ieee 488.1 PP1 */
+ 	unsigned local_ppoll_mode : 1;
+ };
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/include/gpib_user.h linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/gpib_user.h
+--- linux-gpib-kernel-4.3.4/drivers/gpib/include/gpib_user.h	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/gpib_user.h	2022-01-22 15:11:39.739509258 -0800
+@@ -19,6 +19,10 @@
+ #ifndef _GPIB_USER_H
+ #define _GPIB_USER_H
+ 
++#ifdef BIN				// @@@ avoid conflict of config.h with BIN enum member in eos_flags below
++#undef BIN				// @@@
++#endif					// @@@
++
+ #define GPIB_MAX_NUM_BOARDS 16
+ #define GPIB_MAX_NUM_DESCRIPTORS 0x1000
+ 
+@@ -40,6 +44,10 @@ enum ibsta_bit_numbers
+ 	END_NUM = 13,
+ 	TIMO_NUM = 14,
+ 	ERR_NUM = 15
++#if (GPIB_CONFIG_DEVICE==1)
++ 	,
++ 	APT_NUM = 16
++#endif
+ };
+ 
+ /* IBSTA status bits (returned by all functions) */
+@@ -61,11 +69,18 @@ enum ibsta_bits
+ 	END = ( 1 << END_NUM ),	/* EOI or EOS encountered */
+ 	TIMO = ( 1 << TIMO_NUM ),	/* Time limit on I/O or wait function exceeded */
+ 	ERR = ( 1 << ERR_NUM )	/* Function call terminated on error */
++#if (GPIB_CONFIG_DEVICE==1)
++	,
++ 	APT = ( 1 << APT_NUM )		/* secondary GPIB address has been received */
++#endif
+ };
+ 
+ static const int device_status_mask = ERR | TIMO | END | CMPL | RQS;
+ static const int board_status_mask = ERR | TIMO | END | CMPL | SPOLL |
+-	EVENT | LOK | REM | CIC | ATN | TACS | LACS | DTAS | DCAS | SRQI;
++#if (GPIB_CONFIG_DEVICE==1)
++ 		APT |
++#endif
++		EVENT | LOK | REM | CIC | ATN | TACS | LACS | DTAS | DCAS | SRQI;
+ 
+ /* IBERR error codes */
+ enum iberr_code
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/include/nec7210.h linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/nec7210.h
+--- linux-gpib-kernel-4.3.4/drivers/gpib/include/nec7210.h	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/nec7210.h	2022-01-22 15:11:39.739509258 -0800
+@@ -53,6 +53,10 @@ struct nec7210_private_struct
+ 	enum listener_function_state listener_state;
+ 	void *private;
+ 	unsigned srq_pending : 1;
++#if (GPIB_CONFIG_DEVICE==1)
++	unsigned is_minor_address : 1;	// have been addressed on minor address (represents bit 0 of ADSR)
++	unsigned int command;			// keeps the last command or secondary address from CPTR
++#endif
+ };
+ 
+ static inline void init_nec7210_private( nec7210_private_t *priv )
+@@ -84,6 +88,9 @@ enum
+ 	BUS_ERROR_BN,	// output error has occurred
+ 	RFD_HOLDOFF_BN,	// rfd holdoff in effect
+ 	DEV_CLEAR_BN,	// device clear received
++#if (GPIB_CONFIG_DEVICE==1)
++	ADSC_BN,	// addressing changed (either addressed or unaddressed or major/minor change)
++#endif
+ };
+ 
+ // interface functions
+@@ -120,6 +127,14 @@ uint8_t nec7210_serial_poll_status( gpib
+ unsigned int nec7210_t1_delay( gpib_board_t *board,
+ 	nec7210_private_t *priv, unsigned int nano_sec );
+ void nec7210_return_to_local( const gpib_board_t *board, nec7210_private_t *priv );
++#if (GPIB_CONFIG_DEVICE==1)
++void nec7210_local_parallel_poll_mode(gpib_board_t *board, nec7210_private_t *priv, int set_local);
++void nec7210_release_dac_holdoff( gpib_board_t *board, nec7210_private_t *priv, int do_accept );
++void nec7210_set_address_mode( gpib_board_t *board, nec7210_private_t *priv,
++		int address_mode, int sad );
++void nec7210_get_address_state( gpib_board_t *board, nec7210_private_t *priv,
++		unsigned int *secondary, int *is_minor );
++#endif
+ 
+ // utility functions
+ void nec7210_board_reset( nec7210_private_t *priv, const gpib_board_t *board );
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/include/nec7210_registers.h linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/nec7210_registers.h
+--- linux-gpib-kernel-4.3.4/drivers/gpib/include/nec7210_registers.h	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/nec7210_registers.h	2022-01-22 15:11:39.739509258 -0800
+@@ -24,6 +24,9 @@ enum nec7210_chipset
+ 	CB7210,	// measurement computing
+ 	IOT7210,	// iotech
+ 	iGPIB7210,	// Ines
++#if (GPIB_CONFIG_TNT5004==1)
++	TNT5004,	// NI (minor differences to TNT4882)
++#endif
+ };
+ 
+ // nec7210 has 8 registers
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/include/tnt4882_registers.h linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/tnt4882_registers.h
+--- linux-gpib-kernel-4.3.4/drivers/gpib/include/tnt4882_registers.h	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/include/tnt4882_registers.h	2022-01-22 15:11:39.740509272 -0800
+@@ -35,6 +35,9 @@ enum
+ 	SASR = 0x1b,
+ 	IMR0 = 0x1d,
+ 	IMR3 = 0x12,
++#if (GPIB_CONFIG_DEVICE==1)
++	HIER = 0x13,	// high speed enable register (for deglitching etc.)
++#endif
+ 	CNT0 = 0x14,
+ 	CNT1 = 0x16,
+ 	KEYREG = 0x17,	// key control register (7210 mode only)
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/ines/ines_init.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/ines/ines_init.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/ines/ines_init.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/ines/ines_init.c	2022-01-22 15:58:02.150841496 -0800
+@@ -226,6 +226,29 @@ void ines_return_to_local( gpib_board_t
+ 	ines_private_t *priv = board->private_data;
+ 	nec7210_return_to_local( board, &priv->nec7210_priv );
+ }
++#if (GPIB_CONFIG_DEVICE==1)
++void ines_local_parallel_poll_mode( gpib_board_t *board, int set_local )
++{
++	ines_private_t *priv = board->private_data;
++	nec7210_local_parallel_poll_mode( board, &priv->nec7210_priv, set_local );
++}
++void ines_release_dac_holdoff( gpib_board_t *board, int do_accept )
++{
++	ines_private_t *priv = board->private_data;
++	nec7210_release_dac_holdoff( board, &priv->nec7210_priv, do_accept );
++}
++void ines_set_address_mode( gpib_board_t *board, int address_mode, int sad )
++{
++	ines_private_t *priv = board->private_data;
++	nec7210_set_address_mode( board, &priv->nec7210_priv, address_mode, sad );
++}
++void ines_get_address_state( gpib_board_t *board, unsigned int *secondary, int *is_minor )
++{
++	ines_private_t *priv = board->private_data;
++	nec7210_get_address_state( board, &priv->nec7210_priv, secondary, is_minor );
++}
++#endif
++
+ 
+ gpib_interface_t ines_pci_unaccel_interface =
+ {
+@@ -245,7 +268,11 @@ gpib_interface_t ines_pci_unaccel_interf
+ 	parallel_poll: ines_parallel_poll,
+ 	parallel_poll_configure: ines_parallel_poll_configure,
+ 	parallel_poll_response: ines_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: ines_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: ines_line_status,
+ 	update_status: ines_update_status,
+ 	primary_address: ines_primary_address,
+@@ -254,6 +281,11 @@ gpib_interface_t ines_pci_unaccel_interf
+ 	serial_poll_status: ines_serial_poll_status,
+ 	t1_delay: ines_t1_delay,
+ 	return_to_local: ines_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: ines_release_dac_holdoff,
++	set_address_mode: ines_set_address_mode,
++	get_address_state: ines_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ines_pci_interface =
+@@ -274,7 +306,11 @@ gpib_interface_t ines_pci_interface =
+ 	parallel_poll: ines_parallel_poll,
+ 	parallel_poll_configure: ines_parallel_poll_configure,
+ 	parallel_poll_response: ines_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: ines_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: ines_line_status,
+ 	update_status: ines_update_status,
+ 	primary_address: ines_primary_address,
+@@ -283,6 +319,11 @@ gpib_interface_t ines_pci_interface =
+ 	serial_poll_status: ines_serial_poll_status,
+ 	t1_delay: ines_t1_delay,
+ 	return_to_local: ines_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: ines_release_dac_holdoff,
++	set_address_mode: ines_set_address_mode,
++	get_address_state: ines_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ines_pci_accel_interface =
+@@ -303,7 +344,11 @@ gpib_interface_t ines_pci_accel_interfac
+ 	parallel_poll: ines_parallel_poll,
+ 	parallel_poll_configure: ines_parallel_poll_configure,
+ 	parallel_poll_response: ines_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: ines_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: ines_line_status,
+ 	update_status: ines_update_status,
+ 	primary_address: ines_primary_address,
+@@ -312,6 +357,11 @@ gpib_interface_t ines_pci_accel_interfac
+ 	serial_poll_status: ines_serial_poll_status,
+ 	t1_delay: ines_t1_delay,
+ 	return_to_local: ines_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: ines_release_dac_holdoff,
++	set_address_mode: ines_set_address_mode,
++	get_address_state: ines_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ines_isa_interface =
+@@ -332,7 +382,11 @@ gpib_interface_t ines_isa_interface =
+ 	parallel_poll: ines_parallel_poll,
+ 	parallel_poll_configure: ines_parallel_poll_configure,
+ 	parallel_poll_response: ines_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: ines_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: ines_line_status,
+ 	update_status: ines_update_status,
+ 	primary_address: ines_primary_address,
+@@ -341,6 +395,11 @@ gpib_interface_t ines_isa_interface =
+ 	serial_poll_status: ines_serial_poll_status,
+ 	t1_delay: ines_t1_delay,
+ 	return_to_local: ines_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: ines_release_dac_holdoff,
++	set_address_mode: ines_set_address_mode,
++	get_address_state: ines_get_address_state,
++#endif
+ };
+ 
+ int ines_allocate_private(gpib_board_t *board)
+@@ -708,10 +767,3 @@ static void __exit ines_exit_module( voi
+ 
+ module_init( ines_init_module );
+ module_exit( ines_exit_module );
+-
+-
+-
+-
+-
+-
+-
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/Makefile linux-gpib-kernel-4.3.4-patched/drivers/gpib/Makefile
+--- linux-gpib-kernel-4.3.4/drivers/gpib/Makefile	2022-01-22 15:22:30.459573535 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/Makefile	2022-01-22 15:11:39.745509343 -0800
+@@ -5,6 +5,8 @@ endif
+ subdir-ccflags-y := -I$(src)/include \
+ 			-DHAVE_DEV_OF_NODE=$(HAVE_DEV_OF_NODE) \
+ 			-DGPIB_CONFIG_PCMCIA=$(GPIB_CONFIG_PCMCIA) \
++			-DGPIB_CONFIG_DEVICE=$(GPIB_CONFIG_DEVICE) \
++			-DGPIB_CONFIG_TNT5004=$(GPIB_CONFIG_TNT5004) \
+ 			-DGPIB_CONFIG_KERNEL_DEBUG=$(GPIB_CONFIG_KERNEL_DEBUG)
+ 
+ 
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/init.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/init.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/init.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/init.c	2022-01-22 15:11:39.740509272 -0800
+@@ -71,6 +71,9 @@ void nec7210_board_online( nec7210_priva
+ 
+ 	// enable interrupts
+ 	priv->reg_bits[ IMR1 ] = HR_ERRIE | HR_DECIE | HR_ENDIE |
++#if (GPIB_CONFIG_DEVICE==1)
++			HR_APTIE |
++#endif
+ 		HR_DETIE | HR_CPTIE | HR_DOIE | HR_DIIE;
+ 	priv->reg_bits[ IMR2 ] = IMR2_ENABLE_INTR_MASK;
+ 	write_byte( priv, priv->reg_bits[ IMR1 ], IMR1);
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/interrupt.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/interrupt.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/interrupt.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/interrupt.c	2022-01-22 15:11:39.740509272 -0800
+@@ -58,6 +58,31 @@ irqreturn_t nec7210_interrupt_have_statu
+ 	unsigned long dma_flags;
+ #endif
+ 	int retval = IRQ_NONE;
++
++#if (GPIB_CONFIG_DEVICE==1)
++	unsigned int adsr;
++	adsr = read_byte(priv, ADSR);
++
++	// there is no ATN interrupt on vanilla NEC7210 as it is with some of the ASICs
++	// in ISR0, so we use try to at least any event to update ATN status...
++	if ((adsr & HR_NATN) == 0) set_bit(ATN_NUM, &board->status);
++	else clear_bit(ATN_NUM, &board->status);
++
++	// address pass through received
++	if(status1 & HR_APT)
++	{
++		// we *intentionally* do not release the DAC hold-off at this time (has to be
++		// either accepted or declined by calling program with release_dac_holdoff())
++		priv->command = read_byte(priv, CPTR);
++		priv->is_minor_address = adsr & 0x1;
++		set_bit(APT_NUM, &board->status);
++	}
++
++	// address change detected
++	if(status2 & HR_ADSC) {
++		set_bit( ADSC_BN, &priv->state);
++	}
++#endif
+ 	
+ 	smp_mb__before_atomic();
+ 
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/nec7210_aux.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/nec7210_aux.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/nec7210_aux.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/nec7210_aux.c	2022-01-22 15:11:39.740509272 -0800
+@@ -157,6 +157,86 @@ void nec7210_return_to_local( const gpib
+ 	write_byte( priv, AUX_RTL, AUXMR );
+ }
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++void nec7210_local_parallel_poll_mode( gpib_board_t *board, nec7210_private_t *priv, int set_local )
++{
++	// dummy implementation (not needed, intended for TNT4882 & friends only)
++}
++
++/*
++ * releases data acknowledge (DAC) for pending GPIB (secondary) command in
++ * DAC hold-off state with either accepting (do_accept = 1) or rejecting
++ * (do_accept = 0) the command.
++ */
++void nec7210_release_dac_holdoff( gpib_board_t *board, nec7210_private_t *priv, int do_accept )
++{
++	clear_bit(APT_NUM, &board->status);
++	if (do_accept) {
++		write_byte( priv, AUX_VAL, AUXMR );
++	}
++	else {
++		write_byte( priv, AUX_NVAL, AUXMR );
++	}
++}
++
++/*
++ * sets the address mode and (if appropriate) secondary address (sad).
++ * Address mode implementation may be hardware specific, 7210 normally
++ * provides mode 0 (ton/toff), mode 1 (normal dual addressing), mode 2
++ * (extended single addressing) and mode 3 (extended dual addressing).
++ *
++ * Note that dual addressing is a special feature of the 7210 and compatibles.
++ */
++void nec7210_set_address_mode( gpib_board_t *board, nec7210_private_t *priv,
++		int address_mode, int sad )
++{
++	switch(address_mode) {
++	case 0:	// ton/lon
++		priv->reg_bits[ ADMR ] &= ~HR_ADM0;
++		priv->reg_bits[ ADMR ] &= ~HR_ADM1;
++		write_byte( priv, priv->reg_bits[ ADMR ], ADMR );
++		break;
++	case 1:	// normal dual addressing (7210 only)
++		board->sad = sad;
++		write_byte(priv, HR_ARS | sad, ADR);
++		priv->reg_bits[ ADMR ] |= HR_ADM0;
++		priv->reg_bits[ ADMR ] &= ~HR_ADM1;
++		write_byte( priv, priv->reg_bits[ ADMR ], ADMR );
++		break;
++	case 2:	// extended single addressing
++		board->sad = sad;
++		write_byte(priv, HR_ARS | sad, ADR);
++		priv->reg_bits[ ADMR ] &= ~HR_ADM0;
++		priv->reg_bits[ ADMR ] |= HR_ADM1;
++		write_byte( priv, priv->reg_bits[ ADMR ], ADMR );
++		break;
++	case 3:	// extended dual addressing (7210 only)
++		board->sad = sad;
++		write_byte(priv, HR_ARS | sad, ADR);
++		priv->reg_bits[ ADMR ] |= HR_ADM0;
++		priv->reg_bits[ ADMR ] |= HR_ADM1;
++		write_byte( priv, priv->reg_bits[ ADMR ], ADMR );
++		break;
++	default:
++		printk("nec7210: invalid address mode (mode=%d)\n", address_mode);
++	}
++}
++
++/*
++ * returns the current secondary address and whether the minor or major
++ * address has been addressed (meaningful for dual addressing and
++ * extended dual addressing only).
++ */
++void nec7210_get_address_state( gpib_board_t *board, nec7210_private_t *priv,
++		unsigned int *secondary, int *is_minor )
++{
++	*secondary = priv->command & 0x1f;
++	*is_minor = priv->is_minor_address;
++}
++#endif
++
++
++
+ EXPORT_SYMBOL( nec7210_t1_delay );
+ EXPORT_SYMBOL( nec7210_request_system_control );
+ EXPORT_SYMBOL( nec7210_take_control );
+@@ -165,3 +245,9 @@ EXPORT_SYMBOL( nec7210_interface_clear )
+ EXPORT_SYMBOL( nec7210_remote_enable );
+ EXPORT_SYMBOL( nec7210_release_rfd_holdoff );
+ EXPORT_SYMBOL( nec7210_return_to_local );
++#if (GPIB_CONFIG_DEVICE==1)
++EXPORT_SYMBOL( nec7210_local_parallel_poll_mode );
++EXPORT_SYMBOL( nec7210_release_dac_holdoff );
++EXPORT_SYMBOL( nec7210_set_address_mode );
++EXPORT_SYMBOL( nec7210_get_address_state );
++#endif
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/read.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/read.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/read.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/read.c	2022-01-22 15:11:39.740509272 -0800
+@@ -32,6 +32,11 @@ static int pio_read( gpib_board_t *board
+ 	{
+ 		if(wait_event_interruptible(board->wait,
+ 			test_bit(READ_READY_BN, &priv->state) ||
++#if (GPIB_CONFIG_DEVICE==1)
++			test_bit(TACS_NUM, &board->status) ||
++			test_bit(ATN_NUM, &board->status) ||
++			test_bit(ADSC_BN, &priv->state) ||
++#endif
+ 			test_bit(DEV_CLEAR_BN, &priv->state) ||
+ 			test_bit(TIMO_NUM, &board->status)))
+ 		{
+@@ -54,6 +59,26 @@ static int pio_read( gpib_board_t *board
+ 			if( *end )
+ 				break;
+ 		}
++#if (GPIB_CONFIG_DEVICE==1)
++		if( test_bit( TACS_NUM, &board->status ) )
++		{
++			GPIB_DPRINTK("addressed as talker\n");
++			retval = -EINTR;
++			break;
++		}
++		if( test_bit( ATN_NUM, &board->status ) )
++		{
++			GPIB_DPRINTK("ATN asserted\n");
++			retval = -EINTR;
++			break;
++		}
++		if( test_bit( ADSC_BN, &priv->state ) )
++		{
++			GPIB_DPRINTK("address change detected (unlisten)\n");
++			retval = -EINTR;
++			break;
++		}
++#endif
+ 		if( test_bit( TIMO_NUM, &board->status ) )
+ 		{
+ 			GPIB_DPRINTK("interrupted by timeout\n");
+@@ -169,6 +194,11 @@ int nec7210_read(gpib_board_t *board, ne
+ 
+ 	smp_mb__before_atomic();
+ 	clear_bit( DEV_CLEAR_BN, &priv->state ); // XXX wrong
++#if (GPIB_CONFIG_DEVICE==1)
++	clear_bit( TACS_NUM, &board->status );
++	clear_bit( ATN_NUM, &board->status );
++	clear_bit( ADSC_BN, &priv->state );
++#endif
+ 	smp_mb__after_atomic();
+ 
+ 	nec7210_release_rfd_holdoff( board, priv );
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/util.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/util.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/util.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/util.c	2022-01-22 15:11:39.740509272 -0800
+@@ -152,6 +152,11 @@ static void update_talker_state(nec7210_
+ 	{
+ 		priv->talker_state = talker_idle;
+ 	}
++#if (GPIB_CONFIG_DEVICE==1)
++	if((address_status_bits & HR_TPAS)) {
++		priv->talker_state = talker_addressed;
++	}
++#endif
+ }
+ 
+ static void update_listener_state(nec7210_private_t *priv, unsigned address_status_bits)
+@@ -169,6 +174,11 @@ static void update_listener_state(nec721
+ 	{
+ 		priv->listener_state = listener_idle;
+ 	}
++#if (GPIB_CONFIG_DEVICE==1)
++	if((address_status_bits & HR_LPAS)) {
++		priv->listener_state = listener_addressed;
++	}
++#endif
+ }
+ 
+ unsigned int update_status_nolock( gpib_board_t *board, nec7210_private_t *priv )
+@@ -187,6 +197,13 @@ unsigned int update_status_nolock( gpib_
+ 		clear_bit(CIC_NUM, &board->status);
+ 	// check for talker/listener addressed
+ 	update_talker_state(priv, address_status_bits);
++#if (GPIB_CONFIG_DEVICE==1)
++	if((address_status_bits & HR_MJMN) && (board->sad == 31)) {
++		// actually untalk for major address
++		priv->talker_state = talker_idle;
++ //		write_byte(priv, 0xb, AUXMR);	// force local untalk entering TIDS, actually an ASIC feature only
++	}
++#endif
+ 	if(priv->talker_state == talker_active || priv->talker_state == talker_addressed)
+ 	{
+ 		set_bit(TACS_NUM, &board->status);
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/write.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/write.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/nec7210/write.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/nec7210/write.c	2022-01-22 15:11:39.740509272 -0800
+@@ -15,7 +15,6 @@
+  *   (at your option) any later version.                                   *
+  *                                                                         *
+  ***************************************************************************/
+-
+ #include "board.h"
+ #include <linux/string.h>
+ #include <asm/dma.h>
+@@ -30,6 +29,10 @@ static int pio_write_wait(gpib_board_t *
+ 		(wake_on_bus_error && test_bit(BUS_ERROR_BN, &priv->state)) ||
+ 		(wake_on_lacs && test_bit(LACS_NUM, &board->status)) ||
+ 		(wake_on_atn && test_bit(ATN_NUM, &board->status)) ||
++#if (GPIB_CONFIG_DEVICE==1)
++   		test_bit(ADSC_BN, &priv->state) ||
++		test_bit(APT_NUM, &board->status) ||
++#endif
+ 		test_bit(TIMO_NUM, &board->status)))
+ 	{
+ 		GPIB_DPRINTK( "gpib write interrupted\n" );
+@@ -45,6 +48,28 @@ static int pio_write_wait(gpib_board_t *
+ 		GPIB_DPRINTK("nec7210: write interrupted by clear\n");
+ 		return -EINTR;
+ 	}
++#if (GPIB_CONFIG_DEVICE==1)
++	if(test_bit(ADSC_BN, &priv->state))
++	{
++		GPIB_DPRINTK("nec7210: address change detected (untalk)\n");
++		return -EINTR;
++	}
++	if(wake_on_lacs && test_bit(LACS_NUM, &board->status))
++	{
++		GPIB_DPRINTK("nec7210: addressed as listener\n");
++		return -EINTR;
++	}
++	if(wake_on_atn && test_bit(ATN_NUM, &board->status))
++	{
++		GPIB_DPRINTK("nec7210: ATN asserted\n");
++		return -EINTR;
++	}
++	if(test_bit(APT_NUM, &board->status))
++	{
++		GPIB_DPRINTK("nec7210: secondary detected\n");
++		return -EINTR;
++	}
++#endif
+ 	if(wake_on_bus_error && test_and_clear_bit(BUS_ERROR_BN, &priv->state))
+ 	{
+ 		GPIB_DPRINTK("nec7210: bus error on write\n");
+@@ -54,7 +79,11 @@ static int pio_write_wait(gpib_board_t *
+ }
+ 
+ static int pio_write(gpib_board_t *board, nec7210_private_t *priv,
++#if (GPIB_CONFIG_DEVICE==1)
++	uint8_t *buffer, size_t length, size_t *bytes_written, int send_eoi)
++#else
+ 	uint8_t *buffer, size_t length, size_t *bytes_written)
++#endif
+ {
+ 	size_t last_count = 0;
+ 	ssize_t retval = 0;
+@@ -83,7 +112,14 @@ static int pio_write(gpib_board_t *board
+ 			bus_error_count++;
+ 			if(bus_error_count > max_bus_errors) return retval;
+ 			else continue;
++#if (GPIB_CONFIG_DEVICE==1)
++		}else if( retval < 0 ) goto done;
++
++		if (send_eoi && (*bytes_written == (length - 1)))
++			write_byte(priv, AUX_SEOI, AUXMR);
++#else
+ 		}else if( retval < 0 ) return retval;
++#endif
+ 
+ 		spin_lock_irqsave(&board->spinlock, flags);
+ 		clear_bit(BUS_ERROR_BN, &priv->state);
+@@ -93,6 +129,13 @@ static int pio_write(gpib_board_t *board
+ 		spin_unlock_irqrestore(&board->spinlock, flags);
+ 	}
+ 	retval = pio_write_wait(board, priv, 1, 1, priv->type == NEC7210);
++#if (GPIB_CONFIG_DEVICE==1)
++done:
++	if (retval < 0) {
++		if ((retval == -EIO) || test_and_clear_bit(BUS_ERROR_BN, &priv->state))
++			*bytes_written = last_count;
++	}
++#endif
+ 	return retval;
+ }
+ #if 0
+@@ -180,12 +223,33 @@ int nec7210_write(gpib_board_t *board, n
+ {
+ 	int retval = 0;
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++	unsigned int adr1_bits = 0;
++	/* we need to temporarily disable the minor address in order
++	 to see the untalk */
++	adr1_bits = read_byte(priv, ADR1);
++	if ((adr1_bits & (HR_DT | HR_DL | ADDRESS_MASK)) == (HR_DL | 0x1f))
++		write_byte(priv, HR_ARS | HR_DT | HR_DL, ADR);
++	smp_mb__before_atomic();
++	clear_bit(LACS_NUM, &board->status);
++	clear_bit(ATN_NUM, &board->status);
++	clear_bit(ADSC_BN, &priv->state);
++	smp_mb__after_atomic();
++#endif
++
+ 	*bytes_written = 0;
+ 
+ 	smp_mb__before_atomic();
+ 	clear_bit( DEV_CLEAR_BN, &priv->state ); //XXX
+ 	smp_mb__after_atomic();
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++	if (length == 0) return 0;
++	retval = pio_write(board, priv, buffer, length, bytes_written, send_eoi);
++	/* restore minor addressing */
++	if ((adr1_bits & (HR_DT | HR_DL | ADDRESS_MASK)) == (HR_DL | 0x1f))
++		write_byte(priv, HR_ARS | HR_DL | 0x1f, ADR);
++#else
+ 	if(send_eoi)
+ 	{
+ 		length-- ; /* save the last byte for sending EOI */
+@@ -234,7 +298,7 @@ int nec7210_write(gpib_board_t *board, n
+ 			return retval;
+ 		}
+ 	}
+-
++#endif
+ 	return retval;
+ }
+ 
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/pc2/pc2_init.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/pc2/pc2_init.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/pc2/pc2_init.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/pc2/pc2_init.c	2022-01-22 15:11:39.740509272 -0800
+@@ -139,6 +139,28 @@ void pc2_return_to_local( gpib_board_t *
+ 	pc2_private_t *priv = board->private_data;
+ 	nec7210_return_to_local( board, &priv->nec7210_priv );
+ }
++#if (GPIB_CONFIG_DEVICE==1)
++void pc2_local_parallel_poll_mode( gpib_board_t *board, int set_local )
++{
++	pc2_private_t *priv = board->private_data;
++	nec7210_local_parallel_poll_mode( board, &priv->nec7210_priv, set_local );
++}
++void pc2_release_dac_holdoff( gpib_board_t *board, int do_accept )
++{
++	pc2_private_t *priv = board->private_data;
++	nec7210_release_dac_holdoff( board, &priv->nec7210_priv, do_accept );
++}
++void pc2_set_address_mode( gpib_board_t *board, int address_mode, int sad )
++{
++	pc2_private_t *priv = board->private_data;
++	nec7210_set_address_mode( board, &priv->nec7210_priv, address_mode, sad );
++}
++void pc2_get_address_state( gpib_board_t *board, unsigned int *secondary, int *is_minor )
++{
++	pc2_private_t *priv = board->private_data;
++	nec7210_get_address_state( board, &priv->nec7210_priv, secondary, is_minor );
++}
++#endif
+ 
+ gpib_interface_t pc2_interface =
+ {
+@@ -158,7 +180,7 @@ gpib_interface_t pc2_interface =
+ 	parallel_poll:	pc2_parallel_poll,
+ 	parallel_poll_configure:	pc2_parallel_poll_configure,
+ 	parallel_poll_response:	pc2_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++	local_parallel_poll_mode: pc2_local_parallel_poll_mode,
+ 	line_status:	NULL,
+ 	update_status:	pc2_update_status,
+ 	primary_address:	pc2_primary_address,
+@@ -167,6 +189,11 @@ gpib_interface_t pc2_interface =
+ 	serial_poll_status:	pc2_serial_poll_status,
+ 	t1_delay: pc2_t1_delay,
+ 	return_to_local: pc2_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: pc2_release_dac_holdoff,
++	set_address_mode: pc2_set_address_mode,
++	get_address_state: pc2_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t pc2a_interface =
+@@ -187,7 +214,7 @@ gpib_interface_t pc2a_interface =
+ 	parallel_poll:	pc2_parallel_poll,
+ 	parallel_poll_configure:	pc2_parallel_poll_configure,
+ 	parallel_poll_response:	pc2_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++	local_parallel_poll_mode: pc2_local_parallel_poll_mode,
+ 	line_status:	NULL,
+ 	update_status:	pc2_update_status,
+ 	primary_address:	pc2_primary_address,
+@@ -196,6 +223,11 @@ gpib_interface_t pc2a_interface =
+ 	serial_poll_status:	pc2_serial_poll_status,
+ 	t1_delay: pc2_t1_delay,
+ 	return_to_local: pc2_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: pc2_release_dac_holdoff,
++	set_address_mode: pc2_set_address_mode,
++	get_address_state: pc2_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t pc2a_cb7210_interface =
+@@ -216,7 +248,7 @@ gpib_interface_t pc2a_cb7210_interface =
+ 	parallel_poll:	pc2_parallel_poll,
+ 	parallel_poll_configure:	pc2_parallel_poll_configure,
+ 	parallel_poll_response:	pc2_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++	local_parallel_poll_mode: pc2_local_parallel_poll_mode,
+ 	line_status:	NULL, //XXX
+ 	update_status:	pc2_update_status,
+ 	primary_address:	pc2_primary_address,
+@@ -225,6 +257,11 @@ gpib_interface_t pc2a_cb7210_interface =
+ 	serial_poll_status:	pc2_serial_poll_status,
+ 	t1_delay: pc2_t1_delay,
+ 	return_to_local: pc2_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: pc2_release_dac_holdoff,
++	set_address_mode: pc2_set_address_mode,
++	get_address_state: pc2_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t pc2_2a_interface =
+@@ -245,7 +282,7 @@ gpib_interface_t pc2_2a_interface =
+ 	parallel_poll:	pc2_parallel_poll,
+ 	parallel_poll_configure:	pc2_parallel_poll_configure,
+ 	parallel_poll_response:	pc2_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++	local_parallel_poll_mode: pc2_local_parallel_poll_mode,
+ 	line_status:	NULL,
+ 	update_status:	pc2_update_status,
+ 	primary_address:	pc2_primary_address,
+@@ -254,6 +291,11 @@ gpib_interface_t pc2_2a_interface =
+ 	serial_poll_status:	pc2_serial_poll_status,
+ 	t1_delay: pc2_t1_delay,
+ 	return_to_local: pc2_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: pc2_release_dac_holdoff,
++	set_address_mode: pc2_set_address_mode,
++	get_address_state: pc2_get_address_state,
++#endif
+ };
+ 
+ static int allocate_private(gpib_board_t *board)
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/sys/osfuncs.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/sys/osfuncs.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/sys/osfuncs.c	2022-01-22 15:22:30.460573549 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/sys/osfuncs.c	2022-01-22 15:11:39.740509272 -0800
+@@ -68,6 +68,12 @@ static int select_device_path_ioctl( gpi
+ static int event_ioctl( gpib_board_t *board, unsigned long arg );
+ static int request_system_control_ioctl( gpib_board_t *board, unsigned long arg );
+ static int t1_delay_ioctl( gpib_board_t *board, unsigned long arg );
++#if (GPIB_CONFIG_DEVICE==1)
++static int release_dac_holdoff_ioctl( gpib_board_t *board, unsigned long arg );
++static int set_address_mode_ioctl( gpib_board_t *board, unsigned long arg );
++static int get_address_state_ioctl( gpib_board_t *board, unsigned long arg );
++#endif
++
+ 
+ static int cleanup_open_devices( gpib_file_private_t *file_priv, gpib_board_t *board );
+ 
+@@ -251,7 +257,6 @@ long ibioctl(struct file *filep, unsigne
+ 	}
+ 	if( board->interface == NULL )
+ 	{
+-		printk("gpib: no gpib board configured on /dev/gpib%i\n", minor);
+ 		retval = -ENODEV;
+ 		goto done;
+ 	}
+@@ -453,6 +458,20 @@ long ibioctl(struct file *filep, unsigne
+ 			mutex_unlock(&board->big_gpib_mutex);
+ 			return write_ioctl( file_priv, board, arg );
+ 			break;
++#if (GPIB_CONFIG_DEVICE==1)
++		case IBRELEASE_DAC_HOLDOFF:
++			retval = release_dac_holdoff_ioctl( board, arg );
++			goto done;
++			break;
++		case IBSET_ADDRESS_MODE:
++			retval = set_address_mode_ioctl( board, arg );
++			goto done;
++			break;
++		case IBGET_ADDRESS_STATE:
++			retval = get_address_state_ioctl( board, arg );
++			goto done;
++			break;
++#endif
+ 		default:
+ 			retval = -ENOTTY;
+ 			goto done;
+@@ -1591,3 +1610,62 @@ static int t1_delay_ioctl( gpib_board_t
+ 	return 0;
+ }
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++static int release_dac_holdoff_ioctl( gpib_board_t *board, unsigned long arg )
++{
++	int do_accept;
++	int retval;
++
++	if( board->interface->release_dac_holdoff == NULL )
++	{
++		printk("gpib: release holdoff not implemented in driver!\n" );
++		return -EIO;
++	}
++
++	retval = copy_from_user( &do_accept, ( void * ) arg, sizeof( do_accept ) );
++	if( retval ) return -EFAULT;
++
++	board->interface->release_dac_holdoff( board, do_accept);
++
++	return 0;
++}
++
++static int set_address_mode_ioctl( gpib_board_t *board, unsigned long arg )
++{
++	set_address_mode_ioctl_t cmd;
++	int retval;
++
++	if( board->interface->set_address_mode == NULL )
++	{
++		printk("gpib: set address mode not implemented in driver!\n" );
++		return -EIO;
++	}
++
++	retval = copy_from_user( &cmd, ( void * ) arg, sizeof( cmd ) );
++	if( retval ) return -EFAULT;
++
++	board->interface->set_address_mode( board, cmd.address_mode, cmd.sad);
++
++	return 0;
++}
++
++static int get_address_state_ioctl( gpib_board_t *board, unsigned long arg )
++{
++	get_address_state_ioctl_t cmd;
++	int retval;
++
++	if( board->interface->get_address_state == NULL )
++	{
++		printk("gpib: get address state not implemented in driver!\n" );
++		return -EIO;
++	}
++
++	board->interface->get_address_state( board, &cmd.secondary, &cmd.is_minor);
++
++	retval = copy_to_user( ( void * ) arg, &cmd, sizeof( cmd ) );
++	if( retval )
++		return -EFAULT;
++
++	return 0;
++}
++#endif
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882.h linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882.h
+--- linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882.h	2022-01-22 15:22:30.461573562 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882.h	2022-01-22 15:11:39.741509287 -0800
+@@ -33,10 +33,14 @@ enum
+ {
+ 	PCI_DEVICE_ID_NI_GPIB = 0xc801,
+ 	PCI_DEVICE_ID_NI_GPIB_PLUS = 0xc811,
++	PCI_DEVICE_ID_NI_GPIB_PLUS2 = 0x71ad,
+ 	PCI_DEVICE_ID_NI_PXIGPIB = 0xc821,
+ 	PCI_DEVICE_ID_NI_PMCGPIB = 0xc831,
+ 	PCI_DEVICE_ID_NI_PCIEGPIB = 0x70cf,
+ 	PCI_DEVICE_ID_NI_PCIE2GPIB = 0x710e,
++#if (GPIB_CONFIG_TNT5004==1)
++ 	PCI_DEVICE_ID_MC_PCI488 = 0x7259,		// support for Measurement Computing PCI-488 (identical design as PCI-GPIB with TNT5004)
++ #endif
+ 	PCI_DEVICE_ID_CEC_NI_GPIB = 0x7258
+ };
+ 
+@@ -50,6 +54,9 @@ typedef struct
+ 	volatile unsigned short imr0_bits;
+ 	volatile unsigned short imr3_bits;
+ 	unsigned short auxg_bits;	// bits written to auxilliary register G
++#if (GPIB_CONFIG_DEVICE==1)
++	unsigned short auxi_bits;	// bits written to auxilliary register I
++#endif
+ 	void (*io_writeb)(unsigned int value, void *address);
+ 	void (*io_writew)(unsigned int value, void *address);
+ 	unsigned int (*io_readb)(void *address);
+@@ -95,6 +102,12 @@ uint8_t tnt4882_serial_poll_status( gpib
+ int tnt4882_line_status( const gpib_board_t *board );
+ unsigned int tnt4882_t1_delay( gpib_board_t *board, unsigned int nano_sec );
+ void tnt4882_return_to_local( gpib_board_t *board );
++#if (GPIB_CONFIG_DEVICE==1)
++void tnt4882_local_parallel_poll_mode( gpib_board_t *board, int set_local );
++void tnt4882_release_dac_holdoff( gpib_board_t *board, int do_accept );
++void tnt4882_set_address_mode( gpib_board_t *board, int address_mode, int sad );
++void tnt4882_get_address_state( gpib_board_t *board, unsigned int *secondary, int *is_minor );
++#endif
+ 
+ // pcmcia init/cleanup
+ int __init init_ni_gpib_cs(void);
+@@ -148,6 +161,9 @@ static inline unsigned short tnt_readb(
+ 	case BSR:
+ 		switch(priv->nec7210_priv.type)
+ 		{
++#if (GPIB_CONFIG_TNT5004==1)
++		case TNT5004:
++#endif
+ 		case TNT4882:
+ 			retval = priv->io_readb(address);
+ 			break;
+@@ -185,6 +201,9 @@ static inline void tnt_writeb( tnt4882_p
+ 	case BCR:
+ 		switch(priv->nec7210_priv.type)
+ 		{
++#if (GPIB_CONFIG_TNT5004==1)
++		case TNT5004:
++#endif
+ 		case TNT4882:
+ 			priv->io_writeb( value, address );
+ 			break;
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882_init.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882_init.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882_init.c	2022-01-22 15:22:30.461573562 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882_init.c	2022-01-22 15:57:43.616571907 -0800
+@@ -65,7 +65,7 @@ int tnt4882_write(gpib_board_t *board, u
+ 	tnt4882_private_t *priv = board->private_data;
+ 	return nec7210_write(board, &priv->nec7210_priv, buffer, length, send_eoi, bytes_written);
+ }
+-int tnt4882_command_unaccel(gpib_board_t *board, uint8_t *buffer, 
++int tnt4882_command_unaccel(gpib_board_t *board, uint8_t *buffer,
+ 	size_t length, size_t *bytes_written)
+ {
+ 	tnt4882_private_t *priv = board->private_data;
+@@ -153,6 +153,18 @@ int tnt4882_parallel_poll(gpib_board_t *
+ void tnt4882_parallel_poll_configure(gpib_board_t *board, uint8_t config )
+ {
+ 	tnt4882_private_t *priv = board->private_data;
++#if (GPIB_CONFIG_TNT5004==1)
++	if(priv->nec7210_priv.type == TNT5004) {
++		write_byte(&priv->nec7210_priv, AUXRI | 0x4, AUXMR);		/* configure locally */
++		if (config) {
++			write_byte(&priv->nec7210_priv, PPR | config, AUXMR);	/* set response + clear sense */
++		}
++		else {
++			write_byte(&priv->nec7210_priv, PPR | 0x10, AUXMR);		/* disable ppoll */
++		}
++	}
++	else
++#endif
+ 	nec7210_parallel_poll_configure( board, &priv->nec7210_priv, config );
+ }
+ void tnt4882_parallel_poll_response(gpib_board_t *board, int ist )
+@@ -170,7 +182,7 @@ void tnt4882_serial_poll_response(gpib_b
+ 	nec7210_serial_poll_response(board, &priv->nec7210_priv, status);
+ }
+ 
+-void tnt4882_serial_poll_response2(gpib_board_t *board, 
++void tnt4882_serial_poll_response2(gpib_board_t *board,
+ 	uint8_t status, int new_reason_for_service)
+ {
+ 	tnt4882_private_t *priv = board->private_data;
+@@ -222,6 +234,68 @@ void tnt4882_return_to_local( gpib_board
+ 	tnt4882_private_t *priv = board->private_data;
+ 	nec7210_return_to_local( board, &priv->nec7210_priv );
+ }
++#if (GPIB_CONFIG_DEVICE==1)
++/*
++ * Puts the TNT4882 either with set_local = 0 into 7210 mode (remote configuration) or
++ * with set_local = 1 into true PP2 mode (local configuration only). Use set_local = 1
++ * to control PPoll response via bit 4 (Unconfigure) of the PPR register.
++ */
++void tnt4882_local_parallel_poll_mode( gpib_board_t *board, int set_local )
++{
++	tnt4882_private_t *tnt_priv = board->private_data;
++	if(tnt_priv->nec7210_priv.type != NEC7210)
++	{
++		if (set_local) {
++			tnt_priv->auxi_bits |= PP2;
++			write_byte(&tnt_priv->nec7210_priv, tnt_priv->auxi_bits, AUXMR);
++		}
++		else {
++			tnt_priv->auxi_bits &= ~PP2;
++			write_byte(&tnt_priv->nec7210_priv, tnt_priv->auxi_bits, AUXMR);
++		}
++		return;
++	}else
++	{
++		nec7210_local_parallel_poll_mode(board, &tnt_priv->nec7210_priv, set_local);
++	}
++}
++
++/*
++ * Releases data acknowledge (DAC) for pending GPIB (secondary) command in
++ * DAC hold-off state with either accepting (do_accept = 1) or rejecting
++ * (do_accept = 0) the command.
++ */
++void tnt4882_release_dac_holdoff( gpib_board_t *board, int do_accept )
++{
++	tnt4882_private_t *priv = board->private_data;
++	nec7210_release_dac_holdoff( board, &priv->nec7210_priv, do_accept );
++}
++
++/*
++ * Sets the address mode and (if appropriate) secondary address (sad).
++ * Address mode implementation may be hardware specific, 7210 normally
++ * provides mode 0 (ton/toff), mode 1 (normal dual addressing), mode 2
++ * (extended single addressing) and mode 3 (extended dual addressing).
++ *
++ * Note that dual addressing is a special feature of the 7210 and compatibles.
++ */
++void tnt4882_set_address_mode( gpib_board_t *board, int address_mode, int sad )
++{
++	tnt4882_private_t *priv = board->private_data;
++	nec7210_set_address_mode( board, &priv->nec7210_priv, address_mode, sad );
++}
++
++/*
++ * Returns the current secondary address and whether the minor or major
++ * address has been addressed (meaningful for dual addressing and
++ * extended dual addressing only).
++ */
++void tnt4882_get_address_state( gpib_board_t *board, unsigned int *secondary, int *is_minor )
++{
++	tnt4882_private_t *priv = board->private_data;
++	nec7210_get_address_state( board, &priv->nec7210_priv, secondary, is_minor );
++}
++#endif
+ 
+ gpib_interface_t ni_pci_interface =
+ {
+@@ -241,7 +315,11 @@ gpib_interface_t ni_pci_interface =
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: tnt4882_line_status,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -250,6 +328,11 @@ gpib_interface_t ni_pci_interface =
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ni_pci_accel_interface =
+@@ -270,7 +353,11 @@ gpib_interface_t ni_pci_accel_interface
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: tnt4882_line_status,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -279,6 +366,11 @@ gpib_interface_t ni_pci_accel_interface
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ni_isa_interface =
+@@ -299,7 +391,11 @@ gpib_interface_t ni_isa_interface =
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: tnt4882_line_status,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -308,6 +404,11 @@ gpib_interface_t ni_isa_interface =
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ni_nat4882_isa_interface =
+@@ -328,7 +429,11 @@ gpib_interface_t ni_nat4882_isa_interfac
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: tnt4882_line_status,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -337,6 +442,11 @@ gpib_interface_t ni_nat4882_isa_interfac
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ni_nec_isa_interface =
+@@ -357,7 +467,11 @@ gpib_interface_t ni_nec_isa_interface =
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: NULL,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -366,6 +480,11 @@ gpib_interface_t ni_nec_isa_interface =
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ni_isa_accel_interface =
+@@ -386,7 +505,11 @@ gpib_interface_t ni_isa_accel_interface
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: tnt4882_line_status,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -395,6 +518,11 @@ gpib_interface_t ni_isa_accel_interface
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ni_nat4882_isa_accel_interface =
+@@ -415,7 +543,11 @@ gpib_interface_t ni_nat4882_isa_accel_in
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: tnt4882_line_status,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -424,6 +556,11 @@ gpib_interface_t ni_nat4882_isa_accel_in
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ gpib_interface_t ni_nec_isa_accel_interface =
+@@ -444,7 +581,11 @@ gpib_interface_t ni_nec_isa_accel_interf
+ 	parallel_poll: tnt4882_parallel_poll,
+ 	parallel_poll_configure: tnt4882_parallel_poll_configure,
+ 	parallel_poll_response: tnt4882_parallel_poll_response,
+-	local_parallel_poll_mode: NULL, // XXX
++#if (GPIB_CONFIG_DEVICE==1)
++	local_parallel_poll_mode: tnt4882_local_parallel_poll_mode,
++#else
++	local_parallel_poll_mode: NULL,
++#endif
+ 	line_status: NULL,
+ 	update_status: tnt4882_update_status,
+ 	primary_address: tnt4882_primary_address,
+@@ -453,6 +594,11 @@ gpib_interface_t ni_nec_isa_accel_interf
+ 	serial_poll_status: tnt4882_serial_poll_status,
+ 	t1_delay: tnt4882_t1_delay,
+ 	return_to_local: tnt4882_return_to_local,
++#if (GPIB_CONFIG_DEVICE==1)
++	release_dac_holdoff: tnt4882_release_dac_holdoff,
++	set_address_mode: tnt4882_set_address_mode,
++	get_address_state: tnt4882_get_address_state,
++#endif
+ };
+ 
+ void tnt4882_board_reset( tnt4882_private_t *tnt_priv, gpib_board_t *board )
+@@ -508,7 +654,11 @@ void tnt4882_init( tnt4882_private_t *tn
+ 	tnt_writeb( tnt_priv,AUX_7210, SWAPPED_AUXCR);
+ 	udelay(1);
+ 	// turn on one-chip mode
++#if (GPIB_CONFIG_TNT5004==1)
++ 	if(( nec_priv->type == TNT4882 ) || ( nec_priv->type == TNT5004 ))
++#else
+ 	if( nec_priv->type == TNT4882 )
++#endif
+ 		tnt_writeb(tnt_priv, NODMA | TNT_ONE_CHIP_BIT, HSSEL);
+ 	else
+ 		tnt_writeb(tnt_priv, NODMA, HSSEL);
+@@ -524,6 +674,11 @@ void tnt4882_init( tnt4882_private_t *tn
+ 	// enable interrupt
+ 	tnt_writeb( tnt_priv, 0x1, INTRT );
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++	tnt_priv->auxi_bits = AUXRI;
++	write_byte( &tnt_priv->nec7210_priv, tnt_priv->auxi_bits, AUXMR );
++#endif
++
+ 	// force immediate holdoff
+ 	write_byte( &tnt_priv->nec7210_priv, AUX_HLDI, AUXMR );
+ 
+@@ -584,10 +739,14 @@ int ni_pci_attach(gpib_board_t *board, c
+ 		{
+ 		case PCI_DEVICE_ID_NI_GPIB:
+ 		case PCI_DEVICE_ID_NI_GPIB_PLUS:
++		case PCI_DEVICE_ID_NI_GPIB_PLUS2:
+ 		case PCI_DEVICE_ID_NI_PXIGPIB:
+ 		case PCI_DEVICE_ID_NI_PMCGPIB:
+ 		case PCI_DEVICE_ID_NI_PCIEGPIB:
+ 		case PCI_DEVICE_ID_NI_PCIE2GPIB:
++#if (GPIB_CONFIG_TNT5004==1)
++		case PCI_DEVICE_ID_MC_PCI488: 		// support for Measurement Computing PCI-488
++#endif
+ 		case PCI_DEVICE_ID_CEC_NI_GPIB:
+ 			found_board = 1;
+ 			break;
+@@ -621,7 +780,21 @@ int ni_pci_attach(gpib_board_t *board, c
+ 	tnt_priv->irq = mite_irq(tnt_priv->mite);
+ 	printk( "tnt4882: irq %i\n", tnt_priv->irq );
+ 
+-	tnt4882_init( tnt_priv, board );
++#if (GPIB_CONFIG_TNT5004==1)
++	// TNT5004 detection
++	switch(tnt_readb( tnt_priv, CSR ) & 0xf0) {
++	case 0x30:
++		nec_priv->type = TNT4882;
++		printk("tnt4882: TNT4882 chipset detected\n");
++		break;
++	case 0x40:
++		nec_priv->type = TNT5004;
++		printk("tnt4882: TNT5004 chipset detected\n");
++		break;
++	}
++#endif
++
++	 	tnt4882_init( tnt_priv, board );
+ 
+ 	return 0;
+ }
+@@ -787,10 +960,14 @@ static const struct pci_device_id tnt488
+ {
+ 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_GPIB)},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_GPIB_PLUS)},
++	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_GPIB_PLUS2)},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PXIGPIB)},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PMCGPIB)},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PCIEGPIB)},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PCIE2GPIB)},
++#if (GPIB_CONFIG_TNT5004==1)
++	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_MC_PCI488)},	// support for Measurement Computing PCI-488
++#endif
+ 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_CEC_NI_GPIB)},
+ 	{ 0 }
+ };
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882_read.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882_read.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882_read.c	2022-01-22 15:22:30.461573562 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882_read.c	2022-01-22 15:11:39.741509287 -0800
+@@ -46,7 +46,12 @@ static int fifo_xfer_done( tnt4882_priva
+ 	int retval;
+ 
+ 	status1 = tnt_readb( tnt_priv, STS1 );
++
++#if (GPIB_CONFIG_DEVICE==1)
++	retval = status1 & ( S_DONE );	// checking S_HALT will lead to early termination
++#else
+ 	retval = status1 & ( S_DONE | S_HALT );
++#endif
+ 
+ 	return retval;
+ }
+@@ -56,6 +61,46 @@ static int drain_fifo_words(tnt4882_priv
+ 	int count = 0;
+ 	nec7210_private_t *nec_priv = &tnt_priv->nec7210_priv;
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++	short word;
++	int isr3, i;
++
++	// alternative method to drain FIFO as suggested by NI (uses minimum status checks)
++	while (fifo_word_available( tnt_priv ) && ((count + 1) < num_bytes)) {
++		isr3 = tnt_readb( tnt_priv, ISR3 );
++		switch (isr3 & 0x4c) {
++		case 0x04:	/* NEF */
++		case 0x44:	/* NEF|INTSRC2 */
++					/* FIFO full read 16 words */
++					for (i=0; i<16; i++) {
++						word = tnt_priv->io_readw( nec_priv->iobase + FIFOB );
++						if ((count + 1) < num_bytes) {
++							buffer[ count++ ] = word & 0xff;
++							buffer[ count++ ] = ( word >> 8 ) & 0xff;
++						}
++					}
++			break;
++		case 0x4c:	/* NFF|INTSRC2|NEF */
++					/* FIFO half full, read 8 words */
++					for (i=0; i<8; i++) {
++						word = tnt_priv->io_readw( nec_priv->iobase + FIFOB );
++						if ((count + 1) < num_bytes) {
++							buffer[ count++ ] = word & 0xff;
++							buffer[ count++ ] = ( word >> 8 ) & 0xff;
++						}
++					}
++			break;
++		case 0x0c:	/* NFF|NEF */
++					/* at least one word in FIFO */
++					word = tnt_priv->io_readw( nec_priv->iobase + FIFOB );
++					if ((count + 1) < num_bytes) {
++						buffer[ count++ ] = word & 0xff;
++						buffer[ count++ ] = ( word >> 8 ) & 0xff;
++					}
++			break;
++		}
++	}
++#else
+ 	while(fifo_word_available( tnt_priv ) && count + 2 <= num_bytes)
+ 	{
+ 		short word;
+@@ -64,6 +109,7 @@ static int drain_fifo_words(tnt4882_priv
+ 		buffer[ count++ ] = word & 0xff;
+ 		buffer[ count++ ] = ( word >> 8 ) & 0xff;
+ 	}
++#endif
+ 	return count;
+ }
+ 
+@@ -110,12 +156,30 @@ int tnt4882_accel_read( gpib_board_t *bo
+ 
+ 	imr1_bits = nec_priv->reg_bits[ IMR1 ];
+ 	imr2_bits = nec_priv->reg_bits[ IMR2 ];
++
++#if (GPIB_CONFIG_DEVICE==1)
++	nec7210_set_reg_bits( nec_priv, IMR1, 0xff, HR_ENDIE | HR_DECIE | HR_APTIE);
++#else
+ 	nec7210_set_reg_bits( nec_priv, IMR1, 0xff, HR_ENDIE | HR_DECIE );
++#endif
++#if (GPIB_CONFIG_TNT5004==1)
++	if(( nec_priv->type != TNT4882 ) && ( nec_priv->type != TNT5004 ))
++#else
+ 	if( nec_priv->type != TNT4882 )
++#endif
++#if (GPIB_CONFIG_DEVICE==1)
++		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, HR_DMAI | HR_ACIE);
++	else
++		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, HR_ACIE );
++#else
+ 		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, HR_DMAI );
+ 	else
+ 		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, 0 );
++#endif
+ 	imr0_bits = tnt_priv->imr0_bits;
++#if (GPIB_CONFIG_DEVICE==1)
++	tnt_priv->imr0_bits |= TNT_ATNI_BIT;
++#endif
+ 	tnt_priv->imr0_bits &= ~TNT_ATNI_BIT;
+ 	tnt_writeb(tnt_priv, tnt_priv->imr0_bits, IMR0);
+ 	tnt_writeb( tnt_priv, nec_priv->auxa_bits | HR_HLDA, CCR );
+@@ -131,7 +195,6 @@ int tnt4882_accel_read( gpib_board_t *bo
+ 	tnt_writeb( tnt_priv, ( hw_count >> 24 ) & 0xff, CNT3 );
+ 
+ 	tnt4882_release_holdoff(board, tnt_priv);
+-
+ 	tnt_writeb( tnt_priv, GO, CMDR );
+ 	udelay(1);
+ 
+@@ -140,16 +203,26 @@ int tnt4882_accel_read( gpib_board_t *bo
+ 	tnt_writeb( tnt_priv, tnt_priv->imr3_bits, IMR3 );
+ 	spin_unlock_irqrestore( &board->spinlock, flags );
+ 
+-	while(count + 2 <= length &&
+-		test_bit( RECEIVED_END_BN, &nec_priv->state ) == 0 &&
+-		fifo_xfer_done(tnt_priv) == 0)
++	while(((count + 2) <= length) &&
++//		(test_bit( RECEIVED_END_BN, &nec_priv->state ) == 0) &&
++		(retval == 0) &&
++		(fifo_xfer_done(tnt_priv) == 0))
+ 	{
+ 		// wait until a word is ready
+ 		if( wait_event_interruptible( board->wait,
+ 			fifo_word_available( tnt_priv ) ||
+ 			fifo_xfer_done( tnt_priv ) ||
++#if (GPIB_CONFIG_DEVICE==1)
+ 			test_bit( RECEIVED_END_BN, &nec_priv->state ) ||
++#else
++//			test_bit( RECEIVED_END_BN, &nec_priv->state ) ||
++#endif
+ 			test_bit( DEV_CLEAR_BN, &nec_priv->state ) ||
++#if (GPIB_CONFIG_DEVICE==1)
++ 			test_bit( ADSC_BN, &nec_priv->state ) ||
++ 			test_bit( TACS_NUM, &board->status ) ||
++ 			test_bit( APT_NUM, &board->status ) ||
++#endif
+ 			test_bit( TIMO_NUM, &board->status ) ) )
+ 		{
+ 			printk("tnt4882: read interrupted\n");
+@@ -168,7 +241,28 @@ int tnt4882_accel_read( gpib_board_t *bo
+ 			retval = -EINTR;
+ 			break;
+ 		}
+-
++#if (GPIB_CONFIG_DEVICE==1)
++		if(	test_bit( RECEIVED_END_BN, &nec_priv->state )) {
++			// early termination on EOI
++			if ((count + 2) < length) retval= -EINTR;
++		}
++		if( test_bit( ADSC_BN, &nec_priv->state ) ){
++ 			if ( !test_bit( LACS_NUM, &board->status ) )	{
++ 				GPIB_DPRINTK("tnt4882: read interrupted (unlisten)\n");
++ 				retval= -EINTR;
++ 			}
++ 		}
++ 		if( test_bit( TACS_NUM, &board->status ) )
++ 		{
++ 			GPIB_DPRINTK("tnt4882: read interrupted (device addressed as talker)\n");
++ 			retval= -EINTR;
++ 		}
++ 		if( test_bit( APT_NUM, &board->status ) )
++ 		{
++ 			GPIB_DPRINTK("tnt4882: read interrupted (secondary received)\n");
++ 			retval= -EINTR;
++ 		}
++#endif
+ 		spin_lock_irqsave( &board->spinlock, flags );
+ 		count += drain_fifo_words(tnt_priv, &buffer[count], length - count);
+ 		tnt_priv->imr3_bits |= HR_NEF;
+@@ -178,6 +272,7 @@ int tnt4882_accel_read( gpib_board_t *bo
+ 		if(need_resched())
+ 			schedule();
+ 	}
++
+ 	// wait for last byte
+ 	if( count < length )
+ 	{
+@@ -187,7 +282,7 @@ int tnt4882_accel_read( gpib_board_t *bo
+ 		spin_unlock_irqrestore( &board->spinlock, flags );
+ 
+ 		if( wait_event_interruptible( board->wait,
+-			fifo_xfer_done( tnt_priv ) ||
++				fifo_xfer_done( tnt_priv ) ||
+ 			test_bit( RECEIVED_END_BN, &nec_priv->state ) ||
+ 			test_bit( DEV_CLEAR_BN, &nec_priv->state ) ||
+ 			test_bit( TIMO_NUM, &board->status ) ) )
+@@ -205,12 +300,13 @@ int tnt4882_accel_read( gpib_board_t *bo
+ 			printk("tnt4882: device clear interrupted read\n");
+ 			retval = -EINTR;
+ 		}
+-		count += drain_fifo_words(tnt_priv, &buffer[count], length - count);
+-		if(fifo_byte_available( tnt_priv ) && count < length)
++//		count += drain_fifo_words(tnt_priv, &buffer[count], length - count);
++		if(fifo_byte_available( tnt_priv ) && (count < length))
+ 		{
+ 			buffer[ count++ ] = tnt_readb( tnt_priv, FIFOB );
+ 		}
+ 	}
++
+ 	if(count < length)
+ 		tnt_writeb( tnt_priv, STOP, CMDR );
+ 	udelay(1);
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882_write.c linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882_write.c
+--- linux-gpib-kernel-4.3.4/drivers/gpib/tnt4882/tnt4882_write.c	2022-01-22 15:22:30.461573562 -0800
++++ linux-gpib-kernel-4.3.4-patched/drivers/gpib/tnt4882/tnt4882_write.c	2022-01-22 16:05:47.011548156 -0800
+@@ -52,7 +52,7 @@ static unsigned tnt_transfer_count(tnt48
+ };
+ 
+ static int write_wait( gpib_board_t *board, tnt4882_private_t *tnt_priv,
+-		int wait_for_done, int send_commands )
++ 	int wait_for_done, int send_commands)
+ {
+ 	nec7210_private_t *nec_priv = &tnt_priv->nec7210_priv;
+ 
+@@ -61,6 +61,12 @@ static int write_wait( gpib_board_t *boa
+ 		fifo_xfer_done( tnt_priv ) ||
+ 		test_bit( BUS_ERROR_BN, &nec_priv->state ) ||
+ 		test_bit( DEV_CLEAR_BN, &nec_priv->state ) ||
++#if (GPIB_CONFIG_DEVICE==1)
++		(!send_commands &&
++ 			(test_bit( ADSC_BN, &nec_priv->state ) ||
++ 			test_bit( LACS_NUM, &board->status ) ||
++ 			test_bit( APT_NUM, &board->status ))) ||
++#endif
+ 		test_bit( TIMO_NUM, &board->status ) ) )
+ 	{
+ 		GPIB_DPRINTK( "gpib write interrupted\n" );
+@@ -81,6 +87,26 @@ static int write_wait( gpib_board_t *boa
+ 		printk("tnt4882: device clear interrupted write\n" );
+ 		return -EINTR;
+ 	}
++#if (GPIB_CONFIG_DEVICE==1)
++	if (!send_commands) {
++		if( test_bit( ADSC_BN, &nec_priv->state ) ){
++			if ( !test_bit( TACS_NUM, &board->status ) )	{
++				GPIB_DPRINTK("tnt4882: write interrupted (untalk)\n");
++				return -EINTR;
++			}
++		}
++		if( test_bit( LACS_NUM, &board->status ) )
++		{
++			GPIB_DPRINTK("tnt4882: write interrupted (device addressed as listener)\n");
++			return -EINTR;
++		}
++		if( test_bit( APT_NUM, &board->status ) )
++		{
++			GPIB_DPRINTK("tnt4882: write interrupted (secondary received)\n");
++			return -EINTR;
++		}
++	}
++#endif
+ 	return 0;
+ }
+ 
+@@ -95,21 +121,75 @@ static int generic_write( gpib_board_t *
+ 	int32_t hw_count;
+ 	unsigned long flags;
+ 
+-	*bytes_written = 0;
++#if (GPIB_CONFIG_DEVICE==1)
++ 	unsigned int adr1_bits = 0;
++	uint16_t word;
++	int isr3, i;
++
++ 	if (!send_commands) {
++ 		// we now should be already addressed as talker - make sure we are in TACS before trying to send data
++		if ((read_byte(nec_priv, ADSR) & HR_TA) == 0) {
++			// don't continue in case of change in addressing
++			if (read_byte(nec_priv, ISR2) == HR_ADSC) {
++				printk("tnt4882: address change detected (aborting transfer)\n");
++				return -EINTR;
++			}
++			else {
++				printk("tnt4882: write without being addressed as talker\n");
++				return -EINTR;
++			}
++		}
++ 	}
++ 	read_byte(nec_priv, ISR2);	// clear status 2
++#endif
++
++ 	*bytes_written = 0;
+ 	// FIXME: really, DEV_CLEAR_BN should happen elsewhere to prevent race
+ 	smp_mb__before_atomic();
+-	clear_bit(DEV_CLEAR_BN, &nec_priv->state);	
++	clear_bit(DEV_CLEAR_BN, &nec_priv->state);
+ 	smp_mb__after_atomic();
+ 
+ 	imr1_bits = nec_priv->reg_bits[ IMR1 ];
+ 	imr2_bits = nec_priv->reg_bits[ IMR2 ];
++
++#if (GPIB_CONFIG_DEVICE==1)
++ 	if (send_commands)
++ 		nec7210_set_reg_bits( nec_priv, IMR1, 0xff, HR_ERRIE | HR_DECIE );
++ 	else
++ 		nec7210_set_reg_bits( nec_priv, IMR1, 0xff, HR_ERRIE | HR_DECIE | HR_APTIE);
++	/* if extended dual addressing with minor address 31 is being used (HP Identify hack),
++	 * we need to temporarily disable minor talk address in order to see the untalk on
++	 * the major address during writes */
++	if (!send_commands) {
++		adr1_bits = read_byte(nec_priv, ADR1);
++		if ((adr1_bits & (HR_DT | HR_DL | ADDRESS_MASK)) == (HR_DL | 0x1f)) {
++			write_byte( nec_priv, HR_ARS | HR_DT | HR_DL, ADR);
++		}
++	}
++#else
+ 	nec7210_set_reg_bits( nec_priv, IMR1, 0xff, HR_ERRIE | HR_DECIE );
++#endif
++#if (GPIB_CONFIG_TNT5004==1)
++	if(( nec_priv->type != TNT4882 ) && ( nec_priv->type != TNT5004 ))
++#else
+ 	if( nec_priv->type != TNT4882 )
++#endif
++#if (GPIB_CONFIG_DEVICE==1)
++		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, HR_DMAO | HR_ACIE );
++	else
++		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, HR_ACIE);
++	imr0_bits = tnt_priv->imr0_bits;
++	if (send_commands)
++		tnt_priv->imr0_bits &= ~TNT_ATNI_BIT;
++	else
++		tnt_priv->imr0_bits |= TNT_ATNI_BIT;
++#else
+ 		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, HR_DMAO );
+ 	else
+ 		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, 0 );
+ 	imr0_bits = tnt_priv->imr0_bits;
+ 	tnt_priv->imr0_bits &= ~TNT_ATNI_BIT;
++#endif
+ 	tnt_writeb(tnt_priv, tnt_priv->imr0_bits, IMR0);
+ 
+ 	tnt_writeb( tnt_priv, RESET_FIFO, CMDR );
+@@ -119,7 +199,11 @@ static int generic_write( gpib_board_t *
+ 	if( send_eoi )
+ 	{
+ 		bits |= TNT_CCEN;
++#if (GPIB_CONFIG_TNT5004==1)
++		if((nec_priv->type != TNT4882 ) && (nec_priv->type != TNT5004 ))
++#else
+ 		if(nec_priv->type != TNT4882 )
++#endif
+ 			tnt_writeb( tnt_priv, AUX_SEOI, CCR );
+ 	}
+ 	if( send_commands )
+@@ -133,6 +217,10 @@ static int generic_write( gpib_board_t *
+ 	tnt_writeb( tnt_priv, ( hw_count >> 16 ) & 0xff, CNT2 );
+ 	tnt_writeb( tnt_priv, ( hw_count >> 24 ) & 0xff, CNT3 );
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++	nec7210_set_handshake_mode(board, nec_priv, HR_HLDA);		// hold-off on all
++	write_byte(nec_priv, AUX_HLDI, AUXMR);				// hold-off immediate
++#endif
+ 	tnt_writeb( tnt_priv, GO, CMDR );
+ 	udelay(1);
+ 
+@@ -141,6 +229,12 @@ static int generic_write( gpib_board_t *
+ 	tnt_writeb( tnt_priv, tnt_priv->imr3_bits, IMR3 );
+ 	spin_unlock_irqrestore( &board->spinlock, flags );
+ 
++#if (GPIB_CONFIG_DEVICE==1)
++	if (!send_commands) {
++		clear_bit( ADSC_BN, &nec_priv->state);	// reset ADSC
++	}
++#endif
++
+ 	while( count < length  )
+ 	{
+ 		// wait until byte is ready to be sent
+@@ -149,6 +243,46 @@ static int generic_write( gpib_board_t *
+ 		if( fifo_xfer_done( tnt_priv ) ) break;
+ 
+ 		spin_lock_irqsave( &board->spinlock, flags );
++#if (GPIB_CONFIG_DEVICE==1)
++		// alternative method to fill FIFO as suggested by NI (uses minimum status checks)
++		while ( fifo_space_available( tnt_priv ) && count < length ) {
++			isr3 = tnt_readb( tnt_priv, ISR3 );
++			switch (isr3 & 0x4c) {
++			case 0x08:	/* NFF */
++			case 0x48:	/* NFF|INTSRC2 */
++						/* 16 words in FIFO are empty */
++						for (i=0; i<16; i++) {
++							if (count < length) {
++								word = buffer[ count++ ] & 0xff;
++								if( count < length )
++									word |= ( buffer[ count++ ] << 8 ) & 0xff00;
++								tnt_priv->io_writew( word, nec_priv->iobase + FIFOB );
++							}
++						}
++				break;
++			case 0x4c:	/* NFF|INTSRC2|NEF */
++						/* 8 words in FIFO are empty */
++						for (i=0; i<8; i++) {
++							if (count < length) {
++								word = buffer[ count++ ] & 0xff;
++								if( count < length )
++									word |= ( buffer[ count++ ] << 8 ) & 0xff00;
++								tnt_priv->io_writew( word, nec_priv->iobase + FIFOB );
++							}
++						}
++				break;
++			case 0x0c:	/* NFF|NEF */
++						/* 1 word in FIFO is empty */
++						if (count < length) {
++							word = buffer[ count++ ] & 0xff;
++							if( count < length )
++								word |= ( buffer[ count++ ] << 8 ) & 0xff00;
++							tnt_priv->io_writew( word, nec_priv->iobase + FIFOB );
++						}
++				break;
++			}
++		}
++#else
+ 		while( fifo_space_available( tnt_priv ) && count < length )
+ 		{
+ 			uint16_t word;
+@@ -158,6 +292,7 @@ static int generic_write( gpib_board_t *
+ 				word |= ( buffer[ count++ ] << 8 ) & 0xff00;
+ 			tnt_priv->io_writew( word, nec_priv->iobase + FIFOB );
+ 		}
++#endif
+ 		tnt_priv->imr3_bits |= HR_NFF;
+ 		tnt_writeb( tnt_priv, tnt_priv->imr3_bits, IMR3 );
+ 		spin_unlock_irqrestore( &board->spinlock, flags );
+@@ -166,8 +301,23 @@ static int generic_write( gpib_board_t *
+ 			schedule();
+ 	}
+ 	// wait last byte has been sent
++#if (GPIB_CONFIG_DEVICE==1)
++	if (send_commands) {
++		if(retval == 0)
++			retval = write_wait(board, tnt_priv, 1, send_commands);
++	}
++	else {
++		if ((adr1_bits & (HR_DT | HR_DL | ADDRESS_MASK)) == (HR_DL | 0x1f))
++			/* re-enable secondary address for extended dual addressing with
++			 * minor address 31 (HP Identify hack) */
++			write_byte( nec_priv, HR_ARS | HR_DL | 0x1f, ADR);
++		if ((retval == 0) && test_bit( TACS_NUM, &board->status ))
++			retval = write_wait(board, tnt_priv, 1, send_commands);
++	}
++#else
+ 	if(retval == 0)
+ 		retval = write_wait(board, tnt_priv, 1, send_commands);
++#endif
+ 
+ 	tnt_writeb( tnt_priv, STOP, CMDR );
+ 	udelay(1);
+@@ -192,14 +342,3 @@ int tnt4882_command(gpib_board_t *board,
+ {
+ 	return generic_write( board, buffer, length, 0, 1, bytes_written);
+ }
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+diff '--color=auto' -urp -X patch-exclude linux-gpib-kernel-4.3.4/Makefile linux-gpib-kernel-4.3.4-patched/Makefile
+--- linux-gpib-kernel-4.3.4/Makefile	2022-01-22 15:22:30.458573521 -0800
++++ linux-gpib-kernel-4.3.4-patched/Makefile	2022-01-22 15:11:39.739509258 -0800
+@@ -4,6 +4,8 @@ GPIB_SRCDIR ?= $(CURDIR)
+ LINUX_SRCDIR ?= /lib/modules/`uname -r`/build
+ VERBOSE ?= 0
+ ENABLE_PCMCIA ?= 0
++ENABLE_DEVICE ?= 0
++ENABLE_TNT5004 ?= 0
+ GPIB_DEBUG ?= 0
+ 
+ all:
+@@ -12,6 +14,8 @@ all:
+ 		GPIB_TOP_DIR=$(GPIB_SRCDIR) \
+ 		CONFIG_GPIB_ISA="$(ENABLE_ISA)" \
+ 		GPIB_CONFIG_PCMCIA="$(ENABLE_PCMCIA)" \
++		GPIB_CONFIG_DEVICE="$(ENABLE_DEVICE)" \
++		GPIB_CONFIG_TNT5004="$(ENABLE_TNT5004)" \
+ 		HAVE_DEV_OF_NODE=$(HAVE_DEV_OF_NODE) \
+ 		GPIB_CONFIG_KERNEL_DEBUG=$(GPIB_DEBUG)
+ 

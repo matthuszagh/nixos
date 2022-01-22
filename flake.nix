@@ -9,7 +9,8 @@
     mach-nix.url = "github:DavHau/mach-nix";
     ## package overrides
     # 2021-04-07
-    sageNixpkgs.url = "github:nixos/nixpkgs/49cfaef0c34007ade99c7a23497bd5993b8152f0";
+    # Updates sage to version 9.4. Remove when nixpkgs passes this point.
+    sageNixpkgs.url = "github:nixos/nixpkgs/46c3703ec1fe45767a8781e290ed874704d5d18e";
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
     ladyHeatherNixpkgs.url = "github:matthuszagh/nixpkgs/lady-heather";
@@ -21,6 +22,7 @@
     asymptoteNixpkgs.url = "github:nixos/nixpkgs/6eeb612a9b6160df2e110021d93bef3e6e538b9a";
     curaNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
     freecadNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
+    linuxGpibNixpkgs.url = "github:matthuszagh/nixpkgs/e771cd3751af64028e08c0db42ac7ddd0e66ae00";
   };
 
   outputs =
@@ -40,6 +42,7 @@
     , asymptoteNixpkgs
     , curaNixpkgs
     , freecadNixpkgs
+    , linuxGpibNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -73,42 +76,48 @@
         };
       };
 
-      overridePkgs = {
-        sageWithDoc = (pkgImport sageNixpkgs).sageWithDoc;
-        paraview = (pkgImport paraviewNixpkgs).paraview;
-        vivado = (pkgImport vivadoNixpkgs).vivado;
-        lady-heather = (pkgImport ladyHeatherNixpkgs).lady-heather;
-        verilator = (pkgImport verilatorNixpkgs).verilator;
-        dsview = (pkgImport dsviewNixpkgs).dsview;
-        inkscape = (pkgImport inkscapeNixpkgs).inkscape;
-        mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
-        asymptote = (pkgImport asymptoteNixpkgs).asymptote;
-        cura = (pkgImport curaNixpkgs).cura;
-        freecad = (pkgImport freecadNixpkgs).freecad;
-        mach-nix = (import mach-nix {
-          pkgs = (import nixpkgs { inherit system; }).pkgs;
-        }).mach-nix;
-        # TODO this should be in profiles/dev/python/default.nix
-        pythonEnv = (import mach-nix {
-          pkgs = (import nixpkgs { inherit system; }).pkgs;
-          python = "python3";
-        }).mkPython {
-          requirements = ''
-            pylatex # latex generation from python
-            numpy
-            scipy
-            matplotlib
-            pandas
-            tabulate # pretty print tables of values
-            pint # quantities, units, uncertainties
-            ipython
-            debugpy # needed for DAP
-            pyclipper # needed for kicad plugin
-            skidl
-            lxml # needed for LaTeXText
-          '';
+      overridePkgs =
+        let
+          mnix = (import mach-nix {
+            # This allows us to use python packages from
+            # linuxGpibNixpkgs in requirements.
+            pkgs = (import linuxGpibNixpkgs { inherit system; }).pkgs;
+          });
+        in
+        {
+          sageWithDoc = (pkgImport sageNixpkgs).sageWithDoc;
+          paraview = (pkgImport paraviewNixpkgs).paraview;
+          vivado = (pkgImport vivadoNixpkgs).vivado;
+          lady-heather = (pkgImport ladyHeatherNixpkgs).lady-heather;
+          verilator = (pkgImport verilatorNixpkgs).verilator;
+          dsview = (pkgImport dsviewNixpkgs).dsview;
+          inkscape = (pkgImport inkscapeNixpkgs).inkscape;
+          mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
+          asymptote = (pkgImport asymptoteNixpkgs).asymptote;
+          cura = (pkgImport curaNixpkgs).cura;
+          freecad = (pkgImport freecadNixpkgs).freecad;
+          linux-gpib = (pkgImport linuxGpibNixpkgs).linux-gpib;
+
+          mach-nix = mnix.mach-nix;
+          # TODO this should be in profiles/dev/python/default.nix
+          pythonEnv = mnix.mkPython {
+            requirements = ''
+              pylatex # latex generation from python
+              numpy
+              scipy
+              matplotlib
+              pandas
+              tabulate # pretty print tables of values
+              pint # quantities, units, uncertainties
+              ipython
+              debugpy # needed for DAP
+              pyclipper # needed for kicad plugin
+              skidl
+              lxml # needed for LaTeXText
+              python-linux-gpib
+            '';
+          };
         };
-      };
 
       pkgs = (pkgImport nixpkgs) // overridePkgs;
     in

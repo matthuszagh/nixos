@@ -7,5 +7,6 @@
     kicad
     lady-heather
     dsview
+    linux-gpib
   ];
 }

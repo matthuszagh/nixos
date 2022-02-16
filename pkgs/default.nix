@@ -1,10 +1,12 @@
 final: prev:
 
 {
-  # kernel
-  linux-gpib-kernel = prev.callPackage ./linux-gpib {
+  # TODO remove when linux-gpib + hpdrive PR made upstream
+  linux-gpib-kernel = prev.callPackage ./linux-gpib-kernel {
     kernel = prev.pkgs.linux_latest;
   };
+  linux-gpib-user = prev.callPackage ./linux-gpib-user { };
+  hpdrive = prev.callPackage ./hpdrive { };
 
   # general
   pia-config = prev.callPackage ./networking/vpn/pia { };

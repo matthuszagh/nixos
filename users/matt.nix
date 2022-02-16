@@ -16,6 +16,7 @@
       "scanner" # scanners
       "lp" # printers
       "cdrom" # cd drive
+      "gpib" # linux-gpib
     ];
   };
 

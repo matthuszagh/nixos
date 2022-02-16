@@ -28,7 +28,7 @@
 
     kernelModules = [
       "kvm-amd"
-      # GPIB driver provided by linux-gpib
+      # GPIB driver provided by linux-gpib-kernel
       "tnt4882"
     ];
     kernelParams = [ "fbcon=rotate:3" ];
@@ -85,6 +85,19 @@
   ];
 
   environment.variables.XCURSOR_SIZE = "32";
+
+  # TODO remove when possible
+  environment.etc."gpib.conf".text = ''
+    interface {
+        minor = 0
+        board_type = "ni_pci"
+        name = "gpib0"
+        pad = 21
+        master = yes
+        pci_bus = 7
+        pci_slot = 12
+    }
+  '';
 
   services = {
     xserver = {

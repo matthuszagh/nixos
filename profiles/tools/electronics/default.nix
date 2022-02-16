@@ -7,6 +7,7 @@
     kicad
     lady-heather
     dsview
-    linux-gpib
+    linux-gpib-user
+    hpdrive
   ];
 }

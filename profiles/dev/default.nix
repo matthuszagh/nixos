@@ -38,7 +38,13 @@
     # ============================= core =============================
     coreutils
     moreutils
-    binutils
+    # binutils
+    (binutils-unwrapped.override {
+      withAllTargets = true;
+      # needed to get this working
+      # see https://github.com/NixOS/nixpkgs/issues/82792
+      enableShared = false;
+    })
     usbutils
     acpi
     pciutils

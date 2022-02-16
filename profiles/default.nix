@@ -16,6 +16,7 @@
     ./system
     ./tools
     ./virtualization.nix
+    ./wine.nix
     ./writing
   ];
 

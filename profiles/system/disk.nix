@@ -8,5 +8,6 @@
     ddrescue
     smartmontools
     iotop
+    disk-utilities
   ];
 }

@@ -8,6 +8,9 @@ final: prev:
   linux-gpib-user = prev.callPackage ./linux-gpib-user { };
   hpdrive = prev.callPackage ./hpdrive { };
 
+  # TODO create PR upstream
+  disk-utilities = prev.callPackage ./disk-utilities.nix { };
+
   # general
   pia-config = prev.callPackage ./networking/vpn/pia { };
   clang_multi_9 = prev.wrapClangMulti prev.clang_9;

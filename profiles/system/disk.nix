@@ -8,6 +8,7 @@
     ddrescue
     smartmontools
     iotop
+    libdsk # disk image utilities
     disk-utilities
     lifutils
   ];

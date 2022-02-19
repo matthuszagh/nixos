@@ -9,5 +9,6 @@
     smartmontools
     iotop
     disk-utilities
+    lifutils
   ];
 }

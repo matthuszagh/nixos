@@ -10,6 +10,7 @@ final: prev:
 
   # TODO create PR upstream
   disk-utilities = prev.callPackage ./disk-utilities.nix { };
+  lifutils = prev.callPackage ./lifutils.nix { };
 
   # general
   pia-config = prev.callPackage ./networking/vpn/pia { };

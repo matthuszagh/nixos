@@ -41,6 +41,7 @@
       ./profiles/direnv
       ./profiles/clang-format
       ./profiles/inkscape
+      ./profiles/mbsync
       ./profiles/ngspice
       ./profiles/octave
       ./profiles/notmuch

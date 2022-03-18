@@ -11,6 +11,7 @@ final: prev:
   # TODO create PR upstream
   disk-utilities = prev.callPackage ./disk-utilities.nix { };
   lifutils = prev.callPackage ./lifutils.nix { };
+  scsi2sd = prev.callPackage ./scsi2sd.nix { libX11 = prev.xorg.libX11; };
 
   # general
   pia-config = prev.callPackage ./networking/vpn/pia { };

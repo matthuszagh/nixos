@@ -9,6 +9,7 @@
     ./graphics
     ./networking
     ./mail
+    ./mbsync.nix
     ./media
     ./messaging
     ./search

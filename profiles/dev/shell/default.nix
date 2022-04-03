@@ -11,6 +11,7 @@
   environment.systemPackages = with pkgs; [
     less
     vim
+    screen
   ];
 
   programs.thefuck.enable = true;

@@ -76,6 +76,11 @@
           devices = [ "ryzen3950" "oryp4" "st5" ];
           ignorePerms = false;
         };
+        "mail" = {
+          path = "/home/matt/mail";
+          devices = [ "ryzen3950" "oryp4" "st5" ];
+          ignorePerms = false;
+        };
       };
 
       devices = {

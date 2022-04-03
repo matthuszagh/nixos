@@ -30,47 +30,6 @@
           devices = [ "ryzen3950" "oryp4" "st5" ];
           ignorePerms = false;
         };
-        # TODO I shouldn't synchronize gnupg or ssh. I should probably
-        # just synchronize authorized keys, known hosts, etc.
-        "gnupg" = {
-          path = "/home/matt/.gnupg";
-          devices = [ "ryzen3950" "oryp4" ];
-          ignorePerms = false;
-        };
-        # TODO make this declarative (home-manager should be handling
-        # the syncthing service anyway)
-        #
-        # the following should be in .stignore:
-        #
-        # id_rsa
-        # id_rsa.pub
-        # known_hosts
-        # known_hosts.old
-        "ssh" = {
-          path = "/home/matt/.ssh";
-          devices = [ "ryzen3950" "oryp4" "st5" ];
-          ignorePerms = false;
-        };
-        # TODO make this declarative (home-manager should be handling
-        # the syncthing service anyway)
-        #
-        # the following should be in .stignore:
-        #
-        # auto-save-list
-        # %backup%~
-        # .cask
-        # .dap-breakpoints
-        # .edbi-ds-history
-        # eln-cache
-        # elpa
-        # elpy
-        # etc
-        # .extension
-        # idlwave
-        # straight/build
-        # straight/build-cache.el
-        # straight/modified
-        # var
         "emacs" = {
           path = "/home/matt/.config/emacs";
           devices = [ "ryzen3950" "oryp4" "st5" ];
@@ -78,6 +37,11 @@
         };
         "mail" = {
           path = "/home/matt/mail";
+          devices = [ "ryzen3950" "oryp4" "st5" ];
+          ignorePerms = false;
+        };
+        "recoll" = {
+          path = "/home/matt/.recoll";
           devices = [ "ryzen3950" "oryp4" "st5" ];
           ignorePerms = false;
         };

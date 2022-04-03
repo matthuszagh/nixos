@@ -45,7 +45,6 @@
       ./profiles/ngspice
       ./profiles/octave
       ./profiles/notmuch
-      ./profiles/offlineimap
       ./profiles/pylint
       ./profiles/recoll
       ./profiles/sage

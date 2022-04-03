@@ -1,25 +1,53 @@
-IMAPAccount gmail
+################################################################################
+
+IMAPAccount huszaghmatt@gmail.com
 Host imap.gmail.com
 User huszaghmatt@gmail.com
 SSLType IMAPS
-PassCmd "gpg -q --for-your-eyes-only --no-tty -d ~/.authinfo.gpg | awk '/machine imap.gmail.com login huszaghmatt@gmail.com/ {print $NF}'"
+PassCmd "cat ~/.authinfo | awk '/machine imap.gmail.com login huszaghmatt@gmail.com/ {print $NF}'"
 
-IMAPStore gmail-remote
-Account gmail
+IMAPStore huszaghmatt@gmail.com-remote
+Account huszaghmatt@gmail.com
 
-MaildirStore gmail-local
+MaildirStore huszaghmatt@gmail.com-local
 # The trailing "/" is important
-Path ~/mail/
-Inbox ~/mail/inbox
+Path ~/mail/huszaghmatt@gmail.com/
+Inbox ~/mail/huszaghmatt@gmail.com/inbox
+SubFolders Verbatim
 
-Channel gmail
-Far :gmail-remote:
-Near :gmail-local:
-# Exclude everything under the internal [Gmail] folder, except the interesting folders
-# Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
-# Or include everything
+Channel huszaghmatt@gmail.com
+Far :huszaghmatt@gmail.com-remote:
+Near :huszaghmatt@gmail.com-local:
 Patterns *
 # Automatically create missing mailboxes, both locally and on the server
 Create Both
 # Save the synchronization state files in the relevant directory
 SyncState *
+
+################################################################################
+
+IMAPAccount matt.huszagh@jobyaviation.com
+Host imap.gmail.com
+User matt.huszagh@jobyaviation.com
+SSLType IMAPS
+PassCmd "cat ~/.authinfo | awk '/machine imap.gmail.com login matt.huszagh@jobyaviation.com/ {print $NF}'"
+
+IMAPStore matt.huszagh@jobyaviation.com-remote
+Account matt.huszagh@jobyaviation.com
+
+MaildirStore matt.huszagh@jobyaviation.com-local
+# The trailing "/" is important
+Path ~/mail/matt.huszagh@jobyaviation.com/
+Inbox ~/mail/matt.huszagh@jobyaviation.com/inbox
+SubFolders Verbatim
+
+Channel matt.huszagh@jobyaviation.com
+Far :matt.huszagh@jobyaviation.com-remote:
+Near :matt.huszagh@jobyaviation.com-local:
+Patterns *
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *
+
+################################################################################

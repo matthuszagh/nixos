@@ -48,6 +48,7 @@
       ./profiles/pylint
       ./profiles/recoll
       ./profiles/sage
+      ./profiles/screen
       ./profiles/tex
       ./profiles/fish
       ./profiles/bash

@@ -12,6 +12,7 @@
     ./mbsync.nix
     ./media
     ./messaging
+    ./recoll.nix
     ./search
     ./security
     ./system

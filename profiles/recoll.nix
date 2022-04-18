@@ -4,16 +4,13 @@
 
 {
   systemd.services.recollindex = {
-    description = "Periodically run recollindex";
+    description = "Run recollindex";
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      Type = "simple";
+      Type = "oneshot";
       ExecStart = ''
         ${pkgs.recoll}/bin/recollindex
       '';
-      Restart = "always";
-      # disable timeout
-      TimeoutSec = "infinity";
       User = "matt";
     };
     path = with pkgs; [
@@ -21,5 +18,14 @@
       aspell
       exiftool # TODO needed?
     ];
+  };
+
+  systemd.timers.recollindex = {
+    description = "Run recollindex.service daily.";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      Unit = "recollindex.service";
+      OnCalendar = "daily";
+    };
   };
 }

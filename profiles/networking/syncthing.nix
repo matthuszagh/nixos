@@ -40,11 +40,6 @@
           devices = [ "ryzen3950" "oryp4" "st5" ];
           ignorePerms = false;
         };
-        "recoll" = {
-          path = "/home/matt/.recoll";
-          devices = [ "ryzen3950" "oryp4" "st5" ];
-          ignorePerms = false;
-        };
       };
 
       devices = {

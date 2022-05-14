@@ -52,7 +52,12 @@ final: prev:
   python3 = prev.python3.override {
     packageOverrides = pfinal: pprev: {
       circlib = pprev.callPackage ./development/python-modules/circlib { };
-      pyems = pprev.callPackage ./development/python-modules/pyems { };
+      # TODO it would be better to be able to use pprev.callPackage,
+      # but this no longer seems to be available so we need to pass in
+      # every dependency manually.
+      pyems = prev.callPackage ./development/python-modules/pyems {
+        inherit (pprev) numpy buildPythonPackage scipy python-csxcad python-openems;
+      };
     };
   };
   python3Packages = final.python3.pkgs;

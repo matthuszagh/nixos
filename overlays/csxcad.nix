@@ -3,10 +3,10 @@ final: prev:
 {
   csxcad = (prev.csxcad.override { }).overrideAttrs (oldAttrs: {
     src = prev.fetchFromGitHub {
-      owner = "matthuszagh";
+      owner = "thliebig";
       repo = "CSXCAD";
-      rev = "8ee68d4ce44125f7ba38ad7f52c74b2572798dc4";
-      sha256 = "0dwz34a6m682jv8gx51jlpbql9s0rpj2b58yvlx8m7zy1xr4hcdf";
+      rev = "ea97d3992fa5c4f9a3b5c2c5639449504ccf7b90";
+      sha256 = "sha256-O4+kZW2ol62GoIY0B4IlUOOP4awZM3n7+/+x8tB0nVg=";
     };
   });
 }

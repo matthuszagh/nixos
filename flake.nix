@@ -23,6 +23,8 @@
     curaNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
     freecadNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
     linuxGpibNixpkgs.url = "github:matthuszagh/nixpkgs/e771cd3751af64028e08c0db42ac7ddd0e66ae00";
+    # https://github.com/NixOS/nix/pull/4641
+    nixNixpkgs.url = "github:nixos/nixpkgs/c4070d4ce39adc0d27f478f9f02cafcec121be63";
   };
 
   outputs =
@@ -43,6 +45,7 @@
     , curaNixpkgs
     , freecadNixpkgs
     , linuxGpibNixpkgs
+    , nixNixpkgs
     }:
     let
       inherit (builtins) attrNames attrValues readDir;
@@ -97,6 +100,7 @@
           cura = (pkgImport curaNixpkgs).cura;
           freecad = (pkgImport freecadNixpkgs).freecad;
           linux-gpib = (pkgImport linuxGpibNixpkgs).linux-gpib;
+          nixFlakes = (pkgImport nixNixpkgs).nixFlakes;
 
           mach-nix = mnix.mach-nix;
           # TODO this should be in profiles/dev/python/default.nix

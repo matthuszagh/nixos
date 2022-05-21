@@ -115,17 +115,17 @@
     },
     "inkscapeNixpkgs": {
       "locked": {
-        "lastModified": 1625692967,
-        "narHash": "sha256-KA2BnWBfLLMSOgn6oz1BIHKIBUlikqRxRbRi05Ue4fI=",
-        "owner": "nixos",
+        "lastModified": 1652632680,
+        "narHash": "sha256-oIRhbqM8ar0GyTeGl8oUxeMcxd/lx2j17rH6DuzWquc=",
+        "owner": "matthuszagh",
         "repo": "nixpkgs",
-        "rev": "797f77ab66f17c0c7e8c10b137a213d56c9ff36d",
+        "rev": "6af0581cc7182d83a9813bd3c30cf7230807a701",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
+        "owner": "matthuszagh",
         "repo": "nixpkgs",
-        "rev": "797f77ab66f17c0c7e8c10b137a213d56c9ff36d",
+        "rev": "6af0581cc7182d83a9813bd3c30cf7230807a701",
         "type": "github"
       }
     },
@@ -164,9 +164,7 @@
     "mach-nix": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": [
-          "linuxGpibNixpkgs"
-        ],
+        "nixpkgs": "nixpkgs_2",
         "pypi-deps-db": "pypi-deps-db"
       },
       "locked": {
@@ -231,6 +229,21 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1652378906,
+        "narHash": "sha256-DeV2myAMArPvyqxp0M6z30kuXb2L9SO2QXjxbbsZQyY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d89d7af1ba23bd8a5341d00bdd862e8e9a808f56",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1622516815,
         "narHash": "sha256-ZjBd81a6J3TwtlBr3rHsZspYUwT9OdhDk+a/SgSEf7I=",
         "owner": "nixos",
@@ -291,7 +304,7 @@
         "mach-nix": "mach-nix",
         "mesaNixpkgs": "mesaNixpkgs",
         "nixNixpkgs": "nixNixpkgs",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "paraviewNixpkgs": "paraviewNixpkgs",
         "sageNixpkgs": "sageNixpkgs",
         "verilatorNixpkgs": "verilatorNixpkgs",
@@ -316,17 +329,17 @@
     },
     "verilatorNixpkgs": {
       "locked": {
-        "lastModified": 1598198484,
-        "narHash": "sha256-JHmRB/iUzWQ/F9R00pV1DUCIk2kVy48ABWIpmvo4q30=",
+        "lastModified": 1653168651,
+        "narHash": "sha256-G65N1xqzp3v7ItccC3L2vughOJN4St+c40eTQDRwQQA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1e451da3860c1c562fdccefb7f0380f765251399",
+        "rev": "aa2c22d53f30c37a83d0630cbfc01d247a427cc9",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1e451da3860c1c562fdccefb7f0380f765251399",
+        "rev": "aa2c22d53f30c37a83d0630cbfc01d247a427cc9",
         "type": "github"
       }
     },

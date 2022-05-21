@@ -14,7 +14,7 @@
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
     ladyHeatherNixpkgs.url = "github:matthuszagh/nixpkgs/lady-heather";
-    verilatorNixpkgs.url = "github:nixos/nixpkgs/1e451da3860c1c562fdccefb7f0380f765251399";
+    verilatorNixpkgs.url = "github:nixos/nixpkgs/aa2c22d53f30c37a83d0630cbfc01d247a427cc9";
     dsviewNixpkgs.url = "github:nixos/nixpkgs/00b385c61226a3f3c396581fd7b4851d99e20910";
     inkscapeNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
     # https://github.com/NixOS/nixpkgs/issues/94315#issuecomment-719892849

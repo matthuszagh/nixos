@@ -290,6 +290,22 @@
         "type": "github"
       }
     },
+    "python3Nixpkgs": {
+      "locked": {
+        "lastModified": 1653168651,
+        "narHash": "sha256-G65N1xqzp3v7ItccC3L2vughOJN4St+c40eTQDRwQQA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "aa2c22d53f30c37a83d0630cbfc01d247a427cc9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "aa2c22d53f30c37a83d0630cbfc01d247a427cc9",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "asymptoteNixpkgs": "asymptoteNixpkgs",
@@ -306,6 +322,7 @@
         "nixNixpkgs": "nixNixpkgs",
         "nixpkgs": "nixpkgs_3",
         "paraviewNixpkgs": "paraviewNixpkgs",
+        "python3Nixpkgs": "python3Nixpkgs",
         "sageNixpkgs": "sageNixpkgs",
         "verilatorNixpkgs": "verilatorNixpkgs",
         "vivadoNixpkgs": "vivadoNixpkgs"

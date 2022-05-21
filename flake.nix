@@ -15,8 +15,11 @@
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
     ladyHeatherNixpkgs.url = "github:matthuszagh/nixpkgs/lady-heather";
     verilatorNixpkgs.url = "github:nixos/nixpkgs/aa2c22d53f30c37a83d0630cbfc01d247a427cc9";
+    # to update cocotb to be >= version 1.6
+    python3Nixpkgs.url = "github:nixos/nixpkgs/aa2c22d53f30c37a83d0630cbfc01d247a427cc9";
     dsviewNixpkgs.url = "github:nixos/nixpkgs/00b385c61226a3f3c396581fd7b4851d99e20910";
-    inkscapeNixpkgs.url = "github:nixos/nixpkgs/797f77ab66f17c0c7e8c10b137a213d56c9ff36d";
+    # remove when PR accepted: https://github.com/NixOS/nixpkgs/pull/173184
+    inkscapeNixpkgs.url = "github:matthuszagh/nixpkgs/6af0581cc7182d83a9813bd3c30cf7230807a701";
     # https://github.com/NixOS/nixpkgs/issues/94315#issuecomment-719892849
     mesaNixpkgs.url = "github:nixos/nixpkgs/bdac777becdbb8780c35be4f552c9d4518fe0bdb";
     asymptoteNixpkgs.url = "github:nixos/nixpkgs/6eeb612a9b6160df2e110021d93bef3e6e538b9a";
@@ -38,6 +41,7 @@
     , vivadoNixpkgs
     , ladyHeatherNixpkgs
     , verilatorNixpkgs
+    , python3Nixpkgs
     , inkscapeNixpkgs
     , dsviewNixpkgs
     , mesaNixpkgs
@@ -93,6 +97,8 @@
           vivado = (pkgImport vivadoNixpkgs).vivado;
           lady-heather = (pkgImport ladyHeatherNixpkgs).lady-heather;
           verilator = (pkgImport verilatorNixpkgs).verilator;
+          python3 = (pkgImport python3Nixpkgs).python3;
+          python3Packages = (pkgImport python3Nixpkgs).python3Packages;
           dsview = (pkgImport dsviewNixpkgs).dsview;
           inkscape = (pkgImport inkscapeNixpkgs).inkscape;
           mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;
@@ -119,6 +125,7 @@
               skidl
               lxml # needed for LaTeXText
               python-linux-gpib
+              python-vxi11
             '';
           };
         };

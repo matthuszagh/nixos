@@ -62,6 +62,10 @@ final: prev:
       cocotb-test = prev.callPackage ./cocotb-test {
         inherit (pprev) buildPythonPackage fetchPypi pytest cocotb;
       };
+      cocotb = prev.callPackage ./cocotb {
+        inherit (pprev) buildPythonPackage fetchPypi cocotb-bus pytestCheckHook;
+        inherit (prev) swig verilog;
+      };
     };
   };
   python3Packages = final.python3.pkgs;

@@ -58,6 +58,10 @@ final: prev:
       pyems = prev.callPackage ./development/python-modules/pyems {
         inherit (pprev) numpy buildPythonPackage scipy python-csxcad python-openems;
       };
+      # TODO remove when PR accepted
+      cocotb-test = prev.callPackage ./cocotb-test {
+        inherit (pprev) buildPythonPackage fetchPypi pytest cocotb;
+      };
     };
   };
   python3Packages = final.python3.pkgs;

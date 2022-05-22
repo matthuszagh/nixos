@@ -14,9 +14,6 @@
     paraviewNixpkgs.url = "github:nixos/nixpkgs/72158c231ae46a34ec16b8134d2a8598506acd9c";
     vivadoNixpkgs.url = "github:matthuszagh/nixpkgs/vivado";
     ladyHeatherNixpkgs.url = "github:matthuszagh/nixpkgs/lady-heather";
-    verilatorNixpkgs.url = "github:nixos/nixpkgs/aa2c22d53f30c37a83d0630cbfc01d247a427cc9";
-    # to update cocotb to be >= version 1.6
-    python3Nixpkgs.url = "github:nixos/nixpkgs/aa2c22d53f30c37a83d0630cbfc01d247a427cc9";
     dsviewNixpkgs.url = "github:nixos/nixpkgs/00b385c61226a3f3c396581fd7b4851d99e20910";
     # remove when PR accepted: https://github.com/NixOS/nixpkgs/pull/173184
     inkscapeNixpkgs.url = "github:matthuszagh/nixpkgs/6af0581cc7182d83a9813bd3c30cf7230807a701";
@@ -40,8 +37,6 @@
     , paraviewNixpkgs
     , vivadoNixpkgs
     , ladyHeatherNixpkgs
-    , verilatorNixpkgs
-    , python3Nixpkgs
     , inkscapeNixpkgs
     , dsviewNixpkgs
     , mesaNixpkgs
@@ -96,9 +91,6 @@
           paraview = (pkgImport paraviewNixpkgs).paraview;
           vivado = (pkgImport vivadoNixpkgs).vivado;
           lady-heather = (pkgImport ladyHeatherNixpkgs).lady-heather;
-          verilator = (pkgImport verilatorNixpkgs).verilator;
-          python3 = (pkgImport python3Nixpkgs).python3;
-          python3Packages = (pkgImport python3Nixpkgs).python3Packages;
           dsview = (pkgImport dsviewNixpkgs).dsview;
           inkscape = (pkgImport inkscapeNixpkgs).inkscape;
           mesa_drivers = (pkgImport mesaNixpkgs).mesa_drivers;

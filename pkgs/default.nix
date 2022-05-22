@@ -48,6 +48,8 @@ final: prev:
 
   librarian = prev.callPackage ./applications/misc/librarian { };
 
+  verilator = prev.callPackage ./verilator { };
+
   # python
   python3 = prev.python3.override {
     packageOverrides = pfinal: pprev: {
